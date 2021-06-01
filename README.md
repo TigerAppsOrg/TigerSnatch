@@ -1,6 +1,6 @@
 # Welcome to TigerSnatch!
 
-[TigerSnatch](https://tigersnatch.herokuapp.com) helps Princeton students with course enrollment through its Subscriptions and Trades features. With Subscriptions, students can get notified via email when a full class opens up, alleviating the need to repeatedly check official Course Offerings. TigerSnatch Trades, a first-of-its-kind system at Princeton, finds and facilitates swaps between students who wish to enroll in each other's full sections.
+[TigerSnatch](https://snatch.tigerapps.org) helps Princeton students with course enrollment through its Subscriptions and Trades features. With Subscriptions, students can get notified via email when a full class opens up, alleviating the need to repeatedly check official Course Offerings. TigerSnatch Trades, a first-of-its-kind system at Princeton, finds and facilitates swaps between students who wish to enroll in each other's full sections.
 
 > TigerSnatch was built in Spring 2021 by Shannon Heh '23, Nicholas Padmanabhan '23, and Byron Zhang '23 as a project for COS333 at Princeton University. Check out the TigerSnatch documentation in `docs/`!
 > 
