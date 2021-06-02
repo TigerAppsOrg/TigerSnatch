@@ -6,7 +6,7 @@
 
 from sys import stderr
 import re
-from config import DB_CONNECTION_STR, COLLECTIONS, MAX_LOG_LENGTH, MAX_WAITLIST_SIZE, MAX_ADMIN_LOG_LENGTH, HEROKU_API_KEY
+from config import DB_CONNECTION_STR, COLLECTIONS, MAX_LOG_LENGTH, MAX_WAITLIST_SIZE, MAX_ADMIN_LOG_LENGTH, HEROKU_API_KEY, HEROKU_APP_NAME
 from schema import COURSES_SCHEMA, CLASS_SCHEMA, MAPPINGS_SCHEMA, ENROLLMENTS_SCHEMA
 from pymongo import MongoClient
 from pymongo.errors import ConnectionFailure
@@ -1115,7 +1115,7 @@ class Database:
 
     def _connect_to_heroku(self):
         heroku_conn = heroku3.from_key(HEROKU_API_KEY)
-        app = heroku_conn.apps()['tigersnatch']
+        app = heroku_conn.apps()[HEROKU_APP_NAME]
         return app
 
     # adds log message to logs array in system collection
