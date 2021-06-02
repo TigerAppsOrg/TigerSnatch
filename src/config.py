@@ -26,6 +26,9 @@ APP_SECRET_KEY = b'N|\x193\\\xb8\xdaTc\x89\x15r\xb0-\xbb\x02'
 # Heroku API key
 HEROKU_API_KEY = environ['HEROKU_API_KEY']
 
+# Heroku app name
+HEROKU_APP_NAME = environ['HEROKU_APP_NAME']
+
 # TigerSnatch email and password
 TS_EMAIL = environ['TS_EMAIL']
 TS_PASSWORD = environ['TS_PASSWORD']
