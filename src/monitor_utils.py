@@ -61,6 +61,7 @@ def get_course_in_mobileapp(term, course_, curr_time):
             new = {
                 'courseid': courseid,
                 'displayname': subject['code'] + course['catalog_number'],
+                'displayname_whitespace': subject['code'] + ' ' + course['catalog_number'],
                 'title': course['title'],
                 'time': curr_time
             }
@@ -71,6 +72,8 @@ def get_course_in_mobileapp(term, course_, curr_time):
             for x in course['crosslistings']:
                 new['displayname'] += '/' + \
                     x['subject'] + x['catalog_number']
+                new['displayname_whitespace'] += '/' + \
+                    x['subject'] + ' ' + x['catalog_number']
 
             new_mapping = new.copy()
             del new['time']
