@@ -61,12 +61,15 @@ def process_dept_code(args):
                 new = {
                     'courseid': courseid,
                     'displayname': subject['code'] + course['catalog_number'],
+                    'displayname_whitespace': subject['code'] + ' ' + course['catalog_number'],
                     'title': course['title'],
                     'time': time.time()}
 
                 for x in course['crosslistings']:
                     new['displayname'] += '/' + \
                         x['subject'] + x['catalog_number']
+                    new['displayname_whitespace'] += '/' + \
+                        x['subject'] + ' ' + x['catalog_number']
 
                 print('inserting', new['displayname'], 'into mappings')
                 db.add_to_mappings(new)

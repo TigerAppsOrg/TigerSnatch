@@ -735,6 +735,7 @@ class Database:
 
         res = list(self._db.mappings.find({'$or': [
             {'displayname': {'$regex': query}},
+            {'displayname_whitespace': {'$regex': query}},
             {'title': {'$regex': query}}
         ]}))
 
