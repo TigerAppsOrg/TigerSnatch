@@ -408,7 +408,7 @@ def admin():
         query = ''
     if len(query) > 100:
         query = query[:100]
-    search_res, new_query = _db.search_for_user(query)
+    search_res, new_query, total_users = _db.search_for_user(query)
 
     term_code, term_name = _db.get_current_term_code()
 
@@ -424,7 +424,8 @@ def admin():
                            blacklist=_db.get_blacklist(),
                            notifs_online=_db.get_cron_notification_status(),
                            current_term_code=term_code,
-                           term_name=term_name)
+                           term_name=term_name,
+                           total_users=total_users)
 
     return make_response(html)
 

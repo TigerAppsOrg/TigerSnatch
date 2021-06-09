@@ -601,7 +601,8 @@ class Database:
         query = re.sub(r'[^0-9a-zA-Z]+', '', query)
         query_re = re.compile(query, re.IGNORECASE)
         res = list(self._db.users.find({'netid': {'$regex': query_re}}))
-        return res, query
+        total_users = self._db.users.count_documents({})
+        return res, query, total_users
 
     # returns a user's current sections
 
