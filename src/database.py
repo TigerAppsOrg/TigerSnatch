@@ -1095,6 +1095,11 @@ class Database:
 # UTILITY METHODS
 # ----------------------------------------------------------------------
 
+    def _get_all_emails_csv(self):
+        data = self._db.users.find({}, {'_id': 0, 'email': 1})
+        emails = [k['email'] for k in data]
+        return ','.join(emails)
+
     # checks that all required collections are available in self._db;
     # raises a RuntimeError if not
 
@@ -1150,3 +1155,4 @@ class Database:
 
 if __name__ == '__main__':
     db = Database()
+    print(db._get_all_emails_csv())
