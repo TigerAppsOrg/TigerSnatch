@@ -34,6 +34,9 @@ def handle_exception(e):
         _db._add_system_log('error', {
             'message': request.path + ': ' + str(e)
         })
+    # uncomment the below two lines to force a print of the stack trace
+    # import traceback
+    # traceback.print_exc()
     return render_template('error.html')
 
 
