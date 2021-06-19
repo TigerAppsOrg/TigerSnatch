@@ -52,6 +52,7 @@ def get_course_in_mobileapp(term, course_, curr_time):
 
     new_enroll = {}
     new_cap = {}
+    entirely_new_enrollments = {}
 
     # iterate through all subjects, courses, and classes
     for subject in data['term'][0]['subjects']:
@@ -108,6 +109,14 @@ def get_course_in_mobileapp(term, course_, curr_time):
 
                 new_enroll[classid] = int(class_['enrollment'])
                 new_cap[classid] = int(class_['capacity'])
+                entirely_new_enrollments[classid] = {
+                    'classid': classid,
+                    'courseid': courseid,
+                    'section': section,
+                    'enrollment': int(class_['enrollment']),
+                    'capacity': int(class_['capacity']),
+                    'swap_out': []
+                }
 
                 # pre-recorded lectures are marked as 01:00 AM start
                 if new_class['start_time'] == '01:00 AM':
@@ -131,7 +140,7 @@ def get_course_in_mobileapp(term, course_, curr_time):
 
         break
 
-    return new, new_mapping, new_enroll, new_cap
+    return new, new_mapping, new_enroll, new_cap, entirely_new_enrollments
 
 
 # helper method for multiprocessing: generates CourseWrappers after

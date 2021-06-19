@@ -118,7 +118,7 @@ class Monitor:
 
         try:
             displayname = self._db.courseid_to_displayname(courseid)
-            new_course, new_mapping, new_enroll, new_cap = get_course_in_mobileapp(
+            new_course, new_mapping, new_enroll, new_cap, entirely_new_enrollments = get_course_in_mobileapp(
                 current_term_code, displayname, curr_time)
 
             # if no changes to course info, do not update
@@ -127,7 +127,8 @@ class Monitor:
 
             # update course data in db
             self._db.update_course_all(courseid, new_course,
-                                       new_mapping, new_enroll, new_cap)
+                                       new_mapping, new_enroll, new_cap,
+                                       entirely_new_enrollments)
         except Exception as e:
             print(e, file=stderr)
 

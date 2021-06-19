@@ -821,7 +821,14 @@ class Database:
 
     # updates the enrollment and capacity for class classid
 
-    def update_enrollment(self, classid, new_enroll, new_cap, update_courses_entry=True):
+    def update_enrollment(self, classid, new_enroll, new_cap, entirely_new_enrollment, update_courses_entry=True):
+        # handles the situation where an additional section is added to a course after the initial TigerSnatch
+        # term update. the previous issue was that `update_one` DOES NOT add to a collection; it simply updates
+        # an entry if it exists; but an entry for a new section cannot exist. as a result, the new section was being
+        # added to the courses collection but not the enrollments collection, causing an error on the frontend.
+        if self._db.enrollments.find_one({'classid': classid}) is None:
+            self.add_to_enrollments(entirely_new_enrollment)
+            return
         self._db.enrollments.update_one({'classid': classid},
                                         {'$set': {'enrollment': new_enroll,
                                                   'capacity': new_cap}})
@@ -975,7 +982,7 @@ class Database:
     # updates course entry in courses, mappings, and enrollment
     # collections with data dictionary
 
-    def update_course_all(self, courseid, new_course, new_mapping, new_enroll, new_cap):
+    def update_course_all(self, courseid, new_course, new_mapping, new_enroll, new_cap, entirely_new_enrollments):
         def validate(new_course, new_mapping):
             if not all(k in new_course for k in COURSES_SCHEMA):
                 raise RuntimeError('invalid courses document schema')
@@ -994,7 +1001,7 @@ class Database:
         self._db.courses.replace_one({'courseid': courseid}, new_course)
         for classid in new_enroll.keys():
             self.update_enrollment(
-                classid, new_enroll[classid], new_cap[classid], update_courses_entry=False)
+                classid, new_enroll[classid], new_cap[classid], entirely_new_enrollments[classid], update_courses_entry=False)
         self._db.mappings.replace_one({'courseid': courseid}, new_mapping)
 
     # adds a document containing mapping data to the mappings collection
@@ -1088,6 +1095,11 @@ class Database:
 # UTILITY METHODS
 # ----------------------------------------------------------------------
 
+    def _get_all_emails_csv(self):
+        data = self._db.users.find({}, {'_id': 0, 'email': 1})
+        emails = [k['email'] for k in data]
+        return ','.join(emails)
+
     # checks that all required collections are available in self._db;
     # raises a RuntimeError if not
 
@@ -1143,3 +1155,4 @@ class Database:
 
 if __name__ == '__main__':
     db = Database()
+    print(db._get_all_emails_csv())
