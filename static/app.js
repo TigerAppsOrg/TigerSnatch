@@ -723,10 +723,44 @@ let blacklistRemovalListener = function () {
     });
 };
 
+// listens for "Info" button on user list
+let getUserInfoListener = function () {
+    let helper = function (res, label) {
+        if (res["data"] === "missing") {
+            $(".toast-container").prepend(
+                toastUserDoesNotExist.clone().attr("id", "toast-user-does-not-exist-" + ++i)
+            );
+            $("#toast-user-does-not-exist-" + i).toast("show");
+            enableAdminFunction();
+            return;
+        }
+        let data = res["data"].split("{");
+        $(`#get-${label}-input`).val("");
+
+        dataHTML = "";
+        for (let d of data) dataHTML += `<p class="my-1">&#8594; ${d}</p>`;
+
+        $("#modal-body-user-data").html(dataHTML);
+        $("#user-data-waitlist-modal").modal("show");
+    };
+
+    $("button.btn-user-info").on("click", function (e) {
+        e.preventDefault();
+        disableAdminFunction();
+        netid = e.target.getAttribute("data-netid");
+        $.post(`/get_user_data/${netid}/${false}`, function (res) {
+            helper(res, "user-data");
+            $("#staticBackdropLabelUserData").html(`Subscribed Sections for ${netid}`);
+            enableAdminFunction();
+        });
+    });
+};
+
 // enables all admin function buttons
 let enableAdminFunction = function () {
     $(".btn-blacklist").attr("disabled", false);
     $(".btn-blacklist-removal").attr("disabled", false);
+    $(".btn-user-info").attr("disabled", false);
     $("#clear-all").attr("disabled", false);
     $("#clear-all-trades").attr("disabled", false);
     $("#clear-all-logs").attr("disabled", false);
@@ -748,6 +782,7 @@ let enableAdminFunction = function () {
 let disableAdminFunction = function () {
     $(".btn-blacklist").attr("disabled", true);
     $(".btn-blacklist-removal").attr("disabled", true);
+    $(".btn-user-info").attr("disabled", true);
     $("#clear-all").attr("disabled", true);
     $("#clear-all-trades").attr("disabled", true);
     $("#clear-all-logs").attr("disabled", true);
@@ -1268,6 +1303,7 @@ let adminFunctions = function () {
     clearClassWaitlistListener();
     clearCourseWaitlistListener();
     getUserDataListener();
+    getUserInfoListener();
     initToggleEmailNotificationsButton();
     // toggleEmailNotificationsListener();
     fillSectionListener();
