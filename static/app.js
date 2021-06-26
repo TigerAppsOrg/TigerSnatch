@@ -1269,7 +1269,7 @@ let adminFunctions = function () {
     clearCourseWaitlistListener();
     getUserDataListener();
     initToggleEmailNotificationsButton();
-    toggleEmailNotificationsListener();
+    // toggleEmailNotificationsListener();
     fillSectionListener();
 };
 
