@@ -211,27 +211,37 @@ class Database:
             raise Exception('status must be a boolean')
 
         try:
-            app = self._connect_to_heroku()
-            app.process_formation()['notifs'].scale(1 if status else 0)
-
+            new_status = 'on' if status else 'off'
+            self._db.admin.update_one(
+                {}, {'$set': {'notifs_status': new_status}})
             self._add_admin_log(
-                f'notification script is now {"on" if status else "off"}')
+                f'notification script is now {new_status}')
             self._add_system_log('cron', {
-                'message': f'notification script set to {"on" if status else "off"}'
+                'message': f'notification script set to {new_status}'
             }, netid=admin_netid)
         except:
             raise Exception(
-                'something is badly wrong - check heroku website')
+                'ensure that key "notifs_status" is in admin collection')
 
-    # sets notification script status; either True (on) or False (off)
+    # gets notification script status; either True (on) or False (off)
 
     def get_cron_notification_status(self):
         try:
-            app = self._connect_to_heroku()
-            return 'notifs' in app.dynos()
+            return self._db.admin.find_one(
+                {}, {'notifs_status': 1, '_id': 0})['notifs_status'] == 'on'
         except:
             raise Exception(
-                'something is badly wrong - check heroku website')
+                'ensure that key "notifs_status" is in admin collection')
+
+    # checks whether notifs schedule csv is different than database version
+
+    def did_notifs_spreadsheet_change(self, data):
+        return self._db.admin.find_one({}, {'notifs_schedule': 1, '_id': 0})['notifs_schedule'] != data
+
+    # updates notifs_schedule entry in admin collection
+
+    def update_notifs_schedule(self, data):
+        self._db.admin.update_one({}, {'$set': {'notifs_schedule': data}})
 
     # clears and removes users from all waitlists
 
@@ -445,6 +455,7 @@ class Database:
 
     # returns True if netid is on app blacklist
 
+
     def is_blacklisted(self, netid):
         try:
             blacklist = self.get_blacklist()
@@ -632,6 +643,7 @@ class Database:
 # ----------------------------------------------------------------------
 
     # gets current term code from admin collection
+
 
     def get_current_term_code(self):
         res = self._db.admin.find_one(
@@ -1159,4 +1171,3 @@ class Database:
 
 if __name__ == '__main__':
     db = Database()
-    print(db._get_all_emails_csv())

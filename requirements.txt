@@ -8,3 +8,4 @@ Jinja2==2.11.3
 dnspython==1.16.0
 APScheduler==3.0.0
 heroku3==4.2.3
+pandas==1.2.3
