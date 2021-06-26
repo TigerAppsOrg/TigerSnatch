@@ -76,6 +76,7 @@ def cronjob():
         db._add_system_log('cron', {
             'message': f'sent 0 emails in {round(time()-tic)} seconds'
         })
+    print(f'sent {total} emails in {round(time()-tic)} seconds')
 
 
 def set_status_indicator_to_on():
@@ -101,7 +102,7 @@ def update_notifs_schedule(data):
 def generate_time_intervals():
     tz = pytz.timezone('US/Eastern')
     # see https://towardsdatascience.com/read-data-from-google-sheets-into-pandas-without-the-google-sheets-api-5c468536550
-    # for how create this link
+    # for how to create this link
     google_sheets_url = 'https://docs.google.com/spreadsheets/d/1iSWihUcWa0yX8MsS_FKC-DuGH75AukdiuAigbSkPm8k/gviz/tq?tqx=out:csv&sheet=Data'
     data = pd.read_csv(google_sheets_url)[['start_datetime', 'end_datetime']]
     datetimes = list(data.itertuples(index=False, name=None))
@@ -116,7 +117,7 @@ def generate_time_intervals():
         print('datetimes are not in ascending order', file=stderr)
         return []
     if flat[-1] <= datetime.now(tz):
-        print('all time intervals are in the past - please update the schedule spreadsheet')
+        print('all time intervals are in the past - please update the schedule spreadsheet and be sure to use 24-hour time')
         return []
 
     return datetimes
