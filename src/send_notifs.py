@@ -8,6 +8,9 @@
 # run, depending on the number of waited-on classes.
 # ----------------------------------------------------------------------
 
+import pandas as pd
+from datetime import datetime
+import pytz
 from notify import Notify
 from monitor import Monitor
 from database import Database
@@ -73,6 +76,50 @@ def cronjob():
         db._add_system_log('cron', {
             'message': f'sent 0 emails in {round(time()-tic)} seconds'
         })
+
+
+def set_status_indicator_to_on():
+    db = Database()
+    db.set_cron_notification_status(True)
+
+
+def set_status_indicator_to_off():
+    db = Database()
+    db.set_cron_notification_status(False)
+
+
+def did_notifs_spreadsheet_change(data):
+    db = Database()
+    return db.did_notifs_spreadsheet_change(data)
+
+
+def update_notifs_schedule(data):
+    db = Database()
+    db.update_notifs_schedule(data)
+
+
+def generate_time_intervals():
+    tz = pytz.timezone('US/Eastern')
+    # see https://towardsdatascience.com/read-data-from-google-sheets-into-pandas-without-the-google-sheets-api-5c468536550
+    # for how create this link
+    google_sheets_url = 'https://docs.google.com/spreadsheets/d/1iSWihUcWa0yX8MsS_FKC-DuGH75AukdiuAigbSkPm8k/gviz/tq?tqx=out:csv&sheet=Data'
+    data = pd.read_csv(google_sheets_url)[['start_datetime', 'end_datetime']]
+    datetimes = list(data.itertuples(index=False, name=None))
+    datetimes = list(map(lambda x:
+                         [tz.localize(datetime.strptime(x[0], '%Y-%m-%d %H:%M:%S')),
+                          tz.localize(datetime.strptime(x[1], '%Y-%m-%d %H:%M:%S'))],
+                         datetimes))
+
+    # validate list of datetimes
+    flat = [item for sublist in datetimes for item in sublist]
+    if not all(flat[i] <= flat[i+1] for i in range(len(flat)-1)):
+        print('datetimes are not in ascending order', file=stderr)
+        return []
+    if flat[-1] <= datetime.now(tz):
+        print('all time intervals are in the past - please update the schedule spreadsheet')
+        return []
+
+    return datetimes
 
 
 if __name__ == '__main__':
