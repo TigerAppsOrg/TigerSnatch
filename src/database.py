@@ -10,8 +10,12 @@ from config import DB_CONNECTION_STR, COLLECTIONS, MAX_LOG_LENGTH, MAX_WAITLIST_
 from schema import COURSES_SCHEMA, CLASS_SCHEMA, MAPPINGS_SCHEMA, ENROLLMENTS_SCHEMA
 from pymongo import MongoClient
 from pymongo.errors import ConnectionFailure
-from datetime import datetime, timedelta
+from datetime import datetime
+import pytz
 import heroku3
+
+
+TZ = pytz.timezone('US/Eastern')
 
 
 class Database:
@@ -158,7 +162,7 @@ class Database:
 
     def _add_admin_log(self, log):
         print(log)
-        log = f"{(datetime.now()-timedelta(hours=4)).strftime('%b %d, %Y @ %-I:%M %p ET')} \u2192 {log}"
+        log = f"{(datetime.now(TZ)).strftime('%b %d, %Y @ %-I:%M %p ET')} \u2192 {log}"
 
         self._db.admin.update_one({}, {
             '$push': {
@@ -479,7 +483,7 @@ class Database:
     # update user netid's waitlist log
 
     def update_user_waitlist_log(self, netid, entry):
-        entry = f"{(datetime.now()-timedelta(hours=4)).strftime('%b %d, %Y @ %-I:%M %p ET')} \u2192 {entry}"
+        entry = f"{(datetime.now(TZ)).strftime('%b %d, %Y @ %-I:%M %p ET')} \u2192 {entry}"
 
         self._db.logs.update_one({'netid': netid}, {
             '$push': {
@@ -503,7 +507,7 @@ class Database:
     # update user netid's waitlist log
 
     def update_user_trade_log(self, netid, entry):
-        entry = f"{(datetime.now()-timedelta(hours=4)).strftime('%b %d, %Y @ %-I:%M %p ET')} \u2192 {entry}"
+        entry = f"{(datetime.now(TZ)).strftime('%b %d, %Y @ %-I:%M %p ET')} \u2192 {entry}"
 
         self._db.logs.update_one({'netid': netid}, {
             '$push': {
@@ -1136,7 +1140,7 @@ class Database:
 
     def _add_system_log(self, type, meta, netid=None):
         meta['type'] = type
-        meta['time'] = datetime.now()
+        meta['time'] = datetime.now(TZ)
         if netid is not None:
             meta['netid'] = netid
         self._db.system.insert_one(meta)
