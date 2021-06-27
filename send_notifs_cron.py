@@ -74,6 +74,6 @@ if __name__ == '__main__':
     scheds = [new_sched]
 
     sched_spreadsheet_checker.add_job(check_spreadsheet_maybe_schedule_new_notifs, 'interval',
-                                      seconds=30,
+                                      hours=12,
                                       args=[scheds])
     sched_spreadsheet_checker.start()
