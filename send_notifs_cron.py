@@ -14,25 +14,21 @@ from datetime import datetime
 import pytz
 from config import NOTIFS_INTERVAL_SECS
 from apscheduler.schedulers.blocking import BlockingScheduler
+from apscheduler.schedulers.background import BackgroundScheduler
 
 
-def schedule_jobs(sched: BlockingScheduler):
+def schedule_jobs(update_db=False):
+    sched = BackgroundScheduler()
     times = generate_time_intervals()
-    '''uncomment the below code if we figure out a way to make the script
-    automatically poll the Google Sheet for changes (i.e. need to place
-    this function in a BlockingScheduler job, but as of now we're not
-    sure how to do that given that it takes the BlockingScheduler itself
-    as an argument)'''
-    # if not did_notifs_spreadsheet_change(times):
-    #     return
-    # update_notifs_schedule(times)
+    if update_db:
+        update_notifs_schedule(times)  # update database
     set_status_indicator_to_off()
     tz = pytz.timezone('US/Eastern')
     for time in times:
         start, end = time[0], time[1]
         if end <= datetime.now(tz):
             continue
-        print('adding job between', start, 'and', end)
+        print('[Scheduler] adding job between', start, 'and', end)
         sched.add_job(cronjob, 'interval',
                       start_date=start,
                       end_date=end,
@@ -46,8 +42,38 @@ def schedule_jobs(sched: BlockingScheduler):
                       timezone=tz)
         if start <= datetime.now(tz) <= end:
             set_status_indicator_to_on()
+    print('[Scheduler] booting new notifs scheduler')
+    sched.start()
+    print('[Scheduler] done booting scheduler')
+    return sched
 
 
-sched = BlockingScheduler()
-schedule_jobs(sched)
-sched.start()
+def check_spreadsheet_maybe_schedule_new_notifs(scheds: list[BackgroundScheduler]):
+    times = generate_time_intervals()
+    if not did_notifs_spreadsheet_change(times):
+        print('[Scheduler] no new spreadsheet datetimes detected')
+        return
+    print('[Scheduler] new datetimes detected - rescheduling jobs')
+    print('[Scheduler] shutting down current notifs scheduler')
+    scheds[-1].shutdown()  # stop and clear all current notifs jobs
+    update_notifs_schedule(times)  # update database
+    new_sched = schedule_jobs()  # schedule all new notifs jobs
+    print('[Scheduler] replacing notifs scheduler')
+    scheds.pop(0)
+    scheds.append(new_sched)
+    print('[Scheduler] done updating notifs scheduler')
+
+
+if __name__ == '__main__':
+    print('[Scheduler] this script reads from https://docs.google.com/spreadsheets/d/1iSWihUcWa0yX8MsS_FKC-DuGH75AukdiuAigbSkPm8k/edit#gid=550138744 every 12 hours and schedules all notifications jobs according to the datetimes in the spreadsheet.')
+    print('[Scheduler] reboot this dyno ("notifs") in Heroku to force a re-schedule using the spreadsheet')
+    sched_spreadsheet_checker = BlockingScheduler()
+
+    # perform one scheduling check initially
+    new_sched = schedule_jobs(update_db=True)
+    scheds = [new_sched]
+
+    sched_spreadsheet_checker.add_job(check_spreadsheet_maybe_schedule_new_notifs, 'interval',
+                                      seconds=30,
+                                      args=[scheds])
+    sched_spreadsheet_checker.start()

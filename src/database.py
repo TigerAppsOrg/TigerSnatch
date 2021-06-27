@@ -236,7 +236,11 @@ class Database:
     # checks whether notifs schedule csv is different than database version
 
     def did_notifs_spreadsheet_change(self, data):
-        return self._db.admin.find_one({}, {'notifs_schedule': 1, '_id': 0})['notifs_schedule'] != data
+        tz = pytz.timezone('UTC')
+        curr = self._db.admin.find_one({}, {'notifs_schedule': 1, '_id': 0})[
+            'notifs_schedule']
+        curr = [[tz.localize(pair[0]), tz.localize(pair[1])] for pair in curr]
+        return curr != data
 
     # updates notifs_schedule entry in admin collection
 
