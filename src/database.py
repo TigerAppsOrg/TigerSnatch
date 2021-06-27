@@ -1136,12 +1136,14 @@ class Database:
 
         app = self._connect_to_heroku()
         if status:
+            app.process_formation()['notifs'].scale(0)
             app.enable_maintenance_mode()
         else:
+            app.process_formation()['notifs'].scale(1)
             app.disable_maintenance_mode()
 
         self._add_system_log('heroku', {
-            'message': f'maintenance mode set to {"on" if status else "off"}'
+            'message': f'maintenance mode and notifs dyno set to {"on" if status else "off"}'
         })
 
     # connects to Heroku and returns app variable so you can do
