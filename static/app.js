@@ -802,32 +802,12 @@ let disableAdminFunction = function () {
 
 // listens for email notifications switch toggle
 let toggleEmailNotificationsListener = function () {
-    $("#toggle-emails").on("click", function (e) {
+    $("#notifs-sheet-link").on("click", function (e) {
         e.preventDefault();
-        disableAdminFunction();
-
-        if (!confirm("Are you sure you want to toggle notifications?")) {
-            enableAdminFunction();
-            return;
-        }
-
-        $.post("/get_notifications_status", function (res) {
-            $.post(`/set_notifications_status/${!res["isOn"]}`, function (res1) {
-                if (!res["isOn"]) {
-                    $(".toast-container").prepend(
-                        toastEmailsOn.clone().attr("id", "toast-emails-on-" + ++i)
-                    );
-                    $("#toast-emails-on-" + i).toast("show");
-                } else {
-                    $(".toast-container").prepend(
-                        toastEmailsOff.clone().attr("id", "toast-emails-off-" + ++i)
-                    );
-                    $("#toast-emails-off-" + i).toast("show");
-                }
-                $("*").css("pointer-events", "none");
-                setTimeout(() => location.reload(), 3100);
-            });
-        });
+        window.open(
+            "https://docs.google.com/spreadsheets/d/1iSWihUcWa0yX8MsS_FKC-DuGH75AukdiuAigbSkPm8k/edit#gid=550138744",
+            "_blank"
+        );
     });
 };
 
@@ -1305,7 +1285,7 @@ let adminFunctions = function () {
     getUserDataListener();
     getUserInfoListener();
     initToggleEmailNotificationsButton();
-    // toggleEmailNotificationsListener();
+    toggleEmailNotificationsListener();
     fillSectionListener();
 };
 
