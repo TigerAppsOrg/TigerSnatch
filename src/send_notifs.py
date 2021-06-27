@@ -114,7 +114,7 @@ def generate_time_intervals():
     # validate list of datetimes
     flat = [item for sublist in datetimes for item in sublist]
     if not all(flat[i] < flat[i+1] for i in range(len(flat)-1)):
-        print('[Scheduler] WARNING: datetime intervals either overlap or are not in ascending order. This may cause duplicate emails to be sent!')
+        print('[Scheduler] WARNING: datetime intervals either overlap or are not in ascending order. This may cause duplicate emails to be sent!', file=stderr)
         return []
     if flat[-1] <= datetime.now(tz):
         print('[Scheduler] WARNING: all time intervals are in the past - please update the schedule spreadsheet and be sure to use 24-hour time', file=stderr)
