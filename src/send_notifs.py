@@ -106,10 +106,13 @@ def generate_time_intervals():
     google_sheets_url = 'https://docs.google.com/spreadsheets/d/1iSWihUcWa0yX8MsS_FKC-DuGH75AukdiuAigbSkPm8k/gviz/tq?tqx=out:csv&sheet=Data'
     data = pd.read_csv(google_sheets_url)[['start_datetime', 'end_datetime']]
     datetimes = list(data.itertuples(index=False, name=None))
-    datetimes = list(map(lambda x:
-                         [tz.localize(datetime.strptime(x[0], '%Y-%m-%d %I:%M %p')),
-                          tz.localize(datetime.strptime(x[1], '%Y-%m-%d %I:%M %p'))],
-                         datetimes))
+    try:
+        datetimes = list(map(lambda x:
+                            [tz.localize(datetime.strptime(x[0], '%Y-%m-%d %I:%M %p')),
+                            tz.localize(datetime.strptime(x[1], '%Y-%m-%d %I:%M %p'))],
+                            datetimes))
+    except:
+        print('[Scheduler] error parsing datetimes - make sure that their format is YYYY-MM-DD HH:MM AM/PM')
 
     # validate list of datetimes
     flat = [item for sublist in datetimes for item in sublist]
