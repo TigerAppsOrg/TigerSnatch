@@ -12,7 +12,7 @@ path.append('src')  # noqa
 from send_notifs import *
 from datetime import datetime
 import pytz
-from config import NOTIFS_INTERVAL_SECS
+from config import NOTIFS_INTERVAL_SECS, NOTIFS_SHEET_POLL_MINS
 from apscheduler.schedulers.blocking import BlockingScheduler
 from apscheduler.schedulers.background import BackgroundScheduler
 
@@ -74,6 +74,6 @@ if __name__ == '__main__':
     scheds = [new_sched]
 
     sched_spreadsheet_checker.add_job(check_spreadsheet_maybe_schedule_new_notifs, 'interval',
-                                      hours=12,
+                                      minutes=NOTIFS_SHEET_POLL_MINS,
                                       args=[scheds])
     sched_spreadsheet_checker.start()

@@ -49,3 +49,6 @@ MAX_LOG_LENGTH = MAX_WAITLIST_SIZE*2
 
 # maximum number of entries in admin panel logs
 MAX_ADMIN_LOG_LENGTH = int(environ['MAX_ADMIN_LOG_LENGTH'])
+
+# interval on which the notifications scheduling spreadsheet is polled
+NOTIFS_SHEET_POLL_MINS = int(environ['NOTIFS_SHEET_POLL_MINS'])
