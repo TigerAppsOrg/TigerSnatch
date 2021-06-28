@@ -112,7 +112,7 @@ def generate_time_intervals():
                             tz.localize(datetime.strptime(x[1], '%Y-%m-%d %I:%M %p'))],
                             datetimes))
     except:
-        print('[Scheduler] error parsing datetimes - make sure that their format is YYYY-MM-DD HH:MM AM/PM')
+        print('[Scheduler] error parsing datetimes - make sure that their format is YYYY-MM-DD HH:MM AM/PM', file=stderr)
 
     # validate list of datetimes
     flat = [item for sublist in datetimes for item in sublist]
