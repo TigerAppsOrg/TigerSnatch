@@ -72,7 +72,7 @@ def check_spreadsheet_maybe_schedule_new_notifs(scheds: list[BackgroundScheduler
 
 
 if __name__ == '__main__':
-    print('[Scheduler] this script reads from https://docs.google.com/spreadsheets/d/1iSWihUcWa0yX8MsS_FKC-DuGH75AukdiuAigbSkPm8k/edit#gid=550138744 every 12 hours and schedules all notifications jobs according to the datetimes in the spreadsheet.')
+    print('[Scheduler] this script reads from https://docs.google.com/spreadsheets/d/1iSWihUcWa0yX8MsS_FKC-DuGH75AukdiuAigbSkPm8k/edit#gid=550138744 on an interval (configurable in Config Vars) and schedules all notifications jobs according to the datetimes in the spreadsheet')
     print('[Scheduler] reboot this dyno ("notifs") in Heroku to force a re-schedule using the spreadsheet')
     sched_spreadsheet_checker = BlockingScheduler()
 
