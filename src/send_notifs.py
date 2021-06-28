@@ -107,8 +107,8 @@ def generate_time_intervals():
     data = pd.read_csv(google_sheets_url)[['start_datetime', 'end_datetime']]
     datetimes = list(data.itertuples(index=False, name=None))
     datetimes = list(map(lambda x:
-                         [tz.localize(datetime.strptime(x[0], '%Y-%m-%d %H:%M:%S')),
-                          tz.localize(datetime.strptime(x[1], '%Y-%m-%d %H:%M:%S'))],
+                         [tz.localize(datetime.strptime(x[0], '%Y-%m-%d %I:%M %p')),
+                          tz.localize(datetime.strptime(x[1], '%Y-%m-%d %I:%M %p'))],
                          datetimes))
 
     # validate list of datetimes
