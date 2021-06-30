@@ -84,9 +84,9 @@ def set_status_indicator_to_on():
     db.set_cron_notification_status(True)
 
 
-def set_status_indicator_to_off():
+def set_status_indicator_to_off(log=True):
     db = Database()
-    db.set_cron_notification_status(False)
+    db.set_cron_notification_status(False, log=log)
 
 
 def did_notifs_spreadsheet_change(data):

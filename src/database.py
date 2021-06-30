@@ -206,7 +206,7 @@ class Database:
 
     # sets notification script status to either True (on) or False (off)
 
-    def set_cron_notification_status(self, status, admin_netid='SYSTEM_AUTO'):
+    def set_cron_notification_status(self, status, admin_netid='SYSTEM_AUTO', log=True):
         if not isinstance(status, bool):
             raise Exception('status must be a boolean')
 
@@ -214,8 +214,9 @@ class Database:
             new_status = 'on' if status else 'off'
             self._db.admin.update_one(
                 {}, {'$set': {'notifs_status': new_status}})
-            self._add_admin_log(
-                f'notification script is now {new_status}')
+            if log:
+                self._add_admin_log(
+                    f'notification script is now {new_status}')
             self._add_system_log('cron', {
                 'message': f'notification script set to {new_status}'
             }, netid=admin_netid)

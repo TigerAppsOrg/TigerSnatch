@@ -24,7 +24,7 @@ def schedule_jobs(update_db=False):
         times = generate_time_intervals()
         if update_db:
             update_notifs_schedule(times)  # update database
-        set_status_indicator_to_off()
+        set_status_indicator_to_off(log=False)
         tz = pytz.timezone('US/Eastern')
         for time in times:
             start, end = time[0], time[1]
