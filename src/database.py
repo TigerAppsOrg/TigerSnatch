@@ -453,6 +453,56 @@ class Database:
 
         return '{'.join(sorted(res))
 
+    # generates TigerSnatch usage summary: # users, total subscriptions,
+    # top n most-subscribed sections, list of scheduled notifications
+    # intervals
+
+    def get_usage_summary(self):
+        def get_total_users():
+            return self._db.users.count_documents({})
+
+        def get_total_subscriptions():
+            data = self._db.waitlists.find({}, {'waitlist': 1, '_id': 0})
+            return sum([len(k['waitlist']) for k in data])
+
+        def get_top_n_most_subscribed_sections(n=5):
+            data = self._db.waitlists.find(
+                {}, {'waitlist': 1, 'classid': 1, '_id': 0})
+            data = [(len(k['waitlist']), k['classid']) for k in data]
+            data.sort(key=lambda x: x[0])
+            data = [e[1] for e in data[:n]]
+            res = [f'Top {n} most-subscribed sections:']
+            for rank, classid in enumerate(data):
+                deptnum, name, section = self.classid_to_classinfo(classid)
+                res.append(f'#{rank+1}: {name} ({deptnum}): {section}')
+            return res
+
+        def get_notifs_schedule(fmt='%b %d, %Y @ %-I:%M %p'):
+            tz = pytz.timezone('UTC')
+            datetimes = list(self._db.admin.find(
+                {}, {'notifs_schedule': 1, '_id': 0}))[0]['notifs_schedule']
+            res = [f'Scheduled notifications intervals:']
+            for start, end in datetimes:
+                start, end = tz.localize(start).astimezone(
+                    TZ), tz.localize(end).astimezone(TZ)
+                res.append(f'{start.strftime(fmt)} to {end.strftime(fmt)}')
+            return res
+
+        try:
+            res = [f'Total users: {get_total_users()}',
+                   f'Total subscriptions: {get_total_subscriptions()}',
+                   '==========']
+            for section in get_top_n_most_subscribed_sections():
+                res.append(section)
+            res.append('==========')
+            for interval in get_notifs_schedule():
+                res.append(interval)
+            return '{'.join(res)
+
+        except:
+            print('failed to generate usage history', file=stderr)
+            return 'error'
+
 
 # ----------------------------------------------------------------------
 # BLACKLIST UTILITY METHODS

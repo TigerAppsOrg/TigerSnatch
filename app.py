@@ -572,6 +572,19 @@ def get_user_data(netid, isTrade):
                                                     trades=isTrade == 'true')})
 
 
+@app.route('/get_usage_summary', methods=['POST'])
+def get_usage_summary():
+    netid = _cas.authenticate()
+    netid.strip()
+    try:
+        if not is_admin(netid, _db):
+            return redirect(url_for('landing'))
+    except:
+        return redirect(url_for('landing'))
+
+    return jsonify({'data': _db.get_usage_summary()})
+
+
 @app.route('/update_all_courses', methods=['POST'])
 def update_all_courses():
     netid = _cas.authenticate()

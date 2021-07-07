@@ -756,11 +756,38 @@ let getUserInfoListener = function () {
     });
 };
 
+// listens for Usage Summary button on admin panel
+let getUsageSummaryListener = function () {
+    let helper = function (res, label) {
+        if (res["data"] === "error") {
+            enableAdminFunction();
+            return;
+        }
+        let data = res["data"].split("{");
+
+        dataHTML = "";
+        for (let d of data) dataHTML += `<p class="my-1">&#8594; ${d}</p>`;
+
+        $("#modal-body-usage-summary").html(dataHTML);
+        $("#usage-summary-modal").modal("show");
+    };
+
+    $("#usage-summary").on("click", function (e) {
+        e.preventDefault();
+        disableAdminFunction();
+        $.post(`/get_usage_summary`, function (res) {
+            helper(res, "usage-summary");
+            enableAdminFunction();
+        });
+    });
+};
+
 // enables all admin function buttons
 let enableAdminFunction = function () {
     $(".btn-blacklist").attr("disabled", false);
     $(".btn-blacklist-removal").attr("disabled", false);
     $(".btn-user-info").attr("disabled", false);
+    $("#usage-summary").attr("disabled", false);
     $("#clear-all").attr("disabled", false);
     $("#clear-all-trades").attr("disabled", false);
     $("#clear-all-logs").attr("disabled", false);
@@ -783,6 +810,7 @@ let disableAdminFunction = function () {
     $(".btn-blacklist").attr("disabled", true);
     $(".btn-blacklist-removal").attr("disabled", true);
     $(".btn-user-info").attr("disabled", true);
+    $("#usage-summary").attr("disabled", true);
     $("#clear-all").attr("disabled", true);
     $("#clear-all-trades").attr("disabled", true);
     $("#clear-all-logs").attr("disabled", true);
@@ -1282,6 +1310,7 @@ let adminFunctions = function () {
     clearAllLogsListener();
     clearClassWaitlistListener();
     clearCourseWaitlistListener();
+    getUsageSummaryListener();
     getUserDataListener();
     getUserInfoListener();
     initToggleEmailNotificationsButton();
