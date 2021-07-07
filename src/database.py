@@ -458,12 +458,18 @@ class Database:
     # intervals
 
     def get_usage_summary(self):
+        def get_current_term_name():
+            return self.get_current_term_code()[1]
+
         def get_total_users():
             return self._db.users.count_documents({})
 
         def get_total_subscriptions():
             data = self._db.waitlists.find({}, {'waitlist': 1, '_id': 0})
             return sum([len(k['waitlist']) for k in data])
+
+        def get_total_subscribed_sections():
+            return self._db.waitlists.count_documents({})
 
         def get_top_n_most_subscribed_sections(n=5):
             data = self._db.waitlists.find(
@@ -489,8 +495,10 @@ class Database:
             return res
 
         try:
-            res = [f'Total users: {get_total_users()}',
-                   f'Total subscriptions: {get_total_subscriptions()}',
+            res = [f'Current term: {get_current_term_name()}',
+                   f'Total # users: {get_total_users()}',
+                   f'Total # subscriptions: {get_total_subscriptions()}',
+                   f'Total # subscribed sections: {get_total_subscribed_sections()}',
                    '==========']
             for section in get_top_n_most_subscribed_sections():
                 res.append(section)
