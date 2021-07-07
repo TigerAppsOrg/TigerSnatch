@@ -787,6 +787,7 @@ let enableAdminFunction = function () {
     $(".btn-blacklist").attr("disabled", false);
     $(".btn-blacklist-removal").attr("disabled", false);
     $(".btn-user-info").attr("disabled", false);
+    $("#notifs-sheet-link").attr("disabled", false);
     $("#usage-summary").attr("disabled", false);
     $("#clear-all").attr("disabled", false);
     $("#clear-all-trades").attr("disabled", false);
@@ -810,6 +811,7 @@ let disableAdminFunction = function () {
     $(".btn-blacklist").attr("disabled", true);
     $(".btn-blacklist-removal").attr("disabled", true);
     $(".btn-user-info").attr("disabled", true);
+    $("#notifs-sheet-link").attr("disabled", true);
     $("#usage-summary").attr("disabled", true);
     $("#clear-all").attr("disabled", true);
     $("#clear-all-trades").attr("disabled", true);
