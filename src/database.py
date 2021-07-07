@@ -469,7 +469,7 @@ class Database:
             data = self._db.waitlists.find(
                 {}, {'waitlist': 1, 'classid': 1, '_id': 0})
             data = [(len(k['waitlist']), k['classid']) for k in data]
-            data.sort(key=lambda x: x[0])
+            data.sort(key=lambda x: x[0], reverse=True)
             data = [e[1] for e in data[:n]]
             res = [f'Top {n} most-subscribed sections:']
             for rank, classid in enumerate(data):
