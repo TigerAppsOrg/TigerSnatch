@@ -28,8 +28,6 @@ def schedule_jobs(update_db=False):
         tz = pytz.timezone('US/Eastern')
         for time in times:
             start, end = time[0], time[1]
-            if end <= datetime.now(tz):
-                continue
             print('[Scheduler] adding job between', start, 'and', end)
             sched.add_job(cronjob, 'interval',
                         start_date=start,
