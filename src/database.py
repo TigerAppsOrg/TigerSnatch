@@ -1173,6 +1173,14 @@ class Database:
 # UTILITY METHODS
 # ----------------------------------------------------------------------
 
+    def increment_email_counter(self, n):
+        if n <= 0:
+            return
+        self._db.admin.update_one({}, {'$inc': {'total_emails': n}})
+
+    def get_email_counter(self):
+        return self._db.admin.find_one({}, {'_id': 0, 'total_emails': 1})['total_emails']
+
     def _get_all_emails_csv(self):
         data = self._db.users.find({}, {'_id': 0, 'email': 1})
         emails = [k['email'] for k in data]
