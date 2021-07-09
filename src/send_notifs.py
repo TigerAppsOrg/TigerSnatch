@@ -72,6 +72,7 @@ def cronjob():
         db._add_system_log('cron', {
             'message': f'sent {total} emails in {round(time()-tic)} seconds'
         })
+        db.increment_email_counter(total)
     elif total == 0:
         db._add_system_log('cron', {
             'message': f'sent 0 emails in {round(time()-tic)} seconds'
@@ -108,9 +109,9 @@ def generate_time_intervals():
     datetimes = list(data.itertuples(index=False, name=None))
     try:
         datetimes = list(map(lambda x:
-                            [tz.localize(datetime.strptime(x[0], '%Y-%m-%d %I:%M %p')),
-                            tz.localize(datetime.strptime(x[1], '%Y-%m-%d %I:%M %p'))],
-                            datetimes))
+                             [tz.localize(datetime.strptime(x[0], '%Y-%m-%d %I:%M %p')),
+                              tz.localize(datetime.strptime(x[1], '%Y-%m-%d %I:%M %p'))],
+                             datetimes))
         datetimes = list(filter(lambda x: x[1] > datetime.now(tz), datetimes))
     except:
         print('[Scheduler] error parsing datetimes - make sure that their format is YYYY-MM-DD HH:MM AM/PM', file=stderr)
