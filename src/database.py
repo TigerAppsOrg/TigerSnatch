@@ -471,6 +471,9 @@ class Database:
         def get_total_subscribed_sections():
             return self._db.waitlists.count_documents({})
 
+        def get_email_counter():
+            return self._db.admin.find_one({}, {'_id': 0, 'total_emails': 1})['total_emails']
+
         def get_top_n_most_subscribed_sections(n=5):
             data = self._db.waitlists.find(
                 {}, {'waitlist': 1, 'classid': 1, '_id': 0})
@@ -500,6 +503,7 @@ class Database:
                    f'Total # users: {get_total_users()}',
                    f'Total # subscriptions: {get_total_subscriptions()}',
                    f'Total # subscribed sections: {get_total_subscribed_sections()}',
+                   f'Total # emails sent: {get_email_counter()}',
                    '==========']
             for section in get_top_n_most_subscribed_sections():
                 res.append(section)
@@ -1177,9 +1181,6 @@ class Database:
         if n <= 0:
             return
         self._db.admin.update_one({}, {'$inc': {'total_emails': n}})
-
-    def get_email_counter(self):
-        return self._db.admin.find_one({}, {'_id': 0, 'total_emails': 1})['total_emails']
 
     def _get_all_emails_csv(self):
         data = self._db.users.find({}, {'_id': 0, 'email': 1})
