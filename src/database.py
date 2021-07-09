@@ -480,11 +480,11 @@ class Database:
             data = [(len(k['waitlist']), k['classid']) for k in data]
             data.sort(key=lambda x: x[0], reverse=True)
             data = [e for e in data[:n]]
-            res = [f'Top {n} most-subscribed sections:']
-            for rank, (n, classid) in enumerate(data):
+            res = [f'Top {n} most-subscribed sections with # subs:']
+            for n, classid in data:
                 deptnum, name, section = self.classid_to_classinfo(classid)
                 res.append(
-                    f'#{rank+1} [{n} subs]: {name} ({deptnum}): {section}')
+                    f'[{n}] {name} ({deptnum}): {section}')
             return res
 
         def get_notifs_schedule(fmt='%b %d, %Y @ %-I:%M %p'):
