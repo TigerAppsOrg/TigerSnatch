@@ -476,18 +476,19 @@ class Database:
                 {}, {'waitlist': 1, 'classid': 1, '_id': 0})
             data = [(len(k['waitlist']), k['classid']) for k in data]
             data.sort(key=lambda x: x[0], reverse=True)
-            data = [e[1] for e in data[:n]]
+            data = [e for e in data[:n]]
             res = [f'Top {n} most-subscribed sections:']
-            for rank, classid in enumerate(data):
+            for rank, (n, classid) in enumerate(data):
                 deptnum, name, section = self.classid_to_classinfo(classid)
-                res.append(f'#{rank+1}: {name} ({deptnum}): {section}')
+                res.append(
+                    f'#{rank+1} [{n} subs]: {name} ({deptnum}): {section}')
             return res
 
         def get_notifs_schedule(fmt='%b %d, %Y @ %-I:%M %p'):
             tz = pytz.timezone('UTC')
             datetimes = list(self._db.admin.find(
                 {}, {'notifs_schedule': 1, '_id': 0}))[0]['notifs_schedule']
-            res = [f'Scheduled notifications intervals:']
+            res = [f'Scheduled notifications intervals (ET):']
             for start, end in datetimes:
                 start, end = tz.localize(start).astimezone(
                     TZ), tz.localize(end).astimezone(TZ)
@@ -517,7 +518,6 @@ class Database:
 # ----------------------------------------------------------------------
 
     # returns True if netid is on app blacklist
-
 
     def is_blacklisted(self, netid):
         try:
@@ -706,7 +706,6 @@ class Database:
 # ----------------------------------------------------------------------
 
     # gets current term code from admin collection
-
 
     def get_current_term_code(self):
         res = self._db.admin.find_one(
