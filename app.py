@@ -105,6 +105,7 @@ def tutorial():
                            user_is_admin=is_admin(_cas.authenticate(), _db),
                            loggedin=True,
                            notifs_online=_db.get_cron_notification_status(),
+                           next_notifs=_db.get_current_or_next_notifs_interval(),
                            term_name=term_name)
     return make_response(html)
 
@@ -157,6 +158,7 @@ def dashboard():
                            email=email,
                            curr_sections=curr_sections,
                            notifs_online=_db.get_cron_notification_status(),
+                           next_notifs=_db.get_current_or_next_notifs_interval(),
                            term_name=term_name)
 
     return make_response(html)
@@ -174,6 +176,7 @@ def about():
                            user_is_admin=is_admin(_cas.authenticate(), _db),
                            loggedin=True,
                            notifs_online=_db.get_cron_notification_status(),
+                           next_notifs=_db.get_current_or_next_notifs_interval(),
                            term_name=term_name)
     return make_response(html)
 
@@ -195,6 +198,7 @@ def activity():
                            waitlist_logs=waitlist_logs,
                            trade_logs=trade_logs,
                            notifs_online=_db.get_cron_notification_status(),
+                           next_notifs=_db.get_current_or_next_notifs_interval(),
                            term_name=term_name)
 
     return make_response(html)
@@ -258,7 +262,8 @@ def get_course():
                            term_name=term_name,
                            last_query=quote_plus(new_query),
                            last_query_unquoted=unquote_plus(new_query),
-                           notifs_online=_db.get_cron_notification_status())
+                           notifs_online=_db.get_cron_notification_status(),
+                           next_notifs=_db.get_current_or_next_notifs_interval())
 
     return make_response(html)
 
@@ -320,7 +325,8 @@ def get_course_info(courseid):
                            term_name=term_name,
                            curr_waitlists=curr_waitlists,
                            section_names=section_names,
-                           notifs_online=_db.get_cron_notification_status())
+                           notifs_online=_db.get_cron_notification_status(),
+                           next_notifs=_db.get_current_or_next_notifs_interval(),)
     return make_response(html)
 
 
@@ -426,6 +432,7 @@ def admin():
                            admin_logs=admin_logs,
                            blacklist=_db.get_blacklist(),
                            notifs_online=_db.get_cron_notification_status(),
+                           next_notifs=_db.get_current_or_next_notifs_interval(),
                            current_term_code=term_code,
                            term_name=term_name,
                            total_users=total_users)
