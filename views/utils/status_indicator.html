@@ -1,16 +1,26 @@
-<span id="status-indicator" class="fs-6 ms-3 mb-5"
-    >active:
-    <svg
+<span
+    id="status-indicator"
+    class="fs-6 ms-3 mb-5"
+    style="
+        background-color: #ffc107;
+        border-radius: 0.25rem;
+        padding: 5px;
+        text-decoration: underline;
+        letter-spacing: 1px;
+        cursor: help;
+    "
+    data-bs-toggle="tooltip"
+    data-bs-placement="auto"
+    title="Term: {{term_name}}. {{'TigerSnatch is actively sending emails for open spots! Term:' if notifs_online else 'TigerSnatch is not currently sending emails for open spots.'}} {{next_notifs}}"
+    >status<svg
         id="status-indicator-tooltip"
         xmlns="http://www.w3.org/2000/svg"
         width="16"
         height="16"
         fill="currentColor"
-        class="bi bi-circle-fill {{ 'text-success' if notifs_online else 'text-danger' }} animate__animated animate__zoomIn"
+        class="bi bi-circle-fill {{ 'text-success' if notifs_online else 'text-danger' }} ms-1 animate__animated animate__zoomIn"
         viewBox="0 0 16 16"
-        data-bs-toggle="tooltip"
-        data-bs-placement="auto"
-        title="{{'TigerSnatch is actively sending emails for open spots! Term:' if notifs_online else 'TigerSnatch is not currently sending emails for open spots. Term:'}} {{term_name}}. {{next_notifs}}"
+        style="margin-bottom: 2px"
     >
         <circle cx="8" cy="8" r="8" />
     </svg>
