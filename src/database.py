@@ -483,6 +483,10 @@ class Database:
         def get_total_users():
             return self._db.users.count_documents({})
 
+        def get_users_who_subscribe():
+            data = self._db.users.find({}, {'waitlists': 1, '_id': 0})
+            return sum([len(k['waitlists']) > 0 for k in data])
+
         def get_total_subscriptions():
             data = self._db.waitlists.find({}, {'waitlist': 1, '_id': 0})
             return sum([len(k['waitlist']) for k in data])
@@ -520,6 +524,7 @@ class Database:
         try:
             res = [f'Current term: {get_current_term_name()}',
                    f'Total # users: {get_total_users()}',
+                   f'Total # users with >0 subscriptions: {get_users_who_subscribe()}',
                    f'Total # subscriptions: {get_total_subscriptions()}',
                    f'Total # subscribed sections: {get_total_subscribed_sections()}',
                    f'Total # emails sent: {get_email_counter()}',
