@@ -3,7 +3,7 @@
 [TigerSnatch](https://snatch.tigerapps.org) helps Princeton students with course enrollment through its Subscriptions and Trades features. With Subscriptions, students can get notified via email when a full class opens up, alleviating the need to repeatedly check official Course Offerings. TigerSnatch Trades, a first-of-its-kind system at Princeton, finds and facilitates swaps between students who wish to enroll in each other's full sections.
 
 > TigerSnatch was built in Spring 2021 by Shannon Heh '23, Nicholas Padmanabhan '23, and Byron Zhang '23 as a project for COS333 at Princeton University. Check out the TigerSnatch documentation in `docs/`!
-> 
+
 ---
 
 <div class="container-fluid">
@@ -89,7 +89,7 @@
     <br />
 </div>
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-eOJMYsd53ii+scO/bJGFsiCZc+5NDVN2yr8+0RDqr0Ql0h+rP48ckxlpbzKgwra6" crossorigin="anonymous" />
-<link rel="stylesheet" type="text/css" href="static/styles.min.css" />
+<link rel="stylesheet" type="text/css" href="static/styles.min.2.0.css" />
 
 _TigerSnatch subscriptions are independent from official Registrar waitlists. You
 might not be able to enroll in courses shown on TigerSnatch even if spots free
