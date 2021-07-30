@@ -444,9 +444,10 @@ let searchResultListener = function () {
         e.preventDefault();
 
         // blur frame while loading
-        $("*").css("pointer-events", "none");
-        $("*").css("cursor", "wait");
-        $("#right-wrapper").css("filter", "blur(2px)");
+        $("#main").css("pointer-events", "none");
+        $("#main").css("cursor", "wait");
+        $("#main").css("filter", "blur(2px)");
+        $("#loading-overlay").css("display", "flex");
 
         // remove gray background from currently selected course entry
         $("a.selected-course").css("background-color", "");
@@ -472,9 +473,10 @@ let searchResultListener = function () {
             $("#right-wrapper").html(res);
 
             // unblur frame
-            $("#right-wrapper").css("filter", "");
-            $("*").css("cursor", "");
-            $("*").css("pointer-events", "");
+            $("#loading-overlay").css("display", "none");
+            $("#main").css("filter", "");
+            $("#main").css("cursor", "");
+            $("#main").css("pointer-events", "");
 
             // update URL
             window.history.pushState({ restore: "right", html: res }, "", course_link);
@@ -498,9 +500,10 @@ let searchResultListener = function () {
 // to navigate to its course page
 let dashboardCourseSelectListener = function () {
     $(".dashboard-course-link").on("click", function (e) {
-        // blur frame while loadidng
-        $("*").css("pointer-events", "none");
-        $("#right-wrapper").css("filter", "blur(2px)");
+        // blur frame while loading
+        $("#loading-overlay").css("display", "flex");
+        $("#main").css("pointer-events", "none");
+        $("#main").css("filter", "blur(2px)");
     });
 };
 

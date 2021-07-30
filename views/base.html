@@ -4,6 +4,9 @@
         {% block title %}{% endblock %} {% include 'common.html' %}
     </head>
     <body style="height: calc(100% - 60px)">
+        <div id="loading-overlay">
+            <div id="loading-spinner" class="spinner-border text-warning" role="status"></div>
+        </div>
         {% include 'nav/nav.html' %} {% if loggedin %} {% include 'about.html' %} {% else %}
         <div id="main" class="container-fluid">
             <div class="row align-items-start">
@@ -24,6 +27,6 @@
             integrity="sha384-JEW9xMcG8R+pH31jmWH6WWP0WintQrMb4s7ZOdauHnUtxwoG2vI5DkLtS3qm9Ekf"
             crossorigin="anonymous"
         ></script>
-        <script src="{{url_for('static', filename='app.min.1.0.js')}}"></script>
+        <script src="{{url_for('static', filename='app.min.2.0.js')}}"></script>
     </body>
 </html>
