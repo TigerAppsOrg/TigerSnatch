@@ -445,7 +445,6 @@ let searchResultListener = function () {
 
         // blur frame while loading
         $("#main").css("pointer-events", "none");
-        $("#main").css("cursor", "wait");
         $("#main").css("filter", "blur(2px)");
         $("#loading-overlay").css("display", "flex");
 
@@ -475,7 +474,6 @@ let searchResultListener = function () {
             // unblur frame
             $("#loading-overlay").css("display", "none");
             $("#main").css("filter", "");
-            $("#main").css("cursor", "");
             $("#main").css("pointer-events", "");
 
             // update URL
