@@ -33,8 +33,6 @@ def do_search(query, db):
         query = re.sub(r'[^0-9a-zA-Z"?:%\', ]+', '', query)
         res = db.search_for_course(query)
 
-    # sort by course department + number (e.g. COS126)
-    res = sorted(res, key=lambda x: x['displayname'])
     return res, query
 
 

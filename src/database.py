@@ -845,7 +845,7 @@ class Database:
             {'displayname': {'$regex': query}},
             {'displayname_whitespace': {'$regex': query}},
             {'title': {'$regex': query}}
-        ]}))
+        ]}).sort('displayname'))
 
         return res
 
