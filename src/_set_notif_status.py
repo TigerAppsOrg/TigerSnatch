@@ -15,15 +15,15 @@ from sys import exit, argv
 from database import Database
 
 if __name__ == '__main__':
-    def process_args():
-        if len(argv) != 2 or (argv[1] != '--on' and argv[1] != '--off'):
-            print('specify one of the following flags:')
-            print('\t--on: enable notifications cron script')
-            print('\t--off: disable notifications cron script')
-            exit(2)
-        return argv[1] == '--on'
+  def process_args():
+    if len(argv) != 2 or (argv[1] != '--on' and argv[1] != '--off'):
+      print('specify one of the following flags:')
+      print('\t--on: enable notifications cron script')
+      print('\t--off: disable notifications cron script')
+      exit(2)
+    return argv[1] == '--on'
 
-    turn_on = process_args()
+  turn_on = process_args()
 
-    Database().set_cron_notification_status(turn_on)
-    print('done')
+  Database().set_cron_notification_status(turn_on)
+  print('done')

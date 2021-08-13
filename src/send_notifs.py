@@ -20,114 +20,114 @@ from time import time
 
 
 def cronjob():
-    tic = time()
-    monitor = Monitor()
-    db = Database()
+  tic = time()
+  monitor = Monitor()
+  db = Database()
 
+  db._add_system_log('cron', {
+      'message': 'emails script executing'
+  })
+
+  # get all class openings (for waited-on classes) from MobileApp
+  new_slots = monitor.get_classes_with_changed_enrollments()
+
+  total = 0
+  for classid, n_new_slots in new_slots.items():
+    if n_new_slots == 0:
+      continue
+    try:
+      # n_notifs = min(db.get_class_waitlist_size(classid), n_new_slots)
+      n_notifs = db.get_class_waitlist_size(classid)
+    except Exception as e:
+      print(e, file=stderr)
+      continue
+
+    # randomly iterate through lists to ensure fairness
+    ordering = list(range(n_notifs))
+    shuffle(ordering)
+
+    for i in ordering:
+      try:
+        notify = Notify(classid, i, n_new_slots)
+
+        print(notify)
+        print('sending email to', notify.get_netid())
+        stdout.flush()
+
+        # only if email was sent, remove user from waitlist
+        if notify.send_email_html():
+          print(i+1, '/', n_notifs, 'emails sent for this class')
+          total += 1
+          # db.remove_from_waitlist(notify.get_netid(), classid)
+        else:
+          print('failed to send email')
+      except Exception as e:
+        print(e, file=stderr)
+
+      print()
+
+  if total > 0:
+    db._add_admin_log(
+        f'sent {total} emails in {round(time()-tic)} seconds')
     db._add_system_log('cron', {
-        'message': 'emails script executing'
+        'message': f'sent {total} emails in {round(time()-tic)} seconds'
     })
-
-    # get all class openings (for waited-on classes) from MobileApp
-    new_slots = monitor.get_classes_with_changed_enrollments()
-
-    total = 0
-    for classid, n_new_slots in new_slots.items():
-        if n_new_slots == 0:
-            continue
-        try:
-            # n_notifs = min(db.get_class_waitlist_size(classid), n_new_slots)
-            n_notifs = db.get_class_waitlist_size(classid)
-        except Exception as e:
-            print(e, file=stderr)
-            continue
-
-        # randomly iterate through lists to ensure fairness
-        ordering = list(range(n_notifs))
-        shuffle(ordering)
-
-        for i in ordering:
-            try:
-                notify = Notify(classid, i, n_new_slots)
-
-                print(notify)
-                print('sending email to', notify.get_netid())
-                stdout.flush()
-
-                # only if email was sent, remove user from waitlist
-                if notify.send_email_html():
-                    print(i+1, '/', n_notifs, 'emails sent for this class')
-                    total += 1
-                    # db.remove_from_waitlist(notify.get_netid(), classid)
-                else:
-                    print('failed to send email')
-            except Exception as e:
-                print(e, file=stderr)
-
-            print()
-
-    if total > 0:
-        db._add_admin_log(
-            f'sent {total} emails in {round(time()-tic)} seconds')
-        db._add_system_log('cron', {
-            'message': f'sent {total} emails in {round(time()-tic)} seconds'
-        })
-        db.increment_email_counter(total)
-    elif total == 0:
-        db._add_system_log('cron', {
-            'message': f'sent 0 emails in {round(time()-tic)} seconds'
-        })
-    print(f'sent {total} emails in {round(time()-tic)} seconds')
+    db.increment_email_counter(total)
+  elif total == 0:
+    db._add_system_log('cron', {
+        'message': f'sent 0 emails in {round(time()-tic)} seconds'
+    })
+  print(f'sent {total} emails in {round(time()-tic)} seconds')
 
 
 def set_status_indicator_to_on():
-    db = Database()
-    db.set_cron_notification_status(True)
+  db = Database()
+  db.set_cron_notification_status(True)
 
 
 def set_status_indicator_to_off(log=True):
-    db = Database()
-    db.set_cron_notification_status(False, log=log)
+  db = Database()
+  db.set_cron_notification_status(False, log=log)
 
 
 def did_notifs_spreadsheet_change(data):
-    db = Database()
-    return db.did_notifs_spreadsheet_change(data)
+  db = Database()
+  return db.did_notifs_spreadsheet_change(data)
 
 
 def update_notifs_schedule(data):
-    db = Database()
-    db.update_notifs_schedule(data)
+  db = Database()
+  db.update_notifs_schedule(data)
 
 
 def generate_time_intervals():
-    tz = pytz.timezone('US/Eastern')
-    # see https://towardsdatascience.com/read-data-from-google-sheets-into-pandas-without-the-google-sheets-api-5c468536550
-    # for how to create this link
-    google_sheets_url = 'https://docs.google.com/spreadsheets/d/1iSWihUcWa0yX8MsS_FKC-DuGH75AukdiuAigbSkPm8k/gviz/tq?tqx=out:csv&sheet=Data'
-    data = pd.read_csv(google_sheets_url)[['start_datetime', 'end_datetime']]
-    datetimes = list(data.itertuples(index=False, name=None))
-    try:
-        datetimes = list(map(lambda x:
-                             [tz.localize(datetime.strptime(x[0], '%Y-%m-%d %I:%M %p')),
-                              tz.localize(datetime.strptime(x[1], '%Y-%m-%d %I:%M %p'))],
-                             datetimes))
-        datetimes = list(filter(lambda x: x[1] > datetime.now(tz), datetimes))
-    except:
-        print('[Scheduler] error parsing datetimes - make sure that their format is YYYY-MM-DD HH:MM AM/PM', file=stderr)
-        return []
+  tz = pytz.timezone('US/Eastern')
+  # see https://towardsdatascience.com/read-data-from-google-sheets-into-pandas-without-the-google-sheets-api-5c468536550
+  # for how to create this link
+  google_sheets_url = 'https://docs.google.com/spreadsheets/d/1iSWihUcWa0yX8MsS_FKC-DuGH75AukdiuAigbSkPm8k/gviz/tq?tqx=out:csv&sheet=Data'
+  data = pd.read_csv(google_sheets_url)[['start_datetime', 'end_datetime']]
+  datetimes = list(data.itertuples(index=False, name=None))
+  try:
+    datetimes = list(map(lambda x:
+                         [tz.localize(datetime.strptime(x[0], '%Y-%m-%d %I:%M %p')),
+                          tz.localize(datetime.strptime(x[1], '%Y-%m-%d %I:%M %p'))],
+                         datetimes))
+    datetimes = list(filter(lambda x: x[1] > datetime.now(tz), datetimes))
+  except:
+    print('[Scheduler] error parsing datetimes - make sure that their format is YYYY-MM-DD HH:MM AM/PM', file=stderr)
+    return []
 
-    # validate list of datetimes
-    flat = [item for sublist in datetimes for item in sublist]
-    if not all(flat[i] < flat[i+1] for i in range(len(flat)-1)):
-        print('[Scheduler] WARNING: datetime intervals either overlap or are not in ascending order. This may cause duplicate emails to be sent!', file=stderr)
-        return []
-    if flat[-1] <= datetime.now(tz):
-        print('[Scheduler] WARNING: all time intervals are in the past - please update the schedule spreadsheet and be sure to use 24-hour time', file=stderr)
+  # validate list of datetimes
+  flat = [item for sublist in datetimes for item in sublist]
+  if not all(flat[i] < flat[i+1] for i in range(len(flat)-1)):
+    print('[Scheduler] WARNING: datetime intervals either overlap or are not in ascending order. This may cause duplicate emails to be sent!', file=stderr)
+    return []
+  if flat[-1] <= datetime.now(tz):
+    print('[Scheduler] WARNING: all time intervals are in the past - please update the schedule spreadsheet and be sure to use 24-hour time', file=stderr)
 
-    return datetimes
+  return datetimes
 
 
 if __name__ == '__main__':
-    # can function via single file execution, but this is not the intent
-    cronjob()
+  # can function via single file execution, but this is not the intent
+  cronjob()
