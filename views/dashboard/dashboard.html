@@ -1,19 +1,17 @@
 <title>TigerSnatch | Dashboard</title>
 <div class="d-flex flex-column h-100">
-    <div id="dashboard-header">{% include 'dashboard/dashboard_header.html' %}</div>
-    <div id="dashboard-content" class="d-flex flex-column flex-grow-1">
-        <div id="dashboard-table" class="px-3 row flex-grow-1">
-            {% include 'dashboard/dashboard_table.html' %}
-        </div>
-        <div id="dashboard-other" class="px-0 row">
-            <div id="dashboard-prefs" class="col-xl px-3 py-2 flex-grow-1">
-                {% include 'dashboard/dashboard_prefs.html' %}
-            </div>
-            <div id="dashboard-logs" class="col-xl px-3 py-2 flex-grow-1">
-                {% include 'dashboard/dashboard_trades.html' %}
-            </div>
-        </div>
+  <div id="dashboard-header">{% include 'dashboard/dashboard_header.html' %}</div>
+  <div id="dashboard-content" class="d-flex flex-column flex-grow-1">
+    <div id="dashboard-table" class="px-3 row flex-grow-1">{% include 'dashboard/dashboard_table.html' %}</div>
+    <div id="dashboard-other" class="px-0 row">
+      <div id="dashboard-prefs" class="col-xl px-3 py-2 flex-grow-1">
+        {% include 'dashboard/dashboard_prefs.html' %}
+      </div>
+      <div id="dashboard-logs" class="col-xl px-3 py-2 flex-grow-1">
+        {% include 'dashboard/dashboard_trades.html' %}
+      </div>
     </div>
+  </div>
 </div>
 
 {% include 'utils/waitlist_toast.html' %}

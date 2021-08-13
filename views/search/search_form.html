@@ -1,35 +1,35 @@
 <div id="course-search" class="input-group">
-    <input
-        id="search-form-input"
-        class="form-control form-control-lg"
-        type="text"
-        name="query"
-        placeholder="Search for a course"
-        value="{{ last_query_unquoted }}"
-        pattern="^[a-zA-Z0-9-:?%\x22\x27\x26\x2C ]+$"
-        maxlength="100"
-        data-bs-toggle="tooltip"
-        data-bs-placement="top"
-        data-bs-trigger="hover"
-        title="Search by course department, number, or title! Please enter only alphanumerics, spaces, commas, quotes, :, ?, % characters."
-        autofocus
-        autocapitalize="off"
-    />
-    <button class="btn btn-warning px-4" type="submit">
-        <svg
-            xmlns="http://www.w3.org/2000/svg"
-            width="16"
-            height="16"
-            fill="currentColor"
-            class="bi bi-search"
-            viewBox="0 0 16 16"
-        >
-            <path
-                d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z"
-            />
-        </svg>
-    </button>
+  <input
+    id="search-form-input"
+    class="form-control form-control-lg"
+    type="text"
+    name="query"
+    placeholder="Search for a course"
+    value="{{ last_query_unquoted }}"
+    pattern="^[a-zA-Z0-9-:?%\x22\x27\x26\x2C ]+$"
+    maxlength="100"
+    data-bs-toggle="tooltip"
+    data-bs-placement="top"
+    data-bs-trigger="hover"
+    title="Search by course department, number, or title! Please enter only alphanumerics, spaces, commas, quotes, :, ?, % characters."
+    autofocus
+    autocapitalize="off"
+  />
+  <button class="btn btn-warning px-4" type="submit">
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      width="16"
+      height="16"
+      fill="currentColor"
+      class="bi bi-search"
+      viewBox="0 0 16 16"
+    >
+      <path
+        d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z"
+      />
+    </svg>
+  </button>
 </div>
 <small id="course-search-help" class="form-text text-muted">
-    Note: TigerSnatch subscriptions are separate from Registrar waitlists.
+  Note: TigerSnatch subscriptions are separate from Registrar waitlists.
 </small>

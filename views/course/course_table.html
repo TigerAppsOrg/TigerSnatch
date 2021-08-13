@@ -1,80 +1,81 @@
 {% if course_details is none %}
 <div class="container-fluid">
-    <div class="row text-center">
-        <p class="fs-4 px-0 py-5">
-            Course sections are displayed here. <br>
-            Search to get started!
-        </p>
-    </div>
+  <div class="row text-center">
+    <p class="fs-4 px-0 py-5">
+      Course sections are displayed here. <br />
+      Search to get started!
+    </p>
+  </div>
 </div>
 {% else %}
 <div class="table-responsive mt-2">
-    <table class="table table-hover">
-        <thead class='table-white'>
-            <tr>
-                <th scope="col">Section</th>
-                <th scope="col">
-                    Subscribe
-                    <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        width="18"
-                        height="18"
-                        fill="currentColor"
-                        class="bi bi-info-square-fill text-primary ms-1"
-                        viewBox="0 0 16 20"
-                        data-bs-toggle="tooltip"
-                        data-bs-placement="top"
-                        title="Subscribe to receive notifications for a section by turning on its switch! Note that only full sections have switches."
-                    >
-                        <path
-                            d="M0 2a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V2zm8.93 4.588-2.29.287-.082.38.45.083c.294.07.352.176.288.469l-.738 3.468c-.194.897.105 1.319.808 1.319.545 0 1.178-.252 1.465-.598l.088-.416c-.2.176-.492.246-.686.246-.275 0-.375-.193-.304-.533L8.93 6.588zM8 5.5a1 1 0 1 0 0-2 1 1 0 0 0 0 2z"
-                        />
-                    </svg>
-                </th>
-                <th scope="col"># Tigers
-                    <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        width="18"
-                        height="18"
-                        fill="currentColor"
-                        class="bi bi-info-square-fill text-primary ms-1"
-                        viewBox="0 0 16 20"
-                        data-bs-toggle="tooltip"
-                        data-bs-placement="top"
-                        title="This shows the total number of Princeton students subscribed to each section."
-                    >
-                        <path
-                            d="M0 2a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V2zm8.93 4.588-2.29.287-.082.38.45.083c.294.07.352.176.288.469l-.738 3.468c-.194.897.105 1.319.808 1.319.545 0 1.178-.252 1.465-.598l.088-.416c-.2.176-.492.246-.686.246-.275 0-.375-.193-.304-.533L8.93 6.588zM8 5.5a1 1 0 1 0 0-2 1 1 0 0 0 0 2z"
-                        />
-                    </svg>
-                </th>
-                <th scope="col">Enrollment</th>
-                <th scope="col">Time</th>
-                <th scope="col">Days</th>
-            </tr>
-        </thead>
-        <tbody>
-            {% for class in classes_list %} {% if class.isFull %}
-            <tr class="full-section-row">
-                {% include 'course/course_table_row.html' %}
-            </tr>
-            {% else %}
-            <tr class="available-section-row d-none">
-                {% include 'course/course_table_row.html' %}
-            </tr>
-            {% endif %} {% endfor %}
-        </tbody>
-    </table>
-    {% if num_full == 0 %}
-        <div id="no-full-message" class="container-fluid">
-            <div class="row text-center">
-                <p class="fs-4 px-0 py-5">
-                    This course has no full sections. </br>
-                    Search for another course!
-                </p>
-            </div>
-        </div>
-    {% endif %}
+  <table class="table table-hover">
+    <thead class="table-white">
+      <tr>
+        <th scope="col">Section</th>
+        <th scope="col">
+          Subscribe
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="18"
+            height="18"
+            fill="currentColor"
+            class="bi bi-info-square-fill text-primary ms-1"
+            viewBox="0 0 16 20"
+            data-bs-toggle="tooltip"
+            data-bs-placement="top"
+            title="Subscribe to receive notifications for a section by turning on its switch! Note that only full sections have switches."
+          >
+            <path
+              d="M0 2a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V2zm8.93 4.588-2.29.287-.082.38.45.083c.294.07.352.176.288.469l-.738 3.468c-.194.897.105 1.319.808 1.319.545 0 1.178-.252 1.465-.598l.088-.416c-.2.176-.492.246-.686.246-.275 0-.375-.193-.304-.533L8.93 6.588zM8 5.5a1 1 0 1 0 0-2 1 1 0 0 0 0 2z"
+            />
+          </svg>
+        </th>
+        <th scope="col">
+          # Tigers
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="18"
+            height="18"
+            fill="currentColor"
+            class="bi bi-info-square-fill text-primary ms-1"
+            viewBox="0 0 16 20"
+            data-bs-toggle="tooltip"
+            data-bs-placement="top"
+            title="This shows the total number of Princeton students subscribed to each section."
+          >
+            <path
+              d="M0 2a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V2zm8.93 4.588-2.29.287-.082.38.45.083c.294.07.352.176.288.469l-.738 3.468c-.194.897.105 1.319.808 1.319.545 0 1.178-.252 1.465-.598l.088-.416c-.2.176-.492.246-.686.246-.275 0-.375-.193-.304-.533L8.93 6.588zM8 5.5a1 1 0 1 0 0-2 1 1 0 0 0 0 2z"
+            />
+          </svg>
+        </th>
+        <th scope="col">Enrollment</th>
+        <th scope="col">Time</th>
+        <th scope="col">Days</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for class in classes_list %} {% if class.isFull %}
+      <tr class="full-section-row">
+        {% include 'course/course_table_row.html' %}
+      </tr>
+      {% else %}
+      <tr class="available-section-row d-none">
+        {% include 'course/course_table_row.html' %}
+      </tr>
+      {% endif %} {% endfor %}
+    </tbody>
+  </table>
+  {% if num_full == 0 %}
+  <div id="no-full-message" class="container-fluid">
+    <div class="row text-center">
+      <p class="fs-4 px-0 py-5">
+        This course has no full sections. <br />
+        Search for another course!
+      </p>
+    </div>
+  </div>
+  {% endif %}
 </div>
 <br />
 

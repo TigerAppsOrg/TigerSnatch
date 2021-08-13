@@ -1,5 +1,5 @@
 const toastAdded = $(
-    $.parseHTML(`
+  $.parseHTML(`
 <div
     id="toast-added"
     class="toast align-items-center text-white bg-success border-0"
@@ -22,7 +22,7 @@ const toastAdded = $(
 );
 
 const toastRemoved = $(
-    $.parseHTML(`
+  $.parseHTML(`
 <div
     id="toast-removed"
     class="toast align-items-center text-white bg-warning border-0"
@@ -45,7 +45,7 @@ const toastRemoved = $(
 );
 
 const toastUserDoesNotExist = $(
-    $.parseHTML(`
+  $.parseHTML(`
 <div
     id="toast-user-does-not-exist"
     class="toast align-items-center text-white bg-danger border-0"
@@ -68,7 +68,7 @@ const toastUserDoesNotExist = $(
 );
 
 const toastEmailsOn = $(
-    $.parseHTML(`
+  $.parseHTML(`
 <div
     id="toast-emails-on"
     class="toast align-items-center text-white bg-success border-0"
@@ -91,7 +91,7 @@ const toastEmailsOn = $(
 );
 
 const toastEmailsOff = $(
-    $.parseHTML(`
+  $.parseHTML(`
 <div
     id="toast-emails-off"
     class="toast align-items-center text-white bg-success border-0"
@@ -114,7 +114,7 @@ const toastEmailsOff = $(
 );
 
 const toastClearSuccess = $(
-    $.parseHTML(`
+  $.parseHTML(`
 <div
     id="toast-clear-success"
     class="toast align-items-center text-white bg-success border-0"
@@ -137,7 +137,7 @@ const toastClearSuccess = $(
 );
 
 const toastClearFail = $(
-    $.parseHTML(`
+  $.parseHTML(`
 <div
     id="toast-clear-fail"
     class="toast align-items-center text-white bg-danger border-0"
@@ -160,7 +160,7 @@ const toastClearFail = $(
 );
 
 const toastFillSuccess = $(
-    $.parseHTML(`
+  $.parseHTML(`
 <div
     id="toast-clear-success"
     class="toast align-items-center text-white bg-success border-0"
@@ -183,7 +183,7 @@ const toastFillSuccess = $(
 );
 
 const toastFillFail = $(
-    $.parseHTML(`
+  $.parseHTML(`
 <div
     id="toast-clear-fail"
     class="toast align-items-center text-white bg-danger border-0"
@@ -206,7 +206,7 @@ const toastFillFail = $(
 );
 
 const toastUpdateTerm = $(
-    $.parseHTML(`
+  $.parseHTML(`
 <div
     id="toast-update-term"
     class="toast align-items-center text-white bg-success border-0"
@@ -229,7 +229,7 @@ const toastUpdateTerm = $(
 );
 
 const toastBlacklistFail = $(
-    $.parseHTML(`
+  $.parseHTML(`
 <div
     id="toast-blacklist-fail"
     class="toast align-items-center text-white bg-danger border-0"
@@ -252,7 +252,7 @@ const toastBlacklistFail = $(
 );
 
 const toastBlacklistSuccess = $(
-    $.parseHTML(`
+  $.parseHTML(`
 <div
     id="toast-blacklist-success"
     class="toast align-items-center text-white bg-success border-0"
@@ -275,7 +275,7 @@ const toastBlacklistSuccess = $(
 );
 
 const toastAddedSection = $(
-    $.parseHTML(`
+  $.parseHTML(`
 <div
     id="toast-updatesection"
     class="toast align-items-center text-white bg-success border-0"
@@ -298,7 +298,7 @@ const toastAddedSection = $(
 );
 
 const toastAddedSectionFail = $(
-    $.parseHTML(`
+  $.parseHTML(`
 <div
     id="toast-updatesection-fail"
     class="toast align-items-center text-white bg-danger border-0"
@@ -321,7 +321,7 @@ const toastAddedSectionFail = $(
 );
 
 const toastRemovedSection = $(
-    $.parseHTML(`
+  $.parseHTML(`
 <div
     id="toast-removedsection-success"
     class="toast align-items-center text-white bg-warning border-0"
@@ -344,7 +344,7 @@ const toastRemovedSection = $(
 );
 
 const toastRemovedSectionFail = $(
-    $.parseHTML(`
+  $.parseHTML(`
 <div
     id="toast-removedsection-fail"
     class="toast align-items-center text-white bg-danger border-0"
@@ -370,835 +370,786 @@ i = 0; // dummy variable used for toast ids
 
 // scrolls to the bottom of id #dest
 let scrollBottom = function (dest) {
-    $(dest).animate(
-        {
-            scrollTop: $(dest)[0].scrollHeight - $(dest)[0].clientHeight,
-        },
-        500
-    );
+  $(dest).animate(
+    {
+      scrollTop: $(dest)[0].scrollHeight - $(dest)[0].clientHeight,
+    },
+    500
+  );
 };
 
 // scrolls to the top of id #dest
 let resetScroll = function (dest) {
-    $(dest).animate(
-        {
-            scrollTop: 0,
-        },
-        500
-    );
+  $(dest).animate(
+    {
+      scrollTop: 0,
+    },
+    500
+  );
 };
 
 // listens for submission of search form
 let searchFormListener = function () {
-    $("form#search-form").on("submit", function (e) {
-        e.preventDefault();
+  $("form#search-form").on("submit", function (e) {
+    e.preventDefault();
 
-        // automatically close the keyboard on iOS
-        $("#search-form-input").blur();
+    // automatically close the keyboard on iOS
+    $("#search-form-input").blur();
 
-        // close the tooltip if open
-        $("#search-form-input").tooltip("hide");
+    // close the tooltip if open
+    $("#search-form-input").tooltip("hide");
 
-        // get serach query
-        query = encodeURIComponent($("#search-form-input").prop("value"));
+    // get serach query
+    query = encodeURIComponent($("#search-form-input").prop("value"));
 
-        // construct new URL
-        params = location.search;
-        curr_path = location.pathname;
-        if (params === "") {
-            curr_path = curr_path + "?query=" + query;
-        } else {
-            curr_path = curr_path + "?";
-            params = params.replace("?", "");
-            arr = params.split("&");
-            for (let i = 0; i < arr.length; i++) {
-                if (i > 0) curr_path += "&";
-                if (arr[i].startsWith("query")) curr_path = curr_path + "query=" + query;
-                else curr_path += arr[i];
-            }
-        }
-        // get search results
-        if (query.trim() === "") {
-            endpoint = "/searchresults";
-        } else {
-            endpoint = `/searchresults/${query}`;
-        }
-        $.post(endpoint, function (res) {
-            $("div#search-results").html(res);
-            window.history.pushState(
-                { restore: "search", html: res },
-                "restore search results",
-                curr_path
-            );
-            // adds listener to new search results
-            searchResultListener();
-            resetScroll("#search-results");
-            dashboardSkip();
-        });
+    // construct new URL
+    params = location.search;
+    curr_path = location.pathname;
+    if (params === "") {
+      curr_path = curr_path + "?query=" + query;
+    } else {
+      curr_path = curr_path + "?";
+      params = params.replace("?", "");
+      arr = params.split("&");
+      for (let i = 0; i < arr.length; i++) {
+        if (i > 0) curr_path += "&";
+        if (arr[i].startsWith("query")) curr_path = curr_path + "query=" + query;
+        else curr_path += arr[i];
+      }
+    }
+    // get search results
+    if (query.trim() === "") {
+      endpoint = "/searchresults";
+    } else {
+      endpoint = `/searchresults/${query}`;
+    }
+    $.post(endpoint, function (res) {
+      $("div#search-results").html(res);
+      window.history.pushState({ restore: "search", html: res }, "restore search results", curr_path);
+      // adds listener to new search results
+      searchResultListener();
+      resetScroll("#search-results");
+      dashboardSkip();
     });
+  });
 };
 
 // listens for selection of search result
 let searchResultListener = function () {
-    $(".search-results-link").on("click", function (e) {
-        e.preventDefault();
+  $(".search-results-link").on("click", function (e) {
+    e.preventDefault();
 
-        // blur frame while loading
-        $("#main").css("pointer-events", "none");
-        $("#main").css("filter", "blur(2px)");
-        $("#loading-overlay").css("display", "flex");
+    // blur frame while loading
+    $("#main").css("pointer-events", "none");
+    $("#main").css("filter", "blur(2px)");
+    $("#loading-overlay").css("display", "flex");
 
-        // remove gray background from currently selected course entry
-        $("a.selected-course").css("background-color", "");
-        $("a.selected-course").removeClass("selected-course border border-3 border-warning");
+    // remove gray background from currently selected course entry
+    $("a.selected-course").css("background-color", "");
+    $("a.selected-course").removeClass("selected-course border border-3 border-warning");
 
-        closest_a = $(this).closest("a");
+    closest_a = $(this).closest("a");
 
-        // background: #C0BDBD;
-        // add gray background to selected course
-        closest_a.css("background-color", "#ffe58a");
-        closest_a.addClass("selected-course border border-3 border-warning");
+    // background: #C0BDBD;
+    // add gray background to selected course
+    closest_a.css("background-color", "#ffe58a");
+    closest_a.addClass("selected-course border border-3 border-warning");
 
-        course_link = closest_a.attr("href");
-        courseid = closest_a.attr("data-courseid");
+    course_link = closest_a.attr("href");
+    courseid = closest_a.attr("data-courseid");
 
-        scrollBottom("#main");
+    scrollBottom("#main");
 
-        // get course information
-        $.post(`/courseinfo/${courseid}`, function (res) {
-            // change search form to /course endpoint
-            $("form#search-form").attr("action", "/course");
-            $("input#search-form-courseid").attr("value", courseid);
-            $("#right-wrapper").html(res);
+    // get course information
+    $.post(`/courseinfo/${courseid}`, function (res) {
+      // change search form to /course endpoint
+      $("form#search-form").attr("action", "/course");
+      $("input#search-form-courseid").attr("value", courseid);
+      $("#right-wrapper").html(res);
 
-            // unblur frame
-            $("#loading-overlay").css("display", "none");
-            $("#main").css("filter", "");
-            $("#main").css("pointer-events", "");
+      // unblur frame
+      $("#loading-overlay").css("display", "none");
+      $("#main").css("filter", "");
+      $("#main").css("pointer-events", "");
 
-            // update URL
-            window.history.pushState({ restore: "right", html: res }, "", course_link);
+      // update URL
+      window.history.pushState({ restore: "right", html: res }, "", course_link);
 
-            // add listener to new switches & modals, and re-initialize
-            // all tooltips and toasts
-            switchListener();
-            initTooltipsToasts();
-            showAllListener();
-            modalCancelListener();
-            modalConfirmListener();
-            searchSkip();
-            updateCurrentSection();
-            removeCurrentSection();
-            findMatches();
-        });
+      // add listener to new switches & modals, and re-initialize
+      // all tooltips and toasts
+      switchListener();
+      initTooltipsToasts();
+      showAllListener();
+      modalCancelListener();
+      modalConfirmListener();
+      searchSkip();
+      updateCurrentSection();
+      removeCurrentSection();
+      findMatches();
     });
+  });
 };
 
 // listens for when user clicks on course in dashboard
 // to navigate to its course page
 let dashboardCourseSelectListener = function () {
-    $(".dashboard-course-link").on("click", function (e) {
-        // blur frame while loading
-        $("#loading-overlay").css("display", "flex");
-        $("#main").css("pointer-events", "none");
-        $("#main").css("filter", "blur(2px)");
-    });
+  $(".dashboard-course-link").on("click", function (e) {
+    // blur frame while loading
+    $("#loading-overlay").css("display", "flex");
+    $("#main").css("pointer-events", "none");
+    $("#main").css("filter", "blur(2px)");
+  });
 };
 
 let disableSwitchFunctions = function () {
-    $(".waitlist-switch").attr("disabled", true);
-    $("*").css("pointer-events", "none");
-    $("*").css("cursor", "wait");
+  $(".waitlist-switch").attr("disabled", true);
+  $("*").css("pointer-events", "none");
+  $("*").css("cursor", "wait");
 };
 
 let enableSwitchFunctions = function () {
-    $(".waitlist-switch").attr("disabled", false);
-    $("*").css("pointer-events", "");
-    $("*").css("cursor", "");
+  $(".waitlist-switch").attr("disabled", false);
+  $("*").css("pointer-events", "");
+  $("*").css("cursor", "");
 };
 
 // listens for toggle of waitlist notification switch
 let switchListener = function () {
-    $("input.waitlist-switch").change(function (e) {
-        e.preventDefault();
-        classid = e.target.getAttribute("data-classid");
+  $("input.waitlist-switch").change(function (e) {
+    e.preventDefault();
+    classid = e.target.getAttribute("data-classid");
 
-        $("#confirm-remove-waitlist").attr("data-classid", classid);
-        $("#close-waitlist-modal").attr("data-classid", classid);
+    $("#confirm-remove-waitlist").attr("data-classid", classid);
+    $("#close-waitlist-modal").attr("data-classid", classid);
 
-        switchid = `#switch-${classid}`;
-        n_tigers = $(this).closest("td").next("td");
+    switchid = `#switch-${classid}`;
+    n_tigers = $(this).closest("td").next("td");
 
-        // if user is not on waitlist for this class, then add them
-        if (!$(switchid).attr("checked")) {
-            disableSwitchFunctions();
-            $.post(`/add_to_waitlist/${classid}`, function (res) {
-                // checks that user successfully added to waitlist on back-end
-                if (res["isSuccess"] === 2) return;
-                if (res["isSuccess"] === 0) {
-                    $("#close-waitlist-modal").modal("show");
-                    $(switchid).attr("checked", false);
-                    $(switchid).prop("checked", false);
-                    enableSwitchFunctions();
-                    return;
-                }
-
-                // increments # tigers
-                n_tigers.html(Number(n_tigers.html()) + 1);
-
-                $(switchid).attr("checked", true);
-                $(switchid).attr("data-bs-toggle", "modal");
-                $(switchid).attr("data-bs-target", "#confirm-remove-waitlist");
-                enableSwitchFunctions();
-
-                $(".toast-container").prepend(toastAdded.clone().attr("id", "toast-added-" + ++i));
-                $("#toast-added-" + i).toast("show");
-            });
+    // if user is not on waitlist for this class, then add them
+    if (!$(switchid).attr("checked")) {
+      disableSwitchFunctions();
+      $.post(`/add_to_waitlist/${classid}`, function (res) {
+        // checks that user successfully added to waitlist on back-end
+        if (res["isSuccess"] === 2) return;
+        if (res["isSuccess"] === 0) {
+          $("#close-waitlist-modal").modal("show");
+          $(switchid).attr("checked", false);
+          $(switchid).prop("checked", false);
+          enableSwitchFunctions();
+          return;
         }
-    });
+
+        // increments # tigers
+        n_tigers.html(Number(n_tigers.html()) + 1);
+
+        $(switchid).attr("checked", true);
+        $(switchid).attr("data-bs-toggle", "modal");
+        $(switchid).attr("data-bs-target", "#confirm-remove-waitlist");
+        enableSwitchFunctions();
+
+        $(".toast-container").prepend(toastAdded.clone().attr("id", "toast-added-" + ++i));
+        $("#toast-added-" + i).toast("show");
+      });
+    }
+  });
 };
 
 // listens for "Confirm" removal from waitlist
 let modalConfirmListener = function () {
-    $("#waitlist-modal-confirm").on("click", function (e) {
-        e.preventDefault();
-        classid = $("#confirm-remove-waitlist").attr("data-classid");
-        switchid = `#switch-${classid}`;
-        disableSwitchFunctions();
+  $("#waitlist-modal-confirm").on("click", function (e) {
+    e.preventDefault();
+    classid = $("#confirm-remove-waitlist").attr("data-classid");
+    switchid = `#switch-${classid}`;
+    disableSwitchFunctions();
 
-        n_tigers = $(switchid).closest("td").next("td");
+    n_tigers = $(switchid).closest("td").next("td");
 
-        $.post(`/remove_from_waitlist/${classid}`, function (res) {
-            // checks that user successfully removed from waitlist on back-end
-            if (!res["isSuccess"]) return;
+    $.post(`/remove_from_waitlist/${classid}`, function (res) {
+      // checks that user successfully removed from waitlist on back-end
+      if (!res["isSuccess"]) return;
 
-            // decrements # tigers
-            n_tigers.html(Number(n_tigers.html()) - 1);
+      // decrements # tigers
+      n_tigers.html(Number(n_tigers.html()) - 1);
 
-            $(`${switchid}.dashboard-switch`).closest("tr.dashboard-course-row").remove();
-            $(switchid).removeAttr("checked");
-            $(switchid).removeAttr("data-bs-toggle");
-            $(switchid).removeAttr("data-bs-target");
-            enableSwitchFunctions();
+      $(`${switchid}.dashboard-switch`).closest("tr.dashboard-course-row").remove();
+      $(switchid).removeAttr("checked");
+      $(switchid).removeAttr("data-bs-toggle");
+      $(switchid).removeAttr("data-bs-target");
+      enableSwitchFunctions();
 
-            $(".toast-container").prepend(toastRemoved.clone().attr("id", "toast-removed-" + ++i));
-            $("#toast-removed-" + i).toast("show");
-        });
+      $(".toast-container").prepend(toastRemoved.clone().attr("id", "toast-removed-" + ++i));
+      $("#toast-removed-" + i).toast("show");
     });
+  });
 };
 
 // listens for "Cancel" removal from waitlist
 let modalCancelListener = function () {
-    $("#waitlist-modal-cancel").on("click", function (e) {
-        e.preventDefault();
-        classid = $("#confirm-remove-waitlist").attr("data-classid");
-        $(`#switch-${classid}`).prop("checked", true);
-    });
+  $("#waitlist-modal-cancel").on("click", function (e) {
+    e.preventDefault();
+    classid = $("#confirm-remove-waitlist").attr("data-classid");
+    $(`#switch-${classid}`).prop("checked", true);
+  });
 };
 
 let showAllListener = function () {
-    $("#show-all-check").on("click", function (e) {
-        if ($(this).prop("checked")) {
-            $(".available-section-row").removeClass("d-none");
-            $("#no-full-message").addClass("d-none");
-        } else {
-            $(".available-section-row").addClass("d-none");
-            $("#no-full-message").removeClass("d-none");
-        }
-    });
+  $("#show-all-check").on("click", function (e) {
+    if ($(this).prop("checked")) {
+      $(".available-section-row").removeClass("d-none");
+      $("#no-full-message").addClass("d-none");
+    } else {
+      $(".available-section-row").addClass("d-none");
+      $("#no-full-message").removeClass("d-none");
+    }
+  });
 };
 
 // listens for user to click back button on page
 let pageBackListener = function () {
-    $(window).on("popstate", function () {
-        // for now, just reloads
-        location.reload();
-    });
+  $(window).on("popstate", function () {
+    // for now, just reloads
+    location.reload();
+  });
 };
 
 // quick-skip to dashboard
 let dashboardSkip = function () {
-    $("#dashboard-skip").on("click", function (e) {
-        e.preventDefault();
-        scrollBottom("#main");
-    });
-    if (window.location.href.indexOf("skip") !== -1) $("#dashboard-skip").click();
+  $("#dashboard-skip").on("click", function (e) {
+    e.preventDefault();
+    scrollBottom("#main");
+  });
+  if (window.location.href.indexOf("skip") !== -1) $("#dashboard-skip").click();
 };
 
 // quick-skip to course search
 let searchSkip = function () {
-    $("#search-skip").on("click", function (e) {
-        e.preventDefault();
-        resetScroll("#main");
-    });
+  $("#search-skip").on("click", function (e) {
+    e.preventDefault();
+    resetScroll("#main");
+  });
 };
 
 // initialize all tooltips
 let initTooltipsToasts = function () {
-    let tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
-    let tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
-        return new bootstrap.Tooltip(tooltipTriggerEl);
-    });
-    $("#status-indicator").on("click", function (e) {
-        e.preventDefault();
-    });
-    $("#dev-warning").on("click", function (e) {
-        e.preventDefault();
-    });
+  let tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
+  let tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
+    return new bootstrap.Tooltip(tooltipTriggerEl);
+  });
+  $("#status-indicator").on("click", function (e) {
+    e.preventDefault();
+  });
+  $("#dev-warning").on("click", function (e) {
+    e.preventDefault();
+  });
 };
 
 // closes the navbar (mobile) on tap out
 let navbarAutoclose = function () {
-    $(document).click(function (event) {
-        let click = $(event.target);
-        if (
-            $(".navbar-collapse").hasClass("show") &&
-            !click.hasClass("navbar-toggler") &&
-            !click.hasClass("nav-item") &&
-            !click.hasClass("nav-button") &&
-            !click.hasClass("nav-link")
-        )
-            $(".navbar-toggler").click();
-    });
+  $(document).click(function (event) {
+    let click = $(event.target);
+    if (
+      $(".navbar-collapse").hasClass("show") &&
+      !click.hasClass("navbar-toggler") &&
+      !click.hasClass("nav-item") &&
+      !click.hasClass("nav-button") &&
+      !click.hasClass("nav-link")
+    )
+      $(".navbar-toggler").click();
+  });
 };
 
 // helper method to show blacklist success/fail toast
 let blacklistToastHelper = function (type) {
-    if (type === "success") {
-        $(".toast-container").prepend(
-            toastBlacklistSuccess.clone().attr("id", "toast-blacklist-success-" + ++i)
-        );
-        $("#toast-blacklist-success-" + i).toast("show");
-        $("*").css("pointer-events", "none");
-        setTimeout(() => location.reload(), 3100);
-    } else if (type === "fail") {
-        $(".toast-container").prepend(
-            toastBlacklistFail.clone().attr("id", "toast-blacklist-fail-" + ++i)
-        );
-        $("#toast-blacklist-fail-" + i).toast("show");
-    }
+  if (type === "success") {
+    $(".toast-container").prepend(toastBlacklistSuccess.clone().attr("id", "toast-blacklist-success-" + ++i));
+    $("#toast-blacklist-success-" + i).toast("show");
+    $("*").css("pointer-events", "none");
+    setTimeout(() => location.reload(), 3100);
+  } else if (type === "fail") {
+    $(".toast-container").prepend(toastBlacklistFail.clone().attr("id", "toast-blacklist-fail-" + ++i));
+    $("#toast-blacklist-fail-" + i).toast("show");
+  }
 };
 
 // listens for "Confirm" removal from waitlist
 let blacklistListener = function () {
-    $("button.btn-blacklist").on("click", function (e) {
-        e.preventDefault();
+  $("button.btn-blacklist").on("click", function (e) {
+    e.preventDefault();
 
-        if (!confirm("Are you sure you want to blacklist this user?")) return;
+    if (!confirm("Are you sure you want to blacklist this user?")) return;
 
-        disableAdminFunction();
-        netid = e.target.getAttribute("data-netid");
+    disableAdminFunction();
+    netid = e.target.getAttribute("data-netid");
 
-        $.post(`/add_to_blacklist/${netid}`, function (res) {
-            // checks that user successfully removed from waitlist on back-end
-            if (!res["isSuccess"]) {
-                enableAdminFunction();
-                blacklistToastHelper("fail");
-                return;
-            }
+    $.post(`/add_to_blacklist/${netid}`, function (res) {
+      // checks that user successfully removed from waitlist on back-end
+      if (!res["isSuccess"]) {
+        enableAdminFunction();
+        blacklistToastHelper("fail");
+        return;
+      }
 
-            blacklistToastHelper("success");
-        });
+      blacklistToastHelper("success");
     });
+  });
 };
 
 // listens for "Confirm" removal from waitlist
 let blacklistRemovalListener = function () {
-    $("button.btn-blacklist-removal").on("click", function (e) {
-        e.preventDefault();
+  $("button.btn-blacklist-removal").on("click", function (e) {
+    e.preventDefault();
 
-        if (!confirm("Are you sure you want to unblacklist this user?")) return;
+    if (!confirm("Are you sure you want to unblacklist this user?")) return;
 
-        disableAdminFunction();
-        netid = e.target.getAttribute("data-netid");
+    disableAdminFunction();
+    netid = e.target.getAttribute("data-netid");
 
-        $.post(`/remove_from_blacklist/${netid}`, function (res) {
-            // checks that user successfully removed from waitlist on back-end
-            if (!res["isSuccess"]) {
-                blacklistToastHelper("fail");
-                enableAdminFunction();
-                return;
-            }
-            blacklistToastHelper("success");
-        });
+    $.post(`/remove_from_blacklist/${netid}`, function (res) {
+      // checks that user successfully removed from waitlist on back-end
+      if (!res["isSuccess"]) {
+        blacklistToastHelper("fail");
+        enableAdminFunction();
+        return;
+      }
+      blacklistToastHelper("success");
     });
+  });
 };
 
 // listens for "Info" button on user list
 let getUserInfoListener = function () {
-    let helper = function (res, label) {
-        if (res["data"] === "missing") {
-            $(".toast-container").prepend(
-                toastUserDoesNotExist.clone().attr("id", "toast-user-does-not-exist-" + ++i)
-            );
-            $("#toast-user-does-not-exist-" + i).toast("show");
-            enableAdminFunction();
-            return;
-        }
-        let data = res["data"].split("{");
-        $(`#get-${label}-input`).val("");
+  let helper = function (res, label) {
+    if (res["data"] === "missing") {
+      $(".toast-container").prepend(toastUserDoesNotExist.clone().attr("id", "toast-user-does-not-exist-" + ++i));
+      $("#toast-user-does-not-exist-" + i).toast("show");
+      enableAdminFunction();
+      return;
+    }
+    let data = res["data"].split("{");
+    $(`#get-${label}-input`).val("");
 
-        dataHTML = "";
-        for (let d of data) dataHTML += `<p class="my-1">&#8594; ${d}</p>`;
+    dataHTML = "";
+    for (let d of data) dataHTML += `<p class="my-1">&#8594; ${d}</p>`;
 
-        $("#modal-body-user-data").html(dataHTML);
-        $("#user-data-waitlist-modal").modal("show");
-    };
+    $("#modal-body-user-data").html(dataHTML);
+    $("#user-data-waitlist-modal").modal("show");
+  };
 
-    $("button.btn-user-info").on("click", function (e) {
-        e.preventDefault();
-        disableAdminFunction();
-        netid = e.target.getAttribute("data-netid");
-        $.post(`/get_user_data/${netid}/${false}`, function (res) {
-            helper(res, "user-data");
-            $("#staticBackdropLabelUserData").html(`Subscribed Sections for ${netid}`);
-            enableAdminFunction();
-        });
+  $("button.btn-user-info").on("click", function (e) {
+    e.preventDefault();
+    disableAdminFunction();
+    netid = e.target.getAttribute("data-netid");
+    $.post(`/get_user_data/${netid}/${false}`, function (res) {
+      helper(res, "user-data");
+      $("#staticBackdropLabelUserData").html(`Subscribed Sections for ${netid}`);
+      enableAdminFunction();
     });
+  });
 };
 
 // listens for Usage Summary button on admin panel
 let getUsageSummaryListener = function () {
-    let helper = function (res, label) {
-        if (res["data"] === "error") {
-            enableAdminFunction();
-            return;
-        }
-        let data = res["data"].split("{");
+  let helper = function (res, label) {
+    if (res["data"] === "error") {
+      enableAdminFunction();
+      return;
+    }
+    let data = res["data"].split("{");
 
-        dataHTML = "";
-        for (let d of data) dataHTML += `<p class="my-1">&#8594; ${d}</p>`;
+    dataHTML = "";
+    for (let d of data) dataHTML += `<p class="my-1">&#8594; ${d}</p>`;
 
-        $("#modal-body-usage-summary").html(dataHTML);
-        $("#usage-summary-modal").modal("show");
-    };
+    $("#modal-body-usage-summary").html(dataHTML);
+    $("#usage-summary-modal").modal("show");
+  };
 
-    $("#usage-summary").on("click", function (e) {
-        e.preventDefault();
-        disableAdminFunction();
-        $.post(`/get_usage_summary`, function (res) {
-            helper(res, "usage-summary");
-            enableAdminFunction();
-        });
+  $("#usage-summary").on("click", function (e) {
+    e.preventDefault();
+    disableAdminFunction();
+    $.post(`/get_usage_summary`, function (res) {
+      helper(res, "usage-summary");
+      enableAdminFunction();
     });
+  });
 };
 
 // enables all admin function buttons
 let enableAdminFunction = function () {
-    $(".btn-blacklist").attr("disabled", false);
-    $(".btn-blacklist-removal").attr("disabled", false);
-    $(".btn-user-info").attr("disabled", false);
-    $("#notifs-sheet-link").attr("disabled", false);
-    $("#usage-summary").attr("disabled", false);
-    $("#clear-all").attr("disabled", false);
-    $("#clear-all-trades").attr("disabled", false);
-    $("#clear-all-logs").attr("disabled", false);
-    $("#update-term").attr("disabled", false);
-    $("#toggle-emails").attr("disabled", false);
-    $("#classid-clear-input").attr("disabled", false);
-    $("#classid-clear-submit").attr("disabled", false);
-    $("#courseid-clear-input").attr("disabled", false);
-    $("#courseid-clear-submit").attr("disabled", false);
-    $("#get-user-data-input").attr("disabled", false);
-    $("#get-user-data-submit").attr("disabled", false);
-    $("#fill-section-input").attr("disabled", false);
-    $("#get-user-trade-data-input").attr("disabled", false);
-    $("#get-user-trade-data-submit").attr("disabled", false);
-    $("#fill-section-submit").attr("disabled", false);
+  $(".btn-blacklist").attr("disabled", false);
+  $(".btn-blacklist-removal").attr("disabled", false);
+  $(".btn-user-info").attr("disabled", false);
+  $("#notifs-sheet-link").attr("disabled", false);
+  $("#usage-summary").attr("disabled", false);
+  $("#clear-all").attr("disabled", false);
+  $("#clear-all-trades").attr("disabled", false);
+  $("#clear-all-logs").attr("disabled", false);
+  $("#update-term").attr("disabled", false);
+  $("#toggle-emails").attr("disabled", false);
+  $("#classid-clear-input").attr("disabled", false);
+  $("#classid-clear-submit").attr("disabled", false);
+  $("#courseid-clear-input").attr("disabled", false);
+  $("#courseid-clear-submit").attr("disabled", false);
+  $("#get-user-data-input").attr("disabled", false);
+  $("#get-user-data-submit").attr("disabled", false);
+  $("#fill-section-input").attr("disabled", false);
+  $("#get-user-trade-data-input").attr("disabled", false);
+  $("#get-user-trade-data-submit").attr("disabled", false);
+  $("#fill-section-submit").attr("disabled", false);
 };
 
 // disables all admin function buttons
 let disableAdminFunction = function () {
-    $(".btn-blacklist").attr("disabled", true);
-    $(".btn-blacklist-removal").attr("disabled", true);
-    $(".btn-user-info").attr("disabled", true);
-    $("#notifs-sheet-link").attr("disabled", true);
-    $("#usage-summary").attr("disabled", true);
-    $("#clear-all").attr("disabled", true);
-    $("#clear-all-trades").attr("disabled", true);
-    $("#clear-all-logs").attr("disabled", true);
-    $("#update-term").attr("disabled", true);
-    $("#toggle-emails").attr("disabled", true);
-    $("#classid-clear-input").attr("disabled", true);
-    $("#classid-clear-submit").attr("disabled", true);
-    $("#courseid-clear-input").attr("disabled", true);
-    $("#courseid-clear-submit").attr("disabled", true);
-    $("#get-user-data-input").attr("disabled", true);
-    $("#get-user-data-submit").attr("disabled", true);
-    $("#fill-section-input").attr("disabled", true);
-    $("#get-user-trade-data-input").attr("disabled", true);
-    $("#get-user-trade-data-submit").attr("disabled", true);
-    $("#fill-section-submit").attr("disabled", true);
+  $(".btn-blacklist").attr("disabled", true);
+  $(".btn-blacklist-removal").attr("disabled", true);
+  $(".btn-user-info").attr("disabled", true);
+  $("#notifs-sheet-link").attr("disabled", true);
+  $("#usage-summary").attr("disabled", true);
+  $("#clear-all").attr("disabled", true);
+  $("#clear-all-trades").attr("disabled", true);
+  $("#clear-all-logs").attr("disabled", true);
+  $("#update-term").attr("disabled", true);
+  $("#toggle-emails").attr("disabled", true);
+  $("#classid-clear-input").attr("disabled", true);
+  $("#classid-clear-submit").attr("disabled", true);
+  $("#courseid-clear-input").attr("disabled", true);
+  $("#courseid-clear-submit").attr("disabled", true);
+  $("#get-user-data-input").attr("disabled", true);
+  $("#get-user-data-submit").attr("disabled", true);
+  $("#fill-section-input").attr("disabled", true);
+  $("#get-user-trade-data-input").attr("disabled", true);
+  $("#get-user-trade-data-submit").attr("disabled", true);
+  $("#fill-section-submit").attr("disabled", true);
 };
 
 // listens for email notifications switch toggle
 let toggleEmailNotificationsListener = function () {
-    $("#notifs-sheet-link").on("click", function (e) {
-        e.preventDefault();
-        window.open(
-            "https://docs.google.com/spreadsheets/d/1iSWihUcWa0yX8MsS_FKC-DuGH75AukdiuAigbSkPm8k/edit#gid=550138744",
-            "_blank"
-        );
-    });
+  $("#notifs-sheet-link").on("click", function (e) {
+    e.preventDefault();
+    window.open(
+      "https://docs.google.com/spreadsheets/d/1iSWihUcWa0yX8MsS_FKC-DuGH75AukdiuAigbSkPm8k/edit#gid=550138744",
+      "_blank"
+    );
+  });
 };
 
 // sets the state of the toggle notifications button
 let initToggleEmailNotificationsButton = function () {
-    $.post("/get_notifications_status", function (res) {
-        if (res["isOn"]) $("#toggle-emails").html("Turn Off");
-        else $("#toggle-emails").html("Turn On");
-        enableAdminFunction();
-    });
+  $.post("/get_notifications_status", function (res) {
+    if (res["isOn"]) $("#toggle-emails").html("Turn Off");
+    else $("#toggle-emails").html("Turn On");
+    enableAdminFunction();
+  });
 };
 
 // helper method to display fail/success toasts for waitlist clearing
 let clearWaitlistsToastHelper = function (res) {
-    if (!res["isSuccess"]) {
-        $(".toast-container").prepend(toastClearFail.clone().attr("id", "toast-clear-fail-" + ++i));
-        $("#toast-clear-fail-" + i).toast("show");
-    } else {
-        $(".toast-container").prepend(
-            toastClearSuccess.clone().attr("id", "toast-clear-success-" + ++i)
-        );
-        $("#toast-clear-success-" + i).toast("show");
-    }
+  if (!res["isSuccess"]) {
+    $(".toast-container").prepend(toastClearFail.clone().attr("id", "toast-clear-fail-" + ++i));
+    $("#toast-clear-fail-" + i).toast("show");
+  } else {
+    $(".toast-container").prepend(toastClearSuccess.clone().attr("id", "toast-clear-success-" + ++i));
+    $("#toast-clear-success-" + i).toast("show");
+  }
 };
 
 // helper method to display fail/success toasts for waitlist clearing
 let fillSectionToastHelper = function (res) {
-    if (!res["isSuccess"]) {
-        $(".toast-container").prepend(toastFillFail.clone().attr("id", "toast-clear-fail-" + ++i));
-        $("#toast-clear-fail-" + i).toast("show");
-    } else {
-        $(".toast-container").prepend(
-            toastFillSuccess.clone().attr("id", "toast-clear-success-" + ++i)
-        );
-        $("#toast-clear-success-" + i).toast("show");
-    }
+  if (!res["isSuccess"]) {
+    $(".toast-container").prepend(toastFillFail.clone().attr("id", "toast-clear-fail-" + ++i));
+    $("#toast-clear-fail-" + i).toast("show");
+  } else {
+    $(".toast-container").prepend(toastFillSuccess.clone().attr("id", "toast-clear-success-" + ++i));
+    $("#toast-clear-success-" + i).toast("show");
+  }
 };
 
 // listens for clear all waitlists button
 let clearAllWaitlistsListener = function () {
-    $("#clear-all").on("click", function (e) {
-        e.preventDefault();
-        disableAdminFunction();
+  $("#clear-all").on("click", function (e) {
+    e.preventDefault();
+    disableAdminFunction();
 
-        if (
-            !confirm(
-                "Are you sure you want to clear all subscriptions? This action is irreversible."
-            )
-        ) {
-            enableAdminFunction();
-            return;
-        }
+    if (!confirm("Are you sure you want to clear all subscriptions? This action is irreversible.")) {
+      enableAdminFunction();
+      return;
+    }
 
-        $.post("/clear_all_waitlists", function (res) {
-            // checks that user successfully removed from waitlist on back-end
-            clearWaitlistsToastHelper(res);
-            enableAdminFunction();
-        });
+    $.post("/clear_all_waitlists", function (res) {
+      // checks that user successfully removed from waitlist on back-end
+      clearWaitlistsToastHelper(res);
+      enableAdminFunction();
     });
+  });
 };
 
 // listens for update term button
 let updateTermListener = function () {
-    $("#update-term").on("click", function (e) {
-        e.preventDefault();
-        disableAdminFunction();
+  $("#update-term").on("click", function (e) {
+    e.preventDefault();
+    disableAdminFunction();
 
-        if (
-            !confirm(
-                "Are you sure you want to update TigerSnatch to the latest term? This action will clear ALL term-specific data (including user logs, Trades, subscriptions, and curent sections) and is irreversible. TigerSnatch will go into maintenance mode for 2-3 minutes while updating."
-            )
-        ) {
-            enableAdminFunction();
-            return;
-        }
+    if (
+      !confirm(
+        "Are you sure you want to update TigerSnatch to the latest term? This action will clear ALL term-specific data (including user logs, Trades, subscriptions, and curent sections) and is irreversible. TigerSnatch will go into maintenance mode for 2-3 minutes while updating."
+      )
+    ) {
+      enableAdminFunction();
+      return;
+    }
 
-        // MAKE THE ADMIN CONFIRM TWICE!!
-        if (
-            !confirm("Are you ABSOLUTELY sure you want to update TigerSnatch to the latest term?")
-        ) {
-            enableAdminFunction();
-            return;
-        }
+    // MAKE THE ADMIN CONFIRM TWICE!!
+    if (!confirm("Are you ABSOLUTELY sure you want to update TigerSnatch to the latest term?")) {
+      enableAdminFunction();
+      return;
+    }
 
-        $("*").css("pointer-events", "none");
-        setTimeout(() => location.reload(), 3100);
-        $(".toast-container").prepend(
-            toastUpdateTerm.clone().attr("id", "toast-update-term-" + ++i)
-        );
-        $("#toast-update-term-" + i).toast("show");
-        $.post("/update_all_courses", function (res) {});
-    });
+    $("*").css("pointer-events", "none");
+    setTimeout(() => location.reload(), 3100);
+    $(".toast-container").prepend(toastUpdateTerm.clone().attr("id", "toast-update-term-" + ++i));
+    $("#toast-update-term-" + i).toast("show");
+    $.post("/update_all_courses", function (res) {});
+  });
 };
 
 // listens for clear all trades button
 let clearAllTradesListener = function () {
-    $("#clear-all-trades").on("click", function (e) {
-        e.preventDefault();
-        disableAdminFunction();
+  $("#clear-all-trades").on("click", function (e) {
+    e.preventDefault();
+    disableAdminFunction();
 
-        if (!confirm("Are you sure you want to clear all Trades? This action is irreversible.")) {
-            enableAdminFunction();
-            return;
-        }
+    if (!confirm("Are you sure you want to clear all Trades? This action is irreversible.")) {
+      enableAdminFunction();
+      return;
+    }
 
-        $.post("/clear_all_trades", function (res) {
-            // checks that user successfully removed from waitlist on back-end
-            clearWaitlistsToastHelper(res);
-            enableAdminFunction();
-        });
+    $.post("/clear_all_trades", function (res) {
+      // checks that user successfully removed from waitlist on back-end
+      clearWaitlistsToastHelper(res);
+      enableAdminFunction();
     });
+  });
 };
 
 // listens for clear all logs button
 let clearAllLogsListener = function () {
-    $("#clear-all-logs").on("click", function (e) {
-        e.preventDefault();
-        disableAdminFunction();
+  $("#clear-all-logs").on("click", function (e) {
+    e.preventDefault();
+    disableAdminFunction();
 
-        if (
-            !confirm("Are you sure you want to clear all user logs? This action is irreversible.")
-        ) {
-            enableAdminFunction();
-            return;
-        }
+    if (!confirm("Are you sure you want to clear all user logs? This action is irreversible.")) {
+      enableAdminFunction();
+      return;
+    }
 
-        $.post("/clear_all_user_logs", function (res) {
-            // checks that user successfully removed from waitlist on back-end
-            clearWaitlistsToastHelper(res);
-            enableAdminFunction();
-        });
+    $.post("/clear_all_user_logs", function (res) {
+      // checks that user successfully removed from waitlist on back-end
+      clearWaitlistsToastHelper(res);
+      enableAdminFunction();
     });
+  });
 };
 
 // listens for clear class waitlist button
 let clearClassWaitlistListener = function () {
-    $("#classid-clear").on("submit", function (e) {
-        e.preventDefault();
-        classid = $("#classid-clear-input").val();
-        disableAdminFunction();
+  $("#classid-clear").on("submit", function (e) {
+    e.preventDefault();
+    classid = $("#classid-clear-input").val();
+    disableAdminFunction();
 
-        if (
-            !confirm(
-                `Are you sure you want to clear subscriptions for class ${classid}? This action is irreversible.`
-            )
-        ) {
-            enableAdminFunction();
-            return;
-        }
+    if (!confirm(`Are you sure you want to clear subscriptions for class ${classid}? This action is irreversible.`)) {
+      enableAdminFunction();
+      return;
+    }
 
-        $.post(`/clear_by_class/${classid}`, function (res) {
-            // checks that user successfully removed from waitlist on back-end
-            clearWaitlistsToastHelper(res);
-            $("#classid-clear-input").val("");
-            enableAdminFunction();
-        });
+    $.post(`/clear_by_class/${classid}`, function (res) {
+      // checks that user successfully removed from waitlist on back-end
+      clearWaitlistsToastHelper(res);
+      $("#classid-clear-input").val("");
+      enableAdminFunction();
     });
+  });
 };
 
 let fillSectionListener = function () {
-    $("#fill-section").on("submit", function (e) {
-        e.preventDefault();
-        classid = $("#fill-section-input").val();
-        disableAdminFunction();
+  $("#fill-section").on("submit", function (e) {
+    e.preventDefault();
+    classid = $("#fill-section-input").val();
+    disableAdminFunction();
 
-        $.post(`/fill_section/${classid}`, function (res) {
-            // checks that user successfully removed from waitlist on back-end
-            fillSectionToastHelper(res);
-            $("#fill-section-input").val("");
-            enableAdminFunction();
-        });
+    $.post(`/fill_section/${classid}`, function (res) {
+      // checks that user successfully removed from waitlist on back-end
+      fillSectionToastHelper(res);
+      $("#fill-section-input").val("");
+      enableAdminFunction();
     });
+  });
 };
 
 // listens for clear course waitlists button
 let clearCourseWaitlistListener = function () {
-    $("#courseid-clear").on("submit", function (e) {
-        e.preventDefault();
-        courseid = $("#courseid-clear-input").val();
-        disableAdminFunction();
+  $("#courseid-clear").on("submit", function (e) {
+    e.preventDefault();
+    courseid = $("#courseid-clear-input").val();
+    disableAdminFunction();
 
-        if (
-            !confirm(
-                `Are you sure you want to clear subscriptions for course ${courseid}? This action is irreversible.`
-            )
-        ) {
-            enableAdminFunction();
-            return;
-        }
+    if (!confirm(`Are you sure you want to clear subscriptions for course ${courseid}? This action is irreversible.`)) {
+      enableAdminFunction();
+      return;
+    }
 
-        $.post(`/clear_by_course/${courseid}`, function (res) {
-            // checks that user successfully removed from waitlist on back-end
-            clearWaitlistsToastHelper(res);
-            $("#courseid-clear-input").val("");
-            enableAdminFunction();
-        });
+    $.post(`/clear_by_course/${courseid}`, function (res) {
+      // checks that user successfully removed from waitlist on back-end
+      clearWaitlistsToastHelper(res);
+      $("#courseid-clear-input").val("");
+      enableAdminFunction();
     });
+  });
 };
 
 // listens for a user data query
 let getUserDataListener = function () {
-    let helper = function (res, label) {
-        if (res["data"] === "missing") {
-            $(".toast-container").prepend(
-                toastUserDoesNotExist.clone().attr("id", "toast-user-does-not-exist-" + ++i)
-            );
-            $("#toast-user-does-not-exist-" + i).toast("show");
-            enableAdminFunction();
-            return;
-        }
-        let data = res["data"].split("{");
-        $(`#get-${label}-input`).val("");
+  let helper = function (res, label) {
+    if (res["data"] === "missing") {
+      $(".toast-container").prepend(toastUserDoesNotExist.clone().attr("id", "toast-user-does-not-exist-" + ++i));
+      $("#toast-user-does-not-exist-" + i).toast("show");
+      enableAdminFunction();
+      return;
+    }
+    let data = res["data"].split("{");
+    $(`#get-${label}-input`).val("");
 
-        dataHTML = "";
-        for (let d of data) dataHTML += `<p class="my-1">&#8594; ${d}</p>`;
+    dataHTML = "";
+    for (let d of data) dataHTML += `<p class="my-1">&#8594; ${d}</p>`;
 
-        $("#modal-body-user-data").html(dataHTML);
-        $("#user-data-waitlist-modal").modal("show");
-    };
+    $("#modal-body-user-data").html(dataHTML);
+    $("#user-data-waitlist-modal").modal("show");
+  };
 
-    $("#get-user-data").on("submit", function (e) {
-        e.preventDefault();
-        netid = $(`#get-user-data-input`).val();
-        disableAdminFunction();
-        $.post(`/get_user_data/${netid}/${false}`, function (res) {
-            helper(res, "user-data");
-            $("#staticBackdropLabelUserData").html(`Subscribed Sections for ${netid}`);
-            enableAdminFunction();
-        });
+  $("#get-user-data").on("submit", function (e) {
+    e.preventDefault();
+    netid = $(`#get-user-data-input`).val();
+    disableAdminFunction();
+    $.post(`/get_user_data/${netid}/${false}`, function (res) {
+      helper(res, "user-data");
+      $("#staticBackdropLabelUserData").html(`Subscribed Sections for ${netid}`);
+      enableAdminFunction();
     });
+  });
 
-    $("#get-user-trade-data").on("submit", function (e) {
-        e.preventDefault();
-        netid = $(`#get-user-trade-data-input`).val();
-        disableAdminFunction();
-        $.post(`/get_user_data/${netid}/${true}`, function (res) {
-            helper(res, "user-trade-data");
-            $("#staticBackdropLabelUserData").html(`Trade Sections for ${netid}`);
-            enableAdminFunction();
-        });
+  $("#get-user-trade-data").on("submit", function (e) {
+    e.preventDefault();
+    netid = $(`#get-user-trade-data-input`).val();
+    disableAdminFunction();
+    $.post(`/get_user_data/${netid}/${true}`, function (res) {
+      helper(res, "user-trade-data");
+      $("#staticBackdropLabelUserData").html(`Trade Sections for ${netid}`);
+      enableAdminFunction();
     });
+  });
 };
 
 // disables trade functionality buttons
 let disableTradeFunction = function () {
-    $(".submit-trade").attr("disabled", true);
-    $(".save-trade").attr("disabled", true);
-    $(".remove-trade").attr("disabled", true);
-    $("*").css("pointer-events", "none");
-    $("*").css("cursor", "wait");
+  $(".submit-trade").attr("disabled", true);
+  $(".save-trade").attr("disabled", true);
+  $(".remove-trade").attr("disabled", true);
+  $("*").css("pointer-events", "none");
+  $("*").css("cursor", "wait");
 };
 
 // enables trade functionality buttons
 let enableTradeFunction = function () {
-    $(".submit-trade").attr("disabled", false);
-    $(".remove-trade").attr("disabled", false);
-    $(".save-trade").attr("disabled", false);
-    $("*").css("pointer-events", "");
-    $("*").css("cursor", "");
+  $(".submit-trade").attr("disabled", false);
+  $(".remove-trade").attr("disabled", false);
+  $(".save-trade").attr("disabled", false);
+  $("*").css("pointer-events", "");
+  $("*").css("cursor", "");
 };
 
 // helper method to display fail/success toasts for updating current section
 let updateSectionToastHelper = function (res) {
-    if (!res["isSuccess"]) {
-        $(".toast-container").prepend(
-            toastAddedSectionFail.clone().attr("id", "toast-updatesection-fail-" + ++i)
-        );
-        $("#toast-updatesection-fail-" + i).toast("show");
-    } else {
-        $(".toast-container").prepend(
-            toastAddedSection.clone().attr("id", "toast-updatesection-success-" + ++i)
-        );
-        $("#toast-updatesection-success-" + i).toast("show");
-    }
+  if (!res["isSuccess"]) {
+    $(".toast-container").prepend(toastAddedSectionFail.clone().attr("id", "toast-updatesection-fail-" + ++i));
+    $("#toast-updatesection-fail-" + i).toast("show");
+  } else {
+    $(".toast-container").prepend(toastAddedSection.clone().attr("id", "toast-updatesection-success-" + ++i));
+    $("#toast-updatesection-success-" + i).toast("show");
+  }
 };
 
 // helper method to display fail/success toasts for removing current section
 let removeSectionToastHelper = function (res) {
-    if (!res["isSuccess"]) {
-        $(".toast-container").prepend(
-            toastRemovedSectionFail.clone().attr("id", "toast-removedsection-fail-" + ++i)
-        );
-        $("#toast-removedsection-fail-" + i).toast("show");
-    } else {
-        $(".toast-container").prepend(
-            toastRemovedSection.clone().attr("id", "toast-removedsection-success-" + ++i)
-        );
-        $("#toast-removedsection-success-" + i).toast("show");
-    }
+  if (!res["isSuccess"]) {
+    $(".toast-container").prepend(toastRemovedSectionFail.clone().attr("id", "toast-removedsection-fail-" + ++i));
+    $("#toast-removedsection-fail-" + i).toast("show");
+  } else {
+    $(".toast-container").prepend(toastRemovedSection.clone().attr("id", "toast-removedsection-success-" + ++i));
+    $("#toast-removedsection-success-" + i).toast("show");
+  }
 };
 
 // listens for update current section button
 let updateCurrentSection = function () {
-    $(".trade-form").on("submit", function (e) {
-        e.preventDefault();
-        courseid = e.target.getAttribute("courseid");
-        classid = $(`#sections-${courseid}`).val();
+  $(".trade-form").on("submit", function (e) {
+    e.preventDefault();
+    courseid = e.target.getAttribute("courseid");
+    classid = $(`#sections-${courseid}`).val();
 
-        disableTradeFunction();
+    disableTradeFunction();
 
-        $.post(`/update_user_section/${courseid}/${classid}`, function (res) {
-            // checks that user successfully updated section on back-end
-            updateSectionToastHelper(res);
-            curr_section = $(`#sections-${courseid} option:selected`).text();
-            $(".submit-trade").attr("curr-section", curr_section);
-            enableTradeFunction();
-        });
+    $.post(`/update_user_section/${courseid}/${classid}`, function (res) {
+      // checks that user successfully updated section on back-end
+      updateSectionToastHelper(res);
+      curr_section = $(`#sections-${courseid} option:selected`).text();
+      $(".submit-trade").attr("curr-section", curr_section);
+      enableTradeFunction();
     });
+  });
 };
 
 // listens for reset current section button
 let removeCurrentSection = function () {
-    $(".remove-trade").on("click", function (e) {
-        e.preventDefault();
-        courseid = e.target.getAttribute("courseid");
+  $(".remove-trade").on("click", function (e) {
+    e.preventDefault();
+    courseid = e.target.getAttribute("courseid");
 
-        disableTradeFunction();
+    disableTradeFunction();
 
-        $.post(`/remove_user_section/${courseid}`, function (res) {
-            // checks that user successfully updated section on back-end
-            removeSectionToastHelper(res);
-            $(".save-trade").attr("disabled", false);
-            $("*").css("pointer-events", "");
-            $("*").css("cursor", "");
-            $(`#sections-${courseid}`).val("");
-        });
+    $.post(`/remove_user_section/${courseid}`, function (res) {
+      // checks that user successfully updated section on back-end
+      removeSectionToastHelper(res);
+      $(".save-trade").attr("disabled", false);
+      $("*").css("pointer-events", "");
+      $("*").css("cursor", "");
+      $(`#sections-${courseid}`).val("");
     });
+  });
 };
 
 // helper function to build email link
-let createEmail = function (
-    match_netid,
-    my_netid,
-    match_section,
-    my_section,
-    course_name,
-    match_email
-) {
-    const tradeEmailSubject = `TigerSnatch: Trade Sections for ${match_section} in ${course_name}?`;
-    const tradeEmailBody = `Hi ${match_netid},\n\nFrom TigerSnatch, I saw that you're enrolled in ${course_name} ${match_section}. I'm currently in ${my_section}.\nWould you like to set up a time to trade sections with me?\n\nThank you,\n${my_netid}`;
+let createEmail = function (match_netid, my_netid, match_section, my_section, course_name, match_email) {
+  const tradeEmailSubject = `TigerSnatch: Trade Sections for ${match_section} in ${course_name}?`;
+  const tradeEmailBody = `Hi ${match_netid},\n\nFrom TigerSnatch, I saw that you're enrolled in ${course_name} ${match_section}. I'm currently in ${my_section}.\nWould you like to set up a time to trade sections with me?\n\nThank you,\n${my_netid}`;
 
-    return encodeURI(
-        `//mail.google.com/mail/?view=cm&fs=1&to=${match_email}&su=${tradeEmailSubject}&body=${tradeEmailBody}`
-    );
+  return encodeURI(
+    `//mail.google.com/mail/?view=cm&fs=1&to=${match_email}&su=${tradeEmailSubject}&body=${tradeEmailBody}`
+  );
 };
 
 // listens for find trades button
 let findMatches = function () {
-    $(".submit-trade").on("click", function (e) {
-        e.preventDefault();
-        courseid = e.target.getAttribute("courseid");
-        netid = e.target.getAttribute("netid");
-        coursename = e.target.getAttribute("coursename");
+  $(".submit-trade").on("click", function (e) {
+    e.preventDefault();
+    courseid = e.target.getAttribute("courseid");
+    netid = e.target.getAttribute("netid");
+    coursename = e.target.getAttribute("coursename");
 
-        disableTradeFunction();
+    disableTradeFunction();
 
-        $.post(`/find_matches/${courseid}`, function (res) {
-            // checks that user successfully updated section on back-end
-            if (res["data"].length !== 0) {
-                s = `<div>
+    $.post(`/find_matches/${courseid}`, function (res) {
+      // checks that user successfully updated section on back-end
+      if (res["data"].length !== 0) {
+        s = `<div>
                         <svg
                             id="dev-warning"
                             xmlns="http://www.w3.org/2000/svg"
@@ -1223,23 +1174,16 @@ let findMatches = function () {
                             </tr>
                         </thead>
                             <tbody>`;
-                for (var i = 0; i < res["data"].length; i++) {
-                    match_netid = res["data"][i][0];
-                    match_section = res["data"][i][1];
-                    my_section = $(".submit-trade").attr("curr-section");
-                    coursename = $(".submit-trade").attr("coursename");
-                    match_email = res["data"][i][2];
+        for (var i = 0; i < res["data"].length; i++) {
+          match_netid = res["data"][i][0];
+          match_section = res["data"][i][1];
+          my_section = $(".submit-trade").attr("curr-section");
+          coursename = $(".submit-trade").attr("coursename");
+          match_email = res["data"][i][2];
 
-                    emailLink = createEmail(
-                        match_netid,
-                        netid,
-                        match_section,
-                        my_section,
-                        coursename,
-                        match_email
-                    );
+          emailLink = createEmail(match_netid, netid, match_section, my_section, coursename, match_email);
 
-                    s += `<tr>
+          s += `<tr>
                         <td>${res["data"][i][0]}</td>
                         <td>${res["data"][i][1]}</td>
                         <td><a href=${emailLink} target='_blank' class='btn btn-outline-primary contact-button' match-netid=${res["data"][i][0]} match-section=${res["data"][i][1]}>
@@ -1249,101 +1193,98 @@ let findMatches = function () {
                         </a>
                     </td>
                         </tr>`;
-                }
-                s += "</tbody></table></div>";
-                $(`#match-${courseid}`).html(s);
-                $(".contact-button").on("click", function (e) {
-                    e.preventDefault();
-                    $(".contact-button").attr("disabled", true);
-                    matchNetid = e.target.getAttribute("match-netid");
-                    matchSection = e.target.getAttribute("match-section");
+        }
+        s += "</tbody></table></div>";
+        $(`#match-${courseid}`).html(s);
+        $(".contact-button").on("click", function (e) {
+          e.preventDefault();
+          $(".contact-button").attr("disabled", true);
+          matchNetid = e.target.getAttribute("match-netid");
+          matchSection = e.target.getAttribute("match-section");
 
-                    if (!matchNetid || !matchSection) return;
+          if (!matchNetid || !matchSection) return;
 
-                    if (
-                        !confirm(
-                            "Are you sure you want to email this user? They will be notified on their Activity page if you confirm!"
-                        )
-                    )
-                        return;
+          if (
+            !confirm(
+              "Are you sure you want to email this user? They will be notified on their Activity page if you confirm!"
+            )
+          )
+            return;
 
-                    window.open($(this).prop("href"), "_blank");
+          window.open($(this).prop("href"), "_blank");
 
-                    $.post(
-                        `/contact_trade/${coursename.split("/")[0]}/${matchNetid}/${matchSection}`,
-                        function (res) {
-                            // checks that user successfully updated section on back-end
-                            $(".contact-button").attr("disabled", false);
-                        }
-                    );
-                });
-                initTooltipsToasts();
-            } else {
-                $(`#match-${courseid}`).html(
-                    "We're unable to find you a Trade! If you haven't already, make sure to Subscribe to one or more sections for this course. Your Subscribed sections are the ones you'd like to trade into!"
-                );
-            }
-            $("#matches-modal").modal("show");
-            enableTradeFunction();
+          $.post(`/contact_trade/${coursename.split("/")[0]}/${matchNetid}/${matchSection}`, function (res) {
+            // checks that user successfully updated section on back-end
+            $(".contact-button").attr("disabled", false);
+          });
         });
+        initTooltipsToasts();
+      } else {
+        $(`#match-${courseid}`).html(
+          "We're unable to find you a Trade! If you haven't already, make sure to Subscribe to one or more sections for this course. Your Subscribed sections are the ones you'd like to trade into!"
+        );
+      }
+      $("#matches-modal").modal("show");
+      enableTradeFunction();
     });
+  });
 };
 
 // handles button clicks in the Trade Panel
 let tradeFunctions = function () {
-    updateCurrentSection();
-    removeCurrentSection();
-    findMatches();
+  updateCurrentSection();
+  removeCurrentSection();
+  findMatches();
 };
 
 // handles functions that optimizes mobile view
 let mobileViewFunctions = function () {
-    dashboardSkip();
-    searchSkip();
-    navbarAutoclose();
+  dashboardSkip();
+  searchSkip();
+  navbarAutoclose();
 };
 
 // handles features on the admin panel
 let adminFunctions = function () {
-    blacklistListener();
-    blacklistRemovalListener();
-    updateTermListener();
-    clearAllWaitlistsListener();
-    clearAllTradesListener();
-    clearAllLogsListener();
-    clearClassWaitlistListener();
-    clearCourseWaitlistListener();
-    getUsageSummaryListener();
-    getUserDataListener();
-    getUserInfoListener();
-    initToggleEmailNotificationsButton();
-    toggleEmailNotificationsListener();
-    fillSectionListener();
+  blacklistListener();
+  blacklistRemovalListener();
+  updateTermListener();
+  clearAllWaitlistsListener();
+  clearAllTradesListener();
+  clearAllLogsListener();
+  clearClassWaitlistListener();
+  clearCourseWaitlistListener();
+  getUsageSummaryListener();
+  getUserDataListener();
+  getUserInfoListener();
+  initToggleEmailNotificationsButton();
+  toggleEmailNotificationsListener();
+  fillSectionListener();
 };
 
 // handles course search functions
 let searchFunctions = function () {
-    searchFormListener();
-    searchResultListener();
+  searchFormListener();
+  searchResultListener();
 };
 
 // handles changes in course subscription
 let subscriptionFunctions = function () {
-    switchListener();
-    modalConfirmListener();
-    modalCancelListener();
+  switchListener();
+  modalConfirmListener();
+  modalCancelListener();
 };
 
 // jQuery 'on' only applies listeners to elements currently on DOM
 // applies listeners to current elements when document is loaded
 $(document).ready(function () {
-    tradeFunctions();
-    mobileViewFunctions();
-    adminFunctions();
-    searchFunctions();
-    subscriptionFunctions();
-    showAllListener();
-    pageBackListener();
-    initTooltipsToasts();
-    dashboardCourseSelectListener();
+  tradeFunctions();
+  mobileViewFunctions();
+  adminFunctions();
+  searchFunctions();
+  subscriptionFunctions();
+  showAllListener();
+  pageBackListener();
+  initTooltipsToasts();
+  dashboardCourseSelectListener();
 });

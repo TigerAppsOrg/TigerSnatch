@@ -1,139 +1,103 @@
 <!-- Waitlist Modal -->
 <div
-    class="modal fade"
-    id="confirm-remove-waitlist"
-    data-classid=""
-    data-bs-backdrop="static"
-    data-bs-keyboard="false"
-    tabindex="-1"
-    aria-labelledby="staticBackdropLabel"
-    aria-hidden="true"
+  class="modal fade"
+  id="confirm-remove-waitlist"
+  data-classid=""
+  data-bs-backdrop="static"
+  data-bs-keyboard="false"
+  tabindex="-1"
+  aria-labelledby="staticBackdropLabel"
+  aria-hidden="true"
 >
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="staticBackdropLabel">Confirm Unsubscribe</h5>
-            </div>
-            <div class="modal-body">
-                Are you sure you want to unsubscribe yourself from this section?
-            </div>
-            <div class="modal-footer">
-                <button
-                    type="button"
-                    id="waitlist-modal-cancel"
-                    class="btn btn-secondary"
-                    data-bs-dismiss="modal"
-                >
-                    Cancel
-                </button>
-                <button
-                    type="button"
-                    id="waitlist-modal-confirm"
-                    class="btn btn-warning"
-                    data-bs-dismiss="modal"
-                >
-                    Confirm
-                </button>
-            </div>
-        </div>
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="staticBackdropLabel">Confirm Unsubscribe</h5>
+      </div>
+      <div class="modal-body">Are you sure you want to unsubscribe yourself from this section?</div>
+      <div class="modal-footer">
+        <button type="button" id="waitlist-modal-cancel" class="btn btn-secondary" data-bs-dismiss="modal">
+          Cancel
+        </button>
+        <button type="button" id="waitlist-modal-confirm" class="btn btn-warning" data-bs-dismiss="modal">
+          Confirm
+        </button>
+      </div>
     </div>
+  </div>
 </div>
 
 <!-- Close Waitlist Modal -->
 <div
-    class="modal fade"
-    id="close-waitlist-modal"
-    data-classid=""
-    data-bs-backdrop="static"
-    data-bs-keyboard="false"
-    tabindex="-1"
-    aria-labelledby="staticBackdropLabel"
-    aria-hidden="true"
+  class="modal fade"
+  id="close-waitlist-modal"
+  data-classid=""
+  data-bs-backdrop="static"
+  data-bs-keyboard="false"
+  tabindex="-1"
+  aria-labelledby="staticBackdropLabel"
+  aria-hidden="true"
 >
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="staticBackdropLabel">Subscription Limit Reached</h5>
-            </div>
-            <div class="modal-body">
-                You can subscribe to only <strong>seven</strong> sections at once! If you wish to
-                subscribe to this section, please unsubscribe from another section.
-            </div>
-            <div class="modal-footer">
-                <button
-                    type="button"
-                    id="waitlist-modal-close"
-                    class="btn btn-warning"
-                    data-bs-dismiss="modal"
-                >
-                    Close
-                </button>
-            </div>
-        </div>
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="staticBackdropLabel">Subscription Limit Reached</h5>
+      </div>
+      <div class="modal-body">
+        You can subscribe to only <strong>seven</strong> sections at once! If you wish to subscribe to this section,
+        please unsubscribe from another section.
+      </div>
+      <div class="modal-footer">
+        <button type="button" id="waitlist-modal-close" class="btn btn-warning" data-bs-dismiss="modal">Close</button>
+      </div>
     </div>
+  </div>
 </div>
 
 <!-- User Data Waitlist Modal -->
 <div
-    class="modal fade"
-    id="user-data-waitlist-modal"
-    data-classid=""
-    data-bs-backdrop="static"
-    data-bs-keyboard="false"
-    tabindex="-1"
-    aria-labelledby="staticBackdropLabel"
-    aria-hidden="true"
+  class="modal fade"
+  id="user-data-waitlist-modal"
+  data-classid=""
+  data-bs-backdrop="static"
+  data-bs-keyboard="false"
+  tabindex="-1"
+  aria-labelledby="staticBackdropLabel"
+  aria-hidden="true"
 >
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="staticBackdropLabelUserData"></h5>
-            </div>
-            <div class="modal-body" id="modal-body-user-data"></div>
-            <div class="modal-footer">
-                <button
-                    type="button"
-                    id="waitlist-modal-close"
-                    class="btn btn-warning"
-                    data-bs-dismiss="modal"
-                >
-                    Close
-                </button>
-            </div>
-        </div>
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="staticBackdropLabelUserData"></h5>
+      </div>
+      <div class="modal-body" id="modal-body-user-data"></div>
+      <div class="modal-footer">
+        <button type="button" id="waitlist-modal-close" class="btn btn-warning" data-bs-dismiss="modal">Close</button>
+      </div>
     </div>
+  </div>
 </div>
 
 <!-- Usage Summary Modal -->
 <div
-    class="modal fade"
-    id="usage-summary-modal"
-    data-classid=""
-    data-bs-backdrop="static"
-    data-bs-keyboard="false"
-    tabindex="-1"
-    aria-labelledby="staticBackdropLabel"
-    aria-hidden="true"
+  class="modal fade"
+  id="usage-summary-modal"
+  data-classid=""
+  data-bs-backdrop="static"
+  data-bs-keyboard="false"
+  tabindex="-1"
+  aria-labelledby="staticBackdropLabel"
+  aria-hidden="true"
 >
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="staticBackdropLabel">Usage Summary</h5>
-            </div>
-            <div class="modal-body"
-                 style="height: 400px; overflow: auto;"
-                 id="modal-body-usage-summary">
-            </div>
-            <div class="modal-footer">
-                <button
-                    type="button"
-                    id="waitlist-modal-close"
-                    class="btn btn-warning"
-                    data-bs-dismiss="modal"
-                >
-                    Close
-                </button>
-            </div>
-        </div>
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="staticBackdropLabel">Usage Summary</h5>
+      </div>
+      <div class="modal-body" style="height: 400px; overflow: auto" id="modal-body-usage-summary"></div>
+      <div class="modal-footer">
+        <button type="button" id="waitlist-modal-close" class="btn btn-warning" data-bs-dismiss="modal">Close</button>
+      </div>
     </div>
+  </div>
 </div>

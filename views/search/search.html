@@ -1,19 +1,12 @@
 {% if is_dashboard %}
 <form id="search-form" class="form-inline my-0" action="/dashboard" method="get">
-    {% include 'search/search_form.html' %}
-    <input id="search-form-courseid" type="hidden" name="courseid" value="" />
+  {% include 'search/search_form.html' %}
+  <input id="search-form-courseid" type="hidden" name="courseid" value="" />
 </form>
 {% else %}
 <form id="search-form" class="form-inline my-0" action="/course" method="get">
-    {% include 'search/search_form.html' %}
-    <input
-        id="search-form-courseid"
-        type="hidden"
-        name="courseid"
-        value="{{course_details.courseid}}"
-    />
+  {% include 'search/search_form.html' %}
+  <input id="search-form-courseid" type="hidden" name="courseid" value="{{course_details.courseid}}" />
 </form>
 {% endif %}
-<div id="search-results" class="d-flex flex-column my-2">
-    {% include 'search/search_results.html' %}
-</div>
+<div id="search-results" class="d-flex flex-column my-2">{% include 'search/search_results.html' %}</div>

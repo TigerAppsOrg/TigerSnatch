@@ -1,161 +1,145 @@
 <div class="table-responsive">
-    <table class="table table-hover mt-2">
-        <thead class="table-white">
-            <tr>
-                <th scope="col">Description</th>
-                <th scope="col">Inputs</th>
-                <th scopt="col">Action</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr class="dashboard-course-row">
-                <td>Update to Latest Term (current: {{current_term_code}})</td>
-                <td>-</td>
-                <td>
-                    <button id="update-term" type="button" class="btn btn-danger">Update</button>
-                </td>
-            </tr>
-            <tr class="dashboard-course-row">
-                <td>Modify Notifications Schedule</td>
-                <td>-</td>
-                <td>
-                    <!-- <button id="toggle-emails" type="submit" class="btn btn-warning" disabled>
+  <table class="table table-hover mt-2">
+    <thead class="table-white">
+      <tr>
+        <th scope="col">Description</th>
+        <th scope="col">Inputs</th>
+        <th scopt="col">Action</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr class="dashboard-course-row">
+        <td>Update to Latest Term (current: {{current_term_code}})</td>
+        <td>-</td>
+        <td>
+          <button id="update-term" type="button" class="btn btn-danger">Update</button>
+        </td>
+      </tr>
+      <tr class="dashboard-course-row">
+        <td>Modify Notifications Schedule</td>
+        <td>-</td>
+        <td>
+          <!-- <button id="toggle-emails" type="submit" class="btn btn-warning" disabled>
                         Loading...
                     </button> -->
-                    <button id="notifs-sheet-link" type="submit" class="btn btn-warning">
-                        G-Sheet
-                    </button>
-                </td>
-            </tr>
-            <tr class="dashboard-course-row">
-                <td>Usage Summary</td>
-                <td>-</td>
-                <td>
-                    <button id="usage-summary" type="button" class="btn btn-warning">Get</button>
-                </td>
-            </tr>
-            <tr class="dashboard-course-row">
-                <td>Clear All User Logs</td>
-                <td>-</td>
-                <td>
-                    <button id="clear-all-logs" type="button" class="btn btn-warning">Clear</button>
-                </td>
-            </tr>
-            <tr class="dashboard-course-row">
-                <td>Clear All Trades</td>
-                <td>-</td>
-                <td>
-                    <button id="clear-all-trades" type="button" class="btn btn-warning">
-                        Clear
-                    </button>
-                </td>
-            </tr>
-            <tr class="dashboard-course-row">
-                <td>Clear All Subscriptions</td>
-                <td>-</td>
-                <td>
-                    <button id="clear-all" type="button" class="btn btn-warning">Clear</button>
-                </td>
-            </tr>
-            <tr class="dashboard-course-row">
-                <td>Clear Section Subscriptions</td>
-                <form id="classid-clear">
-                    <td>
-                        <input
-                            id="classid-clear-input"
-                            class="form-control"
-                            type="text"
-                            placeholder="5-digit classid (e.g. 24890)"
-                            pattern="^[0-9]+$"
-                            minlength="5"
-                            maxlength="5"
-                            required
-                            autocomplete="off"
-                            autocapitalize="off"
-                        />
-                    </td>
-                    <td>
-                        <button id="classid-clear-submit" type="submit" class="btn btn-warning">
-                            Clear
-                        </button>
-                    </td>
-                </form>
-            </tr>
-            <tr class="dashboard-course-row">
-                <td>Clear Course Subscriptions</td>
-                <form id="courseid-clear">
-                    <td>
-                        <input
-                            id="courseid-clear-input"
-                            class="form-control"
-                            type="text"
-                            placeholder="6-digit courseid (e.g. 021580)"
-                            pattern="^[0-9]+$"
-                            minlength="6"
-                            maxlength="6"
-                            required
-                            autocomplete="off"
-                            autocapitalize="off"
-                        />
-                    </td>
-                    <td>
-                        <button id="courseid-clear-submit" type="submit" class="btn btn-warning">
-                            Clear
-                        </button>
-                    </td>
-                </form>
-            </tr>
-            <tr class="dashboard-course-row">
-                <td>Get Subscribed Sections</td>
-                <form id="get-user-data">
-                    <td>
-                        <input
-                            id="get-user-data-input"
-                            class="form-control"
-                            type="text"
-                            maxlength="20"
-                            pattern="^[a-zA-Z0-9]+$"
-                            placeholder="netID (e.g. sheh)"
-                            required
-                            autocomplete="off"
-                            autocapitalize="off"
-                        />
-                    </td>
-                    <td>
-                        <button id="get-user-data-submit" type="submit" class="btn btn-warning">
-                            Get
-                        </button>
-                    </td>
-                </form>
-            </tr>
-            <tr class="dashboard-course-row">
-                <td>Get Trade Sections</td>
-                <form id="get-user-trade-data">
-                    <td>
-                        <input
-                            id="get-user-trade-data-input"
-                            class="form-control"
-                            type="text"
-                            maxlength="20"
-                            pattern="^[a-zA-Z0-9]+$"
-                            placeholder="netID (e.g. sheh)"
-                            required
-                            autocomplete="off"
-                            autocapitalize="off"
-                        />
-                    </td>
-                    <td>
-                        <button
-                            id="get-user-trade-data-submit"
-                            type="submit"
-                            class="btn btn-warning"
-                        >
-                            Get
-                        </button>
-                    </td>
-                </form>
-            </tr>
-            <!-- <tr class="dashboard-course-row">
+          <button id="notifs-sheet-link" type="submit" class="btn btn-warning">G-Sheet</button>
+        </td>
+      </tr>
+      <tr class="dashboard-course-row">
+        <td>Usage Summary</td>
+        <td>-</td>
+        <td>
+          <button id="usage-summary" type="button" class="btn btn-warning">Get</button>
+        </td>
+      </tr>
+      <tr class="dashboard-course-row">
+        <td>Clear All User Logs</td>
+        <td>-</td>
+        <td>
+          <button id="clear-all-logs" type="button" class="btn btn-warning">Clear</button>
+        </td>
+      </tr>
+      <tr class="dashboard-course-row">
+        <td>Clear All Trades</td>
+        <td>-</td>
+        <td>
+          <button id="clear-all-trades" type="button" class="btn btn-warning">Clear</button>
+        </td>
+      </tr>
+      <tr class="dashboard-course-row">
+        <td>Clear All Subscriptions</td>
+        <td>-</td>
+        <td>
+          <button id="clear-all" type="button" class="btn btn-warning">Clear</button>
+        </td>
+      </tr>
+      <tr class="dashboard-course-row">
+        <td>Clear Section Subscriptions</td>
+        <form id="classid-clear">
+          <td>
+            <input
+              id="classid-clear-input"
+              class="form-control"
+              type="text"
+              placeholder="5-digit classid (e.g. 24890)"
+              pattern="^[0-9]+$"
+              minlength="5"
+              maxlength="5"
+              required
+              autocomplete="off"
+              autocapitalize="off"
+            />
+          </td>
+          <td>
+            <button id="classid-clear-submit" type="submit" class="btn btn-warning">Clear</button>
+          </td>
+        </form>
+      </tr>
+      <tr class="dashboard-course-row">
+        <td>Clear Course Subscriptions</td>
+        <form id="courseid-clear">
+          <td>
+            <input
+              id="courseid-clear-input"
+              class="form-control"
+              type="text"
+              placeholder="6-digit courseid (e.g. 021580)"
+              pattern="^[0-9]+$"
+              minlength="6"
+              maxlength="6"
+              required
+              autocomplete="off"
+              autocapitalize="off"
+            />
+          </td>
+          <td>
+            <button id="courseid-clear-submit" type="submit" class="btn btn-warning">Clear</button>
+          </td>
+        </form>
+      </tr>
+      <tr class="dashboard-course-row">
+        <td>Get Subscribed Sections</td>
+        <form id="get-user-data">
+          <td>
+            <input
+              id="get-user-data-input"
+              class="form-control"
+              type="text"
+              maxlength="20"
+              pattern="^[a-zA-Z0-9]+$"
+              placeholder="netID (e.g. sheh)"
+              required
+              autocomplete="off"
+              autocapitalize="off"
+            />
+          </td>
+          <td>
+            <button id="get-user-data-submit" type="submit" class="btn btn-warning">Get</button>
+          </td>
+        </form>
+      </tr>
+      <tr class="dashboard-course-row">
+        <td>Get Trade Sections</td>
+        <form id="get-user-trade-data">
+          <td>
+            <input
+              id="get-user-trade-data-input"
+              class="form-control"
+              type="text"
+              maxlength="20"
+              pattern="^[a-zA-Z0-9]+$"
+              placeholder="netID (e.g. sheh)"
+              required
+              autocomplete="off"
+              autocapitalize="off"
+            />
+          </td>
+          <td>
+            <button id="get-user-trade-data-submit" type="submit" class="btn btn-warning">Get</button>
+          </td>
+        </form>
+      </tr>
+      <!-- <tr class="dashboard-course-row">
                 <td>Fill Section Enrollment</td>
                 <form id="fill-section">
                     <td>
@@ -179,8 +163,8 @@
                     </td>
                 </form>
             </tr> -->
-        </tbody>
-    </table>
+    </tbody>
+  </table>
 </div>
 
 {% include 'utils/waitlist_modal.html' %}

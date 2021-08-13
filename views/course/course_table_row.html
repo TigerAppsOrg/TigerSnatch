@@ -1,28 +1,28 @@
 <td>{{class.section}}</td>
 {% if class.isFull %} {% if class.classid in curr_waitlists %}
 <td>
-    <div class="form-check form-switch">
-        <input
-            class="form-check-input waitlist-switch"
-            type="checkbox"
-            id="switch-{{class.classid}}"
-            data-classid="{{class.classid}}"
-            data-bs-toggle="modal"
-            data-bs-target="#confirm-remove-waitlist"
-            checked
-        />
-    </div>
+  <div class="form-check form-switch">
+    <input
+      class="form-check-input waitlist-switch"
+      type="checkbox"
+      id="switch-{{class.classid}}"
+      data-classid="{{class.classid}}"
+      data-bs-toggle="modal"
+      data-bs-target="#confirm-remove-waitlist"
+      checked
+    />
+  </div>
 </td>
 {% else %}
 <td>
-    <div class="form-check form-switch">
-        <input
-            class="form-check-input waitlist-switch"
-            type="checkbox"
-            id="switch-{{class.classid}}"
-            data-classid="{{class.classid}}"
-        />
-    </div>
+  <div class="form-check form-switch">
+    <input
+      class="form-check-input waitlist-switch"
+      type="checkbox"
+      id="switch-{{class.classid}}"
+      data-classid="{{class.classid}}"
+    />
+  </div>
 </td>
 {% endif %} {% else %}
 <td></td>
