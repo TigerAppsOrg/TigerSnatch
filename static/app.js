@@ -450,14 +450,14 @@ let searchResultListener = function () {
 
         // remove gray background from currently selected course entry
         $("a.selected-course").css("background-color", "");
-        $("a.selected-course").removeClass("selected-course");
+        $("a.selected-course").removeClass("selected-course border border-3 border-warning");
 
         closest_a = $(this).closest("a");
 
         // background: #C0BDBD;
         // add gray background to selected course
         closest_a.css("background-color", "#ffe58a");
-        closest_a.addClass("selected-course");
+        closest_a.addClass("selected-course border border-3 border-warning");
 
         course_link = closest_a.attr("href");
         courseid = closest_a.attr("data-courseid");
