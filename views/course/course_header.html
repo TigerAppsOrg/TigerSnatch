@@ -1,6 +1,6 @@
 <div class="px-4 pt-3">
     <span class="badge bg-warning text-dark font-monospace px-1 py-1 fs-5"
-        >{{ course_details.displayname }}</span
+        >{{ course_details.displayname.split('/') | join(' / ') }}</span
     >
     <a id="search-skip" class="fw-light ps-3" href="" style="text-decoration: underline">
         <svg
