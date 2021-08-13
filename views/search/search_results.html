@@ -34,20 +34,20 @@
     <div id="search-results-{{course.courseid}}" class="card search-results-card">
         {% if courseid is not none and courseid == course.courseid %}
             <a
-            data-courseid="{{course.courseid}}"
-            class="search-results-link selected-course"
-            href="course?query={{last_query}}&courseid={{course.courseid}}"
-            style="background-color: #ffe58a"
+                data-courseid="{{course.courseid}}"
+                class="search-results-link selected-course"
+                href="course?query={{last_query}}&courseid={{course.courseid}}"
+                style="background-color: #ffe58a"
             >
         {% else %}
             <a
-            data-courseid="{{course.courseid}}"
-            class="search-results-link"
-            href="course?query={{last_query}}&courseid={{course.courseid}}"
+                data-courseid="{{course.courseid}}"
+                class="search-results-link"
+                href="course?query={{last_query}}&courseid={{course.courseid}}"
             >
         {% endif %}
         <div class="card-body">
-            <strong class="search-results-displayname">{{course.displayname}}</strong>
+            <strong class="search-results-displayname">{{course.displayname.split('/') | join(' / ')}}</strong>
             <div class="search-results-title">{{course.title}}</div>
         </div>
     </a>
