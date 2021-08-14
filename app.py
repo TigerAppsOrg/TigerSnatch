@@ -592,6 +592,19 @@ def get_usage_summary():
   return jsonify({'data': _db.get_usage_summary()})
 
 
+@app.route('/get_all_subscriptions', methods=['POST'])
+def get_all_subscriptions():
+  netid = _cas.authenticate()
+  netid.strip()
+  try:
+    if not is_admin(netid, _db):
+      return redirect(url_for('landing'))
+  except:
+    return redirect(url_for('landing'))
+
+  return jsonify({'data': _db.get_all_subscriptions()})
+
+
 @app.route('/update_all_courses', methods=['POST'])
 def update_all_courses():
   netid = _cas.authenticate()
