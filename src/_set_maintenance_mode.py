@@ -5,7 +5,7 @@
 #
 # Specify one of the following flags:
 #   --on: Enables maintenance mode
-#	--off: Disables maintenance mode
+# 	--off: Disables maintenance mode
 #
 # Example: python _set_maintenance_mode.py --on
 # ----------------------------------------------------------------------
@@ -13,16 +13,17 @@
 from sys import exit, argv
 from database import Database
 
-if __name__ == '__main__':
-  def process_args():
-    if len(argv) != 2 or (argv[1] != '--on' and argv[1] != '--off'):
-      print('specify one of the following flags:')
-      print('\t--on: enable maintenance mode and notifs dyno')
-      print('\t--off: disable maintenance mode and notifs dyno')
-      exit(2)
-    return argv[1] == '--on'
+if __name__ == "__main__":
 
-  turn_on = process_args()
+    def process_args():
+        if len(argv) != 2 or (argv[1] != "--on" and argv[1] != "--off"):
+            print("specify one of the following flags:")
+            print("\t--on: enable maintenance mode and notifs dyno")
+            print("\t--off: disable maintenance mode and notifs dyno")
+            exit(2)
+        return argv[1] == "--on"
 
-  Database().set_maintenance_status(turn_on)
-  print('done')
+    turn_on = process_args()
+
+    Database().set_maintenance_status(turn_on)
+    print("done")

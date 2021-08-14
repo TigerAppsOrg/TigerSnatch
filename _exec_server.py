@@ -7,7 +7,8 @@
 # ----------------------------------------------------------------------
 
 from sys import path
-path.append('src')  # noqa
+
+path.append("src")  # noqa
 
 from sys import argv, stderr, exit
 from app import app
@@ -15,18 +16,18 @@ from config import TS_HOST
 
 
 def main(argv):
-  if len(argv) != 2:
-    print('Incorrect number of arguments - specify port only', file=stderr)
-    exit(1)
+    if len(argv) != 2:
+        print("Incorrect number of arguments - specify port only", file=stderr)
+        exit(1)
 
-  try:
-    port = int(argv[1])
-  except Exception:
-    print('Port must be an integer', file=stderr)
-    exit(1)
+    try:
+        port = int(argv[1])
+    except Exception:
+        print("Port must be an integer", file=stderr)
+        exit(1)
 
-  app.run(host=TS_HOST, port=port, debug=True)
+    app.run(host=TS_HOST, port=port, debug=True)
 
 
-if __name__ == '__main__':
-  main(argv)
+if __name__ == "__main__":
+    main(argv)
