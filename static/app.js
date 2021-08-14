@@ -773,6 +773,32 @@ let getUsageSummaryListener = function () {
   });
 };
 
+// listens for All Subscriptions button on admin panel
+let getAllSubscriptionsListener = function () {
+  let helper = function (res, label) {
+    if (res["data"] === "error") {
+      enableAdminFunction();
+      return;
+    }
+    let data = res["data"].split("{");
+
+    dataHTML = "";
+    for (let d of data) dataHTML += `<p class="my-1">&#8594; ${d}</p>`;
+
+    $("#modal-body-all-subscriptions").html(dataHTML);
+    $("#all-subscriptions-modal").modal("show");
+  };
+
+  $("#all-subscriptions").on("click", function (e) {
+    e.preventDefault();
+    disableAdminFunction();
+    $.post(`/get_all_subscriptions`, function (res) {
+      helper(res, "all-subscriptions");
+      enableAdminFunction();
+    });
+  });
+};
+
 // enables all admin function buttons
 let enableAdminFunction = function () {
   $(".btn-blacklist").attr("disabled", false);
@@ -780,6 +806,7 @@ let enableAdminFunction = function () {
   $(".btn-user-info").attr("disabled", false);
   $("#notifs-sheet-link").attr("disabled", false);
   $("#usage-summary").attr("disabled", false);
+  $("#all-subscriptions").attr("disabled", false);
   $("#clear-all").attr("disabled", false);
   $("#clear-all-trades").attr("disabled", false);
   $("#clear-all-logs").attr("disabled", false);
@@ -804,6 +831,7 @@ let disableAdminFunction = function () {
   $(".btn-user-info").attr("disabled", true);
   $("#notifs-sheet-link").attr("disabled", true);
   $("#usage-summary").attr("disabled", true);
+  $("#all-subscriptions").attr("disabled", true);
   $("#clear-all").attr("disabled", true);
   $("#clear-all-trades").attr("disabled", true);
   $("#clear-all-logs").attr("disabled", true);
@@ -1255,6 +1283,7 @@ let adminFunctions = function () {
   clearClassWaitlistListener();
   clearCourseWaitlistListener();
   getUsageSummaryListener();
+  getAllSubscriptionsListener();
   getUserDataListener();
   getUserInfoListener();
   initToggleEmailNotificationsButton();
