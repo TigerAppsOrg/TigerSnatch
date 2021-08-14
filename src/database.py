@@ -576,6 +576,26 @@ class Database:
             print("failed to generate usage history", file=stderr)
             return "error"
 
+    # generates a sorted (popularity primary; course code secondary) list of
+    # all user subscriptions
+
+    def get_all_subscriptions(self):
+        def get_all_subscribed_sections():
+            data = self._db.waitlists.find({}, {"waitlist": 1, "classid": 1, "_id": 0})
+            data = [(len(k["waitlist"]), k["classid"]) for k in data]
+            data.sort(key=lambda x: x[0], reverse=True)
+            res = []
+            for n, classid in data:
+                deptnum, name, section = self.classid_to_classinfo(classid)
+                res.append(f"[{n}] {name} ({deptnum}): {section}")
+            return res
+
+        try:
+            return "{".join(get_all_subscribed_sections())
+        except:
+            print("failed to get all subscriptions", file=stderr)
+            return "error"
+
     # ----------------------------------------------------------------------
     # BLACKLIST UTILITY METHODS
     # ----------------------------------------------------------------------
@@ -1359,3 +1379,4 @@ class Database:
 if __name__ == "__main__":
     db = Database()
     print(db.get_current_or_next_notifs_interval())
+    print(db.get_all_subscriptions())
