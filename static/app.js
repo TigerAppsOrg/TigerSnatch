@@ -170,7 +170,7 @@ const toastDisableEnableCourseSuccess = $(
     data-bs-delay="3000"
 >
     <div class="d-flex">
-        <div class="toast-body">Successfully disabled/enabled course!</div>
+        <div class="toast-body">Successfully disabled/enabled course subscriptions!</div>
         <button
             type="button"
             class="btn-close btn-close-white me-2 m-auto"
@@ -193,7 +193,7 @@ const toastDisableEnableCourseFail = $(
     data-bs-delay="3000"
 >
     <div class="d-flex">
-        <div class="toast-body">Failed to disable/enable course. Check course ID or contact a TigerSnatch developer for assistance.</div>
+        <div class="toast-body">Failed to disable/enable course subscriptions. Check course ID or contact a TigerSnatch developer for assistance.</div>
         <button
             type="button"
             class="btn-close btn-close-white me-2 m-auto"
