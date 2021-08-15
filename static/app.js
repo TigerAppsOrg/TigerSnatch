@@ -870,6 +870,8 @@ let enableAdminFunction = function () {
   $("#toggle-emails").attr("disabled", false);
   $("#disable-course-input").attr("disabled", false);
   $("#disable-course-submit").attr("disabled", false);
+  $("#enable-course-input").attr("disabled", false);
+  $("#enable-course-submit").attr("disabled", false);
   $("#classid-clear-input").attr("disabled", false);
   $("#classid-clear-submit").attr("disabled", false);
   $("#courseid-clear-input").attr("disabled", false);
@@ -897,6 +899,8 @@ let disableAdminFunction = function () {
   $("#toggle-emails").attr("disabled", true);
   $("#disable-course-input").attr("disabled", true);
   $("#disable-course-submit").attr("disabled", true);
+  $("#enable-course-input").attr("disabled", true);
+  $("#enable-course-submit").attr("disabled", true);
   $("#classid-clear-input").attr("disabled", true);
   $("#classid-clear-submit").attr("disabled", true);
   $("#courseid-clear-input").attr("disabled", true);
@@ -1136,6 +1140,22 @@ let disableCourseListener = function () {
       // checks that course has successfully been disabled
       disableEnableCourseToastHelper(res);
       $("#disable-course-input").val("");
+      enableAdminFunction();
+    });
+  });
+};
+
+// listens for enable course button
+let enableCourseListener = function () {
+  $("#enable-course").on("submit", function (e) {
+    e.preventDefault();
+    courseid = $("#enable-course-input").val();
+    disableAdminFunction();
+
+    $.post(`/enable_course/${courseid}`, function (res) {
+      // checks that course has successfully been enable
+      disableEnableCourseToastHelper(res);
+      $("#enable-course-input").val("");
       enableAdminFunction();
     });
   });
@@ -1417,6 +1437,7 @@ let adminFunctions = function () {
   clearClassWaitlistListener();
   clearCourseWaitlistListener();
   disableCourseListener();
+  enableCourseListener();
   getUsageSummaryListener();
   getAllSubscriptionsListener();
   getUserDataListener();
