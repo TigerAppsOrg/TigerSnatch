@@ -40,6 +40,52 @@
         </td>
       </tr>
       <tr class="dashboard-course-row">
+        <td>Disable Course</td>
+        <form id="disable-course">
+          <td>
+            <input
+              id="disable-course-input"
+              class="form-control"
+              type="text"
+              placeholder="6-digit courseid (e.g. 021580)"
+              pattern="^[0-9]+$"
+              minlength="6"
+              maxlength="6"
+              required
+              autocomplete="off"
+              autocapitalize="off"
+            />
+          </td>
+          <td>
+            <button id="disable-course-submit" type="submit" class="btn btn-warning">
+              Disable
+            </button>
+          </td>
+        </form>
+      </tr>
+      <tr class="dashboard-course-row">
+        <td>Enable Course</td>
+        <form id="enable-course">
+          <td>
+            <input
+              id="enable-course-input"
+              class="form-control"
+              type="text"
+              placeholder="6-digit courseid (e.g. 021580)"
+              pattern="^[0-9]+$"
+              minlength="6"
+              maxlength="6"
+              required
+              autocomplete="off"
+              autocapitalize="off"
+            />
+          </td>
+          <td>
+            <button id="enable-course-submit" type="submit" class="btn btn-warning">Enable</button>
+          </td>
+        </form>
+      </tr>
+      <tr class="dashboard-course-row">
         <td>Clear All User Logs</td>
         <td>-</td>
         <td>
