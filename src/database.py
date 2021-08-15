@@ -281,12 +281,12 @@ class Database:
             "notifs_schedule"
         ]
         if len(curr) == 0:
-            return "Next notifications period is not scheduled. Notify a TigerApps member if this isn't fixed soon!"
+            return "Next notifications period is not scheduled. Notify a TigerApps member if this isn't fixed by tomorrow!"
         start, end = tz_utc.localize(curr[0][0]), tz_utc.localize(curr[0][1])
         start, end = start.astimezone(tz_et), end.astimezone(tz_et)
         now = datetime.now(tz_et)
         if now >= end:
-            return "Next notifications period is not scheduled. Notify a TigerApps member if this isn't fixed soon!"
+            return "Next notifications period is not scheduled. Notify a TigerApps member if this isn't fixed by tomorrow!"
         end_fmt = end.strftime(fmt)
         if now >= start:
             return f"Current notifications period will end on {end_fmt} ET."
