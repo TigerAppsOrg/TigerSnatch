@@ -49,8 +49,6 @@ class Notify:
     # self.classid
 
     def send_email_html(self):
-        print("early stop")
-        return
         msg = EmailMessage()
         asparagus_cid = make_msgid()
         msg.add_alternative(
