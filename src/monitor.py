@@ -14,8 +14,8 @@ from config import COURSE_UPDATE_INTERVAL_MINS
 
 
 class Monitor:
-    def __init__(self):
-        self._db = Database()
+    def __init__(self, _db):
+        self._db = _db
 
     # organizes all waited-on classes into groups by their parent course
 
@@ -143,7 +143,7 @@ class Monitor:
 
 
 if __name__ == "__main__":
-    monitor = Monitor()
+    monitor = Monitor(Database())
     print(monitor.get_classes_with_changed_enrollments())
     # call again to retrieve cached version
     print("cached version should print directly beneath this:")

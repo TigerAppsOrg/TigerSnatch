@@ -8,7 +8,7 @@ from database import Database
 from mobileapp import MobileApp
 from coursewrapper import CourseWrapper
 
-_api = MobileApp()
+# _api = MobileApp()
 
 
 # gets the latest term code
@@ -19,7 +19,7 @@ def get_latest_term():
 # returns two dictionaries: one containing new class enrollments, one
 # containing new class capacities
 def get_new_mobileapp_data(term, course, classes, default_empty_dicts=False):
-    data = _api.get_courses(term=term, search=course)
+    data = MobileApp().get_courses(term=term, search=course)
 
     if "subjects" not in data["term"][0]:
         if default_empty_dicts:
@@ -45,7 +45,7 @@ def get_new_mobileapp_data(term, course, classes, default_empty_dicts=False):
 # returns course data and parses its data into dictionaries
 # ready to be inserted into database collections
 def get_course_in_mobileapp(term, course_, curr_time):
-    data = _api.get_courses(term=term, search=course_)
+    data = MobileApp().get_courses(term=term, search=course_)
 
     if "subjects" not in data["term"][0]:
         raise RuntimeError("no query results")

@@ -21,8 +21,8 @@ from time import time
 
 def cronjob():
     tic = time()
-    monitor = Monitor()
     db = Database()
+    monitor = Monitor(db)
 
     db._add_system_log("cron", {"message": "emails script executing"})
 
@@ -46,7 +46,7 @@ def cronjob():
 
         for i in ordering:
             try:
-                notify = Notify(classid, i, n_new_slots)
+                notify = Notify(classid, i, n_new_slots, db)
 
                 print(notify)
                 print("sending email to", notify.get_netid())

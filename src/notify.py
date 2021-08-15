@@ -16,8 +16,7 @@ class Notify:
     # to format and send an email to the first student on the waitlist
     # for that classid
 
-    def __init__(self, classid, i, n_new_slots, swap=False):
-        db = Database()
+    def __init__(self, classid, i, n_new_slots, db, swap=False):
         self._classid = classid
         try:
             self._deptnum, self._title, self._sectionname = db.classid_to_classinfo(
@@ -50,6 +49,8 @@ class Notify:
     # self.classid
 
     def send_email_html(self):
+        print("early stop")
+        return
         msg = EmailMessage()
         asparagus_cid = make_msgid()
         msg.add_alternative(

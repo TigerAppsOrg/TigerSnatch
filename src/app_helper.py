@@ -44,7 +44,7 @@ def pull_course(courseid, db):
         return None, None
 
     # updates course info if it has been 2 minutes since last update
-    Monitor().pull_course_updates(courseid)
+    Monitor(db).pull_course_updates(courseid)
     course = db.get_course_with_enrollment(courseid)
 
     # split course data into basic course details, and list of classes

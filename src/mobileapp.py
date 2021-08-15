@@ -13,12 +13,10 @@ from database import Database
 from time import time
 
 
-_db = Database()
-
-
 class MobileApp:
     def __init__(self):
         self.configs = Configs()
+        self._db = Database()
 
     # wrapper function for _getJSON with the courses/courses endpoint.
     # kwargs must contain key "term" with the current term code, as well
@@ -53,7 +51,7 @@ class MobileApp:
         )
         text = req.text
 
-        _db._add_system_log(
+        self._db._add_system_log(
             "mobileapp",
             {
                 "message": "MobileApp API query",
