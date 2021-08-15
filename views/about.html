@@ -6,17 +6,20 @@
   </head>
 
   <body id="landing-container">
-    {% if not loggedin %} {% include 'nav/nav_about.html' %} {% else %} {% include 'nav/nav.html' %}{% endif %}
+    {% if not loggedin %} {% include 'nav/nav_about.html' %} {% else %} {% include 'nav/nav.html'
+    %}{% endif %}
     <div class="container-fluid">
       <div class="row" style="margin-bottom: 10px">
         <br />
         <p class="fw-light text-center mt-4 fs-5" style="padding-left: 15%; padding-right: 15%">
-          TigerSnatch helps Princeton students with course enrollment through its Subscriptions and Trades features.
+          TigerSnatch helps Princeton students with course enrollment through its Subscriptions and
+          Trades features.
           <br />
           <br />
-          With Subscriptions, students can get notified via email when a full class opens up, alleviating the need to
-          repeatedly check official Course Offerings. TigerSnatch Trades, a first-of-its-kind system at Princeton, finds
-          and facilitates swaps between students who wish to enroll in each other's full sections. <br />
+          With Subscriptions, students can get notified via email when a full class opens up,
+          alleviating the need to repeatedly check official Course Offerings. TigerSnatch Trades, a
+          first-of-its-kind system at Princeton, finds and facilitates swaps between students who
+          wish to enroll in each other's full sections. <br />
           <br />
           <a
             href="https://forms.gle/prjNBnV4odi5w8hw7"
@@ -49,8 +52,8 @@
           </a>
           <br />
           <br />
-          TigerSnatch is actively maintained by the Princeton University Undergraduate Student Government (USG)
-          TigerApps team.
+          TigerSnatch is actively maintained by the Princeton University Undergraduate Student
+          Government (USG) TigerApps team.
           <a href="https://tigerapps.org" target="_blank">
             <br />
             <br />
@@ -100,7 +103,11 @@
           <h2 class="fs-4 text-center py-5" style="margin-bottom: 66px">Byron Zhang '23</h2>
         </div>
       </div>
-      <nav id="nav" class="navbar navbar-expand-xl navbar-light fixed-bottom" style="margin-top: -60px">
+      <nav
+        id="nav"
+        class="navbar navbar-expand-xl navbar-light fixed-bottom"
+        style="margin-top: -60px"
+      >
         <div class="container-fluid">
           <p id="landing-bottom-text" class="mb-0 text-center">
             We thank Professor Robert Dondero and Sata Sengupta for their guidance on TigerSnatch.
@@ -114,6 +121,6 @@
       integrity="sha384-JEW9xMcG8R+pH31jmWH6WWP0WintQrMb4s7ZOdauHnUtxwoG2vI5DkLtS3qm9Ekf"
       crossorigin="anonymous"
     ></script>
-    <script src="{{url_for('static', filename='app.min.3.0.js')}}"></script>
+    <script src="{{url_for('static', filename='app.min.4.0.js')}}"></script>
   </body>
 </html>

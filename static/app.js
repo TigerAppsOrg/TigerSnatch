@@ -159,6 +159,52 @@ const toastClearFail = $(
 `)
 );
 
+const toastDisableEnableCourseSuccess = $(
+  $.parseHTML(`
+<div
+    id="toast-disable-enable-course-success"
+    class="toast align-items-center text-white bg-success border-0"
+    role="alert"
+    aria-live="assertive"
+    aria-atomic="true"
+    data-bs-delay="3000"
+>
+    <div class="d-flex">
+        <div class="toast-body">Successfully disabled/enabled course!</div>
+        <button
+            type="button"
+            class="btn-close btn-close-white me-2 m-auto"
+            data-bs-dismiss="toast"
+            aria-label="Close"
+        ></button>
+    </div>
+</div>
+`)
+);
+
+const toastDisableEnableCourseFail = $(
+  $.parseHTML(`
+<div
+    id="toast-disable-enable-course-fail"
+    class="toast align-items-center text-white bg-danger border-0"
+    role="alert"
+    aria-live="assertive"
+    aria-atomic="true"
+    data-bs-delay="3000"
+>
+    <div class="d-flex">
+        <div class="toast-body">Failed to disable/enable course. Check course ID or contact a TigerSnatch developer for assistance.</div>
+        <button
+            type="button"
+            class="btn-close btn-close-white me-2 m-auto"
+            data-bs-dismiss="toast"
+            aria-label="Close"
+        ></button>
+    </div>
+</div>
+`)
+);
+
 const toastFillSuccess = $(
   $.parseHTML(`
 <div
@@ -822,6 +868,8 @@ let enableAdminFunction = function () {
   $("#clear-all-logs").attr("disabled", false);
   $("#update-term").attr("disabled", false);
   $("#toggle-emails").attr("disabled", false);
+  $("#disable-course-input").attr("disabled", false);
+  $("#disable-course-submit").attr("disabled", false);
   $("#classid-clear-input").attr("disabled", false);
   $("#classid-clear-submit").attr("disabled", false);
   $("#courseid-clear-input").attr("disabled", false);
@@ -847,6 +895,8 @@ let disableAdminFunction = function () {
   $("#clear-all-logs").attr("disabled", true);
   $("#update-term").attr("disabled", true);
   $("#toggle-emails").attr("disabled", true);
+  $("#disable-course-input").attr("disabled", true);
+  $("#disable-course-submit").attr("disabled", true);
   $("#classid-clear-input").attr("disabled", true);
   $("#classid-clear-submit").attr("disabled", true);
   $("#courseid-clear-input").attr("disabled", true);
@@ -889,6 +939,23 @@ let clearWaitlistsToastHelper = function (res) {
       toastClearSuccess.clone().attr("id", "toast-clear-success-" + ++i)
     );
     $("#toast-clear-success-" + i).toast("show");
+  }
+};
+
+// helper method to display fail/success toasts for course disabling/enabling
+let disableEnableCourseToastHelper = function (res) {
+  if (!res["isSuccess"]) {
+    $(".toast-container").prepend(
+      toastDisableEnableCourseFail.clone().attr("id", "toast-disable-enable-course-fail-" + ++i)
+    );
+    $("#toast-disable-enable-course-fail-" + i).toast("show");
+  } else {
+    $(".toast-container").prepend(
+      toastDisableEnableCourseSuccess
+        .clone()
+        .attr("id", "toast-disable-enable-course-success-" + ++i)
+    );
+    $("#toast-disable-enable-course-success-" + i).toast("show");
   }
 };
 
@@ -1053,6 +1120,22 @@ let clearCourseWaitlistListener = function () {
       // checks that user successfully removed from waitlist on back-end
       clearWaitlistsToastHelper(res);
       $("#courseid-clear-input").val("");
+      enableAdminFunction();
+    });
+  });
+};
+
+// listens for disable course button
+let disableCourseListener = function () {
+  $("#disable-course").on("submit", function (e) {
+    e.preventDefault();
+    courseid = $("#disable-course-input").val();
+    disableAdminFunction();
+
+    $.post(`/disable_course/${courseid}`, function (res) {
+      // checks that course has successfully been disabled
+      disableEnableCourseToastHelper(res);
+      $("#disable-course-input").val("");
       enableAdminFunction();
     });
   });
@@ -1333,6 +1416,7 @@ let adminFunctions = function () {
   clearAllLogsListener();
   clearClassWaitlistListener();
   clearCourseWaitlistListener();
+  disableCourseListener();
   getUsageSummaryListener();
   getAllSubscriptionsListener();
   getUserDataListener();

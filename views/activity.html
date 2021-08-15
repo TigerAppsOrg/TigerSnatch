@@ -11,14 +11,16 @@
       <div class="row activity-row">
         <div id="subscription-activity-col" class="col-xl-6">
           <p class="text-center fs-1 px-5 mt-4 mb-4" style="letter-spacing: 1px">
-            <span class="badge bg-warning text-dark font-monospace fs-3 px-2 py-2">Subscriptions</span>
+            <span class="badge bg-warning text-dark font-monospace fs-3 px-2 py-2"
+              >Subscriptions</span
+            >
           </p>
           {% if waitlist_logs == [] %}
           <div class="card activity-card text-center mt-3">
             <div class="card-body">
               <div>
-                Once a spot is available in one of your Subscribed sections and you receive an email about that spot, a
-                message will appear here!
+                Once a spot is available in one of your Subscribed sections and you receive an email
+                about that spot, a message will appear here!
               </div>
             </div>
           </div>
@@ -38,7 +40,8 @@
           <div class="card activity-card text-center mt-3">
             <div class="card-body">
               <div>
-                Once you've initiated an email to Trade sections with another Tiger, a message will appear here!
+                Once you've initiated an email to Trade sections with another Tiger, a message will
+                appear here!
               </div>
             </div>
           </div>
@@ -51,7 +54,11 @@
           {% endfor %} {% endif %}
         </div>
       </div>
-      <nav id="nav" class="navbar navbar-expand-xl navbar-light fixed-bottom" style="margin-top: -60px">
+      <nav
+        id="nav"
+        class="navbar navbar-expand-xl navbar-light fixed-bottom"
+        style="margin-top: -60px"
+      >
         <div class="container-fluid">
           <p id="landing-bottom-text" class="mb-0 text-center">
             <a href="/activity" style="text-decoration: underline">Refresh</a>
@@ -67,5 +74,5 @@
       crossorigin="anonymous"
     ></script>
   </body>
-  <script src="{{url_for('static', filename='app.min.3.0.js')}}"></script>
+  <script src="{{url_for('static', filename='app.min.4.0.js')}}"></script>
 </html>

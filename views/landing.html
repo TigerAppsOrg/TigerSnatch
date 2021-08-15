@@ -8,8 +8,12 @@
     {% include 'nav/nav_landing.html' %}
     <div class="d-flex flex-column" style="height: calc(100% - 120px)">
       <div class="px-3 py-5 mx-0 row flex-grow-1">
-        <div class="col-xxl justify-content-center align-self-center">{% include 'landing/landing_left.html' %}</div>
-        <div class="col-xxl justify-content-center align-self-center">{% include 'landing/landing_right.html' %}</div>
+        <div class="col-xxl justify-content-center align-self-center">
+          {% include 'landing/landing_left.html' %}
+        </div>
+        <div class="col-xxl justify-content-center align-self-center">
+          {% include 'landing/landing_right.html' %}
+        </div>
       </div>
     </div>
 
@@ -18,6 +22,6 @@
       integrity="sha384-JEW9xMcG8R+pH31jmWH6WWP0WintQrMb4s7ZOdauHnUtxwoG2vI5DkLtS3qm9Ekf"
       crossorigin="anonymous"
     ></script>
-    <script src="{{url_for('static', filename='app.min.3.0.js')}}"></script>
+    <script src="{{url_for('static', filename='app.min.4.0.js')}}"></script>
   </body>
 </html>
