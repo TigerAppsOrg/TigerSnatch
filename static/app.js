@@ -425,7 +425,11 @@ let searchFormListener = function () {
     }
     $.post(endpoint, function (res) {
       $("div#search-results").html(res);
-      window.history.pushState({ restore: "search", html: res }, "restore search results", curr_path);
+      window.history.pushState(
+        { restore: "search", html: res },
+        "restore search results",
+        curr_path
+      );
       // adds listener to new search results
       searchResultListener();
       resetScroll("#search-results");
@@ -661,12 +665,16 @@ let navbarAutoclose = function () {
 // helper method to show blacklist success/fail toast
 let blacklistToastHelper = function (type) {
   if (type === "success") {
-    $(".toast-container").prepend(toastBlacklistSuccess.clone().attr("id", "toast-blacklist-success-" + ++i));
+    $(".toast-container").prepend(
+      toastBlacklistSuccess.clone().attr("id", "toast-blacklist-success-" + ++i)
+    );
     $("#toast-blacklist-success-" + i).toast("show");
     $("*").css("pointer-events", "none");
     setTimeout(() => location.reload(), 3100);
   } else if (type === "fail") {
-    $(".toast-container").prepend(toastBlacklistFail.clone().attr("id", "toast-blacklist-fail-" + ++i));
+    $(".toast-container").prepend(
+      toastBlacklistFail.clone().attr("id", "toast-blacklist-fail-" + ++i)
+    );
     $("#toast-blacklist-fail-" + i).toast("show");
   }
 };
@@ -720,7 +728,9 @@ let blacklistRemovalListener = function () {
 let getUserInfoListener = function () {
   let helper = function (res, label) {
     if (res["data"] === "missing") {
-      $(".toast-container").prepend(toastUserDoesNotExist.clone().attr("id", "toast-user-does-not-exist-" + ++i));
+      $(".toast-container").prepend(
+        toastUserDoesNotExist.clone().attr("id", "toast-user-does-not-exist-" + ++i)
+      );
       $("#toast-user-does-not-exist-" + i).toast("show");
       enableAdminFunction();
       return;
@@ -875,7 +885,9 @@ let clearWaitlistsToastHelper = function (res) {
     $(".toast-container").prepend(toastClearFail.clone().attr("id", "toast-clear-fail-" + ++i));
     $("#toast-clear-fail-" + i).toast("show");
   } else {
-    $(".toast-container").prepend(toastClearSuccess.clone().attr("id", "toast-clear-success-" + ++i));
+    $(".toast-container").prepend(
+      toastClearSuccess.clone().attr("id", "toast-clear-success-" + ++i)
+    );
     $("#toast-clear-success-" + i).toast("show");
   }
 };
@@ -886,7 +898,9 @@ let fillSectionToastHelper = function (res) {
     $(".toast-container").prepend(toastFillFail.clone().attr("id", "toast-clear-fail-" + ++i));
     $("#toast-clear-fail-" + i).toast("show");
   } else {
-    $(".toast-container").prepend(toastFillSuccess.clone().attr("id", "toast-clear-success-" + ++i));
+    $(".toast-container").prepend(
+      toastFillSuccess.clone().attr("id", "toast-clear-success-" + ++i)
+    );
     $("#toast-clear-success-" + i).toast("show");
   }
 };
@@ -897,7 +911,9 @@ let clearAllWaitlistsListener = function () {
     e.preventDefault();
     disableAdminFunction();
 
-    if (!confirm("Are you sure you want to clear all subscriptions? This action is irreversible.")) {
+    if (
+      !confirm("Are you sure you want to clear all subscriptions? This action is irreversible.")
+    ) {
       enableAdminFunction();
       return;
     }
@@ -984,7 +1000,11 @@ let clearClassWaitlistListener = function () {
     classid = $("#classid-clear-input").val();
     disableAdminFunction();
 
-    if (!confirm(`Are you sure you want to clear subscriptions for class ${classid}? This action is irreversible.`)) {
+    if (
+      !confirm(
+        `Are you sure you want to clear subscriptions for class ${classid}? This action is irreversible.`
+      )
+    ) {
       enableAdminFunction();
       return;
     }
@@ -1020,7 +1040,11 @@ let clearCourseWaitlistListener = function () {
     courseid = $("#courseid-clear-input").val();
     disableAdminFunction();
 
-    if (!confirm(`Are you sure you want to clear subscriptions for course ${courseid}? This action is irreversible.`)) {
+    if (
+      !confirm(
+        `Are you sure you want to clear subscriptions for course ${courseid}? This action is irreversible.`
+      )
+    ) {
       enableAdminFunction();
       return;
     }
@@ -1038,7 +1062,9 @@ let clearCourseWaitlistListener = function () {
 let getUserDataListener = function () {
   let helper = function (res, label) {
     if (res["data"] === "missing") {
-      $(".toast-container").prepend(toastUserDoesNotExist.clone().attr("id", "toast-user-does-not-exist-" + ++i));
+      $(".toast-container").prepend(
+        toastUserDoesNotExist.clone().attr("id", "toast-user-does-not-exist-" + ++i)
+      );
       $("#toast-user-does-not-exist-" + i).toast("show");
       enableAdminFunction();
       return;
@@ -1097,10 +1123,14 @@ let enableTradeFunction = function () {
 // helper method to display fail/success toasts for updating current section
 let updateSectionToastHelper = function (res) {
   if (!res["isSuccess"]) {
-    $(".toast-container").prepend(toastAddedSectionFail.clone().attr("id", "toast-updatesection-fail-" + ++i));
+    $(".toast-container").prepend(
+      toastAddedSectionFail.clone().attr("id", "toast-updatesection-fail-" + ++i)
+    );
     $("#toast-updatesection-fail-" + i).toast("show");
   } else {
-    $(".toast-container").prepend(toastAddedSection.clone().attr("id", "toast-updatesection-success-" + ++i));
+    $(".toast-container").prepend(
+      toastAddedSection.clone().attr("id", "toast-updatesection-success-" + ++i)
+    );
     $("#toast-updatesection-success-" + i).toast("show");
   }
 };
@@ -1108,10 +1138,14 @@ let updateSectionToastHelper = function (res) {
 // helper method to display fail/success toasts for removing current section
 let removeSectionToastHelper = function (res) {
   if (!res["isSuccess"]) {
-    $(".toast-container").prepend(toastRemovedSectionFail.clone().attr("id", "toast-removedsection-fail-" + ++i));
+    $(".toast-container").prepend(
+      toastRemovedSectionFail.clone().attr("id", "toast-removedsection-fail-" + ++i)
+    );
     $("#toast-removedsection-fail-" + i).toast("show");
   } else {
-    $(".toast-container").prepend(toastRemovedSection.clone().attr("id", "toast-removedsection-success-" + ++i));
+    $(".toast-container").prepend(
+      toastRemovedSection.clone().attr("id", "toast-removedsection-success-" + ++i)
+    );
     $("#toast-removedsection-success-" + i).toast("show");
   }
 };
@@ -1155,7 +1189,14 @@ let removeCurrentSection = function () {
 };
 
 // helper function to build email link
-let createEmail = function (match_netid, my_netid, match_section, my_section, course_name, match_email) {
+let createEmail = function (
+  match_netid,
+  my_netid,
+  match_section,
+  my_section,
+  course_name,
+  match_email
+) {
   const tradeEmailSubject = `TigerSnatch: Trade Sections for ${match_section} in ${course_name}?`;
   const tradeEmailBody = `Hi ${match_netid},\n\nFrom TigerSnatch, I saw that you're enrolled in ${course_name} ${match_section}. I'm currently in ${my_section}.\nWould you like to set up a time to trade sections with me?\n\nThank you,\n${my_netid}`;
 
@@ -1209,7 +1250,14 @@ let findMatches = function () {
           coursename = $(".submit-trade").attr("coursename");
           match_email = res["data"][i][2];
 
-          emailLink = createEmail(match_netid, netid, match_section, my_section, coursename, match_email);
+          emailLink = createEmail(
+            match_netid,
+            netid,
+            match_section,
+            my_section,
+            coursename,
+            match_email
+          );
 
           s += `<tr>
                         <td>${res["data"][i][0]}</td>
@@ -1241,10 +1289,13 @@ let findMatches = function () {
 
           window.open($(this).prop("href"), "_blank");
 
-          $.post(`/contact_trade/${coursename.split("/")[0]}/${matchNetid}/${matchSection}`, function (res) {
-            // checks that user successfully updated section on back-end
-            $(".contact-button").attr("disabled", false);
-          });
+          $.post(
+            `/contact_trade/${coursename.split("/")[0]}/${matchNetid}/${matchSection}`,
+            function (res) {
+              // checks that user successfully updated section on back-end
+              $(".contact-button").attr("disabled", false);
+            }
+          );
         });
         initTooltipsToasts();
       } else {
