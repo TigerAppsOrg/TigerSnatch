@@ -48,7 +48,10 @@ def get_new_mobileapp_data(term, course, classes, default_empty_dicts=False):
 # returns course data and parses its data into dictionaries
 # ready to be inserted into database collections
 def get_course_in_mobileapp(term, course_, curr_time):
-    data = MobileApp().get_courses(term=term, search=course_)
+    # the prepended space in catnum is intentional
+    data = MobileApp().get_courses(
+        term=term, subject=course_[:3], catnum=f" {course_[3:]}"
+    )
 
     if "subjects" not in data["term"][0]:
         raise RuntimeError("no query results")
