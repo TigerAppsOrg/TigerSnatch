@@ -1,14 +1,12 @@
 <span
   id="status-indicator"
-  class="fs-6"
+  class="fs-6 ms-3 mb-5"
   style="
     background-color: #ffc107;
     border-radius: 0.25rem;
     padding: 5px;
     letter-spacing: 1px;
     cursor: help;
-    width: 78px;
-    margin: 0px auto 10px;
   "
   data-bs-toggle="tooltip"
   data-bs-placement="auto"
@@ -19,7 +17,7 @@
     width="16"
     height="16"
     fill="currentColor"
-    class="bi bi-circle-fill {{ 'text-success' if notifs_online else 'text-danger' }} ms-1"
+    class="bi bi-circle-fill {{ 'text-success' if notifs_online else 'text-danger' }} ms-1 animate__animated animate__zoomIn"
     viewBox="0 0 16 16"
     style="margin-bottom: 2px"
   >

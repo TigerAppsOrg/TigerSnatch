@@ -1,4 +1,4 @@
-<div id="contact-preferences-header" class="fs-5 pb-1">Contact Preferences</div>
+<div id="notifications-header" class="fs-5 pb-1">Notifications</div>
 <div class="container px-0 ms-0">
   <div class="row">
     <form id="new-email" action="/dashboard" method="post">
@@ -36,34 +36,6 @@
   </div>
 
   <div class="row">
-    <form id="new-phone">
-      <div class="input-group">
-        <div class="input-group-text">
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            width="24"
-            height="24"
-            fill="currentColor"
-            class="bi bi-phone"
-            viewBox="0 0 16 16"
-          >
-            <path
-              d="M11 1a1 1 0 0 1 1 1v12a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1h6zM5 0a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2H5z"
-            />
-            <path d="M8 14a1 1 0 1 0 0-2 1 1 0 0 0 0 2z" />
-          </svg>
-        </div>
-
-        <input
-          class="form-control form-control-md"
-          name="new_phone"
-          placeholder="Texts coming soon!"
-          pattern="^([\w-]+(?:\.[\w-]+)*)@((?:[\w-]+\.)*\w[\w-]{0,66})\.([a-z]{2,6}(?:\.[a-z]{2})?)$"
-          title="Change your phone number"
-          disabled
-        />
-        <button class="btn btn-warning" disabled>Change</button>
-      </div>
-    </form>
+    <div>{{ next_notifs }}</div>
   </div>
 </div>
