@@ -91,6 +91,6 @@
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-eOJMYsd53ii+scO/bJGFsiCZc+5NDVN2yr8+0RDqr0Ql0h+rP48ckxlpbzKgwra6" crossorigin="anonymous" />
 <link rel="stylesheet" type="text/css" href="static/styles.min.3.0.css" />
 
-_TigerSnatch subscriptions are independent from official Registrar waitlists. You
+_TigerSnatch Subscriptions are independent from official course waitlists. You
 might not be able to enroll in courses shown on TigerSnatch even if spots free
-up. Always check Course Offerings for course-specific enrollment info._
+up. Always check Course Offerings for course-specific enrollment and waitlist info._
