@@ -11,9 +11,8 @@
     <div id="main" class="container-fluid">
       <div class="row align-items-start">
         <div id="search-wrapper" class="d-flex flex-column col-lg-4">
-          {% if is_admin %} {% include 'utils/status_indicator.html' %} {% include
-          'admin/admin_search.html' %} {% else %} {% include 'utils/status_indicator.html' %}{%
-          include 'search/search.html' %} {% endif %}
+          {% if is_admin %} {% include 'admin/admin_search.html' %} {% else %} {% include
+          'search/search.html' %} {% endif %}
         </div>
         <div id="right-wrapper" class="col-lg-8 px-0">
           {% if is_dashboard %} {% include 'dashboard/dashboard.html' %} {% elif is_admin %} {%
