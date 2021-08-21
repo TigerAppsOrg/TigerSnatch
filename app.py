@@ -273,6 +273,7 @@ def get_course():
         last_query_unquoted=unquote_plus(new_query),
         notifs_online=_db.get_cron_notification_status(),
         next_notifs=_db.get_current_or_next_notifs_interval(),
+        is_course_disabled=_db.is_course_disabled(courseid)
     )
 
     return make_response(html)
@@ -346,6 +347,7 @@ def get_course_info(courseid):
         section_names=section_names,
         notifs_online=_db.get_cron_notification_status(),
         next_notifs=_db.get_current_or_next_notifs_interval(),
+        is_course_disabled=_db.is_course_disabled(courseid)
     )
     return make_response(html)
 
@@ -469,6 +471,25 @@ def admin():
 # ACCESSIBLE BY ADMIN ONLY, NOT VIA URL
 # ----------------------------------------------------------------------
 
+@app.route("/disable_course/<courseid>", methods=["POST"])
+def disable_course(courseid):
+    netid = _cas.authenticate()
+    try:
+        if not is_admin(netid, _db):
+            return redirect(url_for("landing"))
+    except:
+        return redirect(url_for("landing"))
+    return jsonify({"isSuccess": _db.add_disabled_course(courseid.strip())})
+
+@app.route("/enable_course/<courseid>", methods=["POST"])
+def enable_course(courseid):
+    netid = _cas.authenticate()
+    try:
+        if not is_admin(netid, _db):
+            return redirect(url_for("landing"))
+    except:
+        return redirect(url_for("landing"))
+    return jsonify({"isSuccess": _db.remove_disabled_course(courseid.strip())})
 
 @app.route("/add_to_blacklist/<user>", methods=["POST"])
 def add_to_blacklist(user):

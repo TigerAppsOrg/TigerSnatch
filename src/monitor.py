@@ -25,9 +25,13 @@ class Monitor:
 
         for class_ in waited_classes:
             classid = class_["classid"]
-            deptnum = self._db.classid_to_course_deptnum(classid)
+            deptnum, courseid = self._db.classid_to_course_info(classid)
 
-            print("adding classid", classid, "from", deptnum)
+            # skip sections whose course is disabled
+            if self._db.is_course_disabled(courseid):
+                continue
+
+            print("adding classid", classid, "from", deptnum, "with courseid", courseid)
 
             if deptnum in data:
                 data[deptnum].append(classid)
