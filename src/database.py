@@ -534,6 +534,8 @@ class Database:
         def get_top_n_most_subscribed_sections(n=5):
             data = self._db.waitlists.find({}, {"waitlist": 1, "classid": 1, "_id": 0})
             data = [(len(k["waitlist"]), k["classid"]) for k in data]
+            if len(data) == 0:
+                return []
             data.sort(key=lambda x: x[0], reverse=True)
             data = [e for e in data[:n]]
             res = [f"Top {n} most-subscribed sections with # subs:"]
@@ -565,7 +567,7 @@ class Database:
                 f"Total # emails sent: {get_email_counter()}",
                 "==========",
             ]
-            for section in get_top_n_most_subscribed_sections():
+            for section in get_top_n_most_subscribed_sections(n=10):
                 res.append(section)
             res.append("==========")
             for interval in get_notifs_schedule():
