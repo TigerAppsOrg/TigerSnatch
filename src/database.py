@@ -187,22 +187,24 @@ class Database:
             raise Exception(f"{courseid} is not a valid course ID.")
             return False
         try:
-            self._db.admin.update_one({}, { "$addToSet": { "disabled_courses": courseid }})
+            self._db.admin.update_one({}, {"$addToSet": {"disabled_courses": courseid}})
             return True
         except:
             raise Exception(f"Could not add {courseid} to list of disabled courses.")
             return False
-    
+
     def remove_disabled_course(self, courseid):
         course_data = self.get_course(courseid)
         if not course_data:
             raise Exception(f"{courseid} is not a valid course ID.")
             return False
         try:
-            self._db.admin.update_one({}, { "$pull": { "disabled_courses": courseid }})
+            self._db.admin.update_one({}, {"$pull": {"disabled_courses": courseid}})
             return True
         except:
-            raise Exception(f"Could not remove {courseid} from list of disabled courses.")
+            raise Exception(
+                f"Could not remove {courseid} from list of disabled courses."
+            )
             return False
 
     # prints log and adds log to admin collection to track admin activity
@@ -947,11 +949,12 @@ class Database:
         )
 
         return res
-    
+
     def is_course_disabled(self, courseid):
         try:
-            disabled_courses = self._db.admin.find_one({}, 
-                {"disabled_courses": 1, "_id": 0})["disabled_courses"]
+            disabled_courses = self._db.admin.find_one(
+                {}, {"disabled_courses": 1, "_id": 0}
+            )["disabled_courses"]
             return courseid in disabled_courses
         except:
             return False
@@ -997,7 +1000,6 @@ class Database:
             raise RuntimeError(f"courseid {courseid} not found in courses")
 
         return (displayname.split("/")[0], courseid)
-
 
     # returns information about a class including course depts, numbers, title
     # and section number, for display in email/text messages
