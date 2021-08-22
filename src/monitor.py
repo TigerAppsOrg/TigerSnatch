@@ -29,6 +29,7 @@ class Monitor:
 
             # skip sections whose course is disabled
             if self._db.is_course_disabled(courseid):
+                print(deptnum, "with courseid", courseid, "is disabled - skipping")
                 continue
 
             print("adding classid", classid, "from", deptnum, "with courseid", courseid)
