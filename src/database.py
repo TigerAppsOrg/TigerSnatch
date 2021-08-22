@@ -570,6 +570,17 @@ class Database:
                 res.append(f"[{n}] {name} ({deptnum}): {section}")
             return res
 
+        def get_disabled_courses():
+            data = self._db.admin.find_one({}, {"disabled_courses": 1, "_id": 0})[
+                "disabled_courses"
+            ]
+            if len(data) == 0:
+                return ["No courses are disabled"]
+            res = ["Disabled courses:"]
+            for courseid in data:
+                res.append(self.courseid_to_displayname(courseid))
+            return res
+
         def get_notifs_schedule(fmt="%b %d, %Y @ %-I:%M %p"):
             tz = pytz.timezone("UTC")
             datetimes = list(self._db.admin.find({}, {"notifs_schedule": 1, "_id": 0}))[
@@ -594,6 +605,8 @@ class Database:
                 "==========",
             ]
             res.extend(get_top_n_most_subscribed_sections(n=10))
+            res.append("==========")
+            res.extend(get_disabled_courses())
             res.append("==========")
             res.extend(get_notifs_schedule())
             return "{".join(res)
