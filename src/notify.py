@@ -3,7 +3,6 @@
 # Sends users emails or text messages about enrollment updates
 # ----------------------------------------------------------------------
 
-from database import Database
 import smtplib
 from email.message import EmailMessage
 from email.utils import make_msgid

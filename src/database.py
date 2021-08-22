@@ -598,7 +598,7 @@ class Database:
             datetimes = list(self._db.admin.find({}, {"notifs_schedule": 1, "_id": 0}))[
                 0
             ]["notifs_schedule"]
-            res = [f"Scheduled notifications intervals (ET):"]
+            res = ["Scheduled notifications intervals (ET):"]
             for start, end in datetimes:
                 start, end = tz.localize(start).astimezone(TZ), tz.localize(
                     end
