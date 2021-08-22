@@ -561,10 +561,10 @@ class Database:
             data = self._db.waitlists.find({}, {"waitlist": 1, "classid": 1, "_id": 0})
             data = [(len(k["waitlist"]), k["classid"]) for k in data]
             if len(data) == 0:
-                return []
+                return ["No Subscriptions found"]
             data.sort(key=lambda x: x[0], reverse=True)
             data = [e for e in data[:n]]
-            res = [f"Top {n} most-subscribed sections with # subs:"]
+            res = [f"Top {len(data)} most-subscribed sections:"]
             for n, classid in data:
                 deptnum, name, section = self.classid_to_classinfo(classid)
                 res.append(f"[{n}] {name} ({deptnum}): {section}")
