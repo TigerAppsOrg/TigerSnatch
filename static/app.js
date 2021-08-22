@@ -1301,7 +1301,7 @@ let createEmail = function (
   match_email
 ) {
   const tradeEmailSubject = `TigerSnatch: Trade Sections for ${match_section} in ${course_name}?`;
-  const tradeEmailBody = `Hi ${match_netid},\n\nFrom TigerSnatch, I saw that you're enrolled in ${course_name} ${match_section}. I'm currently in ${my_section}.\nWould you like to set up a time to trade sections with me?\n\nThank you,\n${my_netid}`;
+  const tradeEmailBody = `Hi ${match_netid},\n\nFrom TigerSnatch, I saw that you're enrolled in ${course_name} ${match_section}. I'm currently in ${my_section}.\nWould you like to set up a time to trade sections with me? We should plan on swapping our sections simultaneously to prevent other TigerSnatch users from taking our spots.\n\nThank you,\n${my_netid}`;
 
   return encodeURI(
     `//mail.google.com/mail/?view=cm&fs=1&to=${match_email}&su=${tradeEmailSubject}&body=${tradeEmailBody}`
