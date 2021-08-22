@@ -593,11 +593,9 @@ class Database:
                 f"Total # emails sent: {get_email_counter()}",
                 "==========",
             ]
-            for section in get_top_n_most_subscribed_sections(n=10):
-                res.append(section)
+            res.extend(get_top_n_most_subscribed_sections(n=10))
             res.append("==========")
-            for interval in get_notifs_schedule():
-                res.append(interval)
+            res.extend(get_notifs_schedule())
             return "{".join(res)
 
         except:
