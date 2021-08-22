@@ -1,7 +1,7 @@
 {% if course_details is none %}
 <title>TigerSnatch | Courses</title>
 {% else %}
-<title>TigerSnatch | {{course_details.displayname}}</title>
+<title>TigerSnatch | {{course_details.displayname.split('/') | join(' / ')}}</title>
 {% endif %}
 
 <div class="d-flex flex-column h-100">

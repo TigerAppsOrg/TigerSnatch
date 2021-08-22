@@ -2,7 +2,6 @@
 {% if class.isFull %} {% if class.classid in curr_waitlists %}
 <td>
   <div class="form-check form-switch">
-    <!-- TODO: replace the conditional logic with a flag for whether or not a course is disabled -->
     <input
       class="form-check-input waitlist-switch"
       type="checkbox"
@@ -11,20 +10,19 @@
       data-bs-toggle="modal"
       data-bs-target="#confirm-remove-waitlist"
       checked
-      {% if 0==1 %}disabled{% endif %}
+      {% if is_course_disabled %} disabled {% endif %}
     />
   </div>
 </td>
 {% else %}
 <td>
   <div class="form-check form-switch">
-    <!-- TODO: replace the conditional logic with a flag for whether or not a course is disabled -->
     <input
       class="form-check-input waitlist-switch"
       type="checkbox"
       id="switch-{{class.classid}}"
       data-classid="{{class.classid}}"
-      {% if 0==1 %}disabled{% endif %}
+      {% if is_course_disabled %} disabled {% endif %}
     />
   </div>
 </td>

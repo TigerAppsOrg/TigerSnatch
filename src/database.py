@@ -181,6 +181,32 @@ class Database:
     # ADMIN PANEL METHODS
     # ----------------------------------------------------------------------
 
+    def add_disabled_course(self, courseid):
+        course_data = self.get_course(courseid)
+        if not course_data:
+            raise Exception(f"{courseid} is not a valid course ID.")
+            return False
+        try:
+            self._db.admin.update_one({}, {"$addToSet": {"disabled_courses": courseid}})
+            return True
+        except:
+            raise Exception(f"Could not add {courseid} to list of disabled courses.")
+            return False
+
+    def remove_disabled_course(self, courseid):
+        course_data = self.get_course(courseid)
+        if not course_data:
+            raise Exception(f"{courseid} is not a valid course ID.")
+            return False
+        try:
+            self._db.admin.update_one({}, {"$pull": {"disabled_courses": courseid}})
+            return True
+        except:
+            raise Exception(
+                f"Could not remove {courseid} from list of disabled courses."
+            )
+            return False
+
     # prints log and adds log to admin collection to track admin activity
 
     def _add_admin_log(self, log):
@@ -534,6 +560,8 @@ class Database:
         def get_top_n_most_subscribed_sections(n=5):
             data = self._db.waitlists.find({}, {"waitlist": 1, "classid": 1, "_id": 0})
             data = [(len(k["waitlist"]), k["classid"]) for k in data]
+            if len(data) == 0:
+                return []
             data.sort(key=lambda x: x[0], reverse=True)
             data = [e for e in data[:n]]
             res = [f"Top {n} most-subscribed sections with # subs:"]
@@ -565,7 +593,7 @@ class Database:
                 f"Total # emails sent: {get_email_counter()}",
                 "==========",
             ]
-            for section in get_top_n_most_subscribed_sections():
+            for section in get_top_n_most_subscribed_sections(n=10):
                 res.append(section)
             res.append("==========")
             for interval in get_notifs_schedule():
@@ -922,6 +950,15 @@ class Database:
 
         return res
 
+    def is_course_disabled(self, courseid):
+        try:
+            disabled_courses = self._db.admin.find_one(
+                {}, {"disabled_courses": 1, "_id": 0}
+            )["disabled_courses"]
+            return courseid in disabled_courses
+        except:
+            return False
+
     # ----------------------------------------------------------------------
     # CLASS METHODS
     # ----------------------------------------------------------------------
@@ -947,9 +984,9 @@ class Database:
         except:
             raise RuntimeError(f"classid {classid} not found in enrollments")
 
-    # returns the corresponding course displayname for a given classid
+    # returns the corresponding course displayname and courseid for a given classid
 
-    def classid_to_course_deptnum(self, classid):
+    def classid_to_course_info(self, classid):
         try:
             courseid = self._db.enrollments.find_one({"classid": classid})["courseid"]
         except:
@@ -962,7 +999,7 @@ class Database:
         except:
             raise RuntimeError(f"courseid {courseid} not found in courses")
 
-        return displayname.split("/")[0]
+        return (displayname.split("/")[0], courseid)
 
     # returns information about a class including course depts, numbers, title
     # and section number, for display in email/text messages

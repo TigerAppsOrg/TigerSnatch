@@ -2,14 +2,13 @@
   <span class="badge bg-warning text-dark font-monospace px-1 py-1 fs-5"
     >{{ course_details.displayname.split('/')[0] }}
   </span>
-  <!-- TODO: replace the conditional logic with a flag for whether or not a course is disabled -->
-  {% if 0==1 %}
+  {% if is_course_disabled %}
   <span
     class="badge bg-danger text-light font-monospace fw-bold px-1 py-1 ms-2 fs-5"
     style="cursor: help; padding-bottom: 0.2rem !important"
     data-bs-toggle="tooltip"
     data-bs-placement="auto"
-    title="An instructor has disabled TigerSnatch Subscriptions for this course. Email notifications will not be sent, and further subscriptions are not allowed. Check Official Course Offerings or contact a course instructor for more details."
+    title="A department coordinator has disabled TigerSnatch Subscriptions for this course. Email notifications will not be sent, and further subscriptions are not allowed. Check Official Course Offerings or contact a department coordinator for more details."
     >DISABLED<svg
       xmlns="http://www.w3.org/2000/svg"
       width="16"
@@ -41,4 +40,23 @@
   </a>
 </div>
 
-<div class="px-4 pt-0 pb-1 fs-2">{{ course_details.title }}</div>
+<div class="px-4 pt-0 pb-1 fs-2">
+  {{ course_details.title }}
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    width="18"
+    height="18"
+    fill="currentColor"
+    class="bi bi-info-square-fill text-primary ms-1"
+    viewBox="0 0 16 20"
+    data-bs-toggle="tooltip"
+    data-bs-placement="auto"
+    data-bs-container="body"
+    data-bs-width="300px"
+    title="TigerSnatch Subscriptions are independent from official course waitlists. You might not be able to enroll in courses shown on TigerSnatch even if spots free up. Always check Course Offerings for course-specific enrollment and waitlist info."
+  >
+    <path
+      d="M0 2a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V2zm8.93 4.588-2.29.287-.082.38.45.083c.294.07.352.176.288.469l-.738 3.468c-.194.897.105 1.319.808 1.319.545 0 1.178-.252 1.465-.598l.088-.416c-.2.176-.492.246-.686.246-.275 0-.375-.193-.304-.533L8.93 6.588zM8 5.5a1 1 0 1 0 0-2 1 1 0 0 0 0 2z"
+    />
+  </svg>
+</div>
