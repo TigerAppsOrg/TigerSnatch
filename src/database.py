@@ -552,6 +552,25 @@ class Database:
         def get_total_subscribed_sections():
             return self._db.waitlists.count_documents({})
 
+        def get_total_subscribed_courses():
+            waited_classes = list(self.get_waited_classes())
+            seen_courses = set()
+            count = 0
+
+            for class_ in waited_classes:
+                classid = class_["classid"]
+                deptnum, courseid = self.classid_to_course_info(classid)
+
+                # skip sections whose course is disabled
+                if self.is_course_disabled(courseid):
+                    continue
+
+                if deptnum not in seen_courses:
+                    count += 1
+                    seen_courses.add(deptnum)
+
+            return count
+
         def get_email_counter():
             return self._db.admin.find_one({}, {"_id": 0, "total_emails": 1})[
                 "total_emails"
@@ -603,6 +622,7 @@ class Database:
                 f"Total # users with >0 subscriptions: {get_users_who_subscribe()}",
                 f"Total # subscriptions: {get_total_subscriptions()}",
                 f"Total # subscribed sections: {get_total_subscribed_sections()}",
+                f"Total # courses with >0 subscriptions: {get_total_subscribed_courses()}",
                 f"Total # emails sent: {get_email_counter()}",
                 "==========",
             ]
