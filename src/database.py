@@ -554,22 +554,13 @@ class Database:
 
         def get_total_subscribed_courses():
             waited_classes = list(self.get_waited_classes())
-            seen_courses = set()
-            count = 0
 
-            for class_ in waited_classes:
-                classid = class_["classid"]
-                deptnum, courseid = self.classid_to_course_info(classid)
+            classids = [e["classid"] for e in waited_classes]
+            courseids = self._db.enrollments.find(
+                {"classid": {"$in": [classid for classid in classids]}}
+            )
 
-                # skip sections whose course is disabled
-                if self.is_course_disabled(courseid):
-                    continue
-
-                if deptnum not in seen_courses:
-                    count += 1
-                    seen_courses.add(deptnum)
-
-            return count
+            return len(set([e["courseid"] for e in courseids]))
 
         def get_email_counter():
             return self._db.admin.find_one({}, {"_id": 0, "total_emails": 1})[
