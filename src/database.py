@@ -578,7 +578,9 @@ class Database:
                 return ["No courses are disabled"]
             res = ["Disabled courses:"]
             for courseid in data:
-                res.append(self.courseid_to_displayname(courseid))
+                res.append(
+                    f"{self.courseid_to_displayname(courseid)} (courseID: {courseid})"
+                )
             return res
 
         def get_notifs_schedule(fmt="%b %d, %Y @ %-I:%M %p"):
