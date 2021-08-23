@@ -683,8 +683,10 @@ def fill_section(classid):
 
     try:
         curr_enrollment = _db.get_class_enrollment(classid)
+        if curr_enrollment is None:
+            return jsonify({"isSuccess": False})
         _db.update_enrollment(
-            classid, curr_enrollment["capacity"], curr_enrollment["capacity"]
+            classid, curr_enrollment["capacity"], curr_enrollment["capacity"], None
         )
 
         _db._add_admin_log(f"manually filled enrollments for class {classid}")
