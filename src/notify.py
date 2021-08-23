@@ -3,11 +3,10 @@
 # Sends users emails or text messages about enrollment updates
 # ----------------------------------------------------------------------
 
-import smtplib
-from email.message import EmailMessage
-from email.utils import make_msgid
+from sendgrid import SendGridAPIClient
+from sendgrid.helpers.mail import Mail
 from sys import stderr
-from config import TS_EMAIL, TS_PASSWORD
+from config import SENDGRID_API_KEY, TS_EMAIL
 
 
 class Notify:
@@ -44,14 +43,10 @@ class Notify:
     def get_netid(self):
         return self._netid
 
-    # sends a formatted email to the first person on waitlist of class with
-    # self.classid
+    # sends a formatted email
 
     def send_email_html(self):
-        msg = EmailMessage()
-        asparagus_cid = make_msgid()
-        msg.add_alternative(
-            f"""\
+        msg = f"""\
         <html>
         <head></head>
         <body style='font-size:1.3em'>
@@ -62,41 +57,18 @@ class Notify:
             <p>Best,<br>TigerSnatch Team <3</p>
         </body>
         </html>
-        """.format(
-                asparagus_cid=asparagus_cid[1:-1]
-            ),
-            subtype="html",
+        """
+
+        message = Mail(
+            from_email=TS_EMAIL,
+            to_emails=self._email,
+            subject=f"TigerSnatch: a spot opened in {self._deptnum} {self._sectionname}",
+            html_content=msg,
         )
 
-        # if self._swap:
-        #     msg.add_alternative(f"""\
-        #     <html>
-        #     <head></head>
-        #     <body>
-        #         <p>Dear {self._netid},</p>
-        #         <p>Your requested section <b>{self._sectionname}</b> in <b>{self._coursename}</b> have a spot open! You have been removed from the waitlist on TigerSnatch. The next student on the waitlist will receive a notification in 5 minutes.
-        #         <p>The netid of your match is: {self._netid_swap}. Please contact them to arrange a section swap!</p>
-        #         <p>Best,<br>Tigersnatch Team</p>
-        #     </body>
-        #     </html>
-        #     """.format(asparagus_cid=asparagus_cid[1:-1]), subtype='html')
-
-        me = TS_EMAIL
-        you = self._email  # receiver
-        pwd = TS_PASSWORD  # see config.py
-
-        msg[
-            "Subject"
-        ] = f"TigerSnatch: a spot opened in {self._deptnum} {self._sectionname}"
-        msg["From"] = me
-        msg["To"] = you
-        s = smtplib.SMTP("smtp.office365.com", 587)
-
         try:
-            s.starttls()
-            s.login(me, pwd)
-            s.send_message(msg)
-            s.quit()
+            sg = SendGridAPIClient(SENDGRID_API_KEY)
+            sg.send(message)
             return True
         except Exception as e:
             print(e, file=stderr)

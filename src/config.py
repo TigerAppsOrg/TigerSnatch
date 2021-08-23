@@ -40,6 +40,9 @@ HEROKU_APP_NAME = environ["HEROKU_APP_NAME"]
 TS_EMAIL = environ["TS_EMAIL"]
 TS_PASSWORD = environ["TS_PASSWORD"]
 
+# TigerSnatch SendGrid API key
+SENDGRID_API_KEY = environ["SENDGRID_API_KEY"]
+
 # minimum time interval on which new course data is fetched (triggered)
 # on the front end web interface
 COURSE_UPDATE_INTERVAL_MINS = int(environ["COURSE_UPDATE_INTERVAL_MINS"])

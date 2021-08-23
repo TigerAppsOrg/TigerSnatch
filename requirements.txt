@@ -6,6 +6,7 @@ Werkzeug==1.0.1
 requests==2.25.1
 Jinja2==2.11.3
 dnspython==1.16.0
-APScheduler==3.0.0
+APScheduler==3.7.0
 heroku3==4.2.3
 pandas==1.2.3
+sendgrid==6.0.5
