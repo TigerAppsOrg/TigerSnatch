@@ -36,6 +36,9 @@ class Notify:
         )
         db.update_user_waitlist_log(self._netid, user_log)
 
+        # unsubscribe user
+        db.remove_from_waitlist(self._netid, self._classid)
+
     # returns the netid of this Notify object
 
     def get_netid(self):
