@@ -522,7 +522,7 @@ class Database:
         res = []
 
         for classid in classids:
-            deptnum, name, section = self.classid_to_classinfo(classid)
+            deptnum, name, section, _ = self.classid_to_classinfo(classid)
             res.append(f"{name} ({deptnum}): {section}")
 
         if len(res) == 0:
@@ -576,7 +576,7 @@ class Database:
             data = [e for e in data[:n]]
             res = [f"Top {len(data)} most-subscribed sections:"]
             for n, classid in data:
-                deptnum, name, section = self.classid_to_classinfo(classid)
+                deptnum, name, section, _ = self.classid_to_classinfo(classid)
                 res.append(f"[{n}] {name} ({deptnum}): {section}")
             return res
 
@@ -638,7 +638,7 @@ class Database:
             data.sort(key=lambda x: x[0], reverse=True)
             res = []
             for n, classid in data:
-                deptnum, name, section = self.classid_to_classinfo(classid)
+                deptnum, name, section, _ = self.classid_to_classinfo(classid)
                 res.append(f"[{n}] {name} ({deptnum}): {section}")
             return res
 
@@ -1044,7 +1044,7 @@ class Database:
             raise Exception(f"courseid {courseid} cannot be found")
 
         dept_num = displayname.split("/")[0]
-        return dept_num, title, sectionname
+        return dept_num, title, sectionname, courseid
 
     # get dictionary for class with given classid in courses
 

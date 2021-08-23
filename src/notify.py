@@ -17,9 +17,12 @@ class Notify:
     def __init__(self, classid, i, n_new_slots, db, swap=False):
         self._classid = classid
         try:
-            self._deptnum, self._title, self._sectionname = db.classid_to_classinfo(
-                classid
-            )
+            (
+                self._deptnum,
+                self._title,
+                self._sectionname,
+                self._courseid,
+            ) = db.classid_to_classinfo(classid)
             self._coursename = f"{self._deptnum}: {self._title}"
             self._netid = db.get_class_waitlist(classid)["waitlist"][i]
         except:
@@ -53,7 +56,7 @@ class Notify:
             <p>Dear {self._netid},</p>
             <p>Your subscribed section <b>{self._sectionname}</b> in <b>{self._coursename}</b> has one or more spots open!</p>
             <p>Head over to <a href="https://phubprod.princeton.edu/psp/phubprod/?cmd=start">TigerHub</a> to Snatch your spot!</p>
-            <p>You'll continue to receive notifications for this section every 2 minutes if spots are still available. To unsubscribe from notifications for this section, please visit <a href="https://tigersnatch.herokuapp.com">TigerSnatch</a>.</p>
+            <p>You have been <b>automatically unsubscribed</b> from this section. If you didn't get the spot, you may re-subscribe here: <a href="https://snatch.tigerapps.org/course?query=&courseid={self._courseid}&skip">TigerSnatch | {self._deptnum}</a>.</p>
             <p>Best,<br>TigerSnatch Team <3</p>
         </body>
         </html>
