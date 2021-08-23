@@ -74,7 +74,7 @@ def cronjob():
         db._add_system_log(
             "cron", {"message": f"sent 0 emails in {round(time()-tic)} seconds"}
         )
-    print(f"sent {total} emails in {round(time()-tic)} seconds")
+        print(f"sent {total} emails in {round(time()-tic)} seconds")
 
 
 def set_status_indicator_to_on():
