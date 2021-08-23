@@ -14,7 +14,7 @@ class Notify:
     # to format and send an email to the first student on the waitlist
     # for that classid
 
-    def __init__(self, classid, i, n_new_slots, db, swap=False):
+    def __init__(self, classid, i, n_new_slots, db):
         self._classid = classid
         try:
             (
@@ -36,12 +36,7 @@ class Notify:
         )
         db.update_user_waitlist_log(self._netid, user_log)
 
-        self._swap = swap
-        if swap:
-            self._netid_swap = ""
-            self._sectionname_swap = ""
-
-    # returns the primary (non-swap) netid of this Notify object
+    # returns the netid of this Notify object
 
     def get_netid(self):
         return self._netid
@@ -84,11 +79,6 @@ class Notify:
         ret += f"\tCourse:\t\t{self._coursename}\n"
         ret += f"\tSection:\t{self._sectionname}\n"
         ret += f"\tClassID:\t{self._classid}"
-
-        if self._swap:
-            ret += f"\n\tSwap with:\t{self._netid_swap}\n"
-            ret += f"\tSwap section:\t{self._sectionname_swap}"
-
         return ret
 
 
