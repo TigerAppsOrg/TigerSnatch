@@ -126,7 +126,7 @@ def generate_time_intervals():
     flat = [item for sublist in datetimes for item in sublist]
     if not all(flat[i] < flat[i + 1] for i in range(len(flat) - 1)):
         print(
-            "[Scheduler] WARNING: datetime intervals either overlap or are not in ascending order. This may cause duplicate emails to be sent!",
+            "[Scheduler] WARNING: datetime intervals either overlap or are not in ascending order. This may cause duplicate emails and texts to be sent!",
             file=stderr,
         )
         return []

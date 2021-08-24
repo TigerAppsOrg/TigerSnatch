@@ -1,6 +1,6 @@
 # Welcome to TigerSnatch!
 
-[TigerSnatch](https://snatch.tigerapps.org) helps Princeton students with course enrollment through its Subscriptions and Trades features. With Subscriptions, students can get notified via email when a full class opens up, alleviating the need to repeatedly check official Course Offerings. TigerSnatch Trades, a first-of-its-kind system at Princeton, finds and facilitates swaps between students who wish to enroll in each other's full sections.
+[TigerSnatch](https://snatch.tigerapps.org) helps Princeton students with course enrollment through its Subscriptions and Trades features. With Subscriptions, students can get notified via email and text message when a full class opens up, alleviating the need to repeatedly check official Course Offerings. TigerSnatch Trades, a first-of-its-kind system at Princeton, finds and facilitates swaps between students who wish to enroll in each other's full sections.
 
 > TigerSnatch was built in Spring 2021 by Shannon Heh '23, Nicholas Padmanabhan '23, and Byron Zhang '23 as a project for COS333 at Princeton University. Check out the TigerSnatch documentation in `docs/`!
 
@@ -63,7 +63,7 @@
     <div class="row">
         <p class="fw-light text-center mt-4 fs-5 tutorial-text">
             It's that simple! The next time a spot opens up in a subscribed section, you'll
-            be notified immediately via email. You will continue receiving notifications
+            be notified immediately via email and text message. You will continue receiving notifications
             every 2 minutes until this section is full again, or you unsubscribe from it. To
             unsubscribe from a particular section, simply log back onto TigerSnatch and
             toggle the section's switch off in the Dashboard.

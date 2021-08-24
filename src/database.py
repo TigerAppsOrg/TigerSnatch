@@ -614,7 +614,7 @@ class Database:
                 f"Total # subscriptions: {get_total_subscriptions()}",
                 f"Total # subscribed sections: {get_total_subscribed_sections()}",
                 f"Total # courses with >0 subscriptions: {get_total_subscribed_courses()}",
-                f"Total # emails sent: {get_email_counter()}",
+                f"Total # emails and texts (each) sent: {get_email_counter()}",
                 "==========",
             ]
             res.extend(get_top_n_most_subscribed_sections(n=10))

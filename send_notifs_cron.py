@@ -1,7 +1,8 @@
 # ----------------------------------------------------------------------
 # send_notifs_cron.py
-# Manages regular execution of the email notification script using a
-# cron wrapper. Disable/enable using admin panel or _set_cron_status.py.
+# Manages regular execution of the email and text message  notification
+# script using a cron wrapper. Disable/enable using admin panel or
+# _set_cron_status.py.
 #
 # Set execution interval in config:     NOTIFS_INTERVAL_SECS
 # ----------------------------------------------------------------------
