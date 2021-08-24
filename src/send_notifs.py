@@ -45,27 +45,35 @@ def cronjob():
             print("sending emails to", notify.get_netids())
             stdout.flush()
 
-            if notify.send_emails_html():
-                print(n_notifs, "email(s) sent")
+            if notify.send_emails_html() and notify.send_sms():
+                print(n_notifs, "emails and texts (each) sent")
                 total += n_notifs
             else:
-                print("failed to send email(s)")
+                print("failed to send emails and/or texts")
         except Exception as e:
             print(e, file=stderr)
 
         print()
 
     if total > 0:
-        db._add_admin_log(f"sent {total} email(s) in {round(time()-tic)} seconds")
+        db._add_admin_log(
+            f"sent {total} emails and texts (each) in {round(time()-tic)} seconds"
+        )
         db._add_system_log(
-            "cron", {"message": f"sent {total} email(s) in {round(time()-tic)} seconds"}
+            "cron",
+            {
+                "message": f"sent {total} emails and texts (each) in {round(time()-tic)} seconds"
+            },
         )
         db.increment_email_counter(total)
     elif total == 0:
         db._add_system_log(
-            "cron", {"message": f"sent 0 emails in {round(time()-tic)} seconds"}
+            "cron",
+            {
+                "message": f"sent 0 emails and texts (each) in {round(time()-tic)} seconds"
+            },
         )
-        print(f"sent {total} emails in {round(time()-tic)} seconds")
+        print(f"sent {total} emails and texts (each) in {round(time()-tic)} seconds")
 
 
 def set_status_indicator_to_on():

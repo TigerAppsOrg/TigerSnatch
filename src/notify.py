@@ -6,7 +6,8 @@
 from sendgrid import SendGridAPIClient
 from sendgrid.helpers.mail import Mail
 from sys import stderr
-from config import SENDGRID_API_KEY, TS_EMAIL
+from twilio.rest import Client
+from config import SENDGRID_API_KEY, TS_EMAIL, TWILIO_PHONE, TWILIO_SID, TWILIO_TOKEN
 
 
 class Notify:
@@ -27,8 +28,10 @@ class Notify:
                 f"{n_new_slots} spots available in {self._deptnum} {self._sectionname}"
             )
             self._emails = []
+            self._phones = []
             for netid in self._netids:
                 self._emails.append(db.get_user(netid, "email"))
+                self._phones.append(db.get_user(netid, "phone"))
                 db.update_user_waitlist_log(netid, user_log)
         except:
             raise Exception(
@@ -70,6 +73,20 @@ class Notify:
 
         try:
             SendGridAPIClient(SENDGRID_API_KEY).client.mail.send.post(request_body=data)
+            return True
+        except Exception as e:
+            print(e, file=stderr)
+            return False
+
+    # sends an SMS
+
+    def send_sms(self):
+        msg = f"{self._sectionname} in {self._deptnum} has open spots! Unsubscribe from this section on your TigerSnatch Dashboard: https://snatch.tigerapps.org/dashboard"
+        try:
+            for phone in self._phones:
+                Client(TWILIO_SID, TWILIO_TOKEN).api.account.messages.create(
+                    to=f"+1{phone}", from_=TWILIO_PHONE, body=msg
+                )
             return True
         except Exception as e:
             print(e, file=stderr)
