@@ -48,7 +48,7 @@ class Notify:
             <p>Dear {self._netid},</p>
             <p>Your subscribed section <b>{self._sectionname}</b> in <b>{self._coursename}</b> has one or more spots open!</p>
             <p>Head over to <a href="https://phubprod.princeton.edu/psp/phubprod/?cmd=start">TigerHub</a> to Snatch your spot!</p>
-            <p>You'll continue to receive notifications for this section every 2 minutes if spots are still available. To unsubscribe from notifications for this section, visit your <a href="https://snatch.tigerapps.org/dashboard">TigerSnatch Dashboard</a>.</p>
+            <p>You'll continue to receive notifications for this section <b>every 5 minutes</b> if spots are still available. To unsubscribe from notifications for this section, visit your <a href="https://snatch.tigerapps.org/dashboard">TigerSnatch Dashboard</a>.</p>
             <p>Best,<br>TigerSnatch Team <3</p>
         </body>
         </html>"""

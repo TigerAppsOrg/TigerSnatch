@@ -64,7 +64,7 @@
         <p class="fw-light text-center mt-4 fs-5 tutorial-text">
             It's that simple! The next time a spot opens up in a subscribed section, you'll
             be notified immediately via email. You will continue receiving notifications
-            every 2 minutes until this section is full again, or you unsubscribe from it. To
+            every 5 minutes until this section is full again, or you unsubscribe from it. To
             unsubscribe from a particular section, simply log back onto TigerSnatch and
             toggle the section's switch off in the Dashboard.
         </p>
