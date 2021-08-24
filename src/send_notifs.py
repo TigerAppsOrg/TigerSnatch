@@ -43,6 +43,7 @@ def cronjob():
             notify = Notify(classid, n_new_slots, db)
             print(notify)
             print("sending emails to", notify.get_netids())
+            print("sending texts to", notify.get_phones())
             stdout.flush()
 
             if notify.send_emails_html() and notify.send_sms():

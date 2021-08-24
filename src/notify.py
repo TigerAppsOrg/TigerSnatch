@@ -43,6 +43,11 @@ class Notify:
     def get_netids(self):
         return self._netids
 
+    # returns the phone numbers of this Notify object
+
+    def get_phones(self):
+        return self._phones
+
     # sends a formatted email
 
     def send_emails_html(self):
@@ -96,6 +101,7 @@ class Notify:
         ret = "Notify:\n"
         ret += f"\tNetIDs:\t\t{self._netids}\n"
         ret += f"\tEmails:\t\t{self._emails}\n"
+        ret += f"\tPhones:\t\t{self._phones}\n"
         ret += f"\tCourse:\t\t{self._coursename}\n"
         ret += f"\tSection:\t{self._sectionname}\n"
         ret += f"\tClassID:\t{self._classid}"
