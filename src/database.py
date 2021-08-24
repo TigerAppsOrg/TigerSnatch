@@ -813,6 +813,14 @@ class Database:
         except:
             raise RuntimeError(f"attempt to update email for {netid} failed")
 
+    def update_user_phone(self, netid, phone):
+        try:
+            self._db.users.update_one(
+                {"netid": netid.rstrip()}, {"$set": {"phone": phone}}
+            )
+        except:
+            raise RuntimeError(f"attempt to update phone for {netid} failed")
+
     # returns list of results whose netid
     # contain user query string
 
