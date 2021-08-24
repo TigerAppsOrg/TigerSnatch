@@ -34,40 +34,31 @@ def cronjob():
         if n_new_slots == 0:
             continue
         try:
-            # n_notifs = min(db.get_class_waitlist_size(classid), n_new_slots)
             n_notifs = db.get_class_waitlist_size(classid)
         except Exception as e:
             print(e, file=stderr)
             continue
 
-        # randomly iterate through lists to ensure fairness
-        ordering = list(range(n_notifs))
-        shuffle(ordering)
+        try:
+            notify = Notify(classid, n_new_slots, db)
+            print(notify)
+            print("sending emails to", notify.get_netids())
+            stdout.flush()
 
-        for i in ordering:
-            try:
-                notify = Notify(classid, i, n_new_slots, db)
+            if notify.send_emails_html():
+                print(n_notifs, "email(s) sent")
+                total += n_notifs
+            else:
+                print("failed to send email(s)")
+        except Exception as e:
+            print(e, file=stderr)
 
-                print(notify)
-                print("sending email to", notify.get_netid())
-                stdout.flush()
-
-                # only if email was sent, remove user from waitlist
-                if notify.send_email_html():
-                    print(i + 1, "/", n_notifs, "emails sent for this class")
-                    total += 1
-                    # db.remove_from_waitlist(notify.get_netid(), classid)
-                else:
-                    print("failed to send email")
-            except Exception as e:
-                print(e, file=stderr)
-
-            print()
+        print()
 
     if total > 0:
-        db._add_admin_log(f"sent {total} emails in {round(time()-tic)} seconds")
+        db._add_admin_log(f"sent {total} email(s) in {round(time()-tic)} seconds")
         db._add_system_log(
-            "cron", {"message": f"sent {total} emails in {round(time()-tic)} seconds"}
+            "cron", {"message": f"sent {total} email(s) in {round(time()-tic)} seconds"}
         )
         db.increment_email_counter(total)
     elif total == 0:
