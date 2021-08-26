@@ -88,10 +88,13 @@ class Notify:
     def send_sms(self):
         msg = f"{self._sectionname} in {self._deptnum} has open spots! Unsubscribe from this section on your TigerSnatch Dashboard: https://snatch.tigerapps.org/dashboard"
         try:
-            for phone in self._phones:
-                Client(TWILIO_SID, TWILIO_TOKEN).api.account.messages.create(
-                    to=f"+1{phone}", from_=TWILIO_PHONE, body=msg
-                )
+            for i in range(len(self._phones)):
+                phone = self._phones[i]
+                if phone != "":
+                    Client(TWILIO_SID, TWILIO_TOKEN).api.account.messages.create(
+                        to=f"+1{phone}", from_=TWILIO_PHONE, body=msg
+                    )
+                self.db.remove_from_waitlist(self._netids[i], self._classid)
             return True
         except Exception as e:
             print(e, file=stderr)
