@@ -17,6 +17,7 @@ class Notify:
 
     def __init__(self, classid, n_new_slots, db):
         self._classid = classid
+        self.db = db
         try:
             (
                 self._deptnum,
