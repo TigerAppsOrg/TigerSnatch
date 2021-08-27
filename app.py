@@ -122,9 +122,11 @@ def dashboard():
 
     data = _db.get_dashboard_data(netid)
     email = _db.get_user(netid, "email")
+    phone = _db.get_user(netid, "phone")
 
     query = request.args.get("query")
     new_email = request.form.get("new_email")
+    new_phone = request.form.get("new_phone")
 
     if query is None:
         query = ""
@@ -138,6 +140,14 @@ def dashboard():
             return redirect(url_for("dashboard"))
 
         _db.update_user(netid, new_email.strip())
+        return redirect(url_for("dashboard"))
+
+    if new_phone is not None:
+        if "<" in new_phone or ">" in new_phone or "script" in new_phone:
+            print("HTML code detected in", new_phone, file=stderr)
+            return redirect(url_for("dashboard"))
+
+        _db.update_user_phone(netid, new_phone.strip())
         return redirect(url_for("dashboard"))
 
     curr_sections = _db.get_current_sections(netid)
@@ -155,6 +165,7 @@ def dashboard():
         username=netid.rstrip(),
         data=data,
         email=email,
+        phone=phone,
         curr_sections=curr_sections,
         notifs_online=_db.get_cron_notification_status(),
         next_notifs=_db.get_current_or_next_notifs_interval(),

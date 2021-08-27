@@ -6,7 +6,8 @@
 from sendgrid import SendGridAPIClient
 from sendgrid.helpers.mail import Mail
 from sys import stderr
-from config import SENDGRID_API_KEY, TS_EMAIL
+from twilio.rest import Client
+from config import SENDGRID_API_KEY, TS_EMAIL, TWILIO_PHONE, TWILIO_SID, TWILIO_TOKEN
 
 
 class Notify:
@@ -14,61 +15,89 @@ class Notify:
     # to format and send an email to the first student on the waitlist
     # for that classid
 
-    def __init__(self, classid, i, n_new_slots, db, swap=False):
+    def __init__(self, classid, n_new_slots, db):
         self._classid = classid
+        self.db = db
         try:
-            self._deptnum, self._title, self._sectionname = db.classid_to_classinfo(
-                classid
-            )
+            (
+                self._deptnum,
+                self._title,
+                self._sectionname,
+                self._courseid,
+            ) = db.classid_to_classinfo(classid)
             self._coursename = f"{self._deptnum}: {self._title}"
-            self._netid = db.get_class_waitlist(classid)["waitlist"][i]
+            self._netids = db.get_class_waitlist(classid)["waitlist"]
+
+            user_log = (
+                f"{n_new_slots} spots available in {self._deptnum} {self._sectionname}"
+            )
+            self._emails = []
+            self._phones = []
+            for netid in self._netids:
+                self._emails.append(db.get_user(netid, "email"))
+                self._phones.append(db.get_user(netid, "phone"))
+                db.update_user_waitlist_log(netid, user_log)
         except:
             raise Exception(
-                f"waitlist element {i} for class {classid} does not exist; user probably removed themself"
+                f"unable to get notification data for subscriptions of class {classid}"
             )
-        self._email = db.get_user(self._netid, "email")
 
-        user_log = (
-            f"{n_new_slots} spots available in {self._deptnum} {self._sectionname}"
-        )
-        db.update_user_waitlist_log(self._netid, user_log)
+    # returns the netIDs of this Notify object
 
-        self._swap = swap
-        if swap:
-            self._netid_swap = ""
-            self._sectionname_swap = ""
+    def get_netids(self):
+        return self._netids
 
-    # returns the primary (non-swap) netid of this Notify object
+    # returns the phone numbers of this Notify object
 
-    def get_netid(self):
-        return self._netid
+    def get_phones(self):
+        return self._phones
 
     # sends a formatted email
 
-    def send_email_html(self):
+    def send_emails_html(self):
         msg = f"""\
         <html>
         <head></head>
         <body style='font-size:1.3em'>
-            <p>Dear {self._netid},</p>
+            <p>Greetings $$netid$$,</p>
             <p>Your subscribed section <b>{self._sectionname}</b> in <b>{self._coursename}</b> has one or more spots open!</p>
             <p>Head over to <a href="https://phubprod.princeton.edu/psp/phubprod/?cmd=start">TigerHub</a> to Snatch your spot!</p>
-            <p>You'll continue to receive notifications for this section every 2 minutes if spots are still available. To unsubscribe from notifications for this section, please visit <a href="https://tigersnatch.herokuapp.com">TigerSnatch</a>.</p>
+            <p>You've been <b>automatically unsubscribed</b> from this section. If you didn't get the spot, you may re-subscribe here: <a href="https://snatch.tigerapps.org/course?query=&courseid={self._courseid}&skip">TigerSnatch | {self._deptnum}</a>.</p>
             <p>Best,<br>TigerSnatch Team <3</p>
         </body>
-        </html>
-        """
+        </html>"""
 
-        message = Mail(
-            from_email=TS_EMAIL,
-            to_emails=self._email,
-            subject=f"TigerSnatch: a spot opened in {self._deptnum} {self._sectionname}",
-            html_content=msg,
-        )
+        data = {
+            "personalizations": [
+                {
+                    "to": [{"email": self._emails[i]}],
+                    "subject": f"TigerSnatch: a spot opened in {self._deptnum} {self._sectionname}",
+                    "substitutions": {"$$netid$$": self._netids[i]},
+                }
+                for i in range(len(self._emails))
+            ],
+            "from": {"email": TS_EMAIL},
+            "content": [{"type": "text/html", "value": msg}],
+        }
 
         try:
-            sg = SendGridAPIClient(SENDGRID_API_KEY)
-            sg.send(message)
+            SendGridAPIClient(SENDGRID_API_KEY).client.mail.send.post(request_body=data)
+            return True
+        except Exception as e:
+            print(e, file=stderr)
+            return False
+
+    # sends an SMS
+
+    def send_sms(self):
+        msg = f"{self._sectionname} in {self._deptnum} has open spots! You've been unsubscribed from this section. Resubscribe here: https://snatch.tigerapps.org/course?query=&courseid={self._courseid}&skip"
+        try:
+            for i, phone in enumerate(self._phones):
+                if phone != "":
+                    Client(TWILIO_SID, TWILIO_TOKEN).api.account.messages.create(
+                        to=f"+1{phone}", from_=TWILIO_PHONE, body=msg
+                    )
+                self.db.remove_from_waitlist(self._netids[i], self._classid)
             return True
         except Exception as e:
             print(e, file=stderr)
@@ -76,16 +105,12 @@ class Notify:
 
     def __str__(self):
         ret = "Notify:\n"
-        ret += f"\tNetID:\t\t{self._netid}\n"
-        ret += f"\tEmail:\t\t{self._email}\n"
+        ret += f"\tNetIDs:\t\t{self._netids}\n"
+        ret += f"\tEmails:\t\t{self._emails}\n"
+        ret += f"\tPhones:\t\t{self._phones}\n"
         ret += f"\tCourse:\t\t{self._coursename}\n"
         ret += f"\tSection:\t{self._sectionname}\n"
         ret += f"\tClassID:\t{self._classid}"
-
-        if self._swap:
-            ret += f"\n\tSwap with:\t{self._netid_swap}\n"
-            ret += f"\tSwap section:\t{self._sectionname_swap}"
-
         return ret
 
 

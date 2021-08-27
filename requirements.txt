@@ -10,3 +10,4 @@ APScheduler==3.7.0
 heroku3==4.2.3
 pandas==1.2.3
 sendgrid==6.0.5
+twilio==6.63.0

@@ -522,7 +522,7 @@ class Database:
         res = []
 
         for classid in classids:
-            deptnum, name, section = self.classid_to_classinfo(classid)
+            deptnum, name, section, _ = self.classid_to_classinfo(classid)
             res.append(f"{name} ({deptnum}): {section}")
 
         if len(res) == 0:
@@ -576,7 +576,7 @@ class Database:
             data = [e for e in data[:n]]
             res = [f"Top {len(data)} most-subscribed sections:"]
             for n, classid in data:
-                deptnum, name, section = self.classid_to_classinfo(classid)
+                deptnum, name, section, _ = self.classid_to_classinfo(classid)
                 res.append(f"[{n}] {name} ({deptnum}): {section}")
             return res
 
@@ -614,7 +614,7 @@ class Database:
                 f"Total # subscriptions: {get_total_subscriptions()}",
                 f"Total # subscribed sections: {get_total_subscribed_sections()}",
                 f"Total # courses with >0 subscriptions: {get_total_subscribed_courses()}",
-                f"Total # emails sent: {get_email_counter()}",
+                f"Total # emails and texts (each) sent: {get_email_counter()}",
                 "==========",
             ]
             res.extend(get_top_n_most_subscribed_sections(n=10))
@@ -638,7 +638,7 @@ class Database:
             data.sort(key=lambda x: x[0], reverse=True)
             res = []
             for n, classid in data:
-                deptnum, name, section = self.classid_to_classinfo(classid)
+                deptnum, name, section, _ = self.classid_to_classinfo(classid)
                 res.append(f"[{n}] {name} ({deptnum}): {section}")
             return res
 
@@ -812,6 +812,14 @@ class Database:
             )
         except:
             raise RuntimeError(f"attempt to update email for {netid} failed")
+
+    def update_user_phone(self, netid, phone):
+        try:
+            self._db.users.update_one(
+                {"netid": netid.rstrip()}, {"$set": {"phone": phone}}
+            )
+        except:
+            raise RuntimeError(f"attempt to update phone for {netid} failed")
 
     # returns list of results whose netid
     # contain user query string
@@ -1044,7 +1052,7 @@ class Database:
             raise Exception(f"courseid {courseid} cannot be found")
 
         dept_num = displayname.split("/")[0]
-        return dept_num, title, sectionname
+        return dept_num, title, sectionname, courseid
 
     # get dictionary for class with given classid in courses
 

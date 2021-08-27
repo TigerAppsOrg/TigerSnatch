@@ -62,3 +62,8 @@ MAX_ADMIN_LOG_LENGTH = int(environ["MAX_ADMIN_LOG_LENGTH"])
 
 # interval on which the notifications scheduling spreadsheet is polled
 NOTIFS_SHEET_POLL_MINS = int(environ["NOTIFS_SHEET_POLL_MINS"])
+
+# Twilio SMS
+TWILIO_PHONE = environ["TWILIO_PHONE"]
+TWILIO_SID = environ["TWILIO_SID"]
+TWILIO_TOKEN = environ["TWILIO_TOKEN"]
