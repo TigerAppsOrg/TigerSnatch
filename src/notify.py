@@ -92,8 +92,7 @@ class Notify:
     def send_sms(self):
         msg = f"{self._sectionname} in {self._deptnum} has open spots! You've been unsubscribed from this section. Resubscribe here: https://snatch.tigerapps.org/course?query=&courseid={self._courseid}&skip"
         try:
-            for i in range(len(self._phones)):
-                phone = self._phones[i]
+            for i, phone in enumerate(self._phones):
                 if phone != "":
                     Client(TWILIO_SID, TWILIO_TOKEN).api.account.messages.create(
                         to=f"+1{phone}", from_=TWILIO_PHONE, body=msg

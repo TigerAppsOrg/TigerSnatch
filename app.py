@@ -165,7 +165,7 @@ def dashboard():
         username=netid.rstrip(),
         data=data,
         email=email,
-        phone=phone if phone != "" else "Phone number not specified!",
+        phone=phone,
         curr_sections=curr_sections,
         notifs_online=_db.get_cron_notification_status(),
         next_notifs=_db.get_current_or_next_notifs_interval(),
