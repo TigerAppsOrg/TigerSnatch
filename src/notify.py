@@ -63,6 +63,7 @@ class Notify:
             <p>Your subscribed section <b>{self._sectionname}</b> in <b>{self._coursename}</b> has one or more spots open!</p>
             <p>Head over to <a href="https://phubprod.princeton.edu/psp/phubprod/?cmd=start">TigerHub</a> to Snatch your spot!</p>
             <p>You've been <b>automatically unsubscribed</b> from this section. If you didn't get the spot, you may re-subscribe here: <a href="https://snatch.tigerapps.org/course?query=&courseid={self._courseid}&skip">TigerSnatch | {self._deptnum}</a>.</p>
+            <p>To receive text message notifications about open spots, set your phone number on the <a href="https://snatch.tigerapps.org/dashboard">TigerSnatch Dashboard</a> if you haven't already!</p>
             <p>Best,<br>TigerSnatch Team <3</p>
         </body>
         </html>"""
