@@ -52,6 +52,11 @@ class Notify:
     def get_phones(self):
         return self._phones
 
+    # returns the deptnum + section name of this Notify object
+
+    def get_name(self):
+        return f"{self._deptnum} {self._sectionname}"
+
     # sends a formatted email
 
     def send_emails_html(self):

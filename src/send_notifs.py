@@ -30,6 +30,7 @@ def cronjob():
     new_slots = monitor.get_classes_with_changed_enrollments()
 
     total = 0
+    names = ""
     for classid, n_new_slots in new_slots.items():
         if n_new_slots == 0:
             continue
@@ -49,6 +50,7 @@ def cronjob():
             if notify.send_emails_html() and notify.send_sms():
                 print(n_notifs, "emails and texts (each) sent")
                 total += n_notifs
+                names += " " + notify.get_name() + ","
             else:
                 print("failed to send emails and/or texts")
         except Exception as e:
@@ -58,12 +60,12 @@ def cronjob():
 
     if total > 0:
         db._add_admin_log(
-            f"sent {total} emails and texts (each) in {round(time()-tic)} seconds"
+            f"sent {total} emails and texts (each) in {round(time()-tic)} seconds:{names[:-1]}"
         )
         db._add_system_log(
             "cron",
             {
-                "message": f"sent {total} emails and texts (each) in {round(time()-tic)} seconds"
+                "message": f"sent {total} emails and texts (each) in {round(time()-tic)} seconds:{names[:-1]}"
             },
         )
         db.increment_email_counter(total)
