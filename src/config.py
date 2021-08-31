@@ -45,7 +45,7 @@ SENDGRID_API_KEY = environ["SENDGRID_API_KEY"]
 
 # minimum time interval on which new course data is fetched (triggered)
 # on the front end web interface
-COURSE_UPDATE_INTERVAL_MINS = int(environ["COURSE_UPDATE_INTERVAL_MINS"])
+COURSE_UPDATE_INTERVAL_MINS = float(environ["COURSE_UPDATE_INTERVAL_MINS"])
 
 # minimum time interval on which new slots are checked and notifications
 # are sent
