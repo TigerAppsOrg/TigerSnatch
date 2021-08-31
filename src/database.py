@@ -780,7 +780,9 @@ class Database:
             try:
                 class_data = course_data[f"class_{classid}"]
             except:
-                raise RuntimeError(f"classid {classid} not found in courses")
+                print(f"classid {classid} not found in courses", file=stderr)
+                del dashboard_data[classid]
+                continue
 
             dashboard_data[classid]["courseid"] = courseid
             dashboard_data[classid]["displayname"] = course_data["displayname"]
