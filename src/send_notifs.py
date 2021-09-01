@@ -60,12 +60,12 @@ def cronjob():
 
     if total > 0:
         db._add_admin_log(
-            f"sent {total} emails and texts (each) in {round(time()-tic)} seconds:{names[:-1]}"
+            f"sent {total} emails and texts in {round(time()-tic)} seconds:{names[:-1]}"
         )
         db._add_system_log(
             "cron",
             {
-                "message": f"sent {total} emails and texts (each) in {round(time()-tic)} seconds:{names[:-1]}"
+                "message": f"sent {total} emails and texts in {round(time()-tic)} seconds:{names[:-1]}"
             },
         )
         db.increment_email_counter(total)
@@ -73,10 +73,10 @@ def cronjob():
         db._add_system_log(
             "cron",
             {
-                "message": f"sent 0 emails and texts (each) in {round(time()-tic)} seconds"
+                "message": f"sent 0 emails and texts in {round(time()-tic)} seconds"
             },
         )
-        print(f"sent {total} emails and texts (each) in {round(time()-tic)} seconds")
+        print(f"sent {total} emails and texts in {round(time()-tic)} seconds")
 
 
 def set_status_indicator_to_on():
