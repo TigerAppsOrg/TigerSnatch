@@ -89,6 +89,8 @@ class Monitor:
 
         data = {}
         for course in self._waited_course_wrappers:
+            if course is None:
+                continue
             print("generating class enrollment delta for", course.get_course_deptnum())
 
             for class_, n_slots in course.get_available_slots().items():

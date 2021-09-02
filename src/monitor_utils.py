@@ -7,6 +7,7 @@
 from database import Database
 from mobileapp import MobileApp
 from coursewrapper import CourseWrapper
+from sys import stderr
 
 # _api = MobileApp()
 
@@ -157,9 +158,14 @@ def process(args):
     term, course, classes = args[0], args[1], args[2]
 
     print("processing", course, "with classes", classes)
-    new_enroll, new_cap = get_new_mobileapp_data(
-        term, course, classes, default_empty_dicts=True
-    )
+    try:
+        new_enroll, new_cap = get_new_mobileapp_data(
+            term, course, classes, default_empty_dicts=True
+        )
+    except Exception:
+        print("detected malformed JSON - skipping", file=stderr)
+        return None
+
     course_data = CourseWrapper(course, new_enroll, new_cap)
     print(course_data)
     return course_data
