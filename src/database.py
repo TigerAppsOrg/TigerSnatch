@@ -421,8 +421,9 @@ class Database:
                 netid=admin_netid,
             )
             return True
-        except:
+        except Exception as e:
             print(f"failed to clear waitlists for course {courseid}", file=stderr)
+            print(e, file=stderr)
             return False
 
     # adds netid to app blacklist
