@@ -38,6 +38,7 @@ def schedule_jobs(update_db=False):
                 end_date=end,
                 timezone=tz,
                 seconds=NOTIFS_INTERVAL_SECS,
+                max_instances=8,
             )
             sched.add_job(
                 set_status_indicator_to_on, "date", run_date=start, timezone=tz
