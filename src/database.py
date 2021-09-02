@@ -1158,7 +1158,7 @@ class Database:
                 )
             _, courseid = self.classid_to_course_info(classid)
             if self.is_course_disabled(courseid):
-                raise Exception(f"class {classid} is in disabled course {courseid}")
+                raise Exception(f"{netid}: class {classid} is in disabled course {courseid}")
 
         netid = netid.rstrip()
 
@@ -1218,7 +1218,7 @@ class Database:
                 raise Exception(f"user {netid} not in waitlist for class {classid}")
             _, courseid = self.classid_to_course_info(classid)
             if self.is_course_disabled(courseid):
-                raise Exception(f"class {classid} is in disabled course {courseid}")
+                raise Exception(f"{netid}: class {classid} is in disabled course {courseid}")
 
         netid = netid.rstrip()
         validate()
