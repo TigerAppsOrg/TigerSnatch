@@ -679,7 +679,7 @@ class Database:
         if self.is_user_created(netid):
             print(f"user {netid} already exists", file=stderr)
             return
-        netid = netid.rstrip()
+        netid = netid.strip()
         self._db.users.insert_one(
             {
                 "netid": netid,
@@ -717,9 +717,9 @@ class Database:
     # gets user netid's waitlist log in array-of-strings format
 
     def get_user_waitlist_log(self, netid):
-        return self._db.logs.find_one(
-            {"netid": netid.rstrip()}, {"waitlist_log": 1, "_id": 0}
-        )["waitlist_log"]
+        return self._db.logs.find_one({"netid": netid}, {"waitlist_log": 1, "_id": 0})[
+            "waitlist_log"
+        ]
 
     # update user netid's waitlist log
 
@@ -745,24 +745,21 @@ class Database:
     # gets user netid's trade log in array-of-strings format
 
     def get_user_trade_log(self, netid):
-        return self._db.logs.find_one(
-            {"netid": netid.rstrip()}, {"trade_log": 1, "_id": 0}
-        )["trade_log"]
+        return self._db.logs.find_one({"netid": netid}, {"trade_log": 1, "_id": 0})[
+            "trade_log"
+        ]
 
     # returns user data given netid and a key from the users collection
 
     def get_user(self, netid, key):
         try:
-            return self._db.users.find_one(
-                {"netid": netid.rstrip()}, {key: 1, "_id": 0}
-            )[key]
+            return self._db.users.find_one({"netid": netid}, {key: 1, "_id": 0})[key]
         except:
             raise Exception(f"failed to get key {key} for netid {netid}")
 
     # returns all data needed to display user waitlists on dashboard
 
     def get_dashboard_data(self, netid):
-        netid = netid.rstrip()
         dashboard_data = {}
         try:
             waitlists = self._db.users.find_one({"netid": netid})["waitlists"]
@@ -810,17 +807,13 @@ class Database:
 
     def update_user(self, netid, email):
         try:
-            self._db.users.update_one(
-                {"netid": netid.rstrip()}, {"$set": {"email": email}}
-            )
+            self._db.users.update_one({"netid": netid}, {"$set": {"email": email}})
         except:
             raise RuntimeError(f"attempt to update email for {netid} failed")
 
     def update_user_phone(self, netid, phone):
         try:
-            self._db.users.update_one(
-                {"netid": netid.rstrip()}, {"$set": {"phone": phone}}
-            )
+            self._db.users.update_one({"netid": netid}, {"$set": {"phone": phone}})
         except:
             raise RuntimeError(f"attempt to update phone for {netid} failed")
 
@@ -1163,8 +1156,7 @@ class Database:
                     f"{netid}: class {classid} is in disabled course {courseid}"
                 )
 
-        netid = netid.rstrip()
-
+        netid = netid.strip()
         if not disable_checks:
             validate()
 
@@ -1225,7 +1217,7 @@ class Database:
                     f"{netid}: class {classid} is in disabled course {courseid}"
                 )
 
-        netid = netid.rstrip()
+        netid = netid.strip()
         validate()
 
         # remove classid from user's waitlist

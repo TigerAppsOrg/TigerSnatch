@@ -61,7 +61,7 @@ class CASClient:
         # If the user's username is in the session, then the user was
         # authenticated previously.  So return the user's username.
         if "username" in session:
-            return session.get("username").lower()
+            return session.get("username").lower().strip()
 
         # If the request contains a login ticket, then try to
         # validate it.
@@ -72,7 +72,7 @@ class CASClient:
                 # The user is authenticated, so store the user's
                 # username in the session.
                 session["username"] = username
-                return username.lower()
+                return username.lower().strip()
 
         # The request does not contain a valid login ticket, so
         # redirect the browser to the login page to get one.

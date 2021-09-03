@@ -67,7 +67,7 @@ def pull_course(courseid, db):
 
 
 def is_admin(netid, db):
-    return db.is_admin(netid.rstrip())
+    return db.is_admin(netid)
 
 
 if __name__ == "__main__":
