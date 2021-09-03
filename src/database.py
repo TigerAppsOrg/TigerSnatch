@@ -413,7 +413,7 @@ class Database:
             self._add_admin_log(f"clearing subscriptions for course {courseid}")
 
             for classid in classids:
-                self.clear_class_waitlist(classid, log_classid_skip=False)
+                self.clear_class_waitlist(classid, admin_netid, log_classid_skip=False)
 
             self._add_system_log(
                 "admin",
@@ -1159,7 +1159,9 @@ class Database:
                 )
             _, courseid = self.classid_to_course_info(classid)
             if self.is_course_disabled(courseid):
-                raise Exception(f"{netid}: class {classid} is in disabled course {courseid}")
+                raise Exception(
+                    f"{netid}: class {classid} is in disabled course {courseid}"
+                )
 
         netid = netid.rstrip()
 
@@ -1219,7 +1221,9 @@ class Database:
                 raise Exception(f"user {netid} not in waitlist for class {classid}")
             _, courseid = self.classid_to_course_info(classid)
             if self.is_course_disabled(courseid):
-                raise Exception(f"{netid}: class {classid} is in disabled course {courseid}")
+                raise Exception(
+                    f"{netid}: class {classid} is in disabled course {courseid}"
+                )
 
         netid = netid.rstrip()
         validate()
