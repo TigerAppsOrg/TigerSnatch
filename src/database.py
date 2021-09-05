@@ -184,27 +184,28 @@ class Database:
     def add_disabled_course(self, courseid):
         course_data = self.get_course(courseid)
         if not course_data:
-            raise Exception(f"{courseid} is not a valid course ID.")
+            print(f"{courseid} is not a valid course ID", file=stderr)
             return False
         try:
             self._db.admin.update_one({}, {"$addToSet": {"disabled_courses": courseid}})
             self.clear_course_waitlists(courseid, "SYSTEM_AUTO")
             return True
         except:
-            raise Exception(f"Could not add {courseid} to list of disabled courses.")
+            print(f"could not add {courseid} to list of disabled courses", file=stderr)
             return False
 
     def remove_disabled_course(self, courseid):
         course_data = self.get_course(courseid)
         if not course_data:
-            raise Exception(f"{courseid} is not a valid course ID.")
+            print(f"{courseid} is not a valid course ID", file=stderr)
             return False
         try:
             self._db.admin.update_one({}, {"$pull": {"disabled_courses": courseid}})
             return True
         except:
-            raise Exception(
-                f"Could not remove {courseid} from list of disabled courses."
+            print(
+                f"could not remove {courseid} from list of disabled courses",
+                file=stderr,
             )
             return False
 
