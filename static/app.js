@@ -1136,6 +1136,15 @@ let disableCourseListener = function () {
     courseid = $("#disable-course-input").val();
     disableAdminFunction();
 
+    if (
+      !confirm(
+        `Are you sure you want to disable course ${courseid}? This action will unsubscribe all users from the course's sections and is irreversible.`
+      )
+    ) {
+      enableAdminFunction();
+      return;
+    }
+
     $.post(`/disable_course/${courseid}`, function (res) {
       // checks that course has successfully been disabled
       disableEnableCourseToastHelper(res);

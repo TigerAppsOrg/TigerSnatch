@@ -188,6 +188,7 @@ class Database:
             return False
         try:
             self._db.admin.update_one({}, {"$addToSet": {"disabled_courses": courseid}})
+            self.clear_course_waitlists(courseid, "SYSTEM_AUTO")
             return True
         except:
             raise Exception(f"Could not add {courseid} to list of disabled courses.")
