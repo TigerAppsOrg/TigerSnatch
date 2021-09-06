@@ -436,6 +436,11 @@ let resetScroll = function (dest) {
 
 // listens for submission of search form
 let searchFormListener = function () {
+  $("form#search-form").on("submit", function (e) {
+    e.preventDefault();
+    return;
+  });
+
   $("form#search-form").on("input", function (e) {
     e.preventDefault();
 
