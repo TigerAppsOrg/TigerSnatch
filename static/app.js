@@ -436,11 +436,11 @@ let resetScroll = function (dest) {
 
 // listens for submission of search form
 let searchFormListener = function () {
-  $("form#search-form").on("submit", function (e) {
+  $("form#search-form").on("input", function (e) {
     e.preventDefault();
 
     // automatically close the keyboard on iOS
-    $("#search-form-input").blur();
+    // $("#search-form-input").blur();
 
     // close the tooltip if open
     $("#search-form-input").tooltip("hide");
@@ -469,18 +469,23 @@ let searchFormListener = function () {
     } else {
       endpoint = `/searchresults/${query}`;
     }
-    $.post(endpoint, function (res) {
-      $("div#search-results").html(res);
-      window.history.pushState(
-        { restore: "search", html: res },
-        "restore search results",
-        curr_path
-      );
-      // adds listener to new search results
-      searchResultListener();
-      resetScroll("#search-results");
-      dashboardSkip();
-    });
+
+    clearTimeout(timeout);
+
+    timeout = setTimeout(function () {
+      $.post(endpoint, function (res) {
+        $("div#search-results").html(res);
+        window.history.pushState(
+          { restore: "search", html: res },
+          "restore search results",
+          curr_path
+        );
+        // adds listener to new search results
+        searchResultListener();
+        resetScroll("#search-results");
+        dashboardSkip();
+      });
+    }, 500);
   });
 };
 
