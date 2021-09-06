@@ -15,7 +15,6 @@ from notify import Notify
 from monitor import Monitor
 from database import Database
 from sys import stdout, stderr
-from random import shuffle
 from time import time
 
 
@@ -72,9 +71,7 @@ def cronjob():
     elif total == 0:
         db._add_system_log(
             "cron",
-            {
-                "message": f"sent 0 emails and texts in {round(time()-tic)} seconds"
-            },
+            {"message": f"sent 0 emails and texts in {round(time()-tic)} seconds"},
         )
         print(f"sent {total} emails and texts in {round(time()-tic)} seconds")
 

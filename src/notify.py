@@ -4,7 +4,6 @@
 # ----------------------------------------------------------------------
 
 from sendgrid import SendGridAPIClient
-from sendgrid.helpers.mail import Mail
 from sys import stderr
 from twilio.rest import Client
 from config import SENDGRID_API_KEY, TS_EMAIL, TWILIO_PHONE, TWILIO_SID, TWILIO_TOKEN
