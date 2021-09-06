@@ -17,12 +17,9 @@ from _exec_update_all_courses import do_update_async
 from app_helper import do_search, pull_course, is_admin
 from urllib.parse import quote_plus, unquote_plus
 from sys import stderr
-import logging
 
 app = Flask(__name__, template_folder="./views")
 app.secret_key = APP_SECRET_KEY
-log = logging.getLogger("werkzeug")
-log.disabled = True
 
 _cas = CASClient()
 _db = Database()
