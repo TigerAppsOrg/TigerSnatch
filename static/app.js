@@ -447,11 +447,14 @@ let searchFormListener = function () {
   $("form#search-form").on("input", function (e) {
     e.preventDefault();
 
+    // get search query
+    query = encodeURIComponent($("#search-form-input").prop("value"));
+    if (query.length < 3) {
+      query = "";
+    }
+
     // close the tooltip if open
     $("#search-form-input").tooltip("hide");
-
-    // get serach query
-    query = encodeURIComponent($("#search-form-input").prop("value"));
 
     // construct new URL
     params = location.search;
