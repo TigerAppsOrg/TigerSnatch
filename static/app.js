@@ -438,14 +438,13 @@ let resetScroll = function (dest) {
 let searchFormListener = function () {
   $("form#search-form").on("submit", function (e) {
     e.preventDefault();
+    // close the keyboard
+    $("#search-form-input").blur();
     return;
   });
 
   $("form#search-form").on("input", function (e) {
     e.preventDefault();
-
-    // automatically close the keyboard on iOS
-    // $("#search-form-input").blur();
 
     // close the tooltip if open
     $("#search-form-input").tooltip("hide");
