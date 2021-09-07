@@ -435,7 +435,6 @@ let resetScroll = function (dest) {
 };
 
 // listens for submission of search form
-var timeout = null;
 let searchFormListener = function () {
   $("form#search-form").on("submit", function (e) {
     e.preventDefault();
@@ -478,22 +477,18 @@ let searchFormListener = function () {
       endpoint = `/searchresults/${query}`;
     }
 
-    clearTimeout(timeout);
-
-    timeout = setTimeout(function () {
-      $.post(endpoint, function (res) {
-        $("div#search-results").html(res);
-        window.history.pushState(
-          { restore: "search", html: res },
-          "restore search results",
-          curr_path
-        );
-        // adds listener to new search results
-        searchResultListener();
-        resetScroll("#search-results");
-        dashboardSkip();
-      });
-    }, 500);
+    $.post(endpoint, function (res) {
+      $("div#search-results").html(res);
+      window.history.pushState(
+        { restore: "search", html: res },
+        "restore search results",
+        curr_path
+      );
+      // adds listener to new search results
+      searchResultListener();
+      resetScroll("#search-results");
+      dashboardSkip();
+    });
   });
 };
 
