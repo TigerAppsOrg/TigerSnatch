@@ -435,6 +435,7 @@ let resetScroll = function (dest) {
 };
 
 // listens for submission of search form
+var timeout = null;
 let searchFormListener = function () {
   $("form#search-form").on("submit", function (e) {
     e.preventDefault();
