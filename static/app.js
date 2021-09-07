@@ -440,6 +440,8 @@ let searchFormListener = function () {
     e.preventDefault();
     // close the keyboard
     $("#search-form-input").blur();
+    // close the tooltip if open
+    $("#search-form-input").tooltip("hide");
     return;
   });
 
