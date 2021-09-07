@@ -24,7 +24,7 @@
   <br />
   <br />
 </p>
-{% else %} {% for user in search_res %}
+{% else %} {% for user in search_res[:20] %}
 <div>
   <div id="admin-results-{{user['netid']}}" class="card search-results-card">
     <div class="card-body row">
