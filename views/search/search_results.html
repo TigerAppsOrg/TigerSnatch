@@ -20,7 +20,7 @@
         class="d-inline-block align-text-center mx-2"
     />
     <br />
-    Search for courses above!
+    Enter 3+ characters to begin searching for courses!
     <br>
     <br>
     <a id="dashboard-skip" href="" class="fw-light fs-4" style="text-decoration: underline;">
@@ -35,7 +35,7 @@
         {% if courseid is not none and courseid == course.courseid %}
         <a
             data-courseid="{{course.courseid}}"
-            class="search-results-link selected-course"
+            class="search-results-link selected-course border border-3 border-warning"
             href="course?query={{last_query}}&courseid={{course.courseid}}"
             style="background-color: #ffe58a"
         >
