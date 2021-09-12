@@ -1454,5 +1454,6 @@ class Database:
 
 if __name__ == "__main__":
     db = Database()
-    print(db.get_current_or_next_notifs_interval())
-    print(db.get_all_subscriptions())
+    # print(db.get_current_or_next_notifs_interval())
+    # print(db.get_all_subscriptions())
+    print(",".join(db._get_all_emails_csv().split(",")[997:]))
