@@ -37,7 +37,7 @@
   </div>
 
   <div class="row">
-    <form id="new-phone" action="/dashboard" method="post">
+    <form id="new-phone" class="{{ 'animate__animated animate__bounceIn animate__slow' if not phone else '' }}" action="/dashboard" method="post">
       <div class="input-group mb-2">
         <div class="input-group-text">
           <svg
@@ -64,8 +64,7 @@
           pattern="^\d{10}$"
           data-bs-toggle="tooltip"
           data-bs-placement="top"
-          title="TigerSnatch will notify you at this US phone number when a slot frees up! Note that you MUST use a US phone number."
-          required
+          title="TigerSnatch will notify you at this US phone number when a slot frees up! Note that you must use a US phone number."
         />
         <button class="btn btn-warning">Change</button>
       </div>
