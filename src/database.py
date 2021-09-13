@@ -1355,6 +1355,9 @@ class Database:
         print("resetting user logs")
         self._db.logs.update_many({}, {"$set": {"waitlist_log": [], "trade_log": []}})
 
+        print("clearing disabled courses")
+        self._db.admin.update_one({}, {"$set": {"disabled_courses": []}})
+
         clear_coll("mappings")
         clear_coll("courses")
         clear_coll("enrollments")
