@@ -612,18 +612,18 @@ class Database:
         try:
             res = [
                 f"Current term: {get_current_term_name()}",
-                f"Total # users: {get_total_users()}",
-                f"Total # users with >0 subscriptions: {get_users_who_subscribe()}",
-                f"Total # subscriptions: {get_total_subscriptions()}",
-                f"Total # subscribed sections: {get_total_subscribed_sections()}",
-                f"Total # courses with >0 subscriptions: {get_total_subscribed_courses()}",
-                f"Total # emails and texts (each) sent: {get_email_counter()}",
-                "==========",
+                f"# users: {get_total_users()}",
+                f"# users with >0 subscriptions: {get_users_who_subscribe()}",
+                f"# subscriptions: {get_total_subscriptions()}",
+                f"# subscribed sections: {get_total_subscribed_sections()}",
+                f"# subscribed courses: {get_total_subscribed_courses()}",
+                f"# notifications sent: {get_email_counter()}",
+                "====================",
             ]
             res.extend(get_top_n_most_subscribed_sections(n=10))
-            res.append("==========")
+            res.append("====================")
             res.extend(get_disabled_courses())
-            res.append("==========")
+            res.append("====================")
             res.extend(get_notifs_schedule())
             return "{".join(res)
 
