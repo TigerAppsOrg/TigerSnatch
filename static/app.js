@@ -1434,23 +1434,24 @@ let findMatches = function () {
 // introJS tutorial
 let initTutorial = function () {
   var tutorial = introJs();
+  var doneKey = "completed1";
 
   window.addEventListener("load", function () {
     if (window.location.pathname !== "/dashboard") return;
     if (window.innerWidth < 992) return;
-    // if (localStorage.getItem("EventTour") === "Completed") return;
+    if (localStorage.getItem("EventTour") === doneKey) return;
     tutorial.setOptions({
       showBullets: false,
       showProgress: true,
-      tooltipClass: "tutorialStyle",
+      tooltipClass: "tutorial-style",
     }).start()
 
     tutorial.oncomplete(function () {
-      localStorage.setItem("EventTour", "Completed");
+      localStorage.setItem("EventTour", doneKey);
     });
 
     tutorial.onexit(function () {
-      localStorage.setItem("EventTour", "Completed");
+      localStorage.setItem("EventTour", doneKey);
     });
   });
 }
