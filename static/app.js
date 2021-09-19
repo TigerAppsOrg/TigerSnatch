@@ -1438,8 +1438,12 @@ let initTutorial = function () {
   window.addEventListener("load", function () {
     if (window.location.pathname !== "/dashboard") return;
     if (window.innerWidth < 992) return;
-    if (localStorage.getItem("EventTour") === "Completed") return;
-    tutorial.start()
+    // if (localStorage.getItem("EventTour") === "Completed") return;
+    tutorial.setOptions({
+      showBullets: false,
+      showProgress: true,
+      tooltipClass: "tutorialStyle",
+    }).start()
 
     tutorial.oncomplete(function () {
       localStorage.setItem("EventTour", "Completed");
