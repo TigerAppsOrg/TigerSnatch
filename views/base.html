@@ -1,31 +1,32 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    {% block title %}{% endblock %} {% include 'common.html' %}
-  </head>
-  <body style="height: calc(100% - 60px)">
-    <div id="loading-overlay">
-      <div id="loading-spinner" class="spinner-border text-warning" role="status"></div>
-    </div>
-    {% include 'nav/nav.html' %} {% if loggedin %} {% include 'about.html' %} {% else %}
-    <div id="main" class="container-fluid">
-      <div class="row align-items-start">
-        <div id="search-wrapper" class="d-flex flex-column col-lg-4">
-          {% if is_admin %} {% include 'admin/admin_search.html' %} {% else %} {% include
-          'search/search.html' %} {% endif %}
-        </div>
-        <div id="right-wrapper" class="col-lg-8 px-0">
-          {% if is_dashboard %} {% include 'dashboard/dashboard.html' %} {% elif is_admin %} {%
-          include 'admin/admin.html' %} {% else %} {% include 'course/course.html' %} {% endif %}
-        </div>
+
+<head>
+  {% block title %}{% endblock %} {% include 'common.html' %}
+</head>
+
+<body style="height: calc(100% - 60px)">
+  <div id="loading-overlay">
+    <div id="loading-spinner" class="spinner-border text-warning" role="status"></div>
+  </div>
+  {% include 'nav/nav.html' %} {% if loggedin %} {% include 'about.html' %} {% else %}
+  <div id="main" class="container-fluid">
+    <div class="row align-items-start">
+      <div id="search-wrapper" class="d-flex flex-column col-lg-4">
+        {% if is_admin %} {% include 'admin/admin_search.html' %} {% else %} {% include
+        'search/search.html' %} {% endif %}
+      </div>
+      <div id="right-wrapper" class="col-lg-8 px-0">
+        {% if is_dashboard %} {% include 'dashboard/dashboard.html' %} {% elif is_admin %} {%
+        include 'admin/admin.html' %} {% else %} {% include 'course/course.html' %} {% endif %}
       </div>
     </div>
-    {% endif %}
-    <script
-      src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/js/bootstrap.bundle.min.js"
-      integrity="sha384-JEW9xMcG8R+pH31jmWH6WWP0WintQrMb4s7ZOdauHnUtxwoG2vI5DkLtS3qm9Ekf"
-      crossorigin="anonymous"
-    ></script>
-    <script src="{{url_for('static', filename='app.min.5.1.js')}}"></script>
-  </body>
+  </div>
+  {% endif %}
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/js/bootstrap.bundle.min.js"
+    integrity="sha384-JEW9xMcG8R+pH31jmWH6WWP0WintQrMb4s7ZOdauHnUtxwoG2vI5DkLtS3qm9Ekf"
+    crossorigin="anonymous"></script>
+  <script src="{{url_for('static', filename='app.min.6.0.js')}}"></script>
+</body>
+
 </html>

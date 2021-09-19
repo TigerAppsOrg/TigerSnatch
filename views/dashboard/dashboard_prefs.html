@@ -38,7 +38,10 @@
 
   <div class="row">
     <form id="new-phone" class="{{ 'animate__animated animate__bounceIn animate__slow' if not phone else '' }}" action="/dashboard" method="post">
-      <div class="input-group mb-2">
+      <div 
+        class="input-group mb-2"
+        data-title="Texts"
+        data-intro="Be sure to set your phone number so TigerSnatch can notify you of course openings via text message!">
         <div class="input-group-text">
           <svg
             xmlns="http://www.w3.org/2000/svg"

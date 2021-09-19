@@ -1,120 +1,105 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    {% include 'common.html' %}
-    <title>TigerSnatch | Tutorial</title>
-  </head>
 
-  <body id="landing-container">
-    {% if not loggedin %} {% include 'nav/nav_tutorial.html' %} {% else %}{% include 'nav/nav.html'
-    %}{% endif %}
-    <div class="container-fluid">
-      <div class="row">
-        <br />
-        <p class="text-center px-5 my-5">
-          <strong id="landing-tigersnatch-highlight" class="fs-1 fw-bold"
-            >Welcome to TigerSnatch!</strong
-          >
-        </p>
-      </div>
-      <div class="row">
-        <p class="fw-light text-center fs-5 tutorial-text mb-4">
-          Before you start Snatching for course spots, here’s a brief guide on how to use
-          TigerSnatch.
-        </p>
-      </div>
-      <div class="row">
-        <p class="fw-light text-center fs-5 tutorial-text mb-4">
-          Search for courses by department, number, and/or title.
-        </p>
-      </div>
-      <div class="row">
-        <p class="fw-light text-center fs-5 tutorial-text mb-4">
-          Toggle “Subscribe” switches to activate or deactivate email and text message notifications
-          for spot openings in specific course sections.
-        </p>
-      </div>
-      <div class="row">
-        <p class="fw-light text-center fs-5 tutorial-text mb-4">
-          If you're already enrolled in a full section but wish to switch into another, use Trades.
-          From the dropdown, select and save your currently enrolled section. Then, click Find
-          Trades to view and contact other Tigers who are enrolled in a section you want (i.e. one
-          of your subscriptions) and who want to switch into your current section.
-        </p>
-      </div>
-      <div class="row">
-        <div class="my-4 tutorial-image">
-          <img
-            src="/static/COURSE_TUTORIAL.jpeg"
-            class="img-shadow rounded border border-3 border-warning mx-auto d-block"
-            width="95%"
-          />
-        </div>
-      </div>
-      <div class="row">
-        <p class="fw-light text-center fs-5 tutorial-text my-4">
-          Return to the Dashboard to check out your subscriptions and the sections you wish to trade
-          with other Tigers.
-          <br />
-        </p>
-      </div>
-      <div class="row">
-        <div class="my-4 tutorial-image">
-          <img
-            src="/static/DASHBOARD_TUTORIAL.jpeg"
-            class="img-shadow rounded border border-3 border-warning mx-auto d-block"
-            width="95%"
-          />
-        </div>
-      </div>
-      <div class="row">
-        <p class="fw-light text-center mt-4 fs-5 tutorial-text">
-          It's that simple! The next time a spot opens up in a subscribed section, you'll be
-          notified immediately via email and text message. If you didn't get the spot, just
-          resubscribe on TigerSnatch to get notified when spots open again. To unsubscribe from a
-          section, simply toggle the section's switch off in the Dashboard.
-        </p>
-      </div>
-      <div class="row">
-        <p class="fw-light text-center mt-4 fs-5 tutorial-text mb-4">
-          By the way, every time spots open in a subscribed section or you and another Tiger choose
-          to contact one another for a Trade, your Activity page will update to reflect these
-          events.
-        </p>
-      </div>
-      <div class="row">
-        <div class="my-4 tutorial-image">
-          <img
-            src="/static/ACTIVITY_TUTORIAL.jpeg"
-            class="img-shadow rounded border border-3 border-warning mx-auto d-block"
-            width="95%"
-          />
-        </div>
-      </div>
-      <div class="row">
-        <p class="fw-light text-center mt-4 mb-3 tutorial-text">
-          TigerSnatch Subscriptions are independent from official course waitlists. You might not be
-          able to enroll in courses shown on TigerSnatch even if spots free up. Always check Course
-          Offerings for course-specific enrollment and waitlist info.
-        </p>
+<head>
+  {% include 'common.html' %}
+  <title>TigerSnatch | Tutorial</title>
+</head>
+
+<body id="landing-container">
+  {% if not loggedin %} {% include 'nav/nav_tutorial.html' %} {% else %}{% include 'nav/nav.html'
+  %}{% endif %}
+  <div class="container-fluid">
+    <div class="row">
+      <br />
+      <p class="text-center px-5 my-5">
+        <strong id="landing-tigersnatch-highlight" class="fs-1 fw-bold">Welcome to TigerSnatch!</strong>
+      </p>
+    </div>
+    <div class="row">
+      <p class="fw-light text-center fs-5 tutorial-text mb-4">
+        Before you start Snatching for course spots, here’s a brief guide on how to use
+        TigerSnatch.
+      </p>
+    </div>
+    <div class="row">
+      <p class="fw-light text-center fs-5 tutorial-text mb-4">
+        Search for courses by department, number, and/or title.
+      </p>
+    </div>
+    <div class="row">
+      <p class="fw-light text-center fs-5 tutorial-text mb-4">
+        Toggle “Subscribe” switches to activate or deactivate email and text message notifications
+        for spot openings in specific course sections.
+      </p>
+    </div>
+    <div class="row">
+      <p class="fw-light text-center fs-5 tutorial-text mb-4">
+        If you're already enrolled in a full section but wish to switch into another, use Trades.
+        From the dropdown, select and save your currently enrolled section. Then, click Find
+        Trades to view and contact other Tigers who are enrolled in a section you want (i.e. one
+        of your subscriptions) and who want to switch into your current section.
+      </p>
+    </div>
+    <div class="row">
+      <div class="my-4 tutorial-image">
+        <img src="/static/COURSE_TUTORIAL.jpeg"
+          class="img-shadow rounded border border-3 border-warning mx-auto d-block" width="95%" />
       </div>
     </div>
+    <div class="row">
+      <p class="fw-light text-center fs-5 tutorial-text my-4">
+        Return to the Dashboard to check out your subscriptions and the sections you wish to trade
+        with other Tigers.
+        <br />
+      </p>
+    </div>
+    <div class="row">
+      <div class="my-4 tutorial-image">
+        <img src="/static/DASHBOARD_TUTORIAL.jpeg"
+          class="img-shadow rounded border border-3 border-warning mx-auto d-block" width="95%" />
+      </div>
+    </div>
+    <div class="row">
+      <p class="fw-light text-center mt-4 fs-5 tutorial-text">
+        It's that simple! The next time a spot opens up in a subscribed section, you'll be
+        notified immediately via email and text message. If you didn't get the spot, just
+        resubscribe on TigerSnatch to get notified when spots open again. To unsubscribe from a
+        section, simply toggle the section's switch off in the Dashboard.
+      </p>
+    </div>
+    <div class="row">
+      <p class="fw-light text-center mt-4 fs-5 tutorial-text mb-4">
+        By the way, every time spots open in a subscribed section or you and another Tiger choose
+        to contact one another for a Trade, your Activity page will update to reflect these
+        events.
+      </p>
+    </div>
+    <div class="row">
+      <div class="my-4 tutorial-image">
+        <img src="/static/ACTIVITY_TUTORIAL.jpeg"
+          class="img-shadow rounded border border-3 border-warning mx-auto d-block" width="95%" />
+      </div>
+    </div>
+    <div class="row">
+      <p class="fw-light text-center mt-4 mb-3 tutorial-text">
+        TigerSnatch Subscriptions are independent from official course waitlists. You might not be
+        able to enroll in courses shown on TigerSnatch even if spots free up. Always check Course
+        Offerings for course-specific enrollment and waitlist info.
+      </p>
+    </div>
+  </div>
 
-    <form method="get" action="/dashboard" class="text-center my-4">
-      <button
-        class="btn btn-warning text-dark fs-4 px-5 py-3 mb-5"
-        type="submit"
-        style="border-radius: 100px"
-      >
-        Go to Dashboard &#8594;
-      </button>
-    </form>
+  <form method="get" action="/dashboard" class="text-center my-4">
+    <button class="btn btn-warning text-dark fs-4 px-5 py-3 mb-5" type="submit" style="border-radius: 100px">
+      Go to Dashboard &#8594;
+    </button>
+  </form>
 
-    <script
-      src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/js/bootstrap.bundle.min.js"
-      integrity="sha384-JEW9xMcG8R+pH31jmWH6WWP0WintQrMb4s7ZOdauHnUtxwoG2vI5DkLtS3qm9Ekf"
-      crossorigin="anonymous"
-    ></script>
-    <script src="{{url_for('static', filename='app.min.5.1.js')}}"></script>
-  </body>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/js/bootstrap.bundle.min.js"
+    integrity="sha384-JEW9xMcG8R+pH31jmWH6WWP0WintQrMb4s7ZOdauHnUtxwoG2vI5DkLtS3qm9Ekf"
+    crossorigin="anonymous"></script>
+  <script src="{{url_for('static', filename='app.min.6.0.js')}}"></script>
+</body>
+
 </html>

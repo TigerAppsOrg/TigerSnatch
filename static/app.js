@@ -1032,7 +1032,7 @@ let updateTermListener = function () {
     setTimeout(() => location.reload(), 3100);
     $(".toast-container").prepend(toastUpdateTerm.clone().attr("id", "toast-update-term-" + ++i));
     $("#toast-update-term-" + i).toast("show");
-    $.post("/update_all_courses", function (res) {});
+    $.post("/update_all_courses", function (res) { });
   });
 };
 
@@ -1431,6 +1431,26 @@ let findMatches = function () {
   });
 };
 
+// introJS tutorial
+let initTutorial = function () {
+  var tutorial = introJs();
+
+  window.addEventListener("load", function () {
+    if (window.location.pathname !== "/dashboard") return;
+    if (window.innerWidth < 992) return;
+    if (localStorage.getItem("EventTour") === "Completed") return;
+    tutorial.start()
+
+    tutorial.oncomplete(function () {
+      localStorage.setItem("EventTour", "Completed");
+    });
+
+    tutorial.onexit(function () {
+      localStorage.setItem("EventTour", "Completed");
+    });
+  });
+}
+
 // handles button clicks in the Trade Panel
 let tradeFunctions = function () {
   updateCurrentSection();
@@ -1491,4 +1511,5 @@ $(document).ready(function () {
   pageBackListener();
   initTooltipsToasts();
   dashboardCourseSelectListener();
+  initTutorial();
 });
