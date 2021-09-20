@@ -1,36 +1,32 @@
-<div id="trades-tracker-header" class="fs-5 pb-1">
+<div id="trades-tracker-header"
+     class="fs-5 pb-1">
   Trades Tracker
-  <svg
-    xmlns="http://www.w3.org/2000/svg"
-    width="18"
-    height="18"
-    fill="currentColor"
-    class="bi bi-info-square-fill text-primary ms-1"
-    viewBox="0 0 16 20"
-    data-bs-toggle="tooltip"
-    data-bs-placement="top"
-    title="This summarizes the sections you wish to switch out of (i.e. the current enrollments you've specified). TigerSnatch may use this data to find Trades for other users. If you no longer wish to Trade a particular section, go to its course page and click 'Reset enrollment'."
-  >
+  <svg xmlns="http://www.w3.org/2000/svg"
+       width="18"
+       height="18"
+       fill="currentColor"
+       class="bi bi-info-square-fill text-primary ms-1"
+       viewBox="0 0 16 20"
+       data-bs-toggle="tooltip"
+       data-bs-placement="top"
+       title="This summarizes the sections you wish to switch out of (i.e. the current enrollments you've specified). TigerSnatch may use this data to find Trades for other users. If you no longer wish to Trade a particular section, go to its course page and click 'Reset enrollment'.">
     <path
-      d="M0 2a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V2zm8.93 4.588-2.29.287-.082.38.45.083c.294.07.352.176.288.469l-.738 3.468c-.194.897.105 1.319.808 1.319.545 0 1.178-.252 1.465-.598l.088-.416c-.2.176-.492.246-.686.246-.275 0-.375-.193-.304-.533L8.93 6.588zM8 5.5a1 1 0 1 0 0-2 1 1 0 0 0 0 2z"
-    />
+          d="M0 2a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V2zm8.93 4.588-2.29.287-.082.38.45.083c.294.07.352.176.288.469l-.738 3.468c-.194.897.105 1.319.808 1.319.545 0 1.178-.252 1.465-.598l.088-.416c-.2.176-.492.246-.686.246-.275 0-.375-.193-.304-.533L8.93 6.588zM8 5.5a1 1 0 1 0 0-2 1 1 0 0 0 0 2z" />
   </svg>
 </div>
 <div id="trades-tracker">
   {% if curr_sections == [] %}
   <div>
-    You've not yet specified any current enrollments - navigate to a course page and submit your currently enrolled
+    You've not yet specified any current enrollments - navigate to a course page and submit your
+    currently enrolled
     section for that course to look for Trades!
   </div>
   {% else %} {% for section in curr_sections %}
   <div>
     &#8594; You seek to Trade out of
-    <a
-      class="badge bg-warning text-dark font-monospace px-1 py-1 mb-1 ms-1 dashboard-course-link"
-      href="/course?query={{last_query}}&courseid={{section[2]}}&skip"
-      style="text-decoration: underline"
-      >{{section[0]}} {{section[1]}}</a
-    >
+    <a class="badge bg-warning text-dark font-monospace px-1 py-1 mb-1 ms-1 dashboard-course-link"
+       href="/course?query={{last_query}}&courseid={{section[2]}}&skip"
+       style="text-decoration: underline">{{section[0]}} {{section[1]}}</a>
   </div>
   {% endfor %} {% endif %}
 </div>

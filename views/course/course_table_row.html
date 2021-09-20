@@ -2,28 +2,38 @@
 {% if class.isFull %} {% if class.classid in curr_waitlists %}
 <td>
   <div class="form-check form-switch">
-    <input
-      class="form-check-input waitlist-switch"
-      type="checkbox"
-      id="switch-{{class.classid}}"
-      data-classid="{{class.classid}}"
-      data-bs-toggle="modal"
-      data-bs-target="#confirm-remove-waitlist"
-      checked
-      {% if is_course_disabled %} disabled {% endif %}
-    />
+    <input class="form-check-input waitlist-switch"
+           type="checkbox"
+           id="switch-{{class.classid}}"
+           data-classid="{{class.classid}}"
+           data-bs-toggle="modal"
+           data-bs-target="#confirm-remove-waitlist"
+           checked
+           {%
+           if
+           is_course_disabled
+           %}
+           disabled
+           {%
+           endif
+           %} />
   </div>
 </td>
 {% else %}
 <td>
   <div class="form-check form-switch">
-    <input
-      class="form-check-input waitlist-switch"
-      type="checkbox"
-      id="switch-{{class.classid}}"
-      data-classid="{{class.classid}}"
-      {% if is_course_disabled %} disabled {% endif %}
-    />
+    <input class="form-check-input waitlist-switch"
+           type="checkbox"
+           id="switch-{{class.classid}}"
+           data-classid="{{class.classid}}"
+           {%
+           if
+           is_course_disabled
+           %}
+           disabled
+           {%
+           endif
+           %} />
   </div>
 </td>
 {% endif %} {% else %}

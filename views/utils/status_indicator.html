@@ -1,28 +1,27 @@
-<span
-  id="status-indicator"
-  class="fs-6 ms-3 mb-5"
-  data-title="Status"
-  data-intro="Hover over this badge to get a summary of TigerSnatch's current status!"
-  style="
+<span id="status-indicator"
+      class="fs-6 ms-3 mb-5"
+      data-title="Status"
+      data-intro="Hover over this badge to get a summary of TigerSnatch's current status!"
+      style="
     background-color: #ffc107;
     border-radius: 0.25rem;
     padding: 5px;
     letter-spacing: 1px;
     cursor: help;
   "
-  data-bs-toggle="tooltip"
-  data-bs-placement="auto"
-  title="Term: {{term_name}}. {{'TigerSnatch is actively sending emails and text messages for open spots!' if notifs_online else 'TigerSnatch is not currently sending emails and text messages for open spots.'}} {{next_notifs}}"
-  >status<svg
-    id="status-indicator-tooltip"
-    xmlns="http://www.w3.org/2000/svg"
-    width="16"
-    height="16"
-    fill="currentColor"
-    class="bi bi-circle-fill {{ 'text-success' if notifs_online else 'text-danger' }} ms-1"
-    viewBox="0 0 16 16"
-    style="margin-bottom: 2px"
-  >
-    <circle cx="8" cy="8" r="8" />
+      data-bs-toggle="tooltip"
+      data-bs-placement="auto"
+      title="Term: {{term_name}}. {{'TigerSnatch is actively sending emails and text messages for open spots!' if notifs_online else 'TigerSnatch is not currently sending emails and text messages for open spots.'}} {{next_notifs}}">status<svg
+       id="status-indicator-tooltip"
+       xmlns="http://www.w3.org/2000/svg"
+       width="16"
+       height="16"
+       fill="currentColor"
+       class="bi bi-circle-fill {{ 'text-success' if notifs_online else 'text-danger' }} ms-1"
+       viewBox="0 0 16 16"
+       style="margin-bottom: 2px">
+    <circle cx="8"
+            cy="8"
+            r="8" />
   </svg>
 </span>

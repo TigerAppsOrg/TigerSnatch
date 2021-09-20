@@ -1,76 +1,72 @@
-<div id="notifications-header" class="fs-5 pb-1">Notifications</div>
+<div id="notifications-header"
+     class="fs-5 pb-1">Notifications</div>
 <div class="container px-0 ms-0">
   <div class="row">
-    <form id="new-email" action="/dashboard" method="post">
+    <form id="new-email"
+          action="/dashboard"
+          method="post">
       <div class="input-group mb-2">
         <div class="input-group-text">
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            width="24"
-            height="24"
-            fill="currentColor"
-            class="bi bi-envelope"
-            viewBox="0 0 16 16"
-          >
+          <svg xmlns="http://www.w3.org/2000/svg"
+               width="24"
+               height="24"
+               fill="currentColor"
+               class="bi bi-envelope"
+               viewBox="0 0 16 16">
             <path
-              d="M0 4a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V4zm2-1a1 1 0 0 0-1 1v.217l7 4.2 7-4.2V4a1 1 0 0 0-1-1H2zm13 2.383l-4.758 2.855L15 11.114v-5.73zm-.034 6.878L9.271 8.82 8 9.583 6.728 8.82l-5.694 3.44A1 1 0 0 0 2 13h12a1 1 0 0 0 .966-.739zM1 11.114l4.758-2.876L1 5.383v5.73z"
-            />
+                  d="M0 4a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V4zm2-1a1 1 0 0 0-1 1v.217l7 4.2 7-4.2V4a1 1 0 0 0-1-1H2zm13 2.383l-4.758 2.855L15 11.114v-5.73zm-.034 6.878L9.271 8.82 8 9.583 6.728 8.82l-5.694 3.44A1 1 0 0 0 2 13h12a1 1 0 0 0 .966-.739zM1 11.114l4.758-2.876L1 5.383v5.73z" />
           </svg>
         </div>
 
-        <input
-          id="new-email-input"
-          class="form-control form-control-md"
-          name="new_email"
-          maxlength="75"
-          placeholder="Email address"
-          value="{{ email if email else '' }}"
-          pattern="^([\w-]+(?:\.[\w-]+)*)@((?:[\w-]+\.)*\w[\w-]{0,66})\.([a-z]{2,6}(?:\.[a-z]{2})?)$"
-          data-bs-toggle="tooltip"
-          data-bs-placement="top"
-          title="TigerSnatch will notify you at this email when a slot frees up! It is recommended to use your @princeton.edu address to prevent TigerSnatch emails from being marked as spam."
-          required
-        />
-        <button id="new-email-submit-btn" class="btn btn-warning" type="submit">Change</button>
+        <input id="new-email-input"
+               class="form-control form-control-md"
+               name="new_email"
+               maxlength="75"
+               placeholder="Email address"
+               value="{{ email if email else '' }}"
+               pattern="^([\w-]+(?:\.[\w-]+)*)@((?:[\w-]+\.)*\w[\w-]{0,66})\.([a-z]{2,6}(?:\.[a-z]{2})?)$"
+               data-bs-toggle="tooltip"
+               data-bs-placement="top"
+               title="TigerSnatch will notify you at this email when a slot frees up! It is recommended to use your @princeton.edu address to prevent TigerSnatch emails from being marked as spam."
+               required />
+        <button id="new-email-submit-btn"
+                class="btn btn-warning"
+                type="submit">Change</button>
       </div>
     </form>
   </div>
 
   <div class="row">
-    <form id="new-phone" class="{{ 'animate__animated animate__flash' if not phone else '' }}" action="/dashboard" method="post">
-      <div 
-        class="input-group mb-2"
-        data-title="Texts"
-        data-intro="Be sure to set your phone number so TigerSnatch can notify you of course openings via text message!"
-        data-step="1"
-      >
+    <form id="new-phone"
+          class="{{ 'animate__animated animate__flash' if not phone else '' }}"
+          action="/dashboard"
+          method="post">
+      <div class="input-group mb-2"
+           data-title="Texts"
+           data-intro="Be sure to set your phone number so TigerSnatch can notify you of course openings via text message!"
+           data-step="1">
         <div class="input-group-text">
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            width="24"
-            height="24"
-            fill="currentColor"
-            class="bi bi-phone"
-            viewBox="0 0 16 16"
-          >
+          <svg xmlns="http://www.w3.org/2000/svg"
+               width="24"
+               height="24"
+               fill="currentColor"
+               class="bi bi-phone"
+               viewBox="0 0 16 16">
             <path
-              d="M11 1a1 1 0 0 1 1 1v12a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1h6zM5 0a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2H5z"
-            />
+                  d="M11 1a1 1 0 0 1 1 1v12a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1h6zM5 0a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2H5z" />
             <path d="M8 14a1 1 0 1 0 0-2 1 1 0 0 0 0 2z" />
           </svg>
         </div>
 
-        <input
-          class="form-control form-control-md"
-          name="new_phone"
-          maxlength="10"
-          placeholder="Phone number"
-          value="{{ phone if phone else '' }}"
-          pattern="^\d{10}$"
-          data-bs-toggle="tooltip"
-          data-bs-placement="top"
-          title="TigerSnatch will notify you at this US phone number when a slot frees up! Note that you must use a US phone number."
-        />
+        <input class="form-control form-control-md"
+               name="new_phone"
+               maxlength="10"
+               placeholder="Phone number"
+               value="{{ phone if phone else '' }}"
+               pattern="^\d{10}$"
+               data-bs-toggle="tooltip"
+               data-bs-placement="top"
+               title="TigerSnatch will notify you at this US phone number when a slot frees up! Note that you must use a US phone number." />
         <button class="btn btn-warning">Change</button>
       </div>
     </form>
@@ -78,23 +74,18 @@
 
   <div class="row">
     <div style="line-height: 1.6em">
-      <span
-        id="status-indicator"
-        class="me-1"
-        style="background-color: #ffc107; border-radius: 0.25rem; padding: 3px"
-      >
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          width="18"
-          height="18"
-          fill="currentColor"
-          class="bi bi-bell text-dark"
-          viewBox="0 0 16 18"
-        >
+      <span id="status-indicator"
+            class="me-1"
+            style="background-color: #ffc107; border-radius: 0.25rem; padding: 3px">
+        <svg xmlns="http://www.w3.org/2000/svg"
+             width="18"
+             height="18"
+             fill="currentColor"
+             class="bi bi-bell text-dark"
+             viewBox="0 0 16 18">
           <path
-            d="M8 16a2 2 0 0 0 2-2H6a2 2 0 0 0 2 2zM8 1.918l-.797.161A4.002 4.002 0 0 0 4 6c0 .628-.134 2.197-.459 3.742-.16.767-.376 1.566-.663 2.258h10.244c-.287-.692-.502-1.49-.663-2.258C12.134 8.197 12 6.628 12 6a4.002 4.002 0 0 0-3.203-3.92L8 1.917zM14.22 12c.223.447.481.801.78 1H1c.299-.199.557-.553.78-1C2.68 10.2 3 6.88 3 6c0-2.42 1.72-4.44 4.005-4.901a1 1 0 1 1 1.99 0A5.002 5.002 0 0 1 13 6c0 .88.32 4.2 1.22 6z"
-          /></svg
-      ></span>
+                d="M8 16a2 2 0 0 0 2-2H6a2 2 0 0 0 2 2zM8 1.918l-.797.161A4.002 4.002 0 0 0 4 6c0 .628-.134 2.197-.459 3.742-.16.767-.376 1.566-.663 2.258h10.244c-.287-.692-.502-1.49-.663-2.258C12.134 8.197 12 6.628 12 6a4.002 4.002 0 0 0-3.203-3.92L8 1.917zM14.22 12c.223.447.481.801.78 1H1c.299-.199.557-.553.78-1C2.68 10.2 3 6.88 3 6c0-2.42 1.72-4.44 4.005-4.901a1 1 0 1 1 1.99 0A5.002 5.002 0 0 1 13 6c0 .88.32 4.2 1.22 6z" />
+        </svg></span>
       {{ next_notifs }}
     </div>
   </div>
