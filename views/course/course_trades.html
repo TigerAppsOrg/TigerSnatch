@@ -1,77 +1,78 @@
 <div id="course-trades-header"
      class="fs-5 pb-1">
-       width="18"
-       height="18"
-       fill="currentColor"
-       class="bi bi-info-square-fill text-primary ms-1"
-       viewBox="0 0 16 20"
-       data-bs-toggle="tooltip"
-       data-bs-placement="auto"
-       title="TigerSnatch will search for Trades using your current enrollment and your Subscribed sections for this course! Select and save your current section to get started.">
-    <path
-          d="M0 2a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V2zm8.93 4.588-2.29.287-.082.38.45.083c.294.07.352.176.288.469l-.738 3.468c-.194.897.105 1.319.808 1.319.545 0 1.178-.252 1.465-.598l.088-.416c-.2.176-.492.246-.686.246-.275 0-.375-.193-.304-.533L8.93 6.588zM8 5.5a1 1 0 1 0 0-2 1 1 0 0 0 0 2z" />
-  </svg>
         Trade sections? <svg xmlns="http://www.w3.org/2000/svg"
+             width="18"
+             height="18"
+             fill="currentColor"
+             class="bi bi-info-square-fill text-primary ms-1"
+             viewBox="0 0 16 20"
+             data-bs-toggle="tooltip"
+             data-bs-placement="auto"
+             title="TigerSnatch will search for Trades using your current enrollment and your Subscribed sections for this course! Select and save your current section to get started.">
+                <path
+                      d="M0 2a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V2zm8.93 4.588-2.29.287-.082.38.45.083c.294.07.352.176.288.469l-.738 3.468c-.194.897.105 1.319.808 1.319.545 0 1.178-.252 1.465-.598l.088-.416c-.2.176-.492.246-.686.246-.275 0-.375-.193-.304-.533L8.93 6.588zM8 5.5a1 1 0 1 0 0-2 1 1 0 0 0 0 2z" />
+        </svg>
 </div>
 {% if trade_unavailable %}
 <div class="">Trades unavailable - this course has fewer than 2 sections outside of lecture.</div>
 {% else %}
 <form class="trade-form"
       courseid="{{courseid}}">
-  <div class="input-group pb-2">
-    <span class="input-group-text">Your current enrollment: </span>
-    <select class="form-select"
-            id="sections-{{courseid}}"
-            required>
-      {% if not current_section %}
-      <option selected
-              value=""></option>
-      {% endif %} {% for section_name, classid in section_names %} {% if current_section == classid
-      %}
-      <option selected
-              value="{{classid}}">{{section_name}}</option>
-      {% else %}
-      <option value="{{classid}}">{{section_name}}</option>
-      {% endif %} {% endfor %}
-    </select>
-    <button class="btn btn-outline btn-secondary save-trade"
-            type="submit">Save</button>
-  </div>
+        <div class="input-group pb-2">
+                <span class="input-group-text">Your current enrollment: </span>
+                <select class="form-select"
+                        id="sections-{{courseid}}"
+                        required>
+                        {% if not current_section %}
+                        <option selected
+                                value=""></option>
+                        {% endif %} {% for section_name, classid in section_names %} {% if
+                        current_section == classid
+                        %}
+                        <option selected
+                                value="{{classid}}">{{section_name}}</option>
+                        {% else %}
+                        <option value="{{classid}}">{{section_name}}</option>
+                        {% endif %} {% endfor %}
+                </select>
+                <button class="btn btn-outline btn-secondary save-trade"
+                        type="submit">Save</button>
+        </div>
 </form>
 
 <div class="btn-group d-flex"
      role="group"
      aria-label="buttons-trade">
-  {% if current_section %}
-  <button class="btn btn-warning submit-trade w-100"
-          type="button"
-          courseid="{{courseid}}"
-          coursename="{{course_details.displayname}}"
-          curr-section="{{current_sectionname}}"
-          netid="{{netid}}">
-    Find Trades!
-  </button>
-  <button class="btn btn-outline-danger remove-trade w-100"
-          courseid="{{courseid}}"
-          type="button">
-    Reset enrollment
-  </button>
-  {% else %}
-  <button class="btn btn-warning submit-trade w-100"
-          type="button"
-          courseid="{{courseid}}"
-          coursename="{{course_details.displayname}}"
-          curr-section=""
-          netid="{{netid}}"
-          disabled>
-    Find Trades!
-  </button>
-  <button class="btn btn-outline-danger remove-trade w-100"
-          courseid="{{courseid}}"
-          type="button"
-          disabled>
-    Reset enrollment
-  </button>
-  {% endif %}
+        {% if current_section %}
+        <button class="btn btn-warning submit-trade w-100"
+                type="button"
+                courseid="{{courseid}}"
+                coursename="{{course_details.displayname}}"
+                curr-section="{{current_sectionname}}"
+                netid="{{netid}}">
+                Find Trades!
+        </button>
+        <button class="btn btn-outline-danger remove-trade w-100"
+                courseid="{{courseid}}"
+                type="button">
+                Reset enrollment
+        </button>
+        {% else %}
+        <button class="btn btn-warning submit-trade w-100"
+                type="button"
+                courseid="{{courseid}}"
+                coursename="{{course_details.displayname}}"
+                curr-section=""
+                netid="{{netid}}"
+                disabled>
+                Find Trades!
+        </button>
+        <button class="btn btn-outline-danger remove-trade w-100"
+                courseid="{{courseid}}"
+                type="button"
+                disabled>
+                Reset enrollment
+        </button>
+        {% endif %}
 </div>
 {% endif %} {% include 'utils/matches_modal.html' %}
