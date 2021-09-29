@@ -1456,6 +1456,16 @@ let initTutorial = function () {
   });
 }
 
+// contact information change confirmation alerts
+let initContactInfoChangeAlerts = function () {
+  $("#new-email").submit(function (e) {
+    alert("Email address successfully changed!");
+  });
+  $("#new-phone").submit(function (e) {
+    alert("Phone number successfully changed!");
+  })
+}
+
 // handles button clicks in the Trade Panel
 let tradeFunctions = function () {
   updateCurrentSection();
@@ -1517,4 +1527,5 @@ $(document).ready(function () {
   initTooltipsToasts();
   dashboardCourseSelectListener();
   initTutorial();
+  initContactInfoChangeAlerts();
 });
