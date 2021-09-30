@@ -309,17 +309,17 @@ class Database:
             "notifs_schedule"
         ]
         if len(curr) == 0:
-            return "Next notifications period is not scheduled. Notify a TigerApps member if this isn't fixed by tomorrow!"
+            return "Next notifications period isn't scheduled. Notify a TigerApps member if this isn't fixed soon!"
         start, end = tz_utc.localize(curr[0][0]), tz_utc.localize(curr[0][1])
         start, end = start.astimezone(tz_et), end.astimezone(tz_et)
         now = datetime.now(tz_et)
         if now >= end:
-            return "Next notifications period is not scheduled. Notify a TigerApps member if this isn't fixed by tomorrow!"
+            return "Next notifications period isn't scheduled. Notify a TigerApps member if this isn't fixed soon!"
         end_fmt = end.strftime(fmt)
         if now >= start:
-            return f"Current notifications period will end on {end_fmt} ET."
+            return f"Current notifications period ending on {end_fmt} ET."
         start_fmt = start.strftime(fmt)
-        return f"Next notifications period will start on {start_fmt} ET and end on {end_fmt} ET."
+        return f"Next notifications period: {start_fmt} ET to {end_fmt} ET."
 
     # updates notifs_schedule entry in admin collection
 
