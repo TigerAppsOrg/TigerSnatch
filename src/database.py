@@ -302,7 +302,7 @@ class Database:
         return curr != data
 
     # generates a string representing the current/next notifications interval
-    def get_current_or_next_notifs_interval(self, fmt="%b %d, %Y @ %-I:%M %p"):
+    def get_current_or_next_notifs_interval(self, fmt="%b %d @ %-I:%M %p"):
         tz_utc = pytz.timezone("UTC")
         tz_et = pytz.timezone("US/Eastern")
         curr = self._db.admin.find_one({}, {"notifs_schedule": 1, "_id": 0})[
