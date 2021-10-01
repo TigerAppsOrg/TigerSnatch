@@ -317,9 +317,9 @@ class Database:
             return "Next notifications period isn't scheduled. Notify a TigerApps member if this isn't fixed soon!"
         end_fmt = end.strftime(fmt)
         if now >= start:
-            return f"Current notifications period ending on {end_fmt} ET."
+            return f"Current notifications period ending on {end_fmt}."
         start_fmt = start.strftime(fmt)
-        return f"Next notifications period: {start_fmt} ET to {end_fmt} ET."
+        return f"Next notifications period: {start_fmt} to {end_fmt}."
 
     # updates notifs_schedule entry in admin collection
 
