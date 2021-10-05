@@ -1459,12 +1459,24 @@ let initTutorial = function () {
 // contact information change confirmation alerts
 let initContactInfoChangeAlerts = function () {
   $("#new-email").submit(function (e) {
-    alert("Email address successfully changed!");
+    alert(`Email address successfully changed to ${$("#new-email-input").val()}!`);
   });
   $("#new-phone").submit(function (e) {
-    alert("Phone number successfully changed!");
+    let newPhone = $("#new-phone-input").val();
+    if (newPhone)
+      alert(`Phone number successfully changed to ${$("#new-phone-input").val()}!`);
+    else
+      alert("Phone number successfully removed!");
   })
 }
+
+// listens for account settings button
+let accountSettings = function () {
+  $("#account-settings").submit(function (e) {
+    e.preventDefault();
+    $("#account-settings-modal").modal("show");
+  });
+};
 
 // handles button clicks in the Trade Panel
 let tradeFunctions = function () {
@@ -1528,4 +1540,5 @@ $(document).ready(function () {
   dashboardCourseSelectListener();
   initTutorial();
   initContactInfoChangeAlerts();
+  accountSettings();
 });

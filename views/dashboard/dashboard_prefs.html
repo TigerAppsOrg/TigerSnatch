@@ -2,74 +2,29 @@
      class="fs-5 pb-1">Notifications</div>
 <div class="container px-0 ms-0">
   <div class="row">
-    <form id="new-email"
-          action="/dashboard"
-          method="post">
+    <form id="account-settings">
       <div class="input-group mb-2">
         <div class="input-group-text">
           <svg xmlns="http://www.w3.org/2000/svg"
                width="24"
                height="24"
                fill="currentColor"
-               class="bi bi-envelope"
+               class="bi bi-gear"
                viewBox="0 0 16 16">
             <path
-                  d="M0 4a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V4zm2-1a1 1 0 0 0-1 1v.217l7 4.2 7-4.2V4a1 1 0 0 0-1-1H2zm13 2.383l-4.758 2.855L15 11.114v-5.73zm-.034 6.878L9.271 8.82 8 9.583 6.728 8.82l-5.694 3.44A1 1 0 0 0 2 13h12a1 1 0 0 0 .966-.739zM1 11.114l4.758-2.876L1 5.383v5.73z" />
+                  d="M8 4.754a3.246 3.246 0 1 0 0 6.492 3.246 3.246 0 0 0 0-6.492zM5.754 8a2.246 2.246 0 1 1 4.492 0 2.246 2.246 0 0 1-4.492 0z" />
+            <path
+                  d="M9.796 1.343c-.527-1.79-3.065-1.79-3.592 0l-.094.319a.873.873 0 0 1-1.255.52l-.292-.16c-1.64-.892-3.433.902-2.54 2.541l.159.292a.873.873 0 0 1-.52 1.255l-.319.094c-1.79.527-1.79 3.065 0 3.592l.319.094a.873.873 0 0 1 .52 1.255l-.16.292c-.892 1.64.901 3.434 2.541 2.54l.292-.159a.873.873 0 0 1 1.255.52l.094.319c.527 1.79 3.065 1.79 3.592 0l.094-.319a.873.873 0 0 1 1.255-.52l.292.16c1.64.893 3.434-.902 2.54-2.541l-.159-.292a.873.873 0 0 1 .52-1.255l.319-.094c1.79-.527 1.79-3.065 0-3.592l-.319-.094a.873.873 0 0 1-.52-1.255l.16-.292c.893-1.64-.902-3.433-2.541-2.54l-.292.159a.873.873 0 0 1-1.255-.52l-.094-.319zm-2.633.283c.246-.835 1.428-.835 1.674 0l.094.319a1.873 1.873 0 0 0 2.693 1.115l.291-.16c.764-.415 1.6.42 1.184 1.185l-.159.292a1.873 1.873 0 0 0 1.116 2.692l.318.094c.835.246.835 1.428 0 1.674l-.319.094a1.873 1.873 0 0 0-1.115 2.693l.16.291c.415.764-.42 1.6-1.185 1.184l-.291-.159a1.873 1.873 0 0 0-2.693 1.116l-.094.318c-.246.835-1.428.835-1.674 0l-.094-.319a1.873 1.873 0 0 0-2.692-1.115l-.292.16c-.764.415-1.6-.42-1.184-1.185l.159-.291A1.873 1.873 0 0 0 1.945 8.93l-.319-.094c-.835-.246-.835-1.428 0-1.674l.319-.094A1.873 1.873 0 0 0 3.06 4.377l-.16-.292c-.415-.764.42-1.6 1.185-1.184l.292.159a1.873 1.873 0 0 0 2.692-1.115l.094-.319z" />
           </svg>
         </div>
-
-        <input id="new-email-input"
-               class="form-control form-control-md"
-               name="new_email"
-               maxlength="75"
-               placeholder="Email address"
-               value="{{ email if email else '' }}"
-               pattern="^([\w-]+(?:\.[\w-]+)*)@((?:[\w-]+\.)*\w[\w-]{0,66})\.([a-z]{2,6}(?:\.[a-z]{2})?)$"
-               data-bs-toggle="tooltip"
-               data-bs-placement="top"
-               title="TigerSnatch will email you when a spot frees up! We recommend using your @princeton.edu address to prevent TigerSnatch emails from being marked as spam."
-               required />
-        <button class="btn btn-warning">Change</button>
+        <button data-title="Account Settings"
+                data-intro="Set your phone number and configure other notifications preferences here!"
+                data-step="1"
+                type="submit"
+                class="btn btn-warning w-auto">Edit Account Settings</button>
       </div>
     </form>
   </div>
-
-  <div class="row">
-    <form id="new-phone"
-          class="{{ 'animate__animated animate__flash' if not phone else '' }}"
-          action="/dashboard"
-          method="post">
-      <div class="input-group mb-2"
-           data-title="Texts"
-           data-intro="Be sure to set your phone number so TigerSnatch can notify you of course openings via text message!"
-           data-step="1">
-        <div class="input-group-text">
-          <svg xmlns="http://www.w3.org/2000/svg"
-               width="24"
-               height="24"
-               fill="currentColor"
-               class="bi bi-phone"
-               viewBox="0 0 16 16">
-            <path
-                  d="M11 1a1 1 0 0 1 1 1v12a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1h6zM5 0a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2H5z" />
-            <path d="M8 14a1 1 0 1 0 0-2 1 1 0 0 0 0 2z" />
-          </svg>
-        </div>
-
-        <input class="form-control form-control-md"
-               name="new_phone"
-               maxlength="10"
-               placeholder="Phone number"
-               value="{{ phone if phone else '' }}"
-               pattern="^\d{10}$"
-               data-bs-toggle="tooltip"
-               data-bs-placement="top"
-               title="TigerSnatch will text you when a spot frees up! Note that you must use a US phone number." />
-        <button class="btn btn-warning">Change</button>
-      </div>
-    </form>
-  </div>
-
   <div class="row">
     <div style="line-height: 1.6em">
       <span id="status-indicator"
@@ -88,3 +43,5 @@
     </div>
   </div>
 </div>
+
+{% include 'utils/user_settings.html' %}

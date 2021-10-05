@@ -1,0 +1,97 @@
+<div class="modal fade"
+     id="account-settings-modal"
+     data-classid=""
+     data-bs-backdrop="static"
+     data-bs-keyboard="false"
+     tabindex="-1"
+     aria-labelledby="staticBackdropLabel"
+     aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title"
+                    id="staticBackdropLabel">Account Settings</h5>
+            </div>
+            <div class="modal-body"
+                 id="modal-body-account-settings">
+
+                <div class="container px-0 ms-0">
+                    <div class="row">
+                        <form id="new-email"
+                              action="/dashboard"
+                              method="post">
+                            <div class="input-group mb-2">
+                                <div class="input-group-text">
+                                    <svg xmlns="http://www.w3.org/2000/svg"
+                                         width="24"
+                                         height="24"
+                                         fill="currentColor"
+                                         class="bi bi-envelope"
+                                         viewBox="0 0 16 16">
+                                        <path
+                                              d="M0 4a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V4zm2-1a1 1 0 0 0-1 1v.217l7 4.2 7-4.2V4a1 1 0 0 0-1-1H2zm13 2.383l-4.758 2.855L15 11.114v-5.73zm-.034 6.878L9.271 8.82 8 9.583 6.728 8.82l-5.694 3.44A1 1 0 0 0 2 13h12a1 1 0 0 0 .966-.739zM1 11.114l4.758-2.876L1 5.383v5.73z" />
+                                    </svg>
+                                </div>
+
+                                <input id="new-email-input"
+                                       class="form-control form-control-md"
+                                       name="new_email"
+                                       maxlength="75"
+                                       placeholder="Email address"
+                                       value="{{ email if email else '' }}"
+                                       pattern="^([\w-]+(?:\.[\w-]+)*)@((?:[\w-]+\.)*\w[\w-]{0,66})\.([a-z]{2,6}(?:\.[a-z]{2})?)$"
+                                       data-bs-toggle="tooltip"
+                                       data-bs-placement="top"
+                                       title="TigerSnatch will email you when a spot frees up! We recommend using your @princeton.edu address to prevent TigerSnatch emails from being marked as spam."
+                                       required />
+                                <button class="btn btn-warning">Change Email</button>
+                            </div>
+                        </form>
+                    </div>
+
+                    <div class="row">
+                        <form id="new-phone"
+                              action="/dashboard"
+                              method="post">
+                            <div class="input-group mb-2">
+                                <div class="input-group-text">
+                                    <svg xmlns="http://www.w3.org/2000/svg"
+                                         width="24"
+                                         height="24"
+                                         fill="currentColor"
+                                         class="bi bi-phone"
+                                         viewBox="0 0 16 16">
+                                        <path
+                                              d="M11 1a1 1 0 0 1 1 1v12a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1h6zM5 0a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2H5z" />
+                                        <path d="M8 14a1 1 0 1 0 0-2 1 1 0 0 0 0 2z" />
+                                    </svg>
+                                </div>
+
+                                <input id="new-phone-input"
+                                       class="form-control form-control-md"
+                                       name="new_phone"
+                                       maxlength="10"
+                                       placeholder="Phone number"
+                                       value="{{ phone if phone else '' }}"
+                                       pattern="^\d{10}$"
+                                       data-bs-toggle="tooltip"
+                                       data-bs-placement="top"
+                                       title="TigerSnatch will text you when a spot frees up! Note that you must use a US phone number." />
+                                <button class="btn btn-warning">Change Phone</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+
+            </div>
+            <div class="modal-footer">
+                <button type="button"
+                        id="waitlist-modal-close"
+                        class="btn btn-warning"
+                        data-bs-dismiss="modal">
+                    Close
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
