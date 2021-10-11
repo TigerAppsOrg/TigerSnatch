@@ -308,7 +308,7 @@ const toastBlacklistSuccess = $(
     data-bs-delay="3000"
 >
     <div class="d-flex">
-        <div class="toast-body">Successfully blacklisted/unblacklisted user! Reloading in a few seconds...</div>
+        <div class="toast-body">Successfully blocked/unblocked user! Reloading in a few seconds...</div>
         <button
             type="button"
             class="btn-close btn-close-white me-2 m-auto"
