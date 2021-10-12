@@ -450,14 +450,14 @@ class Database:
 
         try:
             if self.is_admin(netid):
-                self._add_admin_log(f"user {netid} is an admin - cannot be blacklisted")
+                self._add_admin_log(f"user {netid} is an admin - cannot be blocked")
                 return
 
             blacklist = self.get_blacklist()
 
             # check if user is already in blacklist
             if netid in blacklist:
-                self._add_admin_log(f"user {netid} already on blacklist - not added")
+                self._add_admin_log(f"user {netid} already blocked - not added")
                 return
 
             if self.is_user_created(netid):
@@ -465,21 +465,17 @@ class Database:
 
             blacklist.append(netid)
             self._db.admin.update_one({}, {"$set": {"blacklist": blacklist}})
-            self._add_admin_log(
-                f"user {netid} added to blacklist and removed from database"
-            )
+            self._add_admin_log(f"user {netid} blocked and removed from database")
 
             self._add_system_log(
                 "admin",
-                {
-                    "message": f"user {netid} added to blacklist and removed from database"
-                },
+                {"message": f"user {netid} blocked and removed from database"},
                 netid=admin_netid,
             )
             return True
 
         except Exception:
-            print(f"failed to add user {netid} to blacklist", file=stderr)
+            print(f"failed to block user {netid}", file=stderr)
             return False
 
     # remove netid from app blacklist
@@ -488,21 +484,21 @@ class Database:
         try:
             blacklist = self.get_blacklist()
             if netid not in blacklist:
-                self._add_admin_log(f"user {netid} not on blacklist - not removed")
+                self._add_admin_log(f"user {netid} not blocked - not removed")
                 return False
 
             blacklist.remove(netid)
             self._db.admin.update_one({}, {"$set": {"blacklist": blacklist}})
-            self._add_admin_log(f"user {netid} removed from blacklist")
+            self._add_admin_log(f"user {netid} unblocked")
 
             self._add_system_log(
                 "admin",
-                {"message": f"user {netid} removed from blacklist"},
+                {"message": f"user {netid} unblocked"},
                 netid=admin_netid,
             )
             return True
         except Exception:
-            print(f"failed to remove user {netid} from blacklist", file=stderr)
+            print(f"failed to unblock user {netid}", file=stderr)
             return False
 
     # returns list of blacklisted netids
