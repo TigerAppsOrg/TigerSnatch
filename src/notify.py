@@ -102,7 +102,8 @@ class Notify:
                     Client(TWILIO_SID, TWILIO_TOKEN).api.account.messages.create(
                         to=f"+1{phone}", from_=TWILIO_PHONE, body=msg
                     )
-                self.db.remove_from_waitlist(self._netids[i], self._classid)
+                if not self.db.get_auto_resub(self._netids[i]):
+                    self.db.remove_from_waitlist(self._netids[i], self._classid)
             return True
         except Exception as e:
             print(e, file=stderr)
