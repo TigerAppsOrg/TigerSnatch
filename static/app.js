@@ -621,7 +621,6 @@ let autoResubSwitchListener = function() {
     e.preventDefault();
     disableSwitchFunctions();
     const checkedProp = $("#auto-resub-switch").prop("checked");
-    $("#hidden-auto-resub-input").val(checkedProp);
     $.post(`/update_auto_resub/${checkedProp}`, function(res) {
       if (res["isSuccess"]) {
         if (checkedProp) {
@@ -629,8 +628,10 @@ let autoResubSwitchListener = function() {
         } else {
           alert("Notification settings successfully changed: You are automatically unsubscribed from a section upon first notification.")
         }
-        enableSwitchFunctions();
-      } else return;
+      } else {
+        $("#auto-resub-switch").prop("checked", !checkedProp);
+      }
+      enableSwitchFunctions();
     })
   });
 }
