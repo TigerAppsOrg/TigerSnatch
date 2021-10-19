@@ -104,6 +104,29 @@ def tutorial():
     )
     return make_response(html)
 
+# helper method to update user settings on dashboard
+def _update_user_settings(netid):
+
+    new_email = request.form.get("new_email")
+    new_phone = request.form.get("new_phone")
+
+    if new_email is not None:
+        if "<" in new_email or ">" in new_email or "script" in new_email:
+            print("HTML code detected in", new_email, file=stderr)
+            return True
+
+        _db.update_user(netid, new_email.strip())
+        return True
+
+    if new_phone is not None:
+        if "<" in new_phone or ">" in new_phone or "script" in new_phone:
+            print("HTML code detected in", new_phone, file=stderr)
+            return True
+
+        _db.update_user_phone(netid, new_phone.strip())
+        return True
+    
+    return False
 
 @app.route("/dashboard", methods=["GET", "POST"])
 def dashboard():
@@ -118,32 +141,18 @@ def dashboard():
     data = _db.get_dashboard_data(netid)
     email = _db.get_user(netid, "email")
     phone = _db.get_user(netid, "phone")
+    auto_resub = _db.get_user_auto_resub(netid)
+
+    do_redirect = _update_user_settings(netid)
+    if do_redirect:
+        return redirect(url_for("dashboard"))
 
     query = request.args.get("query")
-    new_email = request.form.get("new_email")
-    new_phone = request.form.get("new_phone")
-
     if query is None:
         query = ""
     if len(query) > 100:
         query = query[:100]
     search_res, new_query = do_search(query, _db)
-
-    if new_email is not None:
-        if "<" in new_email or ">" in new_email or "script" in new_email:
-            print("HTML code detected in", new_email, file=stderr)
-            return redirect(url_for("dashboard"))
-
-        _db.update_user(netid, new_email.strip())
-        return redirect(url_for("dashboard"))
-
-    if new_phone is not None:
-        if "<" in new_phone or ">" in new_phone or "script" in new_phone:
-            print("HTML code detected in", new_phone, file=stderr)
-            return redirect(url_for("dashboard"))
-
-        _db.update_user_phone(netid, new_phone.strip())
-        return redirect(url_for("dashboard"))
 
     curr_sections = _db.get_current_sections(netid)
     term_name = _db.get_current_term_code()[1]
@@ -161,6 +170,7 @@ def dashboard():
         data=data,
         email=email,
         phone=phone,
+        auto_resub=auto_resub,
         curr_sections=curr_sections,
         notifs_online=_db.get_cron_notification_status(),
         next_notifs=_db.get_current_or_next_notifs_interval(),
@@ -169,6 +179,11 @@ def dashboard():
 
     return make_response(html)
 
+@app.route("/update_auto_resub/<auto_resub>", methods=["POST"])
+def update_auto_resub(auto_resub):
+    netid = _cas.authenticate()
+    is_success = _db.update_user_auto_resub(netid, auto_resub.lower() == "true")
+    return jsonify({"isSuccess": is_success})
 
 @app.route("/about", methods=["GET"])
 def about():
@@ -382,7 +397,6 @@ def remove_user_section(courseid):
     netid = _cas.authenticate()
     status = _db.remove_current_section(netid, courseid)
     return jsonify({"isSuccess": status})
-
 
 @app.route("/find_matches/<courseid>", methods=["POST"])
 def find_matches(courseid):
