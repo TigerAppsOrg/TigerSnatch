@@ -563,12 +563,14 @@ let dashboardCourseSelectListener = function () {
 
 let disableSwitchFunctions = function () {
   $(".waitlist-switch").attr("disabled", true);
+  $("#auto-resub-switch").attr("disabled", true);
   $("*").css("pointer-events", "none");
   $("*").css("cursor", "wait");
 };
 
 let enableSwitchFunctions = function () {
   $(".waitlist-switch").attr("disabled", false);
+  $("#auto-resub-switch").attr("disabled", false);
   $("*").css("pointer-events", "");
   $("*").css("cursor", "");
 };
@@ -613,6 +615,26 @@ let switchListener = function () {
     }
   });
 };
+
+let autoResubSwitchListener = function() {
+  $("#auto-resub-switch").change(function(e) {
+    e.preventDefault();
+    disableSwitchFunctions();
+    const checkedProp = $("#auto-resub-switch").prop("checked");
+    $.post(`/update_auto_resub/${checkedProp}`, function(res) {
+      if (res["isSuccess"]) {
+        if (checkedProp) {
+          alert("Notification settings successfully changed: You will keep receiving open-spot notifications for a section until you manually unsubscribe.")
+        } else {
+          alert("Notification settings successfully changed: You will be automatically unsubscribed from a section upon first notification.")
+        }
+      } else {
+        $("#auto-resub-switch").prop("checked", !checkedProp);
+      }
+      enableSwitchFunctions();
+    })
+  });
+}
 
 // listens for "Confirm" removal from waitlist
 let modalConfirmListener = function () {
@@ -1467,7 +1489,7 @@ let initContactInfoChangeAlerts = function () {
       alert(`Phone number successfully changed to ${$("#new-phone-input").val()}!`);
     else
       alert("Phone number successfully removed!");
-  })
+  });
 }
 
 // listens for account settings button
@@ -1526,6 +1548,13 @@ let subscriptionFunctions = function () {
   modalCancelListener();
 };
 
+// handles changes in account settings
+let accountSettingsFunctions = function() {
+  autoResubSwitchListener();
+  initContactInfoChangeAlerts();
+  accountSettings();
+}
+
 // jQuery 'on' only applies listeners to elements currently on DOM
 // applies listeners to current elements when document is loaded
 $(document).ready(function () {
@@ -1539,6 +1568,5 @@ $(document).ready(function () {
   initTooltipsToasts();
   dashboardCourseSelectListener();
   initTutorial();
-  initContactInfoChangeAlerts();
-  accountSettings();
+  accountSettingsFunctions();
 });

@@ -59,6 +59,10 @@ class Notify:
     # sends a formatted email
 
     def send_emails_html(self):
+        next_step_unsubbed = f"""<p>You've been <b>automatically unsubscribed</b> from this section. If you didn't get the spot, you may re-subscribe here: <a href="https://snatch.tigerapps.org/course?query=&courseid={self._courseid}&skip">TigerSnatch | {self._deptnum}</a>.</p>"""
+
+        next_step_resubbed = f"""<p>To stop receiving notifications for this section, unsubscribe here: <a href="https://snatch.tigerapps.org/course?query=&courseid={self._courseid}&skip">TigerSnatch | {self._deptnum}</a>.</p>"""
+
         msg = f"""\
         <html>
         <head></head>
@@ -66,26 +70,25 @@ class Notify:
             <p>Greetings $$netid$$,</p>
             <p>Your subscribed section <b>{self._sectionname}</b> in <b>{self._coursename}</b> has one or more spots open! Note that some courses reserve spots or are closed, so enrollment may not be possible.</p>
             <p>Head over to <a href="https://phubprod.princeton.edu/psp/phubprod/?cmd=start">TigerHub</a> to Snatch your spot!</p>
-            <p>You've been <b>automatically unsubscribed</b> from this section. If you didn't get the spot, you may re-subscribe here: <a href="https://snatch.tigerapps.org/course?query=&courseid={self._courseid}&skip">TigerSnatch | {self._deptnum}</a>.</p>
-            <p>To receive text message notifications about open spots, <b>set your phone number</b> on the <a href="https://snatch.tigerapps.org/dashboard">TigerSnatch Dashboard</a> if you haven't already!</p>
+            $$next_step$$
             <p>Best,<br>TigerSnatch Team <3</p>
         </body>
         </html>"""
-
-        data = {
-            "personalizations": [
-                {
-                    "to": [{"email": self._emails[i]}],
-                    "subject": f"TigerSnatch: a spot opened in {self._deptnum} {self._sectionname}",
-                    "substitutions": {"$$netid$$": self._netids[i]},
-                }
-                for i in range(len(self._emails))
-            ],
-            "from": {"email": TS_EMAIL},
-            "content": [{"type": "text/html", "value": msg}],
-        }
-
+        
         try:
+            data = {
+                "personalizations": [
+                    {
+                        "to": [{"email": self._emails[i]}],
+                        "subject": f"TigerSnatch: a spot opened in {self._deptnum} {self._sectionname}",
+                        "substitutions": {"$$netid$$": self._netids[i], "$$next_step$$": (next_step_resubbed if self.db.get_user_auto_resub(self._netids[i]) else next_step_unsubbed)},
+                    }
+                    for i in range(len(self._emails))
+                ],
+                "from": {"email": TS_EMAIL},
+                "content": [{"type": "text/html", "value": (msg)}],
+            }
+
             SendGridAPIClient(SENDGRID_API_KEY).client.mail.send.post(request_body=data)
             return True
         except Exception as e:
@@ -95,14 +98,17 @@ class Notify:
     # sends an SMS
 
     def send_sms(self):
-        msg = f"{self._sectionname} in {self._deptnum} has open spots! You've been unsubscribed from this section. Resubscribe here: https://snatch.tigerapps.org/course?query=&courseid={self._courseid}&skip"
+        msg_unsubbed = f"{self._sectionname} in {self._deptnum} has open spots! You've been unsubscribed from this section. Resubscribe here: https://snatch.tigerapps.org/course?courseid={self._courseid}&skip"
+        msg_resubbed = f"{self._sectionname} in {self._deptnum} has open spots! To stop receiving notifications for this section, unsubscribe here: https://snatch.tigerapps.org/course?courseid={self._courseid}&skip"
         try:
             for i, phone in enumerate(self._phones):
+                is_auto_resub = self.db.get_user_auto_resub(self._netids[i])
                 if phone != "":
                     Client(TWILIO_SID, TWILIO_TOKEN).api.account.messages.create(
-                        to=f"+1{phone}", from_=TWILIO_PHONE, body=msg
+                        to=f"+1{phone}", from_=TWILIO_PHONE, body=(msg_resubbed if is_auto_resub else msg_unsubbed)
                     )
-                self.db.remove_from_waitlist(self._netids[i], self._classid)
+                if not is_auto_resub:
+                    self.db.remove_from_waitlist(self._netids[i], self._classid)
             return True
         except Exception as e:
             print(e, file=stderr)
