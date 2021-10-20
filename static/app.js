@@ -616,12 +616,12 @@ let switchListener = function () {
   });
 };
 
-let autoResubSwitchListener = function() {
-  $("#auto-resub-switch").change(function(e) {
+let autoResubSwitchListener = function () {
+  $("#auto-resub-switch").change(function (e) {
     e.preventDefault();
     disableSwitchFunctions();
     const checkedProp = $("#auto-resub-switch").prop("checked");
-    $.post(`/update_auto_resub/${checkedProp}`, function(res) {
+    $.post(`/update_auto_resub/${checkedProp}`, function (res) {
       if (res["isSuccess"]) {
         if (checkedProp) {
           alert("Notification settings successfully changed: You will keep receiving open-spot notifications for a section until you manually unsubscribe.")
@@ -1453,10 +1453,12 @@ let findMatches = function () {
   });
 };
 
+// change the name of this variable to force all users to see the tutorial and the alert banner
+var doneKey = "completed1";
+
 // introJS tutorial
 let initTutorial = function () {
   var tutorial = introJs();
-  var doneKey = "completed1";
 
   window.addEventListener("load", function () {
     if (window.location.pathname !== "/dashboard") return;
@@ -1492,11 +1494,18 @@ let initContactInfoChangeAlerts = function () {
   });
 }
 
-// listens for account settings button
+// listens for account settings button and the account settings alert banner
 let accountSettings = function () {
   $("#account-settings").submit(function (e) {
     e.preventDefault();
     $("#account-settings-modal").modal("show");
+  });
+
+  if (localStorage.getItem("NewFeaturesAlert") !== doneKey)
+    $("#new-features-alert").removeClass("d-none");
+
+  $("#new-features-alert-close").click(function (e) {
+    localStorage.setItem("NewFeaturesAlert", doneKey);
   });
 };
 
@@ -1549,7 +1558,7 @@ let subscriptionFunctions = function () {
 };
 
 // handles changes in account settings
-let accountSettingsFunctions = function() {
+let accountSettingsFunctions = function () {
   autoResubSwitchListener();
   initContactInfoChangeAlerts();
   accountSettings();
