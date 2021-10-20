@@ -855,7 +855,7 @@ class Database:
             self._db.users.update_one({"netid": netid}, {"$set": {"auto_resub": auto_resub}})
             return True
         except:
-            print(f"attempt to update auto_resub for {netid} failed")
+            print(f"attempt to update auto_resub for {netid} failed", file=stderr)
             return False
 
     # returns whether user opted to auto resubscribe

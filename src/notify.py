@@ -71,7 +71,6 @@ class Notify:
             <p>Your subscribed section <b>{self._sectionname}</b> in <b>{self._coursename}</b> has one or more spots open! Note that some courses reserve spots or are closed, so enrollment may not be possible.</p>
             <p>Head over to <a href="https://phubprod.princeton.edu/psp/phubprod/?cmd=start">TigerHub</a> to Snatch your spot!</p>
             $$next_step$$
-            <p>To receive text message notifications about open spots, <b>set your phone number</b> on the <a href="https://snatch.tigerapps.org/dashboard">TigerSnatch Dashboard</a> if you haven't already!</p>
             <p>Best,<br>TigerSnatch Team <3</p>
         </body>
         </html>"""
@@ -99,8 +98,8 @@ class Notify:
     # sends an SMS
 
     def send_sms(self):
-        msg_unsubbed = f"{self._sectionname} in {self._deptnum} has open spots! You've been unsubscribed from this section. Resubscribe here: https://snatch.tigerapps.org/course?query=&courseid={self._courseid}&skip"
-        msg_resubbed = f"{self._sectionname} in {self._deptnum} has open spots! To stop receiving notifications for this section, unsubscribe here: https://snatch.tigerapps.org/course?query=&courseid={self._courseid}&skip"
+        msg_unsubbed = f"{self._sectionname} in {self._deptnum} has open spots! You've been unsubscribed from this section. Resubscribe here: https://snatch.tigerapps.org/course?courseid={self._courseid}&skip"
+        msg_resubbed = f"{self._sectionname} in {self._deptnum} has open spots! To stop receiving notifications for this section, unsubscribe here: https://snatch.tigerapps.org/course?courseid={self._courseid}&skip"
         try:
             for i, phone in enumerate(self._phones):
                 is_auto_resub = self.db.get_user_auto_resub(self._netids[i])

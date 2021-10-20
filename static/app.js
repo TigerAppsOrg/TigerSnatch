@@ -624,7 +624,7 @@ let autoResubSwitchListener = function() {
     $.post(`/update_auto_resub/${checkedProp}`, function(res) {
       if (res["isSuccess"]) {
         if (checkedProp) {
-          alert("Notification settings successfully changed: You will keep receiving open spot notifications for a section until you manually unsubscribe.")
+          alert("Notification settings successfully changed: You will keep receiving open-spot notifications for a section until you manually unsubscribe.")
         } else {
           alert("Notification settings successfully changed: You will be automatically unsubscribed from a section upon first notification.")
         }
