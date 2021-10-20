@@ -74,14 +74,21 @@ class Notify:
             <p>Best,<br>TigerSnatch Team <3</p>
         </body>
         </html>"""
-        
+
         try:
             data = {
                 "personalizations": [
                     {
                         "to": [{"email": self._emails[i]}],
                         "subject": f"TigerSnatch: a spot opened in {self._deptnum} {self._sectionname}",
-                        "substitutions": {"$$netid$$": self._netids[i], "$$next_step$$": (next_step_resubbed if self.db.get_user_auto_resub(self._netids[i]) else next_step_unsubbed)},
+                        "substitutions": {
+                            "$$netid$$": self._netids[i],
+                            "$$next_step$$": (
+                                next_step_resubbed
+                                if self.db.get_user_auto_resub(self._netids[i])
+                                else next_step_unsubbed
+                            ),
+                        },
                     }
                     for i in range(len(self._emails))
                 ],
@@ -105,7 +112,9 @@ class Notify:
                 is_auto_resub = self.db.get_user_auto_resub(self._netids[i])
                 if phone != "":
                     Client(TWILIO_SID, TWILIO_TOKEN).api.account.messages.create(
-                        to=f"+1{phone}", from_=TWILIO_PHONE, body=(msg_resubbed if is_auto_resub else msg_unsubbed)
+                        to=f"+1{phone}",
+                        from_=TWILIO_PHONE,
+                        body=(msg_resubbed if is_auto_resub else msg_unsubbed),
                     )
                 if not is_auto_resub:
                     self.db.remove_from_waitlist(self._netids[i], self._classid)

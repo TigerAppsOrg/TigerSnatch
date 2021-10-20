@@ -104,6 +104,7 @@ def tutorial():
     )
     return make_response(html)
 
+
 # helper method to update user settings on dashboard
 def _update_user_settings(netid):
 
@@ -125,8 +126,9 @@ def _update_user_settings(netid):
 
         _db.update_user_phone(netid, new_phone.strip())
         return True
-    
+
     return False
+
 
 @app.route("/dashboard", methods=["GET", "POST"])
 def dashboard():
@@ -179,11 +181,13 @@ def dashboard():
 
     return make_response(html)
 
+
 @app.route("/update_auto_resub/<auto_resub>", methods=["POST"])
 def update_auto_resub(auto_resub):
     netid = _cas.authenticate()
     is_success = _db.update_user_auto_resub(netid, auto_resub.lower() == "true")
     return jsonify({"isSuccess": is_success})
+
 
 @app.route("/about", methods=["GET"])
 def about():
@@ -397,6 +401,7 @@ def remove_user_section(courseid):
     netid = _cas.authenticate()
     status = _db.remove_current_section(netid, courseid)
     return jsonify({"isSuccess": status})
+
 
 @app.route("/find_matches/<courseid>", methods=["POST"])
 def find_matches(courseid):

@@ -685,7 +685,7 @@ class Database:
                 "phone": "",
                 "waitlists": [],
                 "current_sections": {},
-                "auto_resub": False
+                "auto_resub": False,
             }
         )
         self._db.logs.insert_one({"netid": netid, "waitlist_log": [], "trade_log": []})
@@ -852,7 +852,9 @@ class Database:
 
     def update_user_auto_resub(self, netid, auto_resub):
         try:
-            self._db.users.update_one({"netid": netid}, {"$set": {"auto_resub": auto_resub}})
+            self._db.users.update_one(
+                {"netid": netid}, {"$set": {"auto_resub": auto_resub}}
+            )
             return True
         except:
             print(f"attempt to update auto_resub for {netid} failed", file=stderr)
@@ -862,7 +864,9 @@ class Database:
 
     def get_user_auto_resub(self, netid):
         try:
-            auto_resub_dict = self._db.users.find_one({"netid": netid}, {"auto_resub": 1, "_id": 0})
+            auto_resub_dict = self._db.users.find_one(
+                {"netid": netid}, {"auto_resub": 1, "_id": 0}
+            )
             if "auto_resub" not in auto_resub_dict:
                 return False
             return auto_resub_dict["auto_resub"]
