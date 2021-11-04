@@ -634,6 +634,8 @@ class Database:
         def get_all_subscribed_sections():
             data = self._db.waitlists.find({}, {"waitlist": 1, "classid": 1, "_id": 0})
             data = [(len(k["waitlist"]), k["classid"]) for k in data]
+            if len(data) == 0:
+                return ["No Subscriptions found"]
             data.sort(key=lambda x: x[0], reverse=True)
             res = []
             for n, classid in data:
