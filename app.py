@@ -235,9 +235,6 @@ def activity():
 
 @app.route("/course", methods=["GET"])
 def get_course():
-    if not _cas.is_logged_in():
-        return redirect(url_for("landing"))
-
     netid = _cas.authenticate()
     if _db.is_blacklisted(netid):
         _db._add_admin_log(f"blacklisted user {netid} attempted to access the app")
