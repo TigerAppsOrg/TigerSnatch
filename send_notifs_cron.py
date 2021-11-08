@@ -60,7 +60,6 @@ def check_spreadsheet_maybe_schedule_new_notifs(scheds: list[BackgroundScheduler
     try:
         times = generate_time_intervals()
         if not did_notifs_spreadsheet_change(times):
-            print("[Scheduler] no new spreadsheet datetimes detected")
             return
         print("[Scheduler] new datetimes detected - rescheduling jobs")
         print("[Scheduler] shutting down current notifs scheduler")

@@ -270,8 +270,6 @@ def get_course():
     if not section_names or len(section_names) < 2:
         trade_unavailable = True
 
-    # change to check if updateSearch == 'false'
-    # if updateSearch is None:
     html = render_template(
         "base.html",
         is_dashboard=False,
@@ -304,7 +302,6 @@ def get_course():
 @app.route("/logout", methods=["GET"])
 def logout():
     _cas.logout()
-    return redirect(url_for("landing"))
 
 
 # ----------------------------------------------------------------------

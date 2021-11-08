@@ -57,7 +57,6 @@
                    checked />
           </div>
         </td>
-        <!-- <td>{{data[classid].position}}</td> -->
         {% if data[classid].end_time == "" %}
         <td>{{data[classid].start_time}}</td>
         {% else %}
@@ -69,4 +68,4 @@
     </tbody>
   </table>
 </div>
-{% endif %} {% include 'utils/waitlist_modal.html' %}
+{% endif %} {% include 'utils/modals.html' %}

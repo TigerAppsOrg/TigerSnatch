@@ -143,7 +143,7 @@ class Configs:
 
     def _refreshRegistrarToken(self):
         req = requests.get(self.REGISTRAR_REFRESH_TOKEN_URL)
-        soup = BeautifulSoup(req.text)
+        soup = BeautifulSoup(req.text, features="lxml")
         data = soup.find(
             "script", {"data-drupal-selector": "drupal-settings-json"}, text=False
         )

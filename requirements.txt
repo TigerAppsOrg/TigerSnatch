@@ -12,3 +12,4 @@ pandas==1.2.3
 sendgrid==6.0.5
 twilio==6.63.0
 beautifulsoup4==4.9.3
+lxml==4.6.4

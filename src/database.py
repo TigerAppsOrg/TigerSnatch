@@ -1004,6 +1004,8 @@ class Database:
 
         return res
 
+    # checks if a course has been disabled (i.e. by an instructor request)
+
     def is_course_disabled(self, courseid):
         try:
             disabled_courses = self._db.admin.find_one(
@@ -1012,6 +1014,8 @@ class Database:
             return courseid in disabled_courses
         except:
             return False
+
+    # checks if TigerSnatch has detected that a course has reserved seating (uses Registrar's API)
 
     def does_course_have_reserved_seats(self, courseid):
         try:

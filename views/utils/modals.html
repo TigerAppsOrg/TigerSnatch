@@ -1,3 +1,32 @@
+<!-- Matches Modal -->
+<div class="modal fade"
+     id="matches-modal"
+     data-bs-backdrop="static"
+     data-bs-keyboard="false"
+     tabindex="-1"
+     aria-labelledby="staticBackdropLabel"
+     aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title"
+            id="staticBackdropLabel">Potential Trades</h5>
+      </div>
+      <div class="modal-body"
+           id="match-{{courseid}}"
+           style="overflow: auto; max-height: 400px">
+        We're unable to find you a Trade.
+      </div>
+      <div class="modal-footer">
+        <button type="button"
+                id="matches-modal-cancel"
+                class="btn btn-warning"
+                data-bs-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+
 <!-- Waitlist Modal -->
 <div class="modal fade"
      id="confirm-remove-waitlist"
