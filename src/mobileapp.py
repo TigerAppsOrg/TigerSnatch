@@ -40,6 +40,15 @@ class MobileApp:
             params=kwargs if "kwargs" not in kwargs else kwargs["kwargs"],
             headers={"Authorization": "Bearer " + self.configs.REGISTRAR_ACCESS_TOKEN},
         )
+        if req.status_code != 200:
+            self.configs._refreshRegistrarToken()
+            req = requests.get(
+                self.configs.REGISTRAR_API_URL,
+                params=kwargs if "kwargs" not in kwargs else kwargs["kwargs"],
+                headers={
+                    "Authorization": "Bearer " + self.configs.REGISTRAR_ACCESS_TOKEN
+                },
+            )
         return json.loads(req.text)
 
     """
