@@ -49,10 +49,10 @@ def get_new_mobileapp_data(term, course, classes, default_empty_dicts=False):
 # returns course data and parses its data into dictionaries
 # ready to be inserted into database collections
 def get_course_in_mobileapp(term, course_, curr_time):
+    _api = MobileApp()
+
     # the prepended space in catnum is intentional
-    data = MobileApp().get_courses(
-        term=term, subject=course_[:3], catnum=f" {course_[3:]}"
-    )
+    data = _api.get_courses(term=term, subject=course_[:3], catnum=f" {course_[3:]}")
 
     if "subjects" not in data["term"][0]:
         raise RuntimeError("no query results")
@@ -66,6 +66,11 @@ def get_course_in_mobileapp(term, course_, curr_time):
         for course in subject["courses"]:
             courseid = course["course_id"]
 
+            # attempt to detect whether a course has reserved seating
+            registrar_data = _api.get_course_from_registrar_api(
+                term=term, course_id=courseid
+            )
+
             new = {
                 "courseid": courseid,
                 "displayname": subject["code"] + course["catalog_number"],
@@ -74,6 +79,12 @@ def get_course_in_mobileapp(term, course_, curr_time):
                 + course["catalog_number"],
                 "title": course["title"],
                 "time": curr_time,
+                "has_reserved_seats": len(
+                    registrar_data["course_details"]["course_detail"][0][
+                        "seat_reservations"
+                    ]
+                )
+                != 0,
             }
 
             if new["displayname"] != course_:

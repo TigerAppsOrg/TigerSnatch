@@ -19,6 +19,23 @@
     </svg>
   </span>
   {% endif %}
+  {% if has_reserved_seats %}
+  <span class="badge bg-danger text-light font-monospace fw-bold px-1 py-1 ms-2 fs-5"
+        style="cursor: help; padding-bottom: 0.2rem !important"
+        data-bs-toggle="tooltip"
+        data-bs-placement="auto"
+        title="TigerSnatch has detected that this course has reserved seats. Even if a spot opens up, you may not be able to enroll. TigerSnatch is unable to determine whether an open spot corresponds to a particular reserved seat category. Check Official Course Offerings or contact a department coordinator for more details.">RESERVED
+    SEATS<svg xmlns="http://www.w3.org/2000/svg"
+         width="16"
+         height="16"
+         fill="currentColor"
+         class="bi bi-exclamation-triangle-fill text-light ms-2 me-0"
+         viewBox="0 0 16 20">
+      <path
+            d="M8.982 1.566a1.13 1.13 0 0 0-1.96 0L.165 13.233c-.457.778.091 1.767.98 1.767h13.713c.889 0 1.438-.99.98-1.767L8.982 1.566zM8 5c.535 0 .954.462.9.995l-.35 3.507a.552.552 0 0 1-1.1 0L7.1 5.995A.905.905 0 0 1 8 5zm.002 6a1 1 0 1 1 0 2 1 1 0 0 1 0-2z" />
+    </svg>
+  </span>
+  {% endif %}
   <!-- <a id="search-skip"
      class="fw-light ps-3"
      href=""

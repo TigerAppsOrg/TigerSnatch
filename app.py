@@ -295,6 +295,7 @@ def get_course():
         notifs_online=_db.get_cron_notification_status(),
         next_notifs=_db.get_current_or_next_notifs_interval(),
         is_course_disabled=_db.is_course_disabled(courseid),
+        has_reserved_seats=_db.does_course_have_reserved_seats(courseid),
     )
 
     return make_response(html)
@@ -379,6 +380,7 @@ def get_course_info(courseid):
         notifs_online=_db.get_cron_notification_status(),
         next_notifs=_db.get_current_or_next_notifs_interval(),
         is_course_disabled=_db.is_course_disabled(courseid),
+        has_reserved_seats=_db.does_course_have_reserved_seats(courseid),
     )
     return make_response(html)
 

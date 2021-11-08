@@ -1013,6 +1013,12 @@ class Database:
         except:
             return False
 
+    def does_course_have_reserved_seats(self, courseid):
+        try:
+            return self.get_course(courseid)["has_reserved_seats"]
+        except:
+            return False
+
     # ----------------------------------------------------------------------
     # CLASS METHODS
     # ----------------------------------------------------------------------
