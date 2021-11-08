@@ -450,8 +450,12 @@ let searchFormListener = function () {
 
     // get search query
     query = encodeURIComponent($("#search-form-input").prop("value"));
-    if (query.length < 3) {
-      query = "";
+    if (query.length < 2) return;
+    if (query.length == 2) {
+      $.post("/searchresults_placeholder", function (res) {
+        $("div#search-results").html(res);
+      })
+      return;
     }
 
     // close the tooltip if open

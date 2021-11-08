@@ -311,6 +311,17 @@ def logout():
 # ----------------------------------------------------------------------
 
 
+@app.route("/searchresults_placeholder", methods=["POST"])
+def get_search_results_placeholder():
+    html = render_template(
+        "search/search_results.html",
+        last_query=quote_plus(""),
+        last_query_unquoted=unquote_plus(""),
+        search_res=None,
+    )
+    return make_response(html)
+
+
 @app.route("/searchresults", methods=["POST"])
 @app.route("/searchresults/<query>", methods=["POST"])
 def get_search_results(query=""):
