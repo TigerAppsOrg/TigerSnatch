@@ -35,6 +35,7 @@ class MobileApp:
         return self._getJSON(self.configs.COURSE_TERMS, fmt="json")
 
     def get_course_from_registrar_api(self, **kwargs):
+        tic = time()
         req = requests.get(
             self.configs.REGISTRAR_API_URL,
             params=kwargs if "kwargs" not in kwargs else kwargs["kwargs"],
@@ -49,6 +50,15 @@ class MobileApp:
                     "Authorization": "Bearer " + self.configs.REGISTRAR_ACCESS_TOKEN
                 },
             )
+        self._db._add_system_log(
+            "registrar",
+            {
+                "message": "Registrar API query",
+                "response_time": time() - tic,
+                "endpoint": self.configs.REGISTRAR_API_URL,
+                "args": kwargs,
+            },
+        )
         return json.loads(req.text)
 
     """
