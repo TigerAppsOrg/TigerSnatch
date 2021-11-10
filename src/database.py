@@ -4,7 +4,7 @@
 # database.
 # ----------------------------------------------------------------------
 
-from sys import stderr
+from sys import stderr, stdout
 import re
 from config import (
     DB_CONNECTION_STR,
@@ -1475,6 +1475,9 @@ class Database:
         meta["time"] = datetime.now(TZ)
         if netid is not None:
             meta["netid"] = netid
+        if "message" in meta:
+            print(f'System Log > {meta["message"]}')
+            stdout.flush()
         self._db.system.insert_one(meta)
 
     # prints database name, its collections, and the number of documents
