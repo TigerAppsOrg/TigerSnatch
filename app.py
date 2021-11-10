@@ -240,6 +240,10 @@ def get_course():
         _db._add_admin_log(f"blacklisted user {netid} attempted to access the app")
         return make_response(render_template("blocklisted.html"))
 
+    if not _db.is_user_created(netid):
+        _db.create_user(netid)
+        return redirect(url_for("tutorial"))
+
     courseid = request.args.get("courseid")
     query = request.args.get("query")
 
@@ -336,6 +340,9 @@ def get_search_results(query=""):
 @app.route("/courseinfo/<courseid>", methods=["POST"])
 def get_course_info(courseid):
     netid = _cas.authenticate()
+    if not _db.is_user_created(netid):
+        _db.create_user(netid)
+        return redirect(url_for("tutorial"))
 
     _db._add_system_log(
         "user",
