@@ -7,6 +7,7 @@ from urllib.request import urlopen
 from urllib.parse import quote
 from re import sub
 from flask import request, session, redirect, abort
+from config import TS_DOMAIN
 
 
 class CASClient:
@@ -86,10 +87,7 @@ class CASClient:
         # Delete the user's username from the session.
         session.pop("username")
         # Redirect the browser to the application's home page.
-        logout_url = (
-            self.cas_url + "logout?service=" + quote(sub("logout", "", request.url))
-        )
-        abort(redirect(logout_url))
+        abort(redirect(TS_DOMAIN))
 
 
 # -----------------------------------------------------------------------
