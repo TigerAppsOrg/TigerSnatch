@@ -1476,7 +1476,9 @@ class Database:
         if netid is not None:
             meta["netid"] = netid
         if "message" in meta:
-            print(f'System Log > {meta["message"]}')
+            print(
+                f'System Log @ {meta["time"].strftime("%-I:%M:%S %p ET")} > {meta["message"]}'
+            )
             stdout.flush()
         self._db.system.insert_one(meta)
 
