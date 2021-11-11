@@ -12,7 +12,8 @@ from sys import path
 path.append("src")  # noqa
 
 from send_notifs import *
-from datetime import datetime
+from _exec_update_all_courses import do_update
+from datetime import datetime, timedelta
 from sys import stderr
 import pytz
 from config import NOTIFS_INTERVAL_SECS, NOTIFS_SHEET_POLL_MINS
@@ -39,6 +40,17 @@ def schedule_jobs(update_db=False):
                 timezone=tz,
                 seconds=NOTIFS_INTERVAL_SECS,
                 max_instances=8,
+            )
+            print(
+                "[Scheduler] adding global soft course update job at",
+                start - timedelta(hours=3),
+            )
+            sched.add_job(
+                do_update,
+                "date",
+                run_date=start - timedelta(hours=3),
+                timezone=tz,
+                args=[False],
             )
             sched.add_job(
                 set_status_indicator_to_on, "date", run_date=start, timezone=tz
