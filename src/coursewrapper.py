@@ -45,10 +45,10 @@ class CourseWrapper:
     # associated available slot counts
 
     def __str__(self):
-        ret = f"CourseWrapper for course_deptnum {self._course_deptnum}:\n"
+        ret = f"\ncourse_deptnum {self._course_deptnum}:\n"
 
         for k, v in self._available_slots.items():
-            ret += f"\tclassid {k}: {v} available slot(s) with enrollment "
+            ret += f"\tclassid {k}: {v} open spot(s) with enrollment "
             ret += f"{self._new_enroll[k]}/{self._new_cap[k]}\n"
 
         return ret

@@ -168,7 +168,6 @@ def get_course_in_mobileapp(term, course_, curr_time):
 def process(args):
     term, course, classes = args[0], args[1], args[2]
 
-    print("processing", course, "with classes", classes)
     try:
         new_enroll, new_cap = get_new_mobileapp_data(
             term, course, classes, default_empty_dicts=True

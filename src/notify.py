@@ -124,7 +124,7 @@ class Notify:
             return False
 
     def __str__(self):
-        ret = "Notify:\n"
+        ret = "\nNotifications:\n"
         ret += f"\tNetIDs:\t\t{self._netids}\n"
         ret += f"\tEmails:\t\t{self._emails}\n"
         ret += f"\tPhones:\t\t{self._phones}\n"

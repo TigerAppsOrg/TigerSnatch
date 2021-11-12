@@ -32,8 +32,6 @@ class Monitor:
                 print(deptnum, "with courseid", courseid, "is disabled - skipping")
                 continue
 
-            print("adding classid", classid, "from", deptnum, "with courseid", courseid)
-
             if deptnum in data:
                 data[deptnum].append(classid)
             else:
@@ -91,7 +89,6 @@ class Monitor:
         for course in self._waited_course_wrappers:
             if course is None:
                 continue
-            print("generating class enrollment delta for", course.get_course_deptnum())
 
             for class_, n_slots in course.get_available_slots().items():
                 data[class_] = n_slots

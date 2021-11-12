@@ -23,7 +23,7 @@ def cronjob():
     db = Database()
     monitor = Monitor(db)
 
-    db._add_system_log("cron", {"message": "emails script executing"})
+    db._add_system_log("cron", {"message": "notifications script executing"})
 
     # get all class openings (for waited-on classes) from MobileApp
     new_slots = monitor.get_classes_with_changed_enrollments()
@@ -42,12 +42,12 @@ def cronjob():
         try:
             notify = Notify(classid, n_new_slots, db)
             print(notify)
-            print("sending emails to", notify.get_netids())
-            print("sending texts to", notify.get_phones())
+            print("\t> sending emails to", notify.get_netids())
+            print("\t> sending texts to", notify.get_phones())
             stdout.flush()
 
             if notify.send_emails_html() and notify.send_sms():
-                print(n_notifs, "emails and texts (each) sent")
+                print("\t>", n_notifs, "emails and texts (each) sent")
                 total += n_notifs
                 names += " " + notify.get_name() + ","
             else:
