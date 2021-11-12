@@ -7,7 +7,7 @@ from os import environ
 
 # TigerSnatch host URL
 TS_HOST = "localhost"
-TS_DOMAIN = "https://snatch.tigerapps.org"
+TS_DOMAIN = environ["TS_DOMAIN"]
 
 # primary MongoDB server connection string
 DB_CONNECTION_STR = environ["DB_CONNECTION_STR"]

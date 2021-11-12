@@ -6,7 +6,14 @@
 from sendgrid import SendGridAPIClient
 from sys import stderr
 from twilio.rest import Client
-from config import SENDGRID_API_KEY, TS_EMAIL, TWILIO_PHONE, TWILIO_SID, TWILIO_TOKEN
+from config import (
+    SENDGRID_API_KEY,
+    TS_EMAIL,
+    TWILIO_PHONE,
+    TWILIO_SID,
+    TWILIO_TOKEN,
+    TS_DOMAIN,
+)
 
 
 class Notify:
@@ -59,9 +66,9 @@ class Notify:
     # sends a formatted email
 
     def send_emails_html(self):
-        next_step_unsubbed = f"""<p>You've been <b>automatically unsubscribed</b> from this section. If you didn't get the spot, you may re-subscribe here: <a href="https://snatch.tigerapps.org/course?query=&courseid={self._courseid}&skip">TigerSnatch | {self._deptnum}</a>.</p>"""
+        next_step_unsubbed = f"""<p>You've been <b>automatically unsubscribed</b> from this section. If you didn't get the spot, you may re-subscribe here: <a href="{TS_DOMAIN}/course?query=&courseid={self._courseid}&skip">TigerSnatch | {self._deptnum}</a>.</p>"""
 
-        next_step_resubbed = f"""<p>To stop receiving notifications for this section, unsubscribe here: <a href="https://snatch.tigerapps.org/dashboard?&skip">TigerSnatch | Dashboard</a>.</p>"""
+        next_step_resubbed = f"""<p>To stop receiving notifications for this section, unsubscribe here: <a href="{TS_DOMAIN}/dashboard?&skip">TigerSnatch | Dashboard</a>.</p>"""
 
         msg = f"""\
         <html>
@@ -105,8 +112,8 @@ class Notify:
     # sends an SMS
 
     def send_sms(self):
-        msg_unsubbed = f"{self._sectionname} in {self._deptnum} has open spots! You've been unsubscribed from this section. Resubscribe here: https://snatch.tigerapps.org/course?courseid={self._courseid}&skip"
-        msg_resubbed = f"{self._sectionname} in {self._deptnum} has open spots! To stop receiving notifications for this section, unsubscribe here: https://snatch.tigerapps.org/dashboard?&skip"
+        msg_unsubbed = f"{self._sectionname} in {self._deptnum} has open spots! You've been unsubscribed from this section. Resubscribe here: {TS_DOMAIN}/course?courseid={self._courseid}&skip"
+        msg_resubbed = f"{self._sectionname} in {self._deptnum} has open spots! To stop receiving notifications for this section, unsubscribe here: {TS_DOMAIN}/dashboard?&skip"
         try:
             for i, phone in enumerate(self._phones):
                 is_auto_resub = self.db.get_user_auto_resub(self._netids[i])
