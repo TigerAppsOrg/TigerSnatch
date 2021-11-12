@@ -68,3 +68,7 @@ NOTIFS_SHEET_POLL_MINS = int(environ["NOTIFS_SHEET_POLL_MINS"])
 TWILIO_PHONE = environ["TWILIO_PHONE"]
 TWILIO_SID = environ["TWILIO_SID"]
 TWILIO_TOKEN = environ["TWILIO_TOKEN"]
+
+# offset in minutes that is added to all provided notifications start times
+# (this was an OIT request to alleviate load on endpoints during the first few minutes of enrollment)
+OIT_NOTIFS_OFFSET_MINS = int(environ["OIT_NOTIFS_OFFSET_MINS"])

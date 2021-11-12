@@ -31,6 +31,7 @@ def schedule_jobs(update_db=False):
         tz = pytz.timezone("US/Eastern")
         for time in times:
             start, end = time[0], time[1]
+            soft_course_update_start = start - timedelta(hours=3)
             print("[Scheduler] adding job between", start, "and", end)
             sched.add_job(
                 cronjob,
@@ -43,17 +44,20 @@ def schedule_jobs(update_db=False):
             )
             print(
                 "[Scheduler] adding global soft course update job at",
-                start - timedelta(hours=3),
+                soft_course_update_start,
             )
             sched.add_job(
                 do_update,
                 "date",
-                run_date=start - timedelta(hours=3),
+                run_date=soft_course_update_start,
                 timezone=tz,
                 args=[False],
             )
             sched.add_job(
-                set_status_indicator_to_on, "date", run_date=start, timezone=tz
+                set_status_indicator_to_on,
+                "date",
+                run_date=start,
+                timezone=tz,
             )
             sched.add_job(
                 set_status_indicator_to_off, "date", run_date=end, timezone=tz

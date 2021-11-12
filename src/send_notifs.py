@@ -9,13 +9,14 @@
 # ----------------------------------------------------------------------
 
 import pandas as pd
-from datetime import datetime
+from datetime import datetime, timedelta
 import pytz
 from notify import Notify
 from monitor import Monitor
 from database import Database
 from sys import stdout, stderr
 from time import time
+from config import OIT_NOTIFS_OFFSET_MINS
 
 
 def cronjob():
@@ -107,7 +108,8 @@ def generate_time_intervals():
         datetimes = list(
             map(
                 lambda x: [
-                    tz.localize(datetime.strptime(x[0], "%Y-%m-%d %I:%M %p")),
+                    tz.localize(datetime.strptime(x[0], "%Y-%m-%d %I:%M %p"))
+                    + timedelta(minutes=OIT_NOTIFS_OFFSET_MINS),
                     tz.localize(datetime.strptime(x[1], "%Y-%m-%d %I:%M %p")),
                 ],
                 datetimes,
