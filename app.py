@@ -247,11 +247,12 @@ def get_course():
     courseid = request.args.get("courseid")
     query = request.args.get("query")
 
-    _db._add_system_log(
-        "user",
-        {"message": f"course page {courseid} visited by user {netid}"},
-        netid=netid,
-    )
+    if courseid is not None:
+        _db._add_system_log(
+            "user",
+            {"message": f"course page {courseid} visited by user {netid}"},
+            netid=netid,
+        )
 
     if query is None:
         query = ""
@@ -344,11 +345,12 @@ def get_course_info(courseid):
         _db.create_user(netid)
         return redirect(url_for("tutorial"))
 
-    _db._add_system_log(
-        "user",
-        {"message": f"course page {courseid} visited by user {netid}"},
-        netid=netid,
-    )
+    if courseid is not None:
+        _db._add_system_log(
+            "user",
+            {"message": f"course page {courseid} visited by user {netid}"},
+            netid=netid,
+        )
 
     course_details, classes_list = pull_course(courseid, _db)
     curr_waitlists = _db.get_user(netid, "waitlists")
