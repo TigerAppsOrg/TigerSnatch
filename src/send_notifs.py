@@ -11,12 +11,13 @@
 import pandas as pd
 from datetime import datetime, timedelta
 import pytz
+import requests
 from notify import Notify
 from monitor import Monitor
 from database import Database
 from sys import stdout, stderr
 from time import time
-from config import OIT_NOTIFS_OFFSET_MINS
+from config import OIT_NOTIFS_OFFSET_MINS, DMS_URL
 
 
 def cronjob():
@@ -57,24 +58,29 @@ def cronjob():
             print(e, file=stderr)
 
         print()
-
+        
+    duration = round(time()-tic)
+    
     if total > 0:
         db._add_admin_log(
-            f"sent {total} emails and texts in {round(time()-tic)} seconds:{names[:-1]}"
+            f"sent {total} emails and texts in {duration} seconds:{names[:-1]}"
         )
         db._add_system_log(
             "cron",
             {
-                "message": f"sent {total} emails and texts in {round(time()-tic)} seconds:{names[:-1]}"
+                "message": f"sent {total} emails and texts in {duration} seconds:{names[:-1]}"
             },
         )
         db.increment_email_counter(total)
     elif total == 0:
         db._add_system_log(
             "cron",
-            {"message": f"sent 0 emails and texts in {round(time()-tic)} seconds"},
+            {"message": f"sent 0 emails and texts in {duration} seconds"},
         )
-        print(f"sent {total} emails and texts in {round(time()-tic)} seconds")
+        print(f"sent {total} emails and texts in {duration} seconds")
+    
+    # ping Dead Man's Snitch (see heroku addons)
+    requests.post(DMS_URL, data={"m": f"Sent {total} notifications in {duration} seconds"})
 
 
 def set_status_indicator_to_on():
