@@ -1447,10 +1447,10 @@ class Database:
 
         app = self._connect_to_heroku()
         if status:
-            app.process_formation()["notifs"].scale(0)
+            # app.process_formation()["notifs"].scale(0)
             app.enable_maintenance_mode()
         else:
-            app.process_formation()["notifs"].scale(1)
+            # app.process_formation()["notifs"].scale(1)
             app.disable_maintenance_mode()
 
         self._add_system_log(
