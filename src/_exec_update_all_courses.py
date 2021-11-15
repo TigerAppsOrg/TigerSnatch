@@ -84,7 +84,7 @@ def do_update(reset_type):
     print(f"success: approx. {round(time()-tic)} seconds")
 
 
-def do_update_async(admin_netid):
+def do_update_async_HARD(admin_netid):
     Database()._add_system_log(
         "admin", {"message": "course term update started"}, netid=admin_netid
     )
@@ -92,6 +92,16 @@ def do_update_async(admin_netid):
     # needed for execution on heroku servers to avoid the 30 second
     # request timeout for syncronous processes
     system("python src/_exec_update_all_courses.py --hard &")
+
+
+def do_update_async_SOFT(admin_netid="SYSTEM_AUTO"):
+    Database()._add_system_log(
+        "admin", {"message": "soft course term update started"}, netid=admin_netid
+    )
+
+    # needed for execution on heroku servers to avoid the 30 second
+    # request timeout for syncronous processes
+    system("python src/_exec_update_all_courses.py --soft &")
 
 
 if __name__ == "__main__":

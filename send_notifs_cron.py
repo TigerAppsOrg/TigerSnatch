@@ -12,7 +12,7 @@ from sys import path
 path.append("src")  # noqa
 
 from send_notifs import *
-from _exec_update_all_courses import do_update
+from _exec_update_all_courses import do_update_async_SOFT
 from datetime import datetime, timedelta
 from sys import stderr
 import pytz
@@ -47,11 +47,10 @@ def schedule_jobs(update_db=False):
                 soft_course_update_start,
             )
             sched.add_job(
-                do_update,
+                do_update_async_SOFT,
                 "date",
                 run_date=soft_course_update_start,
                 timezone=tz,
-                args=[False],
             )
             sched.add_job(
                 set_status_indicator_to_on,
