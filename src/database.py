@@ -1444,7 +1444,7 @@ class Database:
     def set_maintenance_status(self, status):
         if not isinstance(status, bool):
             raise Exception("status must be a boolean")
-
+        return
         app = self._connect_to_heroku()
         if status:
             # app.process_formation()["notifs"].scale(0)
