@@ -112,7 +112,7 @@ def _update_user_settings(netid):
     new_phone = request.form.get("new_phone")
 
     if new_email is not None:
-        if "<" in new_email or ">" in new_email or "script" in new_email:
+        if "<" in new_email or ">" in new_email or "script" in new_email.lower():
             print("HTML code detected in", new_email, file=stderr)
             return True
 
@@ -120,7 +120,7 @@ def _update_user_settings(netid):
         return True
 
     if new_phone is not None:
-        if "<" in new_phone or ">" in new_phone or "script" in new_phone:
+        if "<" in new_phone or ">" in new_phone or "script" in new_phone.lower():
             print("HTML code detected in", new_phone, file=stderr)
             return True
 
