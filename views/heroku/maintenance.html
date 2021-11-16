@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>TigerSnatch | Maintenance</title>
+    {% include 'common.html' %}
+</head>
+
+<body id="error-container">
+    <div class="container-fluid">
+        <div class="row text-center">
+            <p class="fs-1 px-0 pt-5">Just a moment...</p>
+            <p class="fs-4 px-5">TigerSnatch is fetching the latest course data!</p>
+            <img src="/static/hourglass.svg"
+                 width="200"
+                 height="200"
+                 alt="TigerSnatch maintenance"
+                 class="d-inline-block align-text-center mb-5 mt-3" />
+            <form action="https://snatch.tigerapps.org/dashboard"
+                  class="px-0">
+                <input class="btn btn-warning text-dark fs-2 px-5 py-3"
+                       type="submit"
+                       value="Go to Dashboard &#8594;"
+                       style="border-radius: 100px" />
+            </form>
+        </div>
+    </div>
+</body>
+
+</html>
