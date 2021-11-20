@@ -58,9 +58,9 @@ def cronjob():
             print(e, file=stderr)
 
         print()
-        
-    duration = round(time()-tic)
-    
+
+    duration = round(time() - tic)
+
     if total > 0:
         db._add_admin_log(
             f"sent {total} emails and texts in {duration} seconds:{names[:-1]}"
@@ -78,9 +78,11 @@ def cronjob():
             {"message": f"sent 0 emails and texts in {duration} seconds"},
         )
         print(f"sent {total} emails and texts in {duration} seconds")
-    
+
     # ping Dead Man's Snitch (see heroku addons)
-    requests.post(DMS_URL, data={"m": f"Sent {total} notifications in {duration} seconds"})
+    requests.post(
+        DMS_URL, data={"m": f"Sent {total} notifications in {duration} seconds"}
+    )
 
 
 def set_status_indicator_to_on():
