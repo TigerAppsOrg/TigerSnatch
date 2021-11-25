@@ -605,11 +605,15 @@ class Database:
                 res.append(f"{start.strftime(fmt)} to {end.strftime(fmt)}")
             return res
 
+        def get_users_who_auto_resub():
+            return len(list(self._db.users.find({"auto_resub": {"$eq": True}}, {"_id": 0, "auto_resub": 1})))
+
         try:
             res = [
                 f"Current term: {get_current_term_name()}",
                 f"# users: {get_total_users()}",
                 f"# users with >0 subscriptions: {get_users_who_subscribe()}",
+                f"# users with auto resub on: {get_users_who_auto_resub()}",
                 f"# subscriptions: {get_total_subscriptions()}",
                 f"# subscribed sections: {get_total_subscribed_sections()}",
                 f"# subscribed courses: {get_total_subscribed_courses()}",
