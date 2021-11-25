@@ -66,7 +66,7 @@ class Notify:
     # sends a formatted email
 
     def send_emails_html(self):
-        next_step_unsubbed = f"""<p>You've been <b>automatically unsubscribed</b> from this section. If you didn't get the spot, you may re-subscribe here: <a href="{TS_DOMAIN}/course?query=&courseid={self._courseid}&skip">TigerSnatch | {self._deptnum}</a>.</p>"""
+        next_step_unsubbed = f"""<p>You've been <b>automatically unsubscribed</b> from this section. If you didn't get the spot, you may re-subscribe here: <a href="{TS_DOMAIN}/course?query=&courseid={self._courseid}&skip">TigerSnatch | {self._deptnum}</a>. Want to always stay subscribed until you manually unsubscribe? <b>Change your notifications settings</b> on the <a href="{TS_DOMAIN}/dashboard?&skip">TigerSnatch | Dashboard</a>!</p>"""
 
         next_step_resubbed = f"""<p>To stop receiving notifications for this section, unsubscribe here: <a href="{TS_DOMAIN}/dashboard?&skip">TigerSnatch | Dashboard</a>.</p>"""
 
