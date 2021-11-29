@@ -247,12 +247,14 @@ def get_course():
     courseid = request.args.get("courseid")
     query = request.args.get("query")
 
-    if courseid is not None:
-        _db._add_system_log(
-            "user",
-            {"message": f"course page {courseid} visited by user {netid}"},
-            netid=netid,
-        )
+    if courseid is None:
+        return redirect(url_for("dashboard"))
+
+    _db._add_system_log(
+        "user",
+        {"message": f"course page {courseid} visited by user {netid}"},
+        netid=netid,
+    )
 
     if query is None:
         query = ""
