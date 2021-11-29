@@ -36,15 +36,6 @@ def handle_exception(e):
     return render_template("error.html")
 
 
-@app.before_request
-def enforceHttpsInHeroku():
-    # always force redirect to HTTPS (secure connection)
-    if request.headers.get("X-Forwarded-Proto") == "http":
-        url = request.url.replace("http://", "https://", 1)
-        code = 301
-        return redirect(url, code=code)
-
-
 # private method that redirects to landing page
 # if user is not logged in with CAS
 # or if user is logged in with CAS, but doesn't have entry in DB
