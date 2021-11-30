@@ -6,15 +6,16 @@
 
 from database import Database
 
+_db = Database()
+
 
 class CourseWrapper:
     def __init__(self, course_deptnum, new_enroll, new_cap, courseid):
-        self._db = Database()
         self._course_deptnum = course_deptnum
         self._new_enroll = new_enroll
         self._new_cap = new_cap
         self._courseid = courseid
-        self._has_reserved_seats = self._db.does_course_have_reserved_seats(courseid)
+        self._has_reserved_seats = _db.does_course_have_reserved_seats(courseid)
         self._compute_available_slots()
 
     # returns _course_deptnum
@@ -40,10 +41,10 @@ class CourseWrapper:
             try:
                 if self._has_reserved_seats:
                     d = (
-                        self._db.get_prev_enrollment_RESERVED_SEATS_ONLY(k)
+                        _db.get_prev_enrollment_RESERVED_SEATS_ONLY(k)
                         - self._new_enroll[k]
                     )
-                    self._db.update_prev_enrollment_RESERVED_SEATS_ONLY(
+                    _db.update_prev_enrollment_RESERVED_SEATS_ONLY(
                         k, self._new_enroll[k]
                     )
                 else:
