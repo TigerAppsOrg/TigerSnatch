@@ -1203,18 +1203,22 @@ class Database:
             def is_class_full(enrollment_dict):
                 return enrollment_dict["enrollment"] >= enrollment_dict["capacity"]
 
+            has_reserved_seats = self.does_course_have_reserved_seats(
+                self.classid_to_course_info(classid)[1]
+            )
+
             if not self.is_user_created(netid):
                 raise Exception(f"user {netid} does not exist")
             class_enrollment = self.get_class_enrollment(classid)
             if class_enrollment is None:
                 raise Exception(f"class {classid} does not exist")
-            if not is_class_full(
-                class_enrollment
-            ) and not self.does_course_have_reserved_seats(
-                self.classid_to_course_info(classid)[1]
-            ):
+            if not is_class_full(class_enrollment) and not has_reserved_seats:
                 raise Exception(
                     f"user cannot enter waitlist for non-full class {classid}"
+                )
+            if has_reserved_seats and class_enrollment["enrollment"] == 0:
+                raise Exception(
+                    f"user cannot enter waitlist for reserved class {classid} because its enrollment is 0"
                 )
             if classid in self.get_user(netid, "waitlists"):
                 raise Exception(
