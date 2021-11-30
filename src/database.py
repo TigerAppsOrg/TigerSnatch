@@ -606,7 +606,13 @@ class Database:
             return res
 
         def get_users_who_auto_resub():
-            return len(list(self._db.users.find({"auto_resub": {"$eq": True}}, {"_id": 0, "auto_resub": 1})))
+            return len(
+                list(
+                    self._db.users.find(
+                        {"auto_resub": {"$eq": True}}, {"_id": 0, "auto_resub": 1}
+                    )
+                )
+            )
 
         try:
             res = [
@@ -950,6 +956,7 @@ class Database:
 
     def get_course_with_enrollment(self, courseid):
         course_info = self.get_course(courseid)
+        has_reserved_seats = course_info["has_reserved_seats"]
         for key in course_info.keys():
             if key.startswith("class_"):
                 class_dict = course_info[key]
@@ -960,7 +967,7 @@ class Database:
                 class_dict["isFull"] = (
                     class_dict["capacity"] > 0
                     and class_dict["enrollment"] >= class_dict["capacity"]
-                )
+                ) or has_reserved_seats
         return course_info
 
     # updates time that a course page was last updated
@@ -1142,6 +1149,25 @@ class Database:
                     }
                 },
             )
+
+    # return the previous enrollment of a class whose course has reserved seats
+    # defaults to 0 (which will not trigger notifications)
+    # USE ONLY IF THE CORRESPONDING COURSE HAS RESERVED SEATS!
+    def get_prev_enrollment_RESERVED_SEATS_ONLY(self, classid):
+        try:
+            return self._db.enrollments.find_one({"classid": classid}, {"_id": 0})[
+                "prev_enrollment"
+            ]
+        except:
+            return 0
+
+    def update_prev_enrollment_RESERVED_SEATS_ONLY(self, classid, enrollment):
+        try:
+            self._db.enrollments.update_one(
+                {"classid": classid}, {"$set": {"prev_enrollment": enrollment}}
+            )
+        except:
+            raise RuntimeError(f"class {classid} not found in enrollments")
 
     # ----------------------------------------------------------------------
     # WAITLIST METHODS
@@ -1500,4 +1526,5 @@ if __name__ == "__main__":
     db = Database()
     # print(db.get_current_or_next_notifs_interval())
     # print(db.get_all_subscriptions())
-    print(",".join(db._get_all_emails_csv().split(",")[997:]))
+    # print(",".join(db._get_all_emails_csv().split(",")[997:]))
+    print(db.get_prev_enrollment_RESERVED_SEATS_ONLY("40268"))
