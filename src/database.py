@@ -1208,7 +1208,11 @@ class Database:
             class_enrollment = self.get_class_enrollment(classid)
             if class_enrollment is None:
                 raise Exception(f"class {classid} does not exist")
-            if not is_class_full(class_enrollment):
+            if not is_class_full(
+                class_enrollment
+            ) and not self.does_course_have_reserved_seats(
+                self.classid_to_course_info(classid)[1]
+            ):
                 raise Exception(
                     f"user cannot enter waitlist for non-full class {classid}"
                 )
