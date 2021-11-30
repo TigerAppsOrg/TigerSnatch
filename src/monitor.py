@@ -35,7 +35,7 @@ class Monitor:
             if deptnum in data:
                 data[deptnum].append(classid)
             else:
-                data[deptnum] = [classid]
+                data[deptnum] = [courseid, classid]
 
         self._waited_classes = data
 
@@ -47,7 +47,7 @@ class Monitor:
         process_args = []
 
         for course, classes in self._waited_classes.items():
-            process_args.append([term, course, classes])
+            process_args.append([term, course, classes[1:], classes[0]])
 
         # alleviate MobileApp bottleneck using multiprocessing
         with Pool(cpu_count()) as pool:
