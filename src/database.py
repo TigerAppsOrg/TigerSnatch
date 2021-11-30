@@ -1198,7 +1198,7 @@ class Database:
 
     def add_to_waitlist(self, netid, classid, disable_checks=False):
         # validation checks
-        def validate():
+        def validate(courseid):
             # helper method to check if class is full
             def is_class_full(enrollment_dict):
                 return enrollment_dict["enrollment"] >= enrollment_dict["capacity"]
@@ -1220,15 +1220,15 @@ class Database:
                 raise Exception(
                     f"user {netid} is already in waitlist for class {classid}"
                 )
-            _, courseid = self.classid_to_course_info(classid)
             if self.is_course_disabled(courseid):
                 raise Exception(
                     f"{netid}: class {classid} is in disabled course {courseid}"
                 )
 
         netid = netid.strip()
+        coursedeptnum, courseid = self.classid_to_course_info(classid)
         if not disable_checks:
-            validate()
+            validate(courseid)
 
         # add classid to user's waitlist
         user_waitlists = self.get_user(netid, "waitlists")
@@ -1263,14 +1263,16 @@ class Database:
             {"classid": classid}, {"$set": {"waitlist": class_waitlist}}
         )
 
-        print(f"user {netid} successfully added to waitlist for class {classid}")
+        print(
+            f"user {netid} successfully added to waitlist for class {classid} in {coursedeptnum}"
+        )
         return 1
 
     # removes user of given netid to waitlist for class classid
     # if waitlist for class is empty now, delete entry from waitlists collection
 
     def remove_from_waitlist(self, netid, classid):
-        def validate():
+        def validate(courseid):
             if not self.is_user_created(netid):
                 raise Exception(f"user {netid} does not exist")
             waitlist = self.get_class_waitlist(classid)
@@ -1281,14 +1283,14 @@ class Database:
                 or netid not in waitlist["waitlist"]
             ):
                 raise Exception(f"user {netid} not in waitlist for class {classid}")
-            _, courseid = self.classid_to_course_info(classid)
             if self.is_course_disabled(courseid):
                 raise Exception(
                     f"{netid}: class {classid} is in disabled course {courseid}"
                 )
 
         netid = netid.strip()
-        validate()
+        coursedeptnum, courseid = self.classid_to_course_info(classid)
+        validate(courseid)
 
         # remove classid from user's waitlist
         user_waitlists = self.get_user(netid, "waitlists")
@@ -1307,7 +1309,9 @@ class Database:
                 {"classid": classid}, {"$set": {"waitlist": class_waitlist}}
             )
 
-        print(f"user {netid} successfully removed from waitlist for class {classid}")
+        print(
+            f"user {netid} successfully removed from waitlist for class {classid} in {coursedeptnum}"
+        )
 
     # ----------------------------------------------------------------------
     # DATABASE POPULATION METHODS
