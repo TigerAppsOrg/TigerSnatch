@@ -1308,6 +1308,11 @@ class Database:
         class_waitlist.remove(netid)
         if len(class_waitlist) == 0:
             self._db.waitlists.delete_one({"classid": classid})
+            # reset prev_enrollment to 0 if the course has reserved seats
+            if self.does_course_have_reserved_seats(
+                self.classid_to_course_info(classid)[1]
+            ):
+                self.update_prev_enrollment_RESERVED_SEATS_ONLY(classid, 0)
         else:
             self._db.waitlists.update_one(
                 {"classid": classid}, {"$set": {"waitlist": class_waitlist}}
