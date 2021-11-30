@@ -122,8 +122,9 @@ class Notify:
     # sends an SMS
 
     def send_sms(self):
-        msg_unsubbed = f"{self._sectionname} in {self._deptnum} has open spots! You've been unsubscribed from this section. Resubscribe here: {TS_DOMAIN}/course?courseid={self._courseid}&skip"
-        msg_resubbed = f"{self._sectionname} in {self._deptnum} has open spots! To stop receiving notifications for this section, unsubscribe here: {TS_DOMAIN}/dashboard?&skip"
+        reserved = "This course has reserved seats, so enrollment may not be possible. "
+        msg_unsubbed = f"{self._sectionname} in {self._deptnum} has open spots! {reserved if self._has_reserved_seats else ''}Resubscribe here: {TS_DOMAIN}/course?courseid={self._courseid}&skip"
+        msg_resubbed = f"{self._sectionname} in {self._deptnum} has open spots! {reserved if self._has_reserved_seats else ''}Unsubscribe here: {TS_DOMAIN}/dashboard?&skip"
         try:
             for i, phone in enumerate(self._phones):
                 is_auto_resub = self.db.get_user_auto_resub(self._netids[i])
