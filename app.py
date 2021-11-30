@@ -243,12 +243,6 @@ def get_course():
     if courseid is None:
         return redirect(url_for("dashboard"))
 
-    _db._add_system_log(
-        "user",
-        {"message": f"course page {courseid} visited by user {netid}"},
-        netid=netid,
-    )
-
     if query is None:
         query = ""
     if len(query) > 100:
@@ -269,6 +263,14 @@ def get_course():
     trade_unavailable = False
     if not section_names or len(section_names) < 2:
         trade_unavailable = True
+
+    _db._add_system_log(
+        "user",
+        {
+            "message": f"course {course_details['displayname']} ({courseid}) visited by user {netid}"
+        },
+        netid=netid,
+    )
 
     html = render_template(
         "base.html",
@@ -340,13 +342,6 @@ def get_course_info(courseid):
         _db.create_user(netid)
         return redirect(url_for("tutorial"))
 
-    if courseid is not None:
-        _db._add_system_log(
-            "user",
-            {"message": f"course page {courseid} visited by user {netid}"},
-            netid=netid,
-        )
-
     course_details, classes_list = pull_course(courseid, _db)
     curr_waitlists = _db.get_user(netid, "waitlists")
     section_names = _db.get_section_names_in_course(courseid)
@@ -362,6 +357,15 @@ def get_course_info(courseid):
 
     num_full = sum(class_data["isFull"] for class_data in classes_list)
     term_code, term_name = _db.get_current_term_code()
+
+    if courseid is not None:
+        _db._add_system_log(
+            "user",
+            {
+                "message": f"course {course_details['displayname']} ({courseid}) visited by user {netid}"
+            },
+            netid=netid,
+        )
 
     html = render_template(
         "course/course.html",
