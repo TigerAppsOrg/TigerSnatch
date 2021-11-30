@@ -31,6 +31,9 @@ class Notify:
                 self._sectionname,
                 self._courseid,
             ) = db.classid_to_classinfo(classid)
+            self._has_reserved_seats = db.does_course_have_reserved_seats(
+                self._courseid
+            )
             self._coursename = f"{self._deptnum}: {self._title}"
             self._netids = db.get_class_waitlist(classid)["waitlist"]
 
@@ -70,12 +73,16 @@ class Notify:
 
         next_step_resubbed = f"""<p>To stop receiving notifications for this section, unsubscribe here: <a href="{TS_DOMAIN}/dashboard?&skip">TigerSnatch | Dashboard</a>.</p>"""
 
+        non_reserved = f"""<b>NOTE</b>: Some courses reserve seats or are closed, so enrollment may not be possible."""
+        reserved = f"""<b>NOTE: This course has reserved seats. TigerSnatch has detected a spot opening, but it cannot determine which seat category it corresponds to. Enrollment may not be possible.</b>"""
+
         msg = f"""\
         <html>
         <head></head>
         <body style='font-size:1.3em'>
             <p>Greetings $$netid$$,</p>
-            <p>Your subscribed section <b>{self._sectionname}</b> in <b>{self._coursename}</b> has one or more spots open! Note that some courses reserve spots or are closed, so enrollment may not be possible.</p>
+            $$reserved_text$$
+            <p>Your subscribed section <b>{self._sectionname}</b> in <b>{self._coursename}</b> has one or more spots open!</p>
             <p>Head over to <a href="https://phubprod.princeton.edu/psp/phubprod/?cmd=start">TigerHub</a> to Snatch your spot!</p>
             $$next_step$$
             <p>Best,<br>TigerSnatch Team <3</p>
@@ -90,6 +97,9 @@ class Notify:
                         "subject": f"TigerSnatch: a spot opened in {self._deptnum} {self._sectionname}",
                         "substitutions": {
                             "$$netid$$": self._netids[i],
+                            "$$reserved_text$$": reserved
+                            if self._has_reserved_seats
+                            else non_reserved,
                             "$$next_step$$": (
                                 next_step_resubbed
                                 if self.db.get_user_auto_resub(self._netids[i])
