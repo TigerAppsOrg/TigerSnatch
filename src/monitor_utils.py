@@ -166,7 +166,7 @@ def get_course_in_mobileapp(term, course_, curr_time):
 # helper method for multiprocessing: generates CourseWrappers after
 # querying MobileApp for a given course and classid list
 def process(args):
-    term, course, classes = args[0], args[1], args[2]
+    term, course, classes, courseid = args[0], args[1], args[2], args[3]
 
     try:
         new_enroll, new_cap = get_new_mobileapp_data(
@@ -175,7 +175,6 @@ def process(args):
     except Exception:
         print("detected malformed JSON - skipping", file=stderr)
         return None
-
-    course_data = CourseWrapper(course, new_enroll, new_cap)
+    course_data = CourseWrapper(course, new_enroll, new_cap, courseid)
     print(course_data)
     return course_data
