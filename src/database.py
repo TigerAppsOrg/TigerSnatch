@@ -967,7 +967,7 @@ class Database:
                 class_dict["isFull"] = (
                     class_dict["capacity"] > 0
                     and class_dict["enrollment"] >= class_dict["capacity"]
-                ) or has_reserved_seats
+                ) or (has_reserved_seats and class_dict["enrollment"] > 0)
         return course_info
 
     # updates time that a course page was last updated
