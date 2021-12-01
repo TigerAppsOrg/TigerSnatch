@@ -1458,7 +1458,8 @@ let findMatches = function () {
 };
 
 // change the name of this variable to force all users to see the tutorial and the alert banner
-var doneKey = "completed2";
+var doneKeyTutorial = "completed2";
+var doneKeyBanner = "completed3";
 
 // introJS tutorial
 let initTutorial = function () {
@@ -1467,7 +1468,7 @@ let initTutorial = function () {
   window.addEventListener("load", function () {
     if (window.location.pathname !== "/dashboard") return;
     if (window.innerWidth < 992) return;
-    if (localStorage.getItem("EventTour") === doneKey) return;
+    if (localStorage.getItem("EventTour") === doneKeyTutorial) return;
     tutorial.setOptions({
       showBullets: false,
       showProgress: true,
@@ -1475,11 +1476,11 @@ let initTutorial = function () {
     }).start()
 
     tutorial.oncomplete(function () {
-      localStorage.setItem("EventTour", doneKey);
+      localStorage.setItem("EventTour", doneKeyTutorial);
     });
 
     tutorial.onexit(function () {
-      localStorage.setItem("EventTour", doneKey);
+      localStorage.setItem("EventTour", doneKeyTutorial);
     });
   });
 }
@@ -1505,11 +1506,11 @@ let accountSettings = function () {
     $("#account-settings-modal").modal("show");
   });
 
-  if (localStorage.getItem("NewFeaturesAlert") !== doneKey)
+  if (localStorage.getItem("NewFeaturesAlert") !== doneKeyBanner)
     $("#new-features-alert").removeClass("d-none");
 
   $("#new-features-alert-close").click(function (e) {
-    localStorage.setItem("NewFeaturesAlert", doneKey);
+    localStorage.setItem("NewFeaturesAlert", doneKeyBanner);
   });
 };
 
