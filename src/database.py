@@ -1281,7 +1281,9 @@ class Database:
                 raise Exception(f"user {netid} does not exist")
             waitlist = self.get_class_waitlist(classid)
             if waitlist is None:
-                raise Exception(f"no waitlist for class {classid} exists")
+                raise Exception(
+                    f"no waitlist for class {classid} exists (user {netid})"
+                )
             if (
                 classid not in self.get_user(netid, "waitlists")
                 or netid not in waitlist["waitlist"]
