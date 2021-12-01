@@ -62,27 +62,9 @@ def process_dept_code(args):
                     continue
 
                 # attempt to detect whether a course has reserved seating
-                # registrar_data = _api.get_course_from_registrar_api(
-                #     term=current_term_code, course_id=courseid
-                # )
-
-                # # "new" will contain a single course document to be entered
-                # # in the courses (and, in part, the mapppings) collection
-                # new = {
-                #     "courseid": courseid,
-                #     "displayname": subject["code"] + course["catalog_number"],
-                #     "displayname_whitespace": subject["code"]
-                #     + " "
-                #     + course["catalog_number"],
-                #     "title": course["title"],
-                #     "time": time.time(),
-                #     "has_reserved_seats": len(
-                #         registrar_data["course_details"]["course_detail"][0][
-                #             "seat_reservations"
-                #         ]
-                #     )
-                #     != 0,
-                # }
+                registrar_data = _api.get_course_from_registrar_api(
+                    term=current_term_code, course_id=courseid
+                )
 
                 # "new" will contain a single course document to be entered
                 # in the courses (and, in part, the mapppings) collection
@@ -94,7 +76,12 @@ def process_dept_code(args):
                     + course["catalog_number"],
                     "title": course["title"],
                     "time": time.time(),
-                    "has_reserved_seats": False,
+                    "has_reserved_seats": len(
+                        registrar_data["course_details"]["course_detail"][0][
+                            "seat_reservations"
+                        ]
+                    )
+                    != 0,
                 }
 
                 for x in course["crosslistings"]:
