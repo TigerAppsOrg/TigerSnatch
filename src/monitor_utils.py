@@ -67,9 +67,25 @@ def get_course_in_mobileapp(term, course_, curr_time):
             courseid = course["course_id"]
 
             # attempt to detect whether a course has reserved seating
-            registrar_data = _api.get_course_from_registrar_api(
-                term=term, course_id=courseid
-            )
+            # registrar_data = _api.get_course_from_registrar_api(
+            #     term=term, course_id=courseid
+            # )
+
+            # new = {
+            #     "courseid": courseid,
+            #     "displayname": subject["code"] + course["catalog_number"],
+            #     "displayname_whitespace": subject["code"]
+            #     + " "
+            #     + course["catalog_number"],
+            #     "title": course["title"],
+            #     "time": curr_time,
+            #     "has_reserved_seats": len(
+            #         registrar_data["course_details"]["course_detail"][0][
+            #             "seat_reservations"
+            #         ]
+            #     )
+            #     != 0,
+            # }
 
             new = {
                 "courseid": courseid,
@@ -79,12 +95,7 @@ def get_course_in_mobileapp(term, course_, curr_time):
                 + course["catalog_number"],
                 "title": course["title"],
                 "time": curr_time,
-                "has_reserved_seats": len(
-                    registrar_data["course_details"]["course_detail"][0][
-                        "seat_reservations"
-                    ]
-                )
-                != 0,
+                "has_reserved_seats": False,
             }
 
             if new["displayname"] != course_:
