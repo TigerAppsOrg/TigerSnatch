@@ -1459,7 +1459,7 @@ let findMatches = function () {
 
 // change the name of this variable to force all users to see the tutorial and the alert banner
 var doneKeyTutorial = "completed2";
-var doneKeyBanner = "completed3";
+var doneKeyBanner = "completed4";
 
 // introJS tutorial
 let initTutorial = function () {
