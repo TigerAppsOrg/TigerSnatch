@@ -48,7 +48,7 @@ def get_new_mobileapp_data(term, course, classes, default_empty_dicts=False):
 
 # returns course data and parses its data into dictionaries
 # ready to be inserted into database collections
-def get_course_in_mobileapp(term, course_, curr_time):
+def get_course_in_mobileapp(term, course_, curr_time, db: Database):
     _api = MobileApp()
 
     # the prepended space in catnum is intentional
@@ -66,11 +66,6 @@ def get_course_in_mobileapp(term, course_, curr_time):
         for course in subject["courses"]:
             courseid = course["course_id"]
 
-            # attempt to detect whether a course has reserved seating
-            registrar_data = _api.get_course_from_registrar_api(
-                term=term, course_id=courseid
-            )
-
             new = {
                 "courseid": courseid,
                 "displayname": subject["code"] + course["catalog_number"],
@@ -79,12 +74,8 @@ def get_course_in_mobileapp(term, course_, curr_time):
                 + course["catalog_number"],
                 "title": course["title"],
                 "time": curr_time,
-                "has_reserved_seats": len(
-                    registrar_data["course_details"]["course_detail"][0][
-                        "seat_reservations"
-                    ]
-                )
-                != 0,
+                # preserve previous reserved seat flag, without querying Registar API
+                "has_reserved_seats": db.does_course_have_reserved_seats(courseid),
             }
 
             if new["displayname"] != course_:

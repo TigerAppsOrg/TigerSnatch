@@ -127,7 +127,9 @@ class Monitor:
                 new_enroll,
                 new_cap,
                 entirely_new_enrollments,
-            ) = get_course_in_mobileapp(current_term_code, displayname, curr_time)
+            ) = get_course_in_mobileapp(
+                current_term_code, displayname, curr_time, self._db
+            )
 
             # if no changes to course info, do not update
             if new_course == self._db.get_course(courseid):
