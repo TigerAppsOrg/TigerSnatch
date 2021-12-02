@@ -28,7 +28,7 @@ def cronjob():
     db._add_system_log("cron", {"message": "notifications script executing"})
 
     # get all class openings (for waited-on classes) from MobileApp
-    new_slots = monitor.get_classes_with_changed_enrollments()
+    new_slots, n_courses = monitor.get_classes_with_changed_enrollments()
 
     total = 0
     names = ""
@@ -63,25 +63,33 @@ def cronjob():
 
     if total > 0:
         db._add_admin_log(
-            f"sent {total} emails and texts in {duration} seconds:{names[:-1]}"
+            f"sent {total} emails and texts in {duration} seconds ({n_courses} courses, {len(new_slots)} sections):{names[:-1]}"
         )
         db._add_system_log(
             "cron",
             {
-                "message": f"sent {total} emails and texts in {duration} seconds:{names[:-1]}"
+                "message": f"sent {total} emails and texts in {duration} seconds ({n_courses} courses, {len(new_slots)} sections):{names[:-1]}"
             },
         )
         db.increment_email_counter(total)
     elif total == 0:
         db._add_system_log(
             "cron",
-            {"message": f"sent 0 emails and texts in {duration} seconds"},
+            {
+                "message": f"sent 0 emails and texts in {duration} seconds ({n_courses} courses, {len(new_slots)} sections)"
+            },
         )
-        print(f"sent {total} emails and texts in {duration} seconds")
+        print(
+            f"sent 0 emails and texts in {duration} seconds ({n_courses} courses, {len(new_slots)} sections)"
+        )
+        stdout.flush()
 
     # ping Dead Man's Snitch (see heroku addons)
     requests.post(
-        DMS_URL, data={"m": f"Sent {total} notifications in {duration} seconds"}
+        DMS_URL,
+        data={
+            "m": f"Sent {total} notifications in {duration} seconds ({n_courses} courses, {len(new_slots)} sections)"
+        },
     )
 
 

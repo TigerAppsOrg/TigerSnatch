@@ -95,7 +95,7 @@ class Monitor:
 
         self._changed_enrollments = data
         print(f"success: approx. {round(time()-tic)} seconds")
-        return self._changed_enrollments
+        return self._changed_enrollments, len(self._waited_course_wrappers)
 
     # updates all course data if it has been 2 minutes since last update
 
