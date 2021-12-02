@@ -109,7 +109,7 @@ class Notify:
                     }
                     for i in range(len(self._emails))
                 ],
-                "from": {"email": TS_EMAIL},
+                "from": {"email": TS_EMAIL, "name": "TigerSnatch"},
                 "content": [{"type": "text/html", "value": (msg)}],
             }
 
@@ -153,5 +153,7 @@ class Notify:
 
 
 if __name__ == "__main__":
-    n = Notify("43474")
-    n.send_email_html()
+    from database import Database
+    db = Database()
+    n = Notify("41337", 1, db)
+    n.send_emails_html()
