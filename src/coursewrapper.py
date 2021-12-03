@@ -67,6 +67,8 @@ class CourseWrapper:
         ret += f"\nreserved seats: {self._has_reserved_seats}\n"
 
         for k, v in self._available_slots.items():
+            if v == 0:
+                continue
             ret += f"\tclassid {k}: {v} open spot(s) with enrollment "
             ret += f"{self._new_enroll[k]}/{self._new_cap[k]}\n"
 
