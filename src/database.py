@@ -707,7 +707,7 @@ class Database:
 
     def update_user_waitlist_log(self, netid, entry):
         entry = (
-            f"{(datetime.now(TZ)).strftime('%b %d, %Y @ %-I:%M %p ET')} \u2192 {entry}"
+            f"{(datetime.now(TZ)).strftime('%b %-d, %Y @ %-I:%M %p ET')} \u2192 {entry}"
         )
 
         self._db.logs.update_one(
@@ -723,7 +723,7 @@ class Database:
             },
         )
 
-        print(f"waitlist log for user {netid} successfully updated with entry {entry}")
+        print(f"user {netid} log: {entry}")
 
     # gets user netid's waitlist log in array-of-strings format
 
@@ -736,7 +736,7 @@ class Database:
 
     def update_user_trade_log(self, netid, entry):
         entry = (
-            f"{(datetime.now(TZ)).strftime('%b %d, %Y @ %-I:%M %p ET')} \u2192 {entry}"
+            f"{(datetime.now(TZ)).strftime('%b %-d, %Y @ %-I:%M %p ET')} \u2192 {entry}"
         )
 
         self._db.logs.update_one(
@@ -751,7 +751,7 @@ class Database:
                 }
             },
         )
-        print(f"trade log for user {netid} successfully updated with entry {entry}")
+        print(f"user {netid} log: {entry}")
 
     # gets user netid's trade log in array-of-strings format
 
