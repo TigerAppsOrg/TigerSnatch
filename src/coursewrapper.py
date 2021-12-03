@@ -60,6 +60,9 @@ class CourseWrapper:
     # associated available slot counts
 
     def __str__(self):
+        if sum(self._available_slots.values()) == 0:
+            return ""
+
         ret = f"\ncourse_deptnum {self._course_deptnum}"
         ret += f"\nreserved seats: {self._has_reserved_seats}\n"
 
@@ -71,12 +74,15 @@ class CourseWrapper:
 
 
 if __name__ == "__main__":
+    new_enroll = {"40268": 9}
+    new_cap = {"40268": 10}
+    course = CourseWrapper("COS126", new_enroll, new_cap, "002054")
+    print(course, end="")
+
     new_enroll = {"40268": 10}
-
-    new_cap = {"40268": 20}
-
-    course = CourseWrapper("AAS302", new_enroll, new_cap, "013482")
-
-    print(course)
-    print(course.get_available_slots())
-    print(course.get_course_deptnum())
+    course1 = CourseWrapper("COS126", new_enroll, new_cap, "002054")
+    print(course1, end="")
+    print(course, end="")
+    print(course, end="")
+    # print(course.get_available_slots())
+    # print(course.get_course_deptnum())

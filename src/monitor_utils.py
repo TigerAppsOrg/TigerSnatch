@@ -165,5 +165,5 @@ def process(args):
         print("detected malformed JSON - skipping", file=stderr)
         return None
     course_data = CourseWrapper(course, new_enroll, new_cap, courseid)
-    print(course_data)
+    print(course_data, end="")
     return course_data
