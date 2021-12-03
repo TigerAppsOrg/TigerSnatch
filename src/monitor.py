@@ -14,13 +14,14 @@ from config import COURSE_UPDATE_INTERVAL_MINS
 
 
 class Monitor:
-    def __init__(self, _db):
+    def __init__(self, _db: Database):
         self._db = _db
 
     # organizes all waited-on classes into groups by their parent course
 
     def _construct_waited_classes(self):
         waited_classes = list(self._db.get_waited_classes())
+        disabled_courses = self._db.get_disabled_courses()
         data = {}
 
         for class_ in waited_classes:
@@ -28,7 +29,7 @@ class Monitor:
             deptnum, courseid = self._db.classid_to_course_info(classid)
 
             # skip sections whose course is disabled
-            if self._db.is_course_disabled(courseid):
+            if courseid in disabled_courses:
                 print(deptnum, "with courseid", courseid, "is disabled - skipping")
                 continue
 

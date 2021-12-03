@@ -1026,6 +1026,16 @@ class Database:
         except:
             return False
 
+    # returns a list of disabled courses
+
+    def get_disabled_courses(self):
+        try:
+            return self._db.admin.find_one({}, {"disabled_courses": 1, "_id": 0})[
+                "disabled_courses"
+            ]
+        except:
+            return []
+
     # checks if TigerSnatch has detected that a course has reserved seating (uses Registrar's API)
 
     def does_course_have_reserved_seats(self, courseid):
