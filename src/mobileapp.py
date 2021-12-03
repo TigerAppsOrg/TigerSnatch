@@ -87,6 +87,7 @@ class MobileApp:
                 "endpoint": endpoint,
                 "args": kwargs,
             },
+            log=False,
         )
 
         # Check to see if the response failed due to invalid credentials

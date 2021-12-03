@@ -1527,12 +1527,12 @@ class Database:
 
     # adds log message to logs array in system collection
 
-    def _add_system_log(self, type, meta, netid=None):
+    def _add_system_log(self, type, meta, netid=None, log=True):
         meta["type"] = type
         meta["time"] = datetime.now(TZ)
         if netid is not None:
             meta["netid"] = netid
-        if "message" in meta:
+        if "message" in meta and log:
             print(
                 f'System Log @ {meta["time"].strftime("%-I:%M:%S %p ET")} > {meta["message"]}'
             )

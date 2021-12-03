@@ -162,7 +162,10 @@ def process(args):
             term, course, classes, default_empty_dicts=True
         )
     except Exception:
-        print("detected malformed JSON - skipping", file=stderr)
+        print(
+            "detected malformed JSON - skipping (perhaps MobileApp is down?)",
+            file=stderr,
+        )
         return None
     course_data = CourseWrapper(course, new_enroll, new_cap, courseid)
     print(course_data, end="")
