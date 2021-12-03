@@ -6,7 +6,7 @@
 
 from database import Database
 from multiprocess import Pool
-from os import sched_getaffinity
+from os import cpu_count
 from time import time
 from sys import stderr
 from monitor_utils import get_latest_term, process, get_course_in_mobileapp
@@ -51,7 +51,7 @@ class Monitor:
             process_args.append([term, course, classes[1:], classes[0]])
 
         # alleviate MobileApp bottleneck using multiprocessing
-        with Pool(len(sched_getaffinity(0))) as pool:
+        with Pool(cpu_count()) as pool:
             all_data = pool.map(process, process_args)
 
         self._waited_course_wrappers = all_data
