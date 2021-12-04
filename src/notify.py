@@ -154,6 +154,7 @@ class Notify:
 
 if __name__ == "__main__":
     from database import Database
+
     db = Database()
     n = Notify("41337", 1, db)
     n.send_emails_html()
