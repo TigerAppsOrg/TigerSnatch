@@ -13,7 +13,7 @@ path.append("src")  # noqa
 
 from send_notifs import *
 from _exec_update_all_courses import do_update_async_SOFT
-from datetime import datetime, timedelta
+from datetime import datetime
 from sys import stderr
 import pytz
 from config import NOTIFS_INTERVAL_SECS, NOTIFS_SHEET_POLL_MINS
@@ -29,9 +29,17 @@ def schedule_jobs(update_db=False):
             update_notifs_schedule(times)  # update database
         set_status_indicator_to_off(log=False)
         tz = pytz.timezone("US/Eastern")
+
+        print("[Scheduler] adding global soft course update job at 4am ET daily")
+        sched.add_job(
+            do_update_async_SOFT,
+            "cron",
+            hour="4",
+            timezone=tz,
+        )
+
         for time in times:
             start, end = time[0], time[1]
-            soft_course_update_start = start - timedelta(hours=3)
             print("[Scheduler] adding job between", start, "and", end)
             sched.add_job(
                 cronjob,
@@ -41,16 +49,6 @@ def schedule_jobs(update_db=False):
                 timezone=tz,
                 seconds=NOTIFS_INTERVAL_SECS,
                 max_instances=8,
-            )
-            print(
-                "[Scheduler] adding global soft course update job at",
-                soft_course_update_start,
-            )
-            sched.add_job(
-                do_update_async_SOFT,
-                "date",
-                run_date=soft_course_update_start,
-                timezone=tz,
             )
             sched.add_job(
                 set_status_indicator_to_on,
