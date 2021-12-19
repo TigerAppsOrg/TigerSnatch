@@ -441,6 +441,7 @@ def contact_trade(course_name, match_netid, section_name):
     try:
         _db.update_user_trade_log(netid, log_str)
         _db.update_user_trade_log(match_netid, log_str_alt)
+        _db._add_system_log("user", {"message": f"user {netid} contacted {match_netid} to swap into {course_name} {section_name}"}, netid=netid)
     except:
         return jsonify({"isSuccess": False})
     return jsonify({"isSuccess": True})
