@@ -52,6 +52,11 @@ def do_update(reset_type):
         raise Exception("failed to get current term code")
 
     db.set_maintenance_status(True)
+    db._add_system_log(
+        "admin",
+        {"message": f"{'hard' if hard_reset else 'soft'} course term update started"},
+        netid="SYSTEM_AUTO",
+    )
     print(f"getting all courses in term code {current_term_code}")
 
     DEPT_CODES = get_all_dept_codes(current_term_code)
@@ -88,21 +93,13 @@ def do_update(reset_type):
     print(f"success: approx. {round(time()-tic)} seconds")
 
 
-def do_update_async_HARD(admin_netid="SYSTEM_AUTO"):
-    Database()._add_system_log(
-        "admin", {"message": "course term update started"}, netid=admin_netid
-    )
-
+def do_update_async_HARD():
     # needed for execution on heroku servers to avoid the 30 second
     # request timeout for syncronous processes
     system("python src/_exec_update_all_courses.py --hard &")
 
 
-def do_update_async_SOFT(admin_netid="SYSTEM_AUTO"):
-    Database()._add_system_log(
-        "admin", {"message": "soft course term update started"}, netid=admin_netid
-    )
-
+def do_update_async_SOFT():
     # needed for execution on heroku servers to avoid the 30 second
     # request timeout for syncronous processes
     system("python src/_exec_update_all_courses.py --soft &")
