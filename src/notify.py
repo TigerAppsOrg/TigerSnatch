@@ -69,7 +69,7 @@ class Notify:
     # sends a formatted email
 
     def send_emails_html(self):
-        next_step_unsubbed = "You've been unsubscribed from this section. If you didn't get the spot, you may resubscribe on the Course Page (link below). Want to always stay subscribed until you manually unsubscribe? Change your notifications settings on the Dashboard"
+        next_step_unsubbed = "You've been unsubscribed from this section. If you didn't get the spot, you may resubscribe on the Course Page (link below). Want to always stay subscribed until you manually unsubscribe? Change your notifications settings on the Dashboard!"
         next_step_resubbed = "To stop receiving notifications for this section, unsubscribe on the Dashboard (link below)."
 
         non_reserved = "Some courses reserve seats or are closed, so enrollment may not be possible."
