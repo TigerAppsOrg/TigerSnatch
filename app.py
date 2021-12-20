@@ -13,7 +13,6 @@ from database import Database
 from CASClient import CASClient
 from config import APP_SECRET_KEY
 from waitlist import Waitlist
-from _exec_update_all_courses import do_update_async_HARD
 from app_helper import do_search, pull_course, is_admin
 from urllib.parse import quote_plus, unquote_plus
 from sys import stderr
@@ -675,20 +674,6 @@ def get_all_subscriptions():
         return redirect(url_for("landing"))
 
     return jsonify({"data": _db.get_all_subscriptions()})
-
-
-@app.route("/update_all_courses", methods=["POST"])
-def update_all_courses():
-    netid = _cas.authenticate()
-    try:
-        if not is_admin(netid, _db):
-            return redirect(url_for("landing"))
-    except:
-        return redirect(url_for("landing"))
-
-    do_update_async_HARD(admin_netid=netid)  # CAUTION: hard reset and update
-
-    return jsonify({})
 
 
 @app.route("/fill_section/<classid>", methods=["POST"])
