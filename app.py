@@ -686,7 +686,7 @@ def update_all_courses():
     except:
         return redirect(url_for("landing"))
 
-    do_update_async_HARD(netid)  # CAUTION: hard reset and update
+    do_update_async_HARD(admin_netid=netid)  # CAUTION: hard reset and update
 
     return jsonify({})
 

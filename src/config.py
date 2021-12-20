@@ -48,6 +48,9 @@ SENDGRID_API_KEY = environ["SENDGRID_API_KEY"]
 # on the front end web interface
 COURSE_UPDATE_INTERVAL_MINS = float(environ["COURSE_UPDATE_INTERVAL_MINS"])
 
+# time interval on which TigerSnatch checks for courses from a new term
+GLOBAL_COURSE_UPDATE_INTERVAL_MINS = int(environ["GLOBAL_COURSE_UPDATE_INTERVAL_MINS"])
+
 # minimum time interval on which new slots are checked and notifications
 # are sent
 NOTIFS_INTERVAL_SECS = int(environ["NOTIFS_INTERVAL_SECS"])

@@ -84,7 +84,7 @@ def do_update(reset_type):
     print(f"success: approx. {round(time()-tic)} seconds")
 
 
-def do_update_async_HARD(admin_netid):
+def do_update_async_HARD(admin_netid="SYSTEM_AUTO"):
     Database()._add_system_log(
         "admin", {"message": "course term update started"}, netid=admin_netid
     )
