@@ -69,40 +69,46 @@ class Notify:
     # sends a formatted email
 
     def send_emails_html(self):
-        next_step_unsubbed = "You've been unsubscribed from this section. If you didn't get the spot, you may resubscribe on the Course Page (link below). Want to always stay subscribed until you manually unsubscribe? Change your notifications settings on the Dashboard!"
-        next_step_resubbed = "To stop receiving notifications for this section, unsubscribe on the Dashboard (link below)."
-
-        non_reserved = "Some courses reserve seats or are closed, so enrollment may not be possible."
-        reserved = "This course has reserved seats. TigerSnatch has detected a spot opening, but it cannot determine which seat category it corresponds to. Enrollment may not be possible."
-
         try:
-            data = {
-                "personalizations": [
-                    {
-                        "to": [{"email": self._emails[i]}],
-                        "dynamic_template_data": {
-                            "netid": self._netids[i],
-                            "sectionname": self._sectionname,
-                            "coursename": self._coursename,
-                            "deptnum": self._deptnum,
-                            "tigerhub_url": "https://phubprod.princeton.edu/psp/phubprod/?cmd=start",
-                            "dashboard_url": f"{TS_DOMAIN}/dashboard?&skip",
-                            "course_url": f"{TS_DOMAIN}/course?query=&courseid={self._courseid}&skip",
-                            "reserved_text": reserved
-                            if self._has_reserved_seats
-                            else non_reserved,
-                            "next_step": next_step_resubbed
-                            if self.db.get_user_auto_resub(self._netids[i])
-                            else next_step_unsubbed,
-                        },
-                    }
-                    for i in range(len(self._emails))
-                ],
-                "from": {"email": TS_EMAIL, "name": "TigerSnatch"},
-                "template_id": "d-2607514c41ef48cdb649bad3d4f0c660",
-            }
+            for i in range(len(self._emails)):
+                if self._has_reserved_seats:
+                    if self.db.get_user_auto_resub(self._netids[i]):
+                        # yes auto-resub | yes reserved seats
+                        template_id = "d-b32c7a8c99f2491899322ced801b216b"
+                    else:
+                        # no auto-resub | yes reserved seats
+                        template_id = "d-632e8760499b40d680742b9acdb8d129"
+                else:
+                    if self.db.get_user_auto_resub(self._netids[i]):
+                        # yes auto-resub | no reserved seats
+                        template_id = "d-c04bc32123ea45ec80889919cc5c377e"
+                    else:
+                        # no auto-resub | no reserved seats
+                        template_id = "d-2607514c41ef48cdb649bad3d4f0c660"
 
-            SendGridAPIClient(SENDGRID_API_KEY).client.mail.send.post(request_body=data)
+                data = {
+                    "personalizations": [
+                        {
+                            "to": [{"email": self._emails[i]}],
+                            "dynamic_template_data": {
+                                "netid": self._netids[i],
+                                "sectionname": self._sectionname,
+                                "coursename": self._coursename,
+                                "deptnum": self._deptnum,
+                                "tigerhub_url": "https://phubprod.princeton.edu/psp/phubprod/?cmd=start",
+                                "dashboard_url": f"{TS_DOMAIN}/dashboard?&skip",
+                                "course_url": f"{TS_DOMAIN}/course?query=&courseid={self._courseid}&skip",
+                            },
+                        }
+                    ],
+                    "from": {"email": TS_EMAIL, "name": "TigerSnatch"},
+                    "template_id": template_id,
+                }
+
+                SendGridAPIClient(SENDGRID_API_KEY).client.mail.send.post(
+                    request_body=data
+                )
+
             return True
         except Exception as e:
             print(e, file=stderr)
