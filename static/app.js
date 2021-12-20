@@ -1033,35 +1033,6 @@ let clearAllWaitlistsListener = function () {
   });
 };
 
-// listens for update term button
-let updateTermListener = function () {
-  $("#update-term").on("click", function (e) {
-    e.preventDefault();
-    disableAdminFunction();
-
-    if (
-      !confirm(
-        "Are you sure you want to update TigerSnatch to the latest term? This action will clear ALL term-specific data (including user logs, Trades, subscriptions, and curent sections) and is irreversible. TigerSnatch will go into maintenance mode for 2-3 minutes while updating."
-      )
-    ) {
-      enableAdminFunction();
-      return;
-    }
-
-    // MAKE THE ADMIN CONFIRM TWICE!!
-    if (!confirm("Are you ABSOLUTELY sure you want to update TigerSnatch to the latest term?")) {
-      enableAdminFunction();
-      return;
-    }
-
-    $("*").css("pointer-events", "none");
-    setTimeout(() => location.reload(), 3100);
-    $(".toast-container").prepend(toastUpdateTerm.clone().attr("id", "toast-update-term-" + ++i));
-    $("#toast-update-term-" + i).toast("show");
-    $.post("/update_all_courses", function (res) { });
-  });
-};
-
 // listens for clear all trades button
 let clearAllTradesListener = function () {
   $("#clear-all-trades").on("click", function (e) {
@@ -1532,7 +1503,6 @@ let mobileViewFunctions = function () {
 let adminFunctions = function () {
   blacklistListener();
   blacklistRemovalListener();
-  updateTermListener();
   clearAllWaitlistsListener();
   clearAllTradesListener();
   clearAllLogsListener();
