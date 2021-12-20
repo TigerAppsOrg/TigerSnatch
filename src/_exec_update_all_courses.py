@@ -36,7 +36,6 @@ def do_update(reset_type):
     tic = time()
     hard_reset = reset_type
     db = Database()
-    db.set_maintenance_status(True)
 
     # get current term code
     terms = MobileApp().get_terms()
@@ -52,6 +51,7 @@ def do_update(reset_type):
     except:
         raise Exception("failed to get current term code")
 
+    db.set_maintenance_status(True)
     print(f"getting all courses in term code {current_term_code}")
 
     DEPT_CODES = get_all_dept_codes(current_term_code)
