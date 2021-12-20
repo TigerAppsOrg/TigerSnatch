@@ -44,7 +44,11 @@ def do_update(reset_type):
     try:
         current_term_code = terms["term"][0]["code"]
         current_term_name = terms["term"][0]["cal_name"]
-        db.update_current_term_code(current_term_code, current_term_name)
+        did_update_term_code = db.update_current_term_code(
+            current_term_code, current_term_name
+        )
+        if hard_reset and not did_update_term_code:
+            return
     except:
         raise Exception("failed to get current term code")
 
