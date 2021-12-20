@@ -69,11 +69,11 @@ class Notify:
     # sends a formatted email
 
     def send_emails_html(self):
-        next_step_unsubbed = f"""<p>You've been <b>automatically unsubscribed</b> from this section. If you didn't get the spot, you may re-subscribe here: <a href="{TS_DOMAIN}/course?query=&courseid={self._courseid}&skip">TigerSnatch | {self._deptnum}</a>. Want to always stay subscribed until you manually unsubscribe? <b>Change your notifications settings</b> on the <a href="{TS_DOMAIN}/dashboard?&skip">TigerSnatch | Dashboard</a>!</p>"""
-        next_step_resubbed = f"""<p>To stop receiving notifications for this section, unsubscribe here: <a href="{TS_DOMAIN}/dashboard?&skip">TigerSnatch | Dashboard</a>.</p>"""
+        next_step_unsubbed = f"""You've been unsubscribed from this section. If you didn't get the spot, you may resubscribe on the Course Page (link below). Want to always stay subscribed until you manually unsubscribe? Change your notifications settings on the Dashboard"""
+        next_step_resubbed = f"""To stop receiving notifications for this section, unsubscribe on the Dashboard (link below)."""
 
-        non_reserved = f"""<b>NOTE</b>: Some courses reserve seats or are closed, so enrollment may not be possible."""
-        reserved = f"""<b>NOTE: This course has reserved seats. TigerSnatch has detected a spot opening, but it cannot determine which seat category it corresponds to. Enrollment may not be possible.</b>"""
+        non_reserved = f"""Some courses reserve seats or are closed, so enrollment may not be possible."""
+        reserved = f"""This course has reserved seats. TigerSnatch has detected a spot opening, but it cannot determine which seat category it corresponds to. Enrollment may not be possible."""
 
         try:
             data = {
