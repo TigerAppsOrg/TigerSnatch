@@ -701,6 +701,22 @@ class Database:
             "total_emails"
         ]
 
+    def add_stats_notif_log(self, log):
+        log = f"{(datetime.now(TZ)).strftime('%b %d, %Y @ %-I:%M %p ET')} \u2192 {log}"
+
+        self._db.admin.update_one(
+            {},
+            {
+                "$push": {
+                    "stats_notifs_logs": {
+                        "$each": [log],
+                        "$position": 0,
+                        "$slice": 5,
+                    }
+                }
+            },
+        )
+
     def update_stats(self):
         try: 
             stats_top_subs = self.get_top_subscriptions(target_num=10, unique_courses=True)
@@ -708,24 +724,28 @@ class Database:
             stats_subbed_sections = self.get_num_subscribed_sections()
             stats_subbed_courses = self.get_num_subscribed_courses()
             stats_total_notifs = self.get_email_counter()
+            stats_update_time = f"{(datetime.now(TZ)).strftime('%b %-d, %Y @ %-I:%M %p ET')}"
 
             self._db.admin.update_one({}, 
                 {"$set": {"stats_top_subs": stats_top_subs, 
                 "stats_subbed_users": stats_subbed_users,
                 "stats_subbed_sections": stats_subbed_sections,
                 "stats_subbed_courses": stats_subbed_courses, 
-                "stats_total_notifs": stats_total_notifs}}
+                "stats_total_notifs": stats_total_notifs, 
+                "stats_update_time": stats_update_time}}
             )
         except:
             print("failed to update stats on activity page", file=stderr)
 
 
     def get_stats(self):
-        return self._db.admin.find_one({}, 
+        stats = self._db.admin.find_one({}, 
             {"stats_top_subs": 1, "stats_subbed_users": 1, 
             "stats_subbed_sections": 1, "stats_subbed_courses": 1, 
-            "stats_total_notifs": 1, "_id": 0}
+            "stats_total_notifs": 1, "stats_notifs_logs": 1,
+            "stats_update_time": 1, "_id": 0}
         )
+        return stats
 
 
     # ----------------------------------------------------------------------

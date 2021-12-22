@@ -65,6 +65,9 @@ def cronjob():
         db._add_admin_log(
             f"sent {total} emails and texts in {duration} seconds ({n_courses} courses, {len(new_slots)} sections):{names[:-1]}"
         )
+        db.add_stats_notif_log(
+            f"{total} emails & text sent for {n_courses} courses, {len(new_slots)} sections"
+        )
         db._add_system_log(
             "cron",
             {
