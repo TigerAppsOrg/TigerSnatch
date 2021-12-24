@@ -5,14 +5,11 @@
 # ----------------------------------------------------------------------
 
 from database import Database
-from multiprocess import Pool
-from os import cpu_count
 from time import time
 from sys import stderr
 from coursewrapper import CourseWrapper
 from monitor_utils import (
     get_latest_term,
-    process,
     get_course_in_mobileapp,
     get_new_mobileapp_data,
 )

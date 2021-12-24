@@ -6,8 +6,6 @@
 
 from database import Database
 from mobileapp import MobileApp
-from coursewrapper import CourseWrapper
-from sys import stderr
 
 
 # gets the latest term code
@@ -176,26 +174,6 @@ def get_course_in_mobileapp(term, course_, curr_time, db: Database):
         break
 
     return new, new_mapping, new_enroll, new_cap, entirely_new_enrollments
-
-
-# helper method for multiprocessing: generates CourseWrappers after
-# querying MobileApp for a given course and classid list
-def process(args):
-    term, course, classes, courseid = args[0], args[1], args[2], args[3]
-
-    try:
-        new_enroll, new_cap = get_new_mobileapp_data(
-            term, course, classes, default_empty_dicts=True
-        )
-    except Exception:
-        print(
-            "detected malformed JSON - skipping (perhaps MobileApp is down?)",
-            file=stderr,
-        )
-        return None
-    course_data = CourseWrapper(course, new_enroll, new_cap, courseid)
-    print(course_data, end="")
-    return course_data
 
 
 if __name__ == "__main__":
