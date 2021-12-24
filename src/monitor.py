@@ -33,10 +33,10 @@ class Monitor:
                 print(deptnum, "with courseid", courseid, "is disabled - skipping")
                 continue
 
-            if deptnum in data:
-                data[deptnum].append(classid)
+            if courseid in data:
+                data[courseid].append(classid)
             else:
-                data[deptnum] = [courseid, classid]
+                data[courseid] = [deptnum, classid]
 
         self._waited_classes = data
 
