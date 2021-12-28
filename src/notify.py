@@ -14,6 +14,8 @@ from config import (
     TWILIO_TOKEN,
     TS_DOMAIN,
 )
+from multiprocess import Pool
+from os import cpu_count
 
 
 class Notify:
@@ -70,6 +72,7 @@ class Notify:
 
     def send_emails_html(self):
         try:
+            send_email_args = []
             for i in range(len(self._emails)):
                 if self._has_reserved_seats:
                     if self.db.get_user_auto_resub(self._netids[i]):
@@ -105,9 +108,10 @@ class Notify:
                     "template_id": template_id,
                 }
 
-                SendGridAPIClient(SENDGRID_API_KEY).client.mail.send.post(
-                    request_body=data
-                )
+                send_email_args.append([data])
+
+            with Pool(cpu_count()) as pool:
+                pool.starmap(_send_email, send_email_args)
 
             return True
         except Exception as e:
@@ -121,16 +125,22 @@ class Notify:
         msg_unsubbed = f"{self._sectionname} in {self._deptnum} has open spots! {reserved if self._has_reserved_seats else ''}Resubscribe: {TS_DOMAIN}/course?courseid={self._courseid}&skip"
         msg_resubbed = f"{self._sectionname} in {self._deptnum} has open spots! {reserved if self._has_reserved_seats else ''}Unsubscribe: {TS_DOMAIN}/dashboard?&skip"
         try:
+            send_text_args = []
             for i, phone in enumerate(self._phones):
                 is_auto_resub = self.db.get_user_auto_resub(self._netids[i])
                 if phone != "":
-                    Client(TWILIO_SID, TWILIO_TOKEN).api.account.messages.create(
-                        to=f"+1{phone}",
-                        from_=TWILIO_PHONE,
-                        body=(msg_resubbed if is_auto_resub else msg_unsubbed),
+                    send_text_args.append(
+                        [
+                            phone,
+                            msg_resubbed if is_auto_resub else msg_unsubbed,
+                        ]
                     )
                 if not is_auto_resub:
                     self.db.remove_from_waitlist(self._netids[i], self._classid)
+
+            with Pool(cpu_count()) as pool:
+                pool.starmap(_send_text, send_text_args)
+
             return True
         except Exception as e:
             print(e, file=stderr)
@@ -145,6 +155,24 @@ class Notify:
         ret += f"\tSection:\t{self._sectionname}\n"
         ret += f"\tClassID:\t{self._classid}"
         return ret
+
+
+def _send_email(data):
+    try:
+        SendGridAPIClient(SENDGRID_API_KEY).client.mail.send.post(request_body=data)
+    except Exception as e:
+        print(e, file=stderr)
+
+
+def _send_text(phone, msg):
+    try:
+        Client(TWILIO_SID, TWILIO_TOKEN).api.account.messages.create(
+            to=f"+1{phone}",
+            from_=TWILIO_PHONE,
+            body=msg,
+        )
+    except Exception as e:
+        print(e, file=stderr)
 
 
 if __name__ == "__main__":
