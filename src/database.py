@@ -697,8 +697,8 @@ class Database:
         return len(set([e["courseid"] for e in courseids]))
 
     def get_email_counter(self):
-        return self._db.admin.find_one({}, {"_id": 0, "total_emails": 1})[
-            "total_emails"
+        return self._db.admin.find_one({}, {"_id": 0, "stats_total_notifs": 1})[
+            "stats_total_notifs"
         ]
 
     def add_stats_notif_log(self, log):
@@ -1554,7 +1554,7 @@ class Database:
     def increment_email_counter(self, n):
         if n <= 0:
             return
-        self._db.admin.update_one({}, {"$inc": {"total_emails": n}})
+        self._db.admin.update_one({}, {"$inc": {"stats_total_notifs": n}})
 
     def _get_all_emails_csv(self):
         data = self._db.users.find({}, {"_id": 0, "email": 1})
