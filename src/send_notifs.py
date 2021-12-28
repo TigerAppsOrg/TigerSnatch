@@ -19,6 +19,7 @@ from sys import stdout, stderr
 from time import time
 from config import OIT_NOTIFS_OFFSET_MINS, DMS_URL
 
+TZ = pytz.timezone("US/Eastern")
 
 def cronjob():
     tic = time()
@@ -158,6 +159,26 @@ def generate_time_intervals():
 
     return datetimes
 
+def update_stats():
+    db = Database()
+    try: 
+        stats_top_subs = db.get_top_subscriptions(target_num=10, unique_courses=True)
+        stats_subbed_users = db.get_users_who_subscribe()
+        stats_subbed_sections = db.get_num_subscribed_sections()
+        stats_subbed_courses = db.get_num_subscribed_courses()
+        stats_total_notifs = db.get_email_counter()
+        stats_update_time = f"{(datetime.now(TZ)).strftime('%b %-d, %Y @ %-I:%M %p ET')}"
+
+        db._db.admin.update_one({}, 
+            {"$set": {"stats_top_subs": stats_top_subs, 
+            "stats_subbed_users": stats_subbed_users,
+            "stats_subbed_sections": stats_subbed_sections,
+            "stats_subbed_courses": stats_subbed_courses, 
+            "stats_total_notifs": stats_total_notifs, 
+            "stats_update_time": stats_update_time}}
+        )
+    except:
+        print("failed to update stats on activity page", file=stderr)
 
 if __name__ == "__main__":
     # can function via single file execution, but this is not the intent

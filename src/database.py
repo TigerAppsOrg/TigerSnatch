@@ -717,27 +717,6 @@ class Database:
             },
         )
 
-    def update_stats(self):
-        try: 
-            stats_top_subs = self.get_top_subscriptions(target_num=10, unique_courses=True)
-            stats_subbed_users = self.get_users_who_subscribe()
-            stats_subbed_sections = self.get_num_subscribed_sections()
-            stats_subbed_courses = self.get_num_subscribed_courses()
-            stats_total_notifs = self.get_email_counter()
-            stats_update_time = f"{(datetime.now(TZ)).strftime('%b %-d, %Y @ %-I:%M %p ET')}"
-
-            self._db.admin.update_one({}, 
-                {"$set": {"stats_top_subs": stats_top_subs, 
-                "stats_subbed_users": stats_subbed_users,
-                "stats_subbed_sections": stats_subbed_sections,
-                "stats_subbed_courses": stats_subbed_courses, 
-                "stats_total_notifs": stats_total_notifs, 
-                "stats_update_time": stats_update_time}}
-            )
-        except:
-            print("failed to update stats on activity page", file=stderr)
-
-
     def get_stats(self):
         stats = self._db.admin.find_one({}, 
             {"stats_top_subs": 1, "stats_subbed_users": 1, 
@@ -1647,4 +1626,3 @@ if __name__ == "__main__":
     # print(",".join(db._get_all_emails_csv().split(",")[997:]))
     print(",".join(db._get_all_emails_csv().split(",")[490 * 3 : 490 * 4]))
     # print(db.get_prev_enrollment_RESERVED_SEATS_ONLY("40268"))
-    # db.update_stats()
