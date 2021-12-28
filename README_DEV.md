@@ -36,3 +36,6 @@
 1. If needed, first manually fill a course section using the Admin panel and then subscribe to that section.
     - Be sure to visit the section's course page before doing this to force a data update for that course.
 2. Run `python send_notifs.py` once.
+
+**To view Heroku logs**
+- Use command: `heroku logs --tail -a <app_name>`
