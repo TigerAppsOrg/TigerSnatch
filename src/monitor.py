@@ -71,7 +71,7 @@ class Monitor:
             new_enroll = new_enroll_all[courseid]
             new_cap = new_cap_all[courseid]
             course_wrapper = CourseWrapper(
-                course_deptnum, new_enroll, new_cap, courseid
+                course_deptnum, new_enroll, new_cap, courseid, self._db
             )
             print(course_wrapper, end="")
             course_wrappers.append(course_wrapper)
