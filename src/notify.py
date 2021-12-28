@@ -14,8 +14,6 @@ from config import (
     TWILIO_TOKEN,
     TS_DOMAIN,
 )
-from multiprocess import Pool
-from os import cpu_count
 
 
 class Notify:
@@ -71,9 +69,9 @@ class Notify:
     # sends a formatted email
 
     def send_emails_html(self):
-        try:
-            send_email_args = []
-            for i in range(len(self._emails)):
+        send_email_args = []
+        for i in range(len(self._emails)):
+            try:
                 if self._has_reserved_seats:
                     if self.db.get_user_auto_resub(self._netids[i]):
                         # yes auto-resub | yes reserved seats
@@ -109,14 +107,10 @@ class Notify:
                 }
 
                 send_email_args.append([data])
+            except Exception as e:
+                print(e, file=stderr)
 
-            with Pool(cpu_count()) as pool:
-                pool.starmap(_send_email, send_email_args)
-
-            return True
-        except Exception as e:
-            print(e, file=stderr)
-            return False
+        return send_email_args
 
     # sends an SMS
 
@@ -124,9 +118,9 @@ class Notify:
         reserved = "This course has reserved seats, so enrollment may not be possible. "
         msg_unsubbed = f"{self._sectionname} in {self._deptnum} has open spots! {reserved if self._has_reserved_seats else ''}Resubscribe: {TS_DOMAIN}/course?courseid={self._courseid}&skip"
         msg_resubbed = f"{self._sectionname} in {self._deptnum} has open spots! {reserved if self._has_reserved_seats else ''}Unsubscribe: {TS_DOMAIN}/dashboard?&skip"
-        try:
-            send_text_args = []
-            for i, phone in enumerate(self._phones):
+        send_text_args = []
+        for i, phone in enumerate(self._phones):
+            try:
                 is_auto_resub = self.db.get_user_auto_resub(self._netids[i])
                 if phone != "":
                     send_text_args.append(
@@ -137,14 +131,10 @@ class Notify:
                     )
                 if not is_auto_resub:
                     self.db.remove_from_waitlist(self._netids[i], self._classid)
+            except Exception as e:
+                print(e, file=stderr)
 
-            with Pool(cpu_count()) as pool:
-                pool.starmap(_send_text, send_text_args)
-
-            return True
-        except Exception as e:
-            print(e, file=stderr)
-            return False
+        return send_text_args
 
     def __str__(self):
         ret = "\nNotifications:\n"
@@ -157,22 +147,26 @@ class Notify:
         return ret
 
 
-def _send_email(data):
+def send_email(data):
     try:
         SendGridAPIClient(SENDGRID_API_KEY).client.mail.send.post(request_body=data)
+        return True
     except Exception as e:
         print(e, file=stderr)
+        return False
 
 
-def _send_text(phone, msg):
+def send_text(phone, msg):
     try:
         Client(TWILIO_SID, TWILIO_TOKEN).api.account.messages.create(
             to=f"+1{phone}",
             from_=TWILIO_PHONE,
             body=msg,
         )
+        return True
     except Exception as e:
         print(e, file=stderr)
+        return False
 
 
 if __name__ == "__main__":
