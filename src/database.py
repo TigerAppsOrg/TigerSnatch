@@ -968,9 +968,13 @@ class Database:
     # updates current term code from admin collection
 
     def update_current_term_code(self, code, name):
+        if self.get_current_term_code()[0] == code:
+            return False
+
         self._db.admin.update_one(
             {}, {"$set": {"current_term_code": code, "current_term_name": name}}
         )
+        return True
 
     # ----------------------------------------------------------------------
     # COURSE METHODS

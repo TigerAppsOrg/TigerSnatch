@@ -12,11 +12,16 @@ from sys import path
 path.append("src")  # noqa
 
 from send_notifs import *
-from _exec_update_all_courses import do_update_async_SOFT
+from _exec_update_all_courses import do_update_async_SOFT, do_update_async_HARD
 from datetime import datetime
 from sys import stderr
 import pytz
-from config import NOTIFS_INTERVAL_SECS, NOTIFS_SHEET_POLL_MINS, STATS_INTERVAL_MINS
+from config import (
+    NOTIFS_INTERVAL_SECS,
+    NOTIFS_SHEET_POLL_MINS,
+    GLOBAL_COURSE_UPDATE_INTERVAL_MINS,
+    STATS_INTERVAL_MINS
+)
 from apscheduler.schedulers.blocking import BlockingScheduler
 from apscheduler.schedulers.background import BackgroundScheduler
 
@@ -42,6 +47,17 @@ def schedule_jobs(update_db=False):
             update_stats,
             "interval",
             minutes=STATS_INTERVAL_MINS,
+        )
+
+        print(
+            "[Scheduler] adding global hard course update job every",
+            GLOBAL_COURSE_UPDATE_INTERVAL_MINS,
+            "mins",
+        )
+        sched.add_job(
+            do_update_async_HARD,
+            "interval",
+            minutes=GLOBAL_COURSE_UPDATE_INTERVAL_MINS,
         )
 
         for time in times:

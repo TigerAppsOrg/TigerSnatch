@@ -69,51 +69,46 @@ class Notify:
     # sends a formatted email
 
     def send_emails_html(self):
-        next_step_unsubbed = f"""<p>You've been <b>automatically unsubscribed</b> from this section. If you didn't get the spot, you may re-subscribe here: <a href="{TS_DOMAIN}/course?query=&courseid={self._courseid}&skip">TigerSnatch | {self._deptnum}</a>. Want to always stay subscribed until you manually unsubscribe? <b>Change your notifications settings</b> on the <a href="{TS_DOMAIN}/dashboard?&skip">TigerSnatch | Dashboard</a>!</p>"""
-
-        next_step_resubbed = f"""<p>To stop receiving notifications for this section, unsubscribe here: <a href="{TS_DOMAIN}/dashboard?&skip">TigerSnatch | Dashboard</a>.</p>"""
-
-        non_reserved = f"""<b>NOTE</b>: Some courses reserve seats or are closed, so enrollment may not be possible."""
-        reserved = f"""<b>NOTE: This course has reserved seats. TigerSnatch has detected a spot opening, but it cannot determine which seat category it corresponds to. Enrollment may not be possible.</b>"""
-
-        msg = f"""\
-        <html>
-        <head></head>
-        <body style='font-size:1.3em'>
-            <p>Greetings $$netid$$,</p>
-            $$reserved_text$$
-            <p>Your subscribed section <b>{self._sectionname}</b> in <b>{self._coursename}</b> has one or more spots open!</p>
-            <p>Head over to <a href="https://phubprod.princeton.edu/psp/phubprod/?cmd=start">TigerHub</a> to Snatch your spot!</p>
-            $$next_step$$
-            <p>Best,<br>TigerSnatch Team <3</p>
-        </body>
-        </html>"""
-
         try:
-            data = {
-                "personalizations": [
-                    {
-                        "to": [{"email": self._emails[i]}],
-                        "subject": f"TigerSnatch: a spot opened in {self._deptnum} {self._sectionname}",
-                        "substitutions": {
-                            "$$netid$$": self._netids[i],
-                            "$$reserved_text$$": reserved
-                            if self._has_reserved_seats
-                            else non_reserved,
-                            "$$next_step$$": (
-                                next_step_resubbed
-                                if self.db.get_user_auto_resub(self._netids[i])
-                                else next_step_unsubbed
-                            ),
-                        },
-                    }
-                    for i in range(len(self._emails))
-                ],
-                "from": {"email": TS_EMAIL, "name": "TigerSnatch"},
-                "content": [{"type": "text/html", "value": (msg)}],
-            }
+            for i in range(len(self._emails)):
+                if self._has_reserved_seats:
+                    if self.db.get_user_auto_resub(self._netids[i]):
+                        # yes auto-resub | yes reserved seats
+                        template_id = "d-b32c7a8c99f2491899322ced801b216b"
+                    else:
+                        # no auto-resub | yes reserved seats
+                        template_id = "d-632e8760499b40d680742b9acdb8d129"
+                else:
+                    if self.db.get_user_auto_resub(self._netids[i]):
+                        # yes auto-resub | no reserved seats
+                        template_id = "d-c04bc32123ea45ec80889919cc5c377e"
+                    else:
+                        # no auto-resub | no reserved seats
+                        template_id = "d-2607514c41ef48cdb649bad3d4f0c660"
 
-            SendGridAPIClient(SENDGRID_API_KEY).client.mail.send.post(request_body=data)
+                data = {
+                    "personalizations": [
+                        {
+                            "to": [{"email": self._emails[i]}],
+                            "dynamic_template_data": {
+                                "netid": self._netids[i],
+                                "sectionname": self._sectionname,
+                                "coursename": self._coursename,
+                                "deptnum": self._deptnum,
+                                "tigerhub_url": "https://phubprod.princeton.edu/psp/phubprod/?cmd=start",
+                                "dashboard_url": f"{TS_DOMAIN}/dashboard?&skip",
+                                "course_url": f"{TS_DOMAIN}/course?query=&courseid={self._courseid}&skip",
+                            },
+                        }
+                    ],
+                    "from": {"email": TS_EMAIL, "name": "TigerSnatch"},
+                    "template_id": template_id,
+                }
+
+                SendGridAPIClient(SENDGRID_API_KEY).client.mail.send.post(
+                    request_body=data
+                )
+
             return True
         except Exception as e:
             print(e, file=stderr)
