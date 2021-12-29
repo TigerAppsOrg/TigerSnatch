@@ -22,6 +22,7 @@ from notify import send_email, send_text
 from multiprocess import Pool
 from os import cpu_count
 
+TZ = pytz.timezone("US/Eastern")
 
 def cronjob():
     tic = time()
@@ -31,11 +32,12 @@ def cronjob():
     db._add_system_log("cron", {"message": "notifications script executing"})
 
     # get all class openings (for waited-on classes) from MobileApp
-    new_slots, n_courses = monitor.get_classes_with_changed_enrollments()
+    new_slots, _ = monitor.get_classes_with_changed_enrollments()
 
     total = 0
     names = ""
     emails_to_send, texts_to_send = [], []
+    n_sections = 0
     for classid, n_new_slots in new_slots.items():
         if n_new_slots == 0:
             continue
@@ -57,6 +59,7 @@ def cronjob():
 
             total += n_notifs
             names += " " + notify.get_name() + ","
+            n_sections += 1
 
         except Exception as e:
             print(e, file=stderr)
@@ -82,12 +85,15 @@ def cronjob():
 
     if total > 0:
         db._add_admin_log(
-            f"sent {total} emails and texts in {duration} seconds ({n_courses} courses, {len(new_slots)} sections):{names[:-1]}"
+            f"sent {total} emails and texts in {duration} seconds ({n_sections} sections):{names[:-1]}"
+        )
+        db.add_stats_notif_log(
+            f"{total} notifs sent for {n_sections} sections:{names[:-1]}"
         )
         db._add_system_log(
             "cron",
             {
-                "message": f"sent {total} emails and texts in {duration} seconds ({n_courses} courses, {len(new_slots)} sections):{names[:-1]}"
+                "message": f"sent {total} emails and texts in {duration} seconds ({n_sections} sections):{names[:-1]}"
             },
             log=False,
         )
@@ -96,12 +102,12 @@ def cronjob():
         db._add_system_log(
             "cron",
             {
-                "message": f"sent 0 emails and texts in {duration} seconds ({n_courses} courses, {len(new_slots)} sections)"
+                "message": f"sent 0 emails and texts in {duration} seconds ({n_sections} sections)"
             },
             log=False,
         )
         print(
-            f"sent 0 emails and texts in {duration} seconds ({n_courses} courses, {len(new_slots)} sections)"
+            f"sent 0 emails and texts in {duration} seconds ({n_sections} sections)"
         )
         stdout.flush()
 
@@ -109,7 +115,7 @@ def cronjob():
     requests.post(
         DMS_URL,
         data={
-            "m": f"Sent {total} notifications in {duration} seconds ({n_courses} courses, {len(new_slots)} sections)"
+            "m": f"Sent {total} notifications in {duration} seconds ({n_sections} sections)"
         },
     )
 
@@ -176,6 +182,26 @@ def generate_time_intervals():
 
     return datetimes
 
+def update_stats():
+    db = Database()
+    try: 
+        stats_top_subs = db.get_top_subscriptions(target_num=10, unique_courses=True)
+        stats_subbed_users = db.get_users_who_subscribe()
+        stats_subbed_sections = db.get_num_subscribed_sections()
+        stats_subbed_courses = db.get_num_subscribed_courses()
+        stats_total_notifs = db.get_email_counter()
+        stats_update_time = f"{(datetime.now(TZ)).strftime('%b %-d, %Y @ %-I:%M %p ET')}"
+
+        db._db.admin.update_one({}, 
+            {"$set": {"stats_top_subs": stats_top_subs, 
+            "stats_subbed_users": stats_subbed_users,
+            "stats_subbed_sections": stats_subbed_sections,
+            "stats_subbed_courses": stats_subbed_courses, 
+            "stats_total_notifs": stats_total_notifs, 
+            "stats_update_time": stats_update_time}}
+        )
+    except:
+        print("failed to update stats on activity page", file=stderr)
 
 if __name__ == "__main__":
     # can function via single file execution, but this is not the intent
