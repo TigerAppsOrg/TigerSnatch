@@ -20,6 +20,7 @@ from config import (
     NOTIFS_INTERVAL_SECS,
     NOTIFS_SHEET_POLL_MINS,
     GLOBAL_COURSE_UPDATE_INTERVAL_MINS,
+    STATS_INTERVAL_MINS
 )
 from apscheduler.schedulers.blocking import BlockingScheduler
 from apscheduler.schedulers.background import BackgroundScheduler
@@ -40,6 +41,12 @@ def schedule_jobs(update_db=False):
             "cron",
             hour="4",
             timezone=tz,
+        )
+        print("[Scheduler] adding stats update job every 10 minutes")
+        sched.add_job(
+            update_stats,
+            "interval",
+            minutes=STATS_INTERVAL_MINS,
         )
 
         print(

@@ -55,6 +55,9 @@ GLOBAL_COURSE_UPDATE_INTERVAL_MINS = int(environ["GLOBAL_COURSE_UPDATE_INTERVAL_
 # are sent
 NOTIFS_INTERVAL_SECS = int(environ["NOTIFS_INTERVAL_SECS"])
 
+# minimum time interval on which stats on Activity page are updated
+STATS_INTERVAL_MINS = int(environ["STATS_INTERVAL_MINS"])
+
 # maximum number of sections a user can be on waitlists for
 MAX_WAITLIST_SIZE = int(environ["MAX_WAITLIST_SIZE"])
 

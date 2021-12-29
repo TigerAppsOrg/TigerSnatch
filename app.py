@@ -210,6 +210,7 @@ def activity():
     waitlist_logs = _db.get_user_waitlist_log(netid)
     trade_logs = _db.get_user_trade_log(netid)
     term_name = _db.get_current_term_code()[1]
+    stats = _db.get_stats()
 
     html = render_template(
         "activity.html",
@@ -220,6 +221,7 @@ def activity():
         notifs_online=_db.get_cron_notification_status(),
         next_notifs=_db.get_current_or_next_notifs_interval(),
         term_name=term_name,
+        stats=stats
     )
 
     return make_response(html)

@@ -540,43 +540,17 @@ class Database:
         def get_total_users():
             return self._db.users.count_documents({})
 
-        def get_users_who_subscribe():
-            data = self._db.users.find({}, {"waitlists": 1, "_id": 0})
-            return sum([len(k["waitlists"]) > 0 for k in data])
-
         def get_total_subscriptions():
             data = self._db.waitlists.find({}, {"waitlist": 1, "_id": 0})
             return sum([len(k["waitlist"]) for k in data])
 
-        def get_total_subscribed_sections():
-            return self._db.waitlists.count_documents({})
-
-        def get_total_subscribed_courses():
-            waited_classes = list(self.get_waited_classes())
-
-            classids = [e["classid"] for e in waited_classes]
-            courseids = self._db.enrollments.find(
-                {"classid": {"$in": [classid for classid in classids]}}
-            )
-
-            return len(set([e["courseid"] for e in courseids]))
-
-        def get_email_counter():
-            return self._db.admin.find_one({}, {"_id": 0, "total_emails": 1})[
-                "total_emails"
-            ]
-
-        def get_top_n_most_subscribed_sections(n=5):
-            data = self._db.waitlists.find({}, {"waitlist": 1, "classid": 1, "_id": 0})
-            data = [(len(k["waitlist"]), k["classid"]) for k in data]
+        def get_top_n_subscribed_sections(n):
+            data = self.get_top_subscriptions(target_num=n)
             if len(data) == 0:
                 return ["No Subscriptions found"]
-            data.sort(key=lambda x: x[0], reverse=True)
-            data = [e for e in data[:n]]
             res = [f"Top {len(data)} most-subscribed sections:"]
-            for n, classid in data:
-                deptnum, name, section, _ = self.classid_to_classinfo(classid)
-                res.append(f"[{n}] {name} ({deptnum}): {section}")
+            for s_data in data:
+                res.append(f"[{s_data['size']}] {s_data['name']} ({s_data['deptnum']}): {s_data['section']}")
             return res
 
         def get_disabled_courses():
@@ -618,15 +592,15 @@ class Database:
             res = [
                 f"Current term: {get_current_term_name()}",
                 f"# users: {get_total_users()}",
-                f"# users with >0 subscriptions: {get_users_who_subscribe()}",
+                f"# users with >0 subscriptions: {self.get_users_who_subscribe()}",
                 f"# users with auto resub on: {get_users_who_auto_resub()}",
                 f"# subscriptions: {get_total_subscriptions()}",
-                f"# subscribed sections: {get_total_subscribed_sections()}",
-                f"# subscribed courses: {get_total_subscribed_courses()}",
-                f"# notifications sent: {get_email_counter()}",
+                f"# subscribed sections: {self.get_num_subscribed_sections()}",
+                f"# subscribed courses: {self.get_num_subscribed_courses()}",
+                f"# notifications sent: {self.get_email_counter()}",
                 "====================",
             ]
-            res.extend(get_top_n_most_subscribed_sections(n=10))
+            res.extend(get_top_n_subscribed_sections(n=10))
             res.append("====================")
             res.extend(get_disabled_courses())
             res.append("====================")
@@ -642,15 +616,13 @@ class Database:
 
     def get_all_subscriptions(self):
         def get_all_subscribed_sections():
-            data = self._db.waitlists.find({}, {"waitlist": 1, "classid": 1, "_id": 0})
-            data = [(len(k["waitlist"]), k["classid"]) for k in data]
+            data = self.get_all_subscriptions_raw()
             if len(data) == 0:
                 return ["No Subscriptions found"]
-            data.sort(key=lambda x: x[0], reverse=True)
             res = []
-            for n, classid in data:
-                deptnum, name, section, _ = self.classid_to_classinfo(classid)
-                res.append(f"[{n}] {name} ({deptnum}): {section}")
+            for s_data in data:
+                deptnum, name, section, _ = self.classid_to_classinfo(s_data['classid'])
+                res.append(f"[{s_data['size']}] {name} ({deptnum}): {section}")
             return res
 
         try:
@@ -658,6 +630,102 @@ class Database:
         except:
             print("failed to get all subscriptions", file=stderr)
             return "error"
+    
+    # ----------------------------------------------------------------------
+    # STATS METHODS
+    # ----------------------------------------------------------------------
+
+    # if include_waitlist is True, include each section's waitlist array in result
+    def get_all_subscriptions_raw(self, include_waitlist=False): 
+        fields = {"classid": 1, "size": 1, "_id": 0}
+        if include_waitlist:
+            fields['waitlist'] = 1
+        data = list(self._db.waitlists.aggregate(
+            [
+                {"$addFields": {"size": {"$size": "$waitlist"}}}, 
+                {"$sort": {"size": -1}}, 
+                {"$project": fields}
+            ]
+        ))
+        return data
+
+  
+    # if unique_courses is True, removes entries for duplicate courses
+    def get_top_subscriptions(self, target_num, unique_courses=False):
+        if target_num <= 0:
+            return []
+
+        res = []
+        if unique_courses:
+            try:
+                waitlists = self.get_all_subscriptions_raw()
+                courses = set()
+                for data in waitlists: 
+                    if (len(courses) >= target_num):
+                        break
+                    deptnum, name, section, _ = self.classid_to_classinfo(data['classid'])
+                    if deptnum not in courses:
+                        courses.add(deptnum)
+                        res.append({"deptnum": deptnum, "name": name, "section": section, "size": data['size']})
+            except:
+                print("failed to retrieve top subscribed courses", file=stderr)
+
+        else:
+            try:
+                waitlists = self.get_all_subscriptions_raw()[0:target_num]
+                for data in waitlists:
+                    deptnum, name, section, _ = self.classid_to_classinfo(data['classid'])
+                    res.append({"deptnum": deptnum, "name": name, "section": section, "size": data['size']})
+            except:
+                print("failed to retrieve top subscribed sections", file=stderr)
+        
+        return res
+
+    def get_users_who_subscribe(self):
+        data = self._db.users.find({}, {"waitlists": 1, "_id": 0})
+        return sum([len(k["waitlists"]) > 0 for k in data])
+
+    def get_num_subscribed_sections(self):
+        return self._db.waitlists.count_documents({})
+
+    def get_num_subscribed_courses(self):
+        waited_classes = list(self.get_waited_classes())
+        classids = [e["classid"] for e in waited_classes]
+        courseids = self._db.enrollments.find(
+            {"classid": {"$in": [classid for classid in classids]}}
+        )
+        return len(set([e["courseid"] for e in courseids]))
+
+    def get_email_counter(self):
+        return self._db.admin.find_one({}, {"_id": 0, "stats_total_notifs": 1})[
+            "stats_total_notifs"
+        ]
+
+    def add_stats_notif_log(self, log):
+        log = f"{(datetime.now(TZ)).strftime('%b %d, %Y @ %-I:%M %p ET')} \u2192 {log}"
+
+        self._db.admin.update_one(
+            {},
+            {
+                "$push": {
+                    "stats_notifs_logs": {
+                        "$each": [log],
+                        "$position": 0,
+                        "$slice": 5,
+                    }
+                }
+            },
+        )
+
+    def get_stats(self):
+        stats = self._db.admin.find_one({}, 
+            {"stats_top_subs": 1, "stats_subbed_users": 1, 
+            "stats_subbed_sections": 1, "stats_subbed_courses": 1, 
+            "stats_total_notifs": 1, "stats_notifs_logs": 1,
+            "stats_update_time": 1, "_id": 0}
+        )
+        return stats
+
 
     # ----------------------------------------------------------------------
     # BLACKLIST UTILITY METHODS
@@ -1486,7 +1554,7 @@ class Database:
     def increment_email_counter(self, n):
         if n <= 0:
             return
-        self._db.admin.update_one({}, {"$inc": {"total_emails": n}})
+        self._db.admin.update_one({}, {"$inc": {"stats_total_notifs": n}})
 
     def _get_all_emails_csv(self):
         data = self._db.users.find({}, {"_id": 0, "email": 1})
