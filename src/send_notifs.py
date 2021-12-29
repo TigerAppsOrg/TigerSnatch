@@ -69,7 +69,7 @@ def cronjob():
             f"sent {total} emails and texts in {duration} seconds ({n_sections} sections):{names[:-1]}"
         )
         db.add_stats_notif_log(
-            f"{total} notifs sent for {n_sections} sections:{names[:-1]}"
+            f"{total} notif{'s'[:total^1]} sent for {n_sections} section{'s'[:n_sections^1]}:{names[:-1]}"
         )
         db._add_system_log(
             "cron",
