@@ -66,7 +66,7 @@
                 </div>
                 <div class="list-group-item align-items-center stats-item">
                   <label>
-                    Number of Emails Sent:
+                    Number of Emails/Texts Sent:
                   </label>
                   <span class="badge">{{ stats['stats_total_notifs'] }}</span>
                 </div>
@@ -77,9 +77,9 @@
           <div class="card activity-card text-center mt-3">
             <div class="card-body">
               <div class="card-title">
-                Most Recent Notifs
+                Most Recent Notifications
               </div>
-              <div class="card-subtitle mb-2 text-muted">Always up-to-date. Only at most 5 notifs are shown.</div>
+              <div class="card-subtitle mb-2 text-muted">Always up-to-date. Only at most 5 notifications are shown.</div>
               {% if stats['stats_notifs_logs'] == [] %}
                 <div>No data available.</div>
               {% else %}

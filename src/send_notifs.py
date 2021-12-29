@@ -29,10 +29,11 @@ def cronjob():
     db._add_system_log("cron", {"message": "notifications script executing"})
 
     # get all class openings (for waited-on classes) from MobileApp
-    new_slots, n_courses = monitor.get_classes_with_changed_enrollments()
+    new_slots, _ = monitor.get_classes_with_changed_enrollments()
 
     total = 0
     names = ""
+    n_sections = 0
     for classid, n_new_slots in new_slots.items():
         if n_new_slots == 0:
             continue
@@ -53,6 +54,7 @@ def cronjob():
                 print("\t>", n_notifs, "emails and texts (each) sent")
                 total += n_notifs
                 names += " " + notify.get_name() + ","
+                n_sections += 1
             else:
                 print("failed to send emails and/or texts")
         except Exception as e:
@@ -64,15 +66,15 @@ def cronjob():
 
     if total > 0:
         db._add_admin_log(
-            f"sent {total} emails and texts in {duration} seconds ({n_courses} courses, {len(new_slots)} sections):{names[:-1]}"
+            f"sent {total} emails and texts in {duration} seconds ({n_sections} sections):{names[:-1]}"
         )
         db.add_stats_notif_log(
-            f"{total} emails & text sent for {n_courses} courses, {len(new_slots)} sections"
+            f"{total} notifs sent for {n_sections} sections:{names[:-1]}"
         )
         db._add_system_log(
             "cron",
             {
-                "message": f"sent {total} emails and texts in {duration} seconds ({n_courses} courses, {len(new_slots)} sections):{names[:-1]}"
+                "message": f"sent {total} emails and texts in {duration} seconds ({n_sections} sections):{names[:-1]}"
             },
         )
         db.increment_email_counter(total)
@@ -80,11 +82,11 @@ def cronjob():
         db._add_system_log(
             "cron",
             {
-                "message": f"sent 0 emails and texts in {duration} seconds ({n_courses} courses, {len(new_slots)} sections)"
+                "message": f"sent 0 emails and texts in {duration} seconds ({n_sections} sections)"
             },
         )
         print(
-            f"sent 0 emails and texts in {duration} seconds ({n_courses} courses, {len(new_slots)} sections)"
+            f"sent 0 emails and texts in {duration} seconds ({n_sections} sections)"
         )
         stdout.flush()
 
@@ -92,7 +94,7 @@ def cronjob():
     requests.post(
         DMS_URL,
         data={
-            "m": f"Sent {total} notifications in {duration} seconds ({n_courses} courses, {len(new_slots)} sections)"
+            "m": f"Sent {total} notifications in {duration} seconds ({n_sections} sections)"
         },
     )
 
