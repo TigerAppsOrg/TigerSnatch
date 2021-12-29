@@ -16,10 +16,10 @@
         <span class="badge bg-warning text-dark font-monospace fs-3 px-2 py-2">Statistics</span>
       </p>
       <div id="stats-activity-col-l" class="stats-col col-xl-6">
-          <div class="card activity-card text-center mt-3">
+          <div class="card activity-card mt-3">
             <div class="card-body">
-              <div class="card-title">Top Subscribed Courses</div>
-              <div class="card-subtitle mb-2 text-muted">Last Updated: {{ stats['stats_update_time'] }}. <br/>  Only the top subscribed section from a course is shown. </div>
+              <div class="card-title text-center">Top Subscribed Courses</div>
+              <div class="card-subtitle mb-2 text-muted text-center">Last Updated: {{ stats['stats_update_time'] }}. <br/>  Only the top subscribed section from a course is shown. </div>
               {% if stats['stats_top_subs'] == [] %}
                 <div>No data available.</div>
               {% else %}
