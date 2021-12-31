@@ -40,7 +40,7 @@
 **To view Heroku logs**
 - Use command: `heroku logs --tail -a <app_name>`
 
-**To visit API Store*
+**To visit API Store**
 1. Connect to vpn.princeton.edu using GlobalProtect VPN.
 2. Navigate to https://api-store.princeton.edu/store/
 3. Login with TigerSnatch credentials for access to MobileApp API.
