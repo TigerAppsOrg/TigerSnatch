@@ -37,8 +37,11 @@ def do_update(reset_type):
     hard_reset = reset_type
     db = Database()
 
-    # get current term code
-    terms = MobileApp().get_terms()
+    try:
+        # get current term code
+        terms = MobileApp().get_terms()
+    except:
+        raise Exception("failed to query MobileApp term endpoint")
 
     try:
         current_term_code = terms["term"][0]["code"]
