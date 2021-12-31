@@ -1108,7 +1108,7 @@ class Database:
         except:
             return []
 
-    # checks if TigerSnatch has detected that a course has reserved seating (uses Registrar's API)
+    # checks if a course has reserved seating
 
     def does_course_have_reserved_seats(self, courseid):
         try:

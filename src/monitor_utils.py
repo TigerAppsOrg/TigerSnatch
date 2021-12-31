@@ -72,8 +72,7 @@ def get_course_in_mobileapp(term, course_, curr_time, db: Database):
                 + course["catalog_number"],
                 "title": course["title"],
                 "time": curr_time,
-                # preserve previous reserved seat flag, without querying Registar API
-                "has_reserved_seats": db.does_course_have_reserved_seats(courseid),
+                "has_reserved_seats": course["detail"]["seat_reservations"] == "Y",
             }
 
             if new["displayname"] != course_:
