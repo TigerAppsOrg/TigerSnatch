@@ -35,7 +35,15 @@
 **To simulate one run of the notifications script**
 1. If needed, first manually fill a course section using the Admin panel and then subscribe to that section.
     - Be sure to visit the section's course page before doing this to force a data update for that course.
-2. Run `python send_notifs.py` once.
+2. Run `python send_notifs.py` (locally) or `heroku run python src/send_notifs.py -a <app_name>` (on a specific app).
 
 **To view Heroku logs**
 - Use command: `heroku logs --tail -a <app_name>`
+
+**To visit API Store*
+1. Connect to vpn.princeton.edu using GlobalProtect VPN.
+2. Navigate to https://api-store.princeton.edu/store/
+3. Login with TigerSnatch credentials for access to MobileApp API.
+
+**Things for Shannon to Remember**
+- Data on course page is read from DB. If it has been more than 5 mins since course page was last visited, then API is queried and this course's data is updated in DB. Notifs script directly queries API for new enrollment/cap and checks if spots are available; does not update DB.
