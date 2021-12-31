@@ -6,8 +6,6 @@
 
 from database import Database
 from mobileapp import MobileApp
-from coursewrapper import CourseWrapper
-from sys import stderr
 
 
 # gets the latest term code
@@ -17,29 +15,55 @@ def get_latest_term():
 
 # returns two dictionaries: one containing new class enrollments, one
 # containing new class capacities
-def get_new_mobileapp_data(term, course, classes, default_empty_dicts=False):
-    # the prepended space in catnum is intentional
-    data = MobileApp().get_courses(
-        term=term, subject=course[:3], catnum=f" {course[3:]}"
-    )
+def get_new_mobileapp_data(
+    term: str, courseids: list, classids: list, default_empty_dicts=False
+):
+    data = MobileApp().get_seats(term=term, course_ids=",".join(courseids))
 
-    if "subjects" not in data["term"][0]:
+    if "course" not in data:
         if default_empty_dicts:
             return {}, {}
         raise Exception("no query results")
 
     new_enroll = {}
     new_cap = {}
+    courseids = set(courseids)
+    classids = set(classids)
 
-    # O(n^2) loop - there is only one subject and course!
-    for classid in classes:
-        for subject in data["term"][0]["subjects"]:
-            for course in subject["courses"]:
-                for class_ in course["classes"]:
-                    if class_["class_number"] == classid:
-                        new_enroll[classid] = int(class_["enrollment"])
-                        new_cap[classid] = int(class_["capacity"])
-                        break
+    for course in data["course"]:
+        courseid = course["course_id"]
+        # the below checks should never fail if MobileApp is working properly
+        if courseid not in courseids:
+            continue
+        if "classes" not in course:
+            continue
+
+        """
+        Create the following structure for each of new_cap and new_enroll:
+        {
+            courseid1: {
+                classid1: enroll/cap,
+                classid2: enroll/cap,
+                ...
+            },
+            courseid2: {
+                classid1: enroll/cap,
+                classid2: enroll/cap,
+                ...
+            },
+            ...
+        }
+        """
+        for class_ in course["classes"]:
+            classid = class_["class_number"]
+            # skip classids that people are not subscribed to
+            if classid not in classids:
+                continue
+            if courseid not in new_enroll:
+                new_enroll[courseid] = {}
+                new_cap[courseid] = {}
+            new_enroll[courseid][classid] = int(class_["enrollment"])
+            new_cap[courseid][classid] = int(class_["capacity"])
 
     return new_enroll, new_cap
 
@@ -151,21 +175,12 @@ def get_course_in_mobileapp(term, course_, curr_time, db: Database):
     return new, new_mapping, new_enroll, new_cap, entirely_new_enrollments
 
 
-# helper method for multiprocessing: generates CourseWrappers after
-# querying MobileApp for a given course and classid list
-def process(args):
-    term, course, classes, courseid = args[0], args[1], args[2], args[3]
-
-    try:
-        new_enroll, new_cap = get_new_mobileapp_data(
-            term, course, classes, default_empty_dicts=True
-        )
-    except Exception:
-        print(
-            "detected malformed JSON - skipping (perhaps MobileApp is down?)",
-            file=stderr,
-        )
-        return None
-    course_data = CourseWrapper(course, new_enroll, new_cap, courseid)
-    print(course_data, end="")
-    return course_data
+if __name__ == "__main__":
+    new_enroll, new_cap = get_new_mobileapp_data(
+        "1224",
+        ["002051", "002054"],
+        ["22797", "22795", "21931", "21927"],
+        default_empty_dicts=True,
+    )
+    print(new_enroll)
+    print(new_cap)

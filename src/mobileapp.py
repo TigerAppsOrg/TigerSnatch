@@ -18,6 +18,15 @@ class MobileApp:
         self.configs = Configs()
         self._db = Database()
 
+    # wrapper function for _getJSON with the courses/seats endpoint.
+    # kwargs must contain key "term" with the current term code, as well
+    # as key "course_ids" with a comma-separated list of courseIDs to
+    # get enrollment and capacity data
+
+    def get_seats(self, **kwargs):
+        kwargs["fmt"] = "json"
+        return self._getJSON(self.configs.COURSE_SEATS, **kwargs)
+
     # wrapper function for _getJSON with the courses/courses endpoint.
     # kwargs must contain key "term" with the current term code, as well
     # as one or more of "subject" (department code) and "search" (course

@@ -18,6 +18,9 @@ from database import Database
 from sys import stdout, stderr
 from time import time
 from config import OIT_NOTIFS_OFFSET_MINS, DMS_URL
+from notify import send_email, send_text
+from multiprocess import Pool
+from os import cpu_count
 
 TZ = pytz.timezone("US/Eastern")
 
@@ -33,6 +36,7 @@ def cronjob():
 
     total = 0
     names = ""
+    emails_to_send, texts_to_send = [], []
     n_sections = 0
     for classid, n_new_slots in new_slots.items():
         if n_new_slots == 0:
@@ -50,17 +54,32 @@ def cronjob():
             print("\t> sending texts to", notify.get_phones())
             stdout.flush()
 
-            if notify.send_emails_html() and notify.send_sms():
-                print("\t>", n_notifs, "emails and texts (each) sent")
-                total += n_notifs
-                names += " " + notify.get_name() + ","
-                n_sections += 1
-            else:
-                print("failed to send emails and/or texts")
+            emails_to_send.extend(notify.send_emails_html())
+            texts_to_send.extend(notify.send_sms())
+
+            total += n_notifs
+            names += " " + notify.get_name() + ","
+            n_sections += 1
+
         except Exception as e:
             print(e, file=stderr)
 
-        print()
+    with Pool(cpu_count()) as pool:
+        emails_res = pool.starmap(send_email, emails_to_send)
+        texts_res = pool.starmap(send_text, texts_to_send)
+
+    n_emails_sent = sum(emails_res)
+    if len(emails_res) > 0 and n_emails_sent == 0:
+        print("failed to send emails")
+
+    n_texts_sent = sum(texts_res)
+    if len(texts_res) > 0 and n_texts_sent == 0:
+        print("failed to send texts")
+
+    if n_emails_sent + n_texts_sent == 0:
+        total = 0
+
+    print()
 
     duration = round(time() - tic)
 
@@ -76,6 +95,7 @@ def cronjob():
             {
                 "message": f"sent {total} emails and texts in {duration} seconds ({n_sections} sections):{names[:-1]}"
             },
+            log=False,
         )
         db.increment_email_counter(total)
     elif total == 0:
@@ -84,6 +104,7 @@ def cronjob():
             {
                 "message": f"sent 0 emails and texts in {duration} seconds ({n_sections} sections)"
             },
+            log=False,
         )
         print(
             f"sent 0 emails and texts in {duration} seconds ({n_sections} sections)"

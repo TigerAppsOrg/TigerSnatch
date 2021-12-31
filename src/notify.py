@@ -69,8 +69,9 @@ class Notify:
     # sends a formatted email
 
     def send_emails_html(self):
-        try:
-            for i in range(len(self._emails)):
+        send_email_args = []
+        for i in range(len(self._emails)):
+            try:
                 if self._has_reserved_seats:
                     if self.db.get_user_auto_resub(self._netids[i]):
                         # yes auto-resub | yes reserved seats
@@ -105,14 +106,11 @@ class Notify:
                     "template_id": template_id,
                 }
 
-                SendGridAPIClient(SENDGRID_API_KEY).client.mail.send.post(
-                    request_body=data
-                )
+                send_email_args.append([data])
+            except Exception as e:
+                print(e, file=stderr)
 
-            return True
-        except Exception as e:
-            print(e, file=stderr)
-            return False
+        return send_email_args
 
     # sends an SMS
 
@@ -120,21 +118,23 @@ class Notify:
         reserved = "This course has reserved seats, so enrollment may not be possible. "
         msg_unsubbed = f"{self._sectionname} in {self._deptnum} has open spots! {reserved if self._has_reserved_seats else ''}Resubscribe: {TS_DOMAIN}/course?courseid={self._courseid}&skip"
         msg_resubbed = f"{self._sectionname} in {self._deptnum} has open spots! {reserved if self._has_reserved_seats else ''}Unsubscribe: {TS_DOMAIN}/dashboard?&skip"
-        try:
-            for i, phone in enumerate(self._phones):
+        send_text_args = []
+        for i, phone in enumerate(self._phones):
+            try:
                 is_auto_resub = self.db.get_user_auto_resub(self._netids[i])
                 if phone != "":
-                    Client(TWILIO_SID, TWILIO_TOKEN).api.account.messages.create(
-                        to=f"+1{phone}",
-                        from_=TWILIO_PHONE,
-                        body=(msg_resubbed if is_auto_resub else msg_unsubbed),
+                    send_text_args.append(
+                        [
+                            phone,
+                            msg_resubbed if is_auto_resub else msg_unsubbed,
+                        ]
                     )
                 if not is_auto_resub:
                     self.db.remove_from_waitlist(self._netids[i], self._classid)
-            return True
-        except Exception as e:
-            print(e, file=stderr)
-            return False
+            except Exception as e:
+                print(e, file=stderr)
+
+        return send_text_args
 
     def __str__(self):
         ret = "\nNotifications:\n"
@@ -145,6 +145,28 @@ class Notify:
         ret += f"\tSection:\t{self._sectionname}\n"
         ret += f"\tClassID:\t{self._classid}"
         return ret
+
+
+def send_email(data):
+    try:
+        SendGridAPIClient(SENDGRID_API_KEY).client.mail.send.post(request_body=data)
+        return True
+    except Exception as e:
+        print(e, file=stderr)
+        return False
+
+
+def send_text(phone, msg):
+    try:
+        Client(TWILIO_SID, TWILIO_TOKEN).api.account.messages.create(
+            to=f"+1{phone}",
+            from_=TWILIO_PHONE,
+            body=msg,
+        )
+        return True
+    except Exception as e:
+        print(e, file=stderr)
+        return False
 
 
 if __name__ == "__main__":

@@ -4,12 +4,10 @@
 # all classes in a given course.
 # ----------------------------------------------------------------------
 
-from database import Database
-
 
 class CourseWrapper:
-    def __init__(self, course_deptnum, new_enroll, new_cap, courseid):
-        self._db = Database()
+    def __init__(self, course_deptnum, new_enroll, new_cap, courseid, db):
+        self._db = db
         self._course_deptnum = course_deptnum
         self._new_enroll = new_enroll
         self._new_cap = new_cap

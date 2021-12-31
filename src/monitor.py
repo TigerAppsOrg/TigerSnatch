@@ -5,11 +5,14 @@
 # ----------------------------------------------------------------------
 
 from database import Database
-from multiprocess import Pool
-from os import cpu_count
 from time import time
 from sys import stderr
-from monitor_utils import get_latest_term, process, get_course_in_mobileapp
+from coursewrapper import CourseWrapper
+from monitor_utils import (
+    get_latest_term,
+    get_course_in_mobileapp,
+    get_new_mobileapp_data,
+)
 from config import COURSE_UPDATE_INTERVAL_MINS
 
 
@@ -33,10 +36,10 @@ class Monitor:
                 print(deptnum, "with courseid", courseid, "is disabled - skipping")
                 continue
 
-            if deptnum in data:
-                data[deptnum].append(classid)
+            if courseid in data:
+                data[courseid].append(classid)
             else:
-                data[deptnum] = [courseid, classid]
+                data[courseid] = [deptnum, classid]
 
         self._waited_classes = data
 
@@ -45,16 +48,35 @@ class Monitor:
 
     def _analyze_classes(self):
         term = get_latest_term()
-        process_args = []
+        courseids = []
+        classids = []
 
-        for course, classes in self._waited_classes.items():
-            process_args.append([term, course, classes[1:], classes[0]])
+        # build list of courseids and list of classids
+        for courseid in self._waited_classes:
+            courseids.append(courseid)
+            classids.extend(self._waited_classes[courseid][1:])
 
-        # alleviate MobileApp bottleneck using multiprocessing
-        with Pool(cpu_count()) as pool:
-            all_data = pool.map(process, process_args)
+        # get new enrollment and capacity for subscribed sections
+        new_enroll_all, new_cap_all = get_new_mobileapp_data(
+            term,
+            courseids,
+            classids,
+            default_empty_dicts=True,
+        )
 
-        self._waited_course_wrappers = all_data
+        # construct list of CourseWrapper objects
+        course_wrappers = []
+        for courseid in new_enroll_all:
+            course_deptnum = self._waited_classes[courseid][0]
+            new_enroll = new_enroll_all[courseid]
+            new_cap = new_cap_all[courseid]
+            course_wrapper = CourseWrapper(
+                course_deptnum, new_enroll, new_cap, courseid, self._db
+            )
+            print(course_wrapper, end="")
+            course_wrappers.append(course_wrapper)
+
+        self._waited_course_wrappers = course_wrappers
 
     # generates, caches, and returns a dictionary in the form:
     # {
