@@ -42,13 +42,11 @@ def process_dept_codes(dept_codes: str, current_term_code: str, hard_reset: bool
             db.soft_reset_db()
 
         n_courses = 0
-        n_classes = 0
+        n_sections = 0
 
         # iterate through all subjects, courses, and classes
         for subject in courses["term"][0]["subjects"]:
-            print("-------------------------")
-            print("processing dept code", subject["code"])
-            print("-------------------------")
+            print("> processing dept code", subject["code"])
             for course in subject["courses"]:
                 courseid = course["course_id"]
                 if db.courses_contains_courseid(courseid):
@@ -155,7 +153,7 @@ def process_dept_codes(dept_codes: str, current_term_code: str, hard_reset: bool
                     else:
                         all_new_classes.append(new_class)
 
-                    n_classes += 1
+                    n_sections += 1
 
                 for i, new_class in enumerate(all_new_classes):
                     new[f'class_{new_class["classid"]}'] = new_class
@@ -165,10 +163,9 @@ def process_dept_codes(dept_codes: str, current_term_code: str, hard_reset: bool
 
                 n_courses += 1
 
-        print("-------------------------")
-        print("processed", n_courses, "courses and", n_classes, "classes")
-        print("-------------------------")
-        return n_courses, n_classes
+        print(f"> processed {n_courses} courses and {n_sections} sections")
+        print(f"> performed a {'hard' if hard_reset else 'soft'} reset")
+        return n_courses, n_sections
 
     except Exception as e:
         print(f"failed to get new course data with exception message {e}", file=stderr)

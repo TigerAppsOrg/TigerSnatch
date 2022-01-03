@@ -68,13 +68,13 @@ def do_update(reset_type):
     db.set_maintenance_status(False)
 
     db._add_admin_log(
-        f"updated to term code {current_term_code} in {round(time()-tic)} seconds ({n_courses} courses, {n_classes} sections)"
+        f"{'hard' if hard_reset else 'soft'}-updated to term code {current_term_code} in {round(time()-tic)} seconds ({n_courses} courses, {n_classes} sections)"
     )
 
     db._add_system_log(
         "admin",
         {
-            "message": f"updated to term code {current_term_code} in {round(time()-tic)} seconds ({n_courses} courses, {n_classes} sections)"
+            "message": f"{'hard' if hard_reset else 'soft'}-updated to term code {current_term_code} in {round(time()-tic)} seconds ({n_courses} courses, {n_classes} sections)"
         },
         netid="SYSTEM_AUTO",
     )
