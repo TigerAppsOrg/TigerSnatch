@@ -27,7 +27,7 @@ from database import Database
 from sys import argv, exit
 from time import time
 from os import system
-from update_all_courses_utils import get_all_dept_codes, process_dept_code
+from update_all_courses_utils import get_all_dept_codes, process_dept_codes
 
 
 # True --> hard reset
@@ -62,33 +62,19 @@ def do_update(reset_type):
     )
     print(f"getting all courses in term code {current_term_code}")
 
-    DEPT_CODES = get_all_dept_codes(current_term_code)
-
-    # process_dept_code_args = []
-    for n, code in enumerate(DEPT_CODES):
-        process_dept_code([code, n, current_term_code, False, hard_reset])
-        # the below code is for multiprocessing
-        # process_dept_code_args.append(
-        #     [code, n, current_term_code, True, hard_reset])
-
-    # alleviate MobileApp bottleneck using multiprocessing
-    # NOTE: setting cores to > 1 yields in different results every time
-    # replace with cpu_count() if someone figures out why - it's not a
-    # big issue though because this script is run only once per semester
-
-    # with Pool(1) as pool:
-    #     pool.map(process_dept_code, process_dept_code_args)
+    DEPT_CODES = ",".join(get_all_dept_codes(current_term_code))
+    n_courses, n_classes = process_dept_codes(DEPT_CODES, current_term_code, hard_reset)
 
     db.set_maintenance_status(False)
 
     db._add_admin_log(
-        f"updated to term code {current_term_code} in {round(time()-tic)} seconds"
+        f"{'hard' if hard_reset else 'soft'}-updated to term code {current_term_code} in {round(time()-tic)} seconds ({n_courses} courses, {n_classes} sections)"
     )
 
     db._add_system_log(
         "admin",
         {
-            "message": f"updated to term code {current_term_code} in {round(time()-tic)} seconds"
+            "message": f"{'hard' if hard_reset else 'soft'}-updated to term code {current_term_code} in {round(time()-tic)} seconds ({n_courses} courses, {n_classes} sections)"
         },
         netid="SYSTEM_AUTO",
     )

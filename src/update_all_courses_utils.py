@@ -6,7 +6,6 @@
 
 from mobileapp import MobileApp
 from database import Database
-from random import random
 from sys import stderr
 import time
 
@@ -28,33 +27,26 @@ def get_all_dept_codes(term):
     return codes
 
 
-# helper method for multiprocessing: fetches and inserts new course
-# information into the database
-def process_dept_code(args):
+# fetches and inserts new course information into the database
+def process_dept_codes(dept_codes: str, current_term_code: str, hard_reset: bool):
     try:
-        code, n, current_term_code, dummy_waitlists, hard_reset = (
-            args[0],
-            args[1],
-            args[2],
-            args[3],
-            args[4],
-        )
         db = Database()
-
-        print("processing dept code", code)
-        courses = _api.get_courses(term=current_term_code, subject=code)
+        courses = _api.get_courses(term=current_term_code, subject=dept_codes)
 
         if "subjects" not in courses["term"][0]:
             raise RuntimeError("no query results")
 
-        if n == 0:
-            if hard_reset:
-                db.reset_db()
-            else:
-                db.soft_reset_db()
+        if hard_reset:
+            db.reset_db()
+        else:
+            db.soft_reset_db()
+
+        n_courses = 0
+        n_sections = 0
 
         # iterate through all subjects, courses, and classes
         for subject in courses["term"][0]["subjects"]:
+            print("> processing dept code", subject["code"])
             for course in subject["courses"]:
                 courseid = course["course_id"]
                 if db.courses_contains_courseid(courseid):
@@ -161,21 +153,7 @@ def process_dept_code(args):
                     else:
                         all_new_classes.append(new_class)
 
-                    ####################################################
-
-                    # randomly add waitlists for testing purposes
-                    rand = random()
-                    if dummy_waitlists and rand < 0.005:
-                        print("> inserting", classid, "into waitlists")
-                        db.add_to_waitlist("sheh", classid, disable_checks=True)
-                    elif dummy_waitlists and 0.005 <= rand < 0.01:
-                        print("> inserting", classid, "into waitlists")
-                        db.add_to_waitlist("ntyp", classid, disable_checks=True)
-                    elif dummy_waitlists and 0.01 <= rand < 0.015:
-                        print("> inserting", classid, "into waitlists")
-                        db.add_to_waitlist("zishuoz", classid, disable_checks=True)
-
-                    ####################################################
+                    n_sections += 1
 
                 for i, new_class in enumerate(all_new_classes):
                     new[f'class_{new_class["classid"]}'] = new_class
@@ -183,7 +161,12 @@ def process_dept_code(args):
                 print("inserting", new["displayname"], "into courses")
                 db.add_to_courses(new)
 
-        print()
+                n_courses += 1
+
+        print(f"> processed {n_courses} courses and {n_sections} sections")
+        print(f"> performed a {'hard' if hard_reset else 'soft'} reset")
+        return n_courses, n_sections
 
     except Exception as e:
-        print(f"failed on code {args[0]} with exception message {e}", file=stderr)
+        print(f"failed to get new course data with exception message {e}", file=stderr)
+        return 0, 0
