@@ -20,7 +20,7 @@ from config import (
     NOTIFS_INTERVAL_SECS,
     NOTIFS_SHEET_POLL_MINS,
     GLOBAL_COURSE_UPDATE_INTERVAL_MINS,
-    STATS_INTERVAL_MINS
+    STATS_INTERVAL_MINS,
 )
 from apscheduler.schedulers.blocking import BlockingScheduler
 from apscheduler.schedulers.background import BackgroundScheduler

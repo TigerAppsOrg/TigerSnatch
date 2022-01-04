@@ -221,7 +221,7 @@ def activity():
         notifs_online=_db.get_cron_notification_status(),
         next_notifs=_db.get_current_or_next_notifs_interval(),
         term_name=term_name,
-        stats=stats
+        stats=stats,
     )
 
     return make_response(html)
@@ -442,7 +442,13 @@ def contact_trade(course_name, match_netid, section_name):
     try:
         _db.update_user_trade_log(netid, log_str)
         _db.update_user_trade_log(match_netid, log_str_alt)
-        _db._add_system_log("trade", {"message": f"{netid} contacted {match_netid} to swap into {course_name} {section_name}"}, netid=netid)
+        _db._add_system_log(
+            "trade",
+            {
+                "message": f"{netid} contacted {match_netid} to swap into {course_name} {section_name}"
+            },
+            netid=netid,
+        )
     except:
         return jsonify({"isSuccess": False})
     return jsonify({"isSuccess": True})

@@ -550,7 +550,9 @@ class Database:
                 return ["No Subscriptions found"]
             res = [f"Top {len(data)} most-subscribed sections:"]
             for s_data in data:
-                res.append(f"[{s_data['size']}] {s_data['name']} ({s_data['deptnum']}): {s_data['section']}")
+                res.append(
+                    f"[{s_data['size']}] {s_data['name']} ({s_data['deptnum']}): {s_data['section']}"
+                )
             return res
 
         def get_disabled_courses():
@@ -621,7 +623,7 @@ class Database:
                 return ["No Subscriptions found"]
             res = []
             for s_data in data:
-                deptnum, name, section, _ = self.classid_to_classinfo(s_data['classid'])
+                deptnum, name, section, _ = self.classid_to_classinfo(s_data["classid"])
                 res.append(f"[{s_data['size']}] {name} ({deptnum}): {section}")
             return res
 
@@ -630,26 +632,27 @@ class Database:
         except:
             print("failed to get all subscriptions", file=stderr)
             return "error"
-    
+
     # ----------------------------------------------------------------------
     # STATS METHODS
     # ----------------------------------------------------------------------
 
     # if include_waitlist is True, include each section's waitlist array in result
-    def get_all_subscriptions_raw(self, include_waitlist=False): 
+    def get_all_subscriptions_raw(self, include_waitlist=False):
         fields = {"classid": 1, "size": 1, "_id": 0}
         if include_waitlist:
-            fields['waitlist'] = 1
-        data = list(self._db.waitlists.aggregate(
-            [
-                {"$addFields": {"size": {"$size": "$waitlist"}}}, 
-                {"$sort": {"size": -1}}, 
-                {"$project": fields}
-            ]
-        ))
+            fields["waitlist"] = 1
+        data = list(
+            self._db.waitlists.aggregate(
+                [
+                    {"$addFields": {"size": {"$size": "$waitlist"}}},
+                    {"$sort": {"size": -1}},
+                    {"$project": fields},
+                ]
+            )
+        )
         return data
 
-  
     # if unique_courses is True, removes entries for duplicate courses
     def get_top_subscriptions(self, target_num, unique_courses=False):
         if target_num <= 0:
@@ -660,13 +663,22 @@ class Database:
             try:
                 waitlists = self.get_all_subscriptions_raw()
                 courses = set()
-                for data in waitlists: 
-                    if (len(courses) >= target_num):
+                for data in waitlists:
+                    if len(courses) >= target_num:
                         break
-                    deptnum, name, section, _ = self.classid_to_classinfo(data['classid'])
+                    deptnum, name, section, _ = self.classid_to_classinfo(
+                        data["classid"]
+                    )
                     if deptnum not in courses:
                         courses.add(deptnum)
-                        res.append({"deptnum": deptnum, "name": name, "section": section, "size": data['size']})
+                        res.append(
+                            {
+                                "deptnum": deptnum,
+                                "name": name,
+                                "section": section,
+                                "size": data["size"],
+                            }
+                        )
             except:
                 print("failed to retrieve top subscribed courses", file=stderr)
 
@@ -674,11 +686,20 @@ class Database:
             try:
                 waitlists = self.get_all_subscriptions_raw()[0:target_num]
                 for data in waitlists:
-                    deptnum, name, section, _ = self.classid_to_classinfo(data['classid'])
-                    res.append({"deptnum": deptnum, "name": name, "section": section, "size": data['size']})
+                    deptnum, name, section, _ = self.classid_to_classinfo(
+                        data["classid"]
+                    )
+                    res.append(
+                        {
+                            "deptnum": deptnum,
+                            "name": name,
+                            "section": section,
+                            "size": data["size"],
+                        }
+                    )
             except:
                 print("failed to retrieve top subscribed sections", file=stderr)
-        
+
         return res
 
     def get_users_who_subscribe(self):
@@ -718,14 +739,20 @@ class Database:
         )
 
     def get_stats(self):
-        stats = self._db.admin.find_one({}, 
-            {"stats_top_subs": 1, "stats_subbed_users": 1, 
-            "stats_subbed_sections": 1, "stats_subbed_courses": 1, 
-            "stats_total_notifs": 1, "stats_notifs_logs": 1,
-            "stats_update_time": 1, "_id": 0}
+        stats = self._db.admin.find_one(
+            {},
+            {
+                "stats_top_subs": 1,
+                "stats_subbed_users": 1,
+                "stats_subbed_sections": 1,
+                "stats_subbed_courses": 1,
+                "stats_total_notifs": 1,
+                "stats_notifs_logs": 1,
+                "stats_update_time": 1,
+                "_id": 0,
+            },
         )
         return stats
-
 
     # ----------------------------------------------------------------------
     # BLACKLIST UTILITY METHODS
