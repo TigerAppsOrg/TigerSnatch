@@ -25,6 +25,7 @@ _db = Database()
 
 
 @app.errorhandler(Exception)
+
 def handle_exception(e):
     if "404 Not Found" in str(e):
         return redirect(url_for("dashboard"))
