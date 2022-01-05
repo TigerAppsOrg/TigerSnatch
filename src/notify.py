@@ -124,10 +124,7 @@ class Notify:
                 is_auto_resub = self.db.get_user_auto_resub(self._netids[i])
                 if phone != "":
                     send_text_args.append(
-                        [
-                            phone,
-                            msg_resubbed if is_auto_resub else msg_unsubbed,
-                        ]
+                        [phone, msg_resubbed if is_auto_resub else msg_unsubbed,]
                     )
                 if not is_auto_resub:
                     self.db.remove_from_waitlist(self._netids[i], self._classid)
@@ -159,9 +156,7 @@ def send_email(data):
 def send_text(phone, msg):
     try:
         Client(TWILIO_SID, TWILIO_TOKEN).api.account.messages.create(
-            to=f"+1{phone}",
-            from_=TWILIO_PHONE,
-            body=msg,
+            to=f"+1{phone}", from_=TWILIO_PHONE, body=msg,
         )
         return True
     except Exception as e:

@@ -37,16 +37,11 @@ def schedule_jobs(update_db=False):
 
         print("[Scheduler] adding global soft course update job at 4am ET daily")
         sched.add_job(
-            do_update_async_SOFT,
-            "cron",
-            hour="4",
-            timezone=tz,
+            do_update_async_SOFT, "cron", hour="4", timezone=tz,
         )
         print("[Scheduler] adding stats update job every 10 minutes")
         sched.add_job(
-            update_stats,
-            "interval",
-            minutes=STATS_INTERVAL_MINS,
+            update_stats, "interval", minutes=STATS_INTERVAL_MINS,
         )
 
         print(
@@ -73,10 +68,7 @@ def schedule_jobs(update_db=False):
                 max_instances=8,
             )
             sched.add_job(
-                set_status_indicator_to_on,
-                "date",
-                run_date=start,
-                timezone=tz,
+                set_status_indicator_to_on, "date", run_date=start, timezone=tz,
             )
             sched.add_job(
                 set_status_indicator_to_off, "date", run_date=end, timezone=tz

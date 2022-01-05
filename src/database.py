@@ -492,9 +492,7 @@ class Database:
             self._add_admin_log(f"user {netid} unblocked")
 
             self._add_system_log(
-                "admin",
-                {"message": f"user {netid} unblocked"},
-                netid=admin_netid,
+                "admin", {"message": f"user {netid} unblocked"}, netid=admin_netid,
             )
             return True
         except Exception:
@@ -575,9 +573,10 @@ class Database:
             ]["notifs_schedule"]
             res = ["Scheduled notifications intervals (ET):"]
             for start, end in datetimes:
-                start, end = tz.localize(start).astimezone(TZ), tz.localize(
-                    end
-                ).astimezone(TZ)
+                start, end = (
+                    tz.localize(start).astimezone(TZ),
+                    tz.localize(end).astimezone(TZ),
+                )
                 res.append(f"{start.strftime(fmt)} to {end.strftime(fmt)}")
             return res
 
@@ -729,11 +728,7 @@ class Database:
             {},
             {
                 "$push": {
-                    "stats_notifs_logs": {
-                        "$each": [log],
-                        "$position": 0,
-                        "$slice": 5,
-                    }
+                    "stats_notifs_logs": {"$each": [log], "$position": 0, "$slice": 5,}
                 }
             },
         )
