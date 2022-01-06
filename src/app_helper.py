@@ -58,7 +58,14 @@ def pull_course(courseid, db):
                 waitlist_count = db.get_class_waitlist_size(curr_class["classid"])
             except Exception:
                 waitlist_count = 0
+            try:
+                time_of_last_notif = db.get_time_of_last_notif(curr_class["classid"])
+            except Exception:
+                time_of_last_notif = None
             curr_class["wl_size"] = waitlist_count
+            curr_class["time_of_last_notif"] = (
+                time_of_last_notif if time_of_last_notif is not None else "-"
+            )
             classes_list.append(curr_class)
         else:
             course_details[key] = course[key]
