@@ -58,7 +58,10 @@ class Monitor:
 
         # get new enrollment and capacity for subscribed sections
         new_enroll_all, new_cap_all = get_new_mobileapp_data(
-            term, courseids, classids, default_empty_dicts=True,
+            term,
+            courseids,
+            classids,
+            default_empty_dicts=True,
         )
 
         # construct list of CourseWrapper objects

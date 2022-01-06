@@ -492,7 +492,9 @@ class Database:
             self._add_admin_log(f"user {netid} unblocked")
 
             self._add_system_log(
-                "admin", {"message": f"user {netid} unblocked"}, netid=admin_netid,
+                "admin",
+                {"message": f"user {netid} unblocked"},
+                netid=admin_netid,
             )
             return True
         except Exception:
@@ -728,7 +730,11 @@ class Database:
             {},
             {
                 "$push": {
-                    "stats_notifs_logs": {"$each": [log], "$position": 0, "$slice": 5,}
+                    "stats_notifs_logs": {
+                        "$each": [log],
+                        "$position": 0,
+                        "$slice": 5,
+                    }
                 }
             },
         )
