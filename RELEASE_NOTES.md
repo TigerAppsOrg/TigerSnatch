@@ -2,7 +2,7 @@
 
 Release Notes are our way of documenting and announcing new product updates (e.g. new features, feature upgrades, major bug fixes) to TigerSnatch users. Our release notes are published on the About page and on our Github repo in `RELEASE_NOTES.md`.
 
-For Devs: For instructions on how to add release note, check `README_DEV.md`.
+For Devs: For instructions on how to add a release note, check `README_DEV.md`.
 
 <!-- NOTE -->
 ## New "Statistics" Display under Activity page - 12 / 01 / 2021
@@ -15,3 +15,12 @@ Under Statistics, users can view statistics including the most-subscribed course
 Let us know if there are other data you’d like to see under Statistics via our Feedback form (in About)!
 
 <img src="static/release_notes_pics/statistics.png" width="100%"/>
+
+<!-- NOTE -->
+## Title - 01 / 01 / 2020
+
+<!-- BODY -->
+**Here's some bold words!** *Here's some italicized words.*
+
+- Bullet 1
+- Bullet 2

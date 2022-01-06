@@ -121,30 +121,31 @@
       <div id="release-notes-accordion" class="accordion">
 
         {% for note in release_notes %}
+          {% set i = loop.index %}
           <div class="accordion-item">
-            <h2 class="accordion-header" id="heading-{{ loop.index }}">
-              <div class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse-{{ loop.index }}" aria-controls="collapse-{{ loop.index }}" aria-expanded="false">
+            <h2 class="accordion-header" id="heading-{{ i }}">
+              <div class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse-{{ i }}" aria-controls="collapse-{{ i }}" aria-expanded="false">
                 <div class="d-flex flex-column">
                   <div>
-                    <span id="release-title-{{ loop.index }}" class="release-title">{{ note["title"] }}</span>
-                    <span id="release-date-{{ loop.index }}" class="badge bg-secondary">{{ note["date"] }}</span>
+                    <span id="release-title-{{ i }}" class="release-title">{{ note["title"] }}</span>
+                    <span id="release-date-{{ i }}" class="badge bg-secondary">{{ note["date"] }}</span>
                   </div>
-                  <div class="release-tags" id="release-tags-{{ loop.index }}">
-                    {% for tag_type in note["tags"] %}
-                      {% if "type" in tag_type %}
-                        <span class="badge rounded-pill bg-success">{{ note["tags"]["type"] }}</span>
-                      {% elif "location" in tag_type %}
-                        <span class="badge rounded-pill bg-primary">{{ note["tags"]["location"] }}</span>
-                      {% elif "importance" in tag_type %}
-                        <span class="badge rounded-pill bg-danger">{{ note["tags"]["importance"] }}</span>
-                      {% endif %}
-                    {% endfor %}
+                  <div class="release-tags" id="release-tags-{{ i }}">
+                    {% if "type" in note["tags"] %}
+                      <span class="badge rounded-pill bg-success">{{ note["tags"]["type"] }}</span>
+                    {% endif %}
+                    {% if "location" in note["tags"] %}
+                      <span class="badge rounded-pill bg-primary">{{ note["tags"]["location"] }}</span>
+                    {% endif %}
+                    {% if "importance" in note["tags"] %}
+                      <span class="badge rounded-pill bg-danger">{{ note["tags"]["importance"] }}</span>
+                    {% endif %}
                   </div>
                 </div>
               </div>
             </h2>
-            <div id="collapse-{{ loop.index }}" class="accordion-collapse collapse" aria-labelledby="heading-{{ loop.index }}" data-bs-parent="#release-notes-accordion">
-              <div id="release-content-{{ loop.index }}" class="accordion-body">
+            <div id="collapse-{{ i }}" class="accordion-collapse collapse" aria-labelledby="heading-{{ i }}" data-bs-parent="#release-notes-accordion">
+              <div id="release-content-{{ i }}" class="accordion-body">
                   {{ note["body"]|safe }}
               </div>
             </div>

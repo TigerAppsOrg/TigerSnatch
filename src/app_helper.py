@@ -95,7 +95,7 @@ def get_release_notes():
         # get metadata for each release note
         metadata = json.load(f2)
 
-        # if RELEASE_NOTES.md and release_notes_metadata.json are correctly formatted, check should not pass
+        # if RELEASE_NOTES.md and release_notes_metadata.json are correctly formatted, check should fail
         num_notes = len(bodies)
         if num_notes != len(metadata):
             return False, []

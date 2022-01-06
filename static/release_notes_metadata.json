@@ -8,5 +8,15 @@
             "location": "Activity",
             "importance": "Medium"
         }
+    },
+    {
+        "title": "Title",
+        "date": "01 / 01 / 2020",
+        "tags": 
+            {
+            "type": "Bug Fix",
+            "location": "Backend",
+            "importance": "High"
+        }
     }
 ]
