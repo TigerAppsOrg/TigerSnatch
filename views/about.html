@@ -93,6 +93,67 @@
             style="margin-bottom: 66px">Byron Zhang '23</h2>
       </div>
     </div>
+  </div>
+  <hr class="my-3"
+          style="width: 80%; margin: auto" />
+    </div>
+    <div class="row mb-3">
+      <p class="text-center fs-1 mt-2 mb-3"
+         style="letter-spacing: 1px">
+        <span class="badge bg-warning text-dark font-monospace fs-1 px-2 pb-2">Release Notes</span>
+      </p>
+      <div id="release-notes-desc" class="text-center" style="margin-bottom: 20px;">
+        <div style="margin: auto; margin-bottom: 10px;">Stay informed about the newest TigerSnatch product updates with our Release Notes.</div>
+        <div>
+          <strong>Tag Categories:</strong>
+          <span class="badge rounded-pill bg-success">Type of Update</span>
+          <span class="badge rounded-pill bg-primary">Location of Update</span>
+          <span class="badge rounded-pill bg-danger">Importance of Update</span>
+        </div>
+      </div>
+    </div>
+    <div class="row">
+
+    {% if not release_notes_success %}
+
+      <div class="text-center" style="margin-bottom: 100px;">Release Notes currently unavailable. Check them out on our <a href="https://github.com/PrincetonUSG/TigerSnatch" target="_blank" style="text-decoration: underline;">Github repo</a>.</div>
+
+    {% else %}
+
+      <div id="release-notes-accordion" class="accordion">
+
+        {% for note in release_notes %}
+          <div class="accordion-item">
+            <h2 class="accordion-header" id="heading-{{ loop.index }}">
+              <div class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse-{{ loop.index }}" aria-controls="collapse-{{ loop.index }}" aria-expanded="false">
+                <div class="d-flex flex-column">
+                  <div>
+                    <span id="release-title-{{ loop.index }}" class="release-title">{{ note["title"] }}</span>
+                    <span id="release-date-{{ loop.index }}" class="badge bg-secondary">{{ note["date"] }}</span>
+                  </div>
+                  <div class="release-tags" id="release-tags-{{ loop.index }}">
+                    {% for tag_type in note["tags"] %}
+                      {% if "type" in tag_type %}
+                        <span class="badge rounded-pill bg-success">{{ note["tags"]["type"] }}</span>
+                      {% elif "location" in tag_type %}
+                        <span class="badge rounded-pill bg-primary">{{ note["tags"]["location"] }}</span>
+                      {% elif "importance" in tag_type %}
+                        <span class="badge rounded-pill bg-danger">{{ note["tags"]["importance"] }}</span>
+                      {% endif %}
+                    {% endfor %}
+                  </div>
+                </div>
+              </div>
+            </h2>
+            <div id="collapse-{{ loop.index }}" class="accordion-collapse collapse" aria-labelledby="heading-{{ loop.index }}" data-bs-parent="#release-notes-accordion">
+              <div id="release-content-{{ loop.index }}" class="accordion-body">
+                  {{ note["body"]|safe }}
+              </div>
+            </div>
+          </div>
+        {% endfor %}
+    {% endif %}
+
     <nav id="nav"
          class="navbar navbar-expand-xl navbar-light fixed-bottom"
          style="margin-top: -60px">
