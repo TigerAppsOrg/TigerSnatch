@@ -183,13 +183,18 @@ def update_auto_resub(auto_resub):
 
 @app.route("/about", methods=["GET"])
 def about():
+    release_notes_success, release_notes = get_release_notes()
+
     if redirect_landing():
-        html = render_template("about.html", loggedin=False)
+        html = render_template(
+            "about.html",
+            loggedin=False,
+            release_notes_success=release_notes_success,
+            release_notes=release_notes,
+        )
         return make_response(html)
 
     term_name = _db.get_current_term_code()[1]
-
-    release_notes_success, release_notes = get_release_notes()
 
     html = render_template(
         "about.html",
