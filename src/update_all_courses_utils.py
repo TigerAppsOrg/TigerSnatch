@@ -31,6 +31,17 @@ def get_all_dept_codes(term):
 def process_dept_codes(dept_codes: str, current_term_code: str, hard_reset: bool):
     try:
         db = Database()
+        old_enrollments = list(
+            db._db.enrollments.find({}, {"_id": 0, "classid": 1, "last_notif": 1})
+        )
+
+        # precompute dictionary of times of last notif
+        old_last_notifs = {}
+        for enrollment in old_enrollments:
+            if "last_notif" not in enrollment:
+                continue
+            old_last_notifs[enrollment["classid"]] = enrollment["last_notif"]
+
         courses = _api.get_courses(term=current_term_code, subject=dept_codes)
 
         if "subjects" not in courses["term"][0]:
@@ -132,6 +143,10 @@ def process_dept_codes(dept_codes: str, current_term_code: str, hard_reset: bool
                         "capacity": int(class_["capacity"]),
                         "swap_out": [],
                     }
+
+                    if not hard_reset and classid in old_last_notifs:
+                        print("preserving time of last notif for class", classid)
+                        new_class_enrollment["last_notif"] = old_last_notifs[classid]
 
                     print(
                         "inserting",

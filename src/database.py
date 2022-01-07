@@ -1279,6 +1279,31 @@ class Database:
         except:
             raise RuntimeError(f"class {classid} not found in enrollments")
 
+    # sets the time of last notif for class classid to NOW
+    # time of last notif stored in enrollments collection
+    def update_time_of_last_notif(self, classid):
+        try:
+            self._db.enrollments.update_one(
+                {"classid": classid}, {"$set": {"last_notif": datetime.now(TZ)}}
+            )
+        except:
+            raise RuntimeError(f"class {classid} not found in enrollments")
+
+    # returns the time of last notif as a string, or None if it does not exist, for class classid
+    # can pass a custom format string for the datetime
+    def get_time_of_last_notif(self, classid, fmt="%-m/%-d @ %-I:%M %p"):
+        try:
+            tz_utc = pytz.timezone("UTC")
+            tz_et = pytz.timezone("US/Eastern")
+            time = self._db.enrollments.find_one({"classid": classid}, {"_id": 0})[
+                "last_notif"
+            ]
+            time = tz_utc.localize(time)
+            time = time.astimezone(tz_et)
+            return time.strftime(fmt)
+        except:
+            return None
+
     # ----------------------------------------------------------------------
     # WAITLIST METHODS
     # ----------------------------------------------------------------------
