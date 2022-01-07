@@ -46,6 +46,9 @@ class Notify:
                 self._emails.append(db.get_user(netid, "email"))
                 self._phones.append(db.get_user(netid, "phone"))
                 db.update_user_waitlist_log(netid, user_log)
+
+            db.update_time_of_last_notif(classid)
+
         except:
             raise Exception(
                 f"unable to get notification data for subscriptions of class {classid}"
@@ -173,5 +176,5 @@ if __name__ == "__main__":
     from database import Database
 
     db = Database()
-    n = Notify("41337", 1, db)
-    n.send_emails_html()
+    n = Notify("42149", 1, db)
+    # n.send_emails_html()
