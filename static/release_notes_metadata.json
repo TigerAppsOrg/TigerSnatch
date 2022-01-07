@@ -1,0 +1,22 @@
+[
+    {
+        "title": "New \"Statistics\" Display under Activity page",
+        "date": "12 / 01 / 2021",
+        "tags": 
+            {
+            "type": "New Feature",
+            "location": "Activity",
+            "importance": "Medium"
+        }
+    },
+    {
+        "title": "Title",
+        "date": "01 / 01 / 2020",
+        "tags": 
+            {
+            "type": "Bug Fix",
+            "location": "Backend",
+            "importance": "High"
+        }
+    }
+]

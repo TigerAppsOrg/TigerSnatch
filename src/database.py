@@ -575,9 +575,10 @@ class Database:
             ]["notifs_schedule"]
             res = ["Scheduled notifications intervals (ET):"]
             for start, end in datetimes:
-                start, end = tz.localize(start).astimezone(TZ), tz.localize(
-                    end
-                ).astimezone(TZ)
+                start, end = (
+                    tz.localize(start).astimezone(TZ),
+                    tz.localize(end).astimezone(TZ),
+                )
                 res.append(f"{start.strftime(fmt)} to {end.strftime(fmt)}")
             return res
 

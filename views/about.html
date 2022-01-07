@@ -60,13 +60,12 @@
                title="Check out other TigerApps!" />
         </a>
       </p>
-      <hr class="my-3"
-          style="width: 80%; margin: auto" />
     </div>
+    <hr class="my-3 about-hr"/>
     <div class="row">
-      <p class="text-center fs-1 mt-2 mb-5"
+      <p class="text-center mt-2 mb-5"
          style="letter-spacing: 1px">
-        <span class="badge bg-warning text-dark font-monospace fs-1 px-2 py-2">Original Team</span>
+        <span class="badge bg-warning text-dark font-monospace fs-3 px-2 py-2">Original Team</span>
       </p>
     </div>
     <div class="row">
@@ -89,10 +88,69 @@
              src="/static/Byron.jpg"
              width="250px"
              height="250px" />
-        <h2 class="fs-4 text-center py-5"
-            style="margin-bottom: 66px">Byron Zhang '23</h2>
+        <h2 class="fs-4 text-center py-5">Byron Zhang '23</h2>
       </div>
     </div>
+  <hr class="my-3 about-hr" />
+  <div class="row">
+    <p class="text-center mt-2 mb-3"
+         style="letter-spacing: 1px">
+        <span class="badge bg-warning text-dark font-monospace fs-3 px-2 pb-2">Release Notes</span>
+    </p>
+    <div id="release-notes-desc" class="text-center mb-3">
+      <div>Stay informed about the newest TigerSnatch updates with Release Notes!</div>
+      <div class="release-tags">
+        <strong>Tag Categories:</strong>
+        <span class="badge rounded-pill bg-success">Type of Update</span>
+        <span class="badge rounded-pill bg-primary">Location of Update</span>
+        <span class="badge rounded-pill bg-danger">Importance of Update</span>
+      </div>
+    </div>
+  </div>
+  <div class="row">
+
+    {% if not release_notes_success %}
+
+      <div class="text-center" style="margin-bottom: 100px;">Release Notes currently unavailable. Check them out on our <a href="https://github.com/PrincetonUSG/TigerSnatch" target="_blank" style="text-decoration: underline;">Github repo</a>.</div>
+
+    {% else %}
+
+      <div id="release-notes-accordion" class="accordion" style="margin-bottom: 100px">
+
+        {% for note in release_notes %}
+          {% set i = loop.index %}
+          <div class="accordion-item">
+            <h2 class="accordion-header" id="heading-{{ i }}">
+              <div class="accordion-button collapsed" data-bs-toggle="collapse" data-bs-target="#collapse-{{ i }}" aria-controls="collapse-{{ i }}" aria-expanded="false" style="cursor:pointer;">
+                <div class="d-flex flex-column">
+                  <div>
+                    <span id="release-title-{{ i }}" class="release-title">{{ note["title"] }}</span>
+                    <span id="release-date-{{ i }}" class="badge bg-secondary">{{ note["date"] }}</span>
+                  </div>
+                  <div class="release-tags" id="release-tags-{{ i }}">
+                    {% if "type" in note["tags"] %}
+                      <span class="badge rounded-pill bg-success">{{ note["tags"]["type"] }}</span>
+                    {% endif %}
+                    {% if "location" in note["tags"] %}
+                      <span class="badge rounded-pill bg-primary">{{ note["tags"]["location"] }}</span>
+                    {% endif %}
+                    {% if "importance" in note["tags"] %}
+                      <span class="badge rounded-pill bg-danger">{{ note["tags"]["importance"] }}</span>
+                    {% endif %}
+                  </div>
+                </div>
+              </div>
+            </h2>
+            <div id="collapse-{{ i }}" class="accordion-collapse collapse" aria-labelledby="heading-{{ i }}" data-bs-parent="#release-notes-accordion">
+              <div id="release-content-{{ i }}" class="accordion-body">
+                  {{ note["body"]|safe }}
+              </div>
+            </div>
+          </div>
+        {% endfor %}
+      </div>
+    {% endif %}
+
     <nav id="nav"
          class="navbar navbar-expand-xl navbar-light fixed-bottom"
          style="margin-top: -60px">
@@ -104,6 +162,7 @@
       </div>
     </nav>
   </div>
+</div>
 
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/js/bootstrap.bundle.min.js"
           integrity="sha384-JEW9xMcG8R+pH31jmWH6WWP0WintQrMb4s7ZOdauHnUtxwoG2vI5DkLtS3qm9Ekf"
