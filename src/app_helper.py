@@ -6,7 +6,9 @@
 from monitor import Monitor
 import re
 from sys import stderr
-
+from markdown import markdown
+import json
+import os
 
 MAX_QUERY_LENGTH = 150
 
@@ -68,6 +70,55 @@ def pull_course(courseid, db):
 
 def is_admin(netid, db):
     return db.is_admin(netid)
+
+
+# get release notes to display on About page
+def get_release_notes():
+    # delimiters used in RELEASE_NOTES.md
+    NOTE_DELIMITER = "<!-- NOTE -->"
+    BODY_DELIMITER = "<!-- BODY -->"
+
+    # path of main directory
+    main_dir = f"{os.path.dirname(__file__)}/../"
+
+    try:
+        with open(f"{main_dir}/RELEASE_NOTES.md") as f1, open(
+            f"{main_dir}/static/release_notes_metadata.json"
+        ) as f2:
+            read_data = f1.read()
+            notes_raw = read_data.split(NOTE_DELIMITER)[1:]
+
+            # get body of each release note and convert to HTML
+            bodies = []
+            for note in notes_raw:
+                split_note = note.split(BODY_DELIMITER)
+                # if RELEASE_NOTES.md is wrongly formatted
+                if len(split_note) != 2:
+                    return False, []
+                bodies.append(markdown(split_note[1]))
+
+            # get metadata for each release note
+            metadata = json.load(f2)
+
+            # if two files are wrongly formatted / do not contain equal # of notes
+            num_notes = len(bodies)
+            if num_notes != len(metadata):
+                return False, []
+
+            # construct list of release notes (metadata + body)
+            notes = []
+            for i in range(num_notes):
+                data = metadata[i]
+                # if metadata obj does not contain correct keys
+                if "title" not in data or "date" not in data or "tags" not in data:
+                    return False, []
+                data["body"] = bodies[i]
+                notes.append(data)
+
+            return True, notes
+    except:
+        print("failed to open or parse release note files", file=stderr)
+        return False, []
 
 
 if __name__ == "__main__":

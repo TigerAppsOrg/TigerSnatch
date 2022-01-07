@@ -13,7 +13,7 @@ from database import Database
 from CASClient import CASClient
 from config import APP_SECRET_KEY
 from waitlist import Waitlist
-from app_helper import do_search, pull_course, is_admin
+from app_helper import do_search, pull_course, is_admin, get_release_notes
 from urllib.parse import quote_plus, unquote_plus
 from sys import stderr
 
@@ -183,8 +183,15 @@ def update_auto_resub(auto_resub):
 
 @app.route("/about", methods=["GET"])
 def about():
+    release_notes_success, release_notes = get_release_notes()
+
     if redirect_landing():
-        html = render_template("about.html", loggedin=False)
+        html = render_template(
+            "about.html",
+            loggedin=False,
+            release_notes_success=release_notes_success,
+            release_notes=release_notes,
+        )
         return make_response(html)
 
     term_name = _db.get_current_term_code()[1]
@@ -196,6 +203,8 @@ def about():
         notifs_online=_db.get_cron_notification_status(),
         next_notifs=_db.get_current_or_next_notifs_interval(),
         term_name=term_name,
+        release_notes_success=release_notes_success,
+        release_notes=release_notes,
     )
     return make_response(html)
 
