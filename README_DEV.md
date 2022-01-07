@@ -64,6 +64,11 @@
         }
         ```
         - NOTE: Each note's metadata must include a title, the date, and 1+ tags.
+        - NOTE: Tags can be of any type/value. If you are to edit/add a new type, then make sure to this type has been assigned its own badge color in `about.html` (or else the tag won't be rendered):
+            ```
+            {% if [tag type] in note["tags"] %}
+                <span class="badge rounded-pill" [color]>{{ note["tags"][[tag type]] }}</span>
+            ```
     - In `RELEASE_NOTES.md`, follow the existing format to add the body of your new release note in the appropriate order (reverse chron.), i.e. 
         ```
         <!-- NOTE  -->

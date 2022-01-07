@@ -81,40 +81,44 @@ def get_release_notes():
     # path of main directory
     main_dir = f"{os.path.dirname(__file__)}/../"
 
-    with open(f"{main_dir}/RELEASE_NOTES.md") as f1, open(
-        f"{main_dir}/static/release_notes_metadata.json"
-    ) as f2:
-        read_data = f1.read()
-        notes_raw = read_data.split(NOTE_DELIMITER)[1:]
+    try:
+        with open(f"{main_dir}/RELEASE_NOTES.md") as f1, open(
+            f"{main_dir}/static/release_notes_metadata.json"
+        ) as f2:
+            read_data = f1.read()
+            notes_raw = read_data.split(NOTE_DELIMITER)[1:]
 
-        # get body of each release note and convert to HTML
-        bodies = []
-        for note in notes_raw:
-            split_note = note.split(BODY_DELIMITER)
-            # if RELEASE_NOTES.md is correctly formatted, check should fail
-            if len(split_note) != 2:
+            # get body of each release note and convert to HTML
+            bodies = []
+            for note in notes_raw:
+                split_note = note.split(BODY_DELIMITER)
+                # if RELEASE_NOTES.md is wrongly formatted
+                if len(split_note) != 2:
+                    return False, []
+                bodies.append(markdown(split_note[1]))
+
+            # get metadata for each release note
+            metadata = json.load(f2)
+
+            # if two files are wrongly formatted / do not contain equal # of notes
+            num_notes = len(bodies)
+            if num_notes != len(metadata):
                 return False, []
-            bodies.append(markdown(split_note[1]))
 
-        # get metadata for each release note
-        metadata = json.load(f2)
+            # construct list of release notes (metadata + body)
+            notes = []
+            for i in range(num_notes):
+                data = metadata[i]
+                # if metadata obj does not contain correct keys
+                if "title" not in data or "date" not in data or "tags" not in data:
+                    return False, []
+                data["body"] = bodies[i]
+                notes.append(data)
 
-        # if RELEASE_NOTES.md and release_notes_metadata.json are correctly formatted / contain equal number of notes, check should fail
-        num_notes = len(bodies)
-        if num_notes != len(metadata):
-            return False, []
-
-        # construct list of release notes (metadata + body)
-        notes = []
-        for i in range(num_notes):
-            data = metadata[i]
-            # if metadata obj in release_notes_metadata.json contain correct keys, check should fail
-            if "title" not in data or "date" not in data or "tags" not in data:
-                return False, []
-            data["body"] = bodies[i]
-            notes.append(data)
-
-        return True, notes
+            return True, notes
+    except:
+        print("failed to open or parse release note files", file=stderr)
+        return False, []
 
 
 if __name__ == "__main__":
