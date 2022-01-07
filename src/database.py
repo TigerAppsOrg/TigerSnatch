@@ -1680,7 +1680,5 @@ if __name__ == "__main__":
     # print(db.get_current_or_next_notifs_interval())
     # print(db.get_all_subscriptions())
     # print(",".join(db._get_all_emails_csv().split(",")[997:]))
-    # print(",".join(db._get_all_emails_csv().split(",")[490 * 3 : 490 * 4]))
+    print(",".join(db._get_all_emails_csv().split(",")[490 * 3 : 490 * 4]))
     # print(db.get_prev_enrollment_RESERVED_SEATS_ONLY("40268"))
-    db.update_time_of_last_notif("42369")
-    print(db.get_time_of_last_notif("42369"))
