@@ -51,7 +51,7 @@
 **How to add a Release Note**
 
 1. Write down a title for your product update, the date it was deployed, and any short tags to describe this update (e.g. What type of update is it - new feature, bug fix, feature enhancement? On which page is this feature located? How important is this update for your users - high, medium, low?)  
-2. Open `RELEASE_NOTES.md` and `release_notes_metadata.json`. `RELEASE_NOTES.md` is the human-readable version of our release notes in the Github Repo. This file contains the "body" of each release note. `release_notes_metadata.json` stores the metadata for each release note: the title, date, and tags. In both files, release notes are organized in reverse chronological order (i.e. release notes should be in the same order in both files!)
+2. Open `RELEASE_NOTES.md` and `release_notes_metadata.json`. `RELEASE_NOTES.md` is the human-readable version of our release notes in the Github Repo. This file contains the "body" of each release note, written in markdown. `release_notes_metadata.json` stores the metadata for each release note: the title, date, and tags. In both files, release notes are organized in reverse chronological order (i.e. release notes should be in the same order in both files!)
     - In `release_notes_metadata.json`, follow the existing format to add metadata about your new note, i.e. your note's metadata is contained in an object within an ordered (reverse chron.) list: 
         ```
         {
@@ -63,6 +63,7 @@
             }
         }
         ```
+        - NOTE: Each note's metadata must include a title, the date, and 1+ tags.
     - In `RELEASE_NOTES.md`, follow the existing format to add the body of your new release note in the appropriate order (reverse chron.), i.e. 
         ```
         <!-- NOTE  -->
@@ -71,4 +72,7 @@
         <!-- BODY  -->
         Body of note, written in markdown. To add images, use HTML: <img src="static/release_notes_pics/image_file" width="100%"/>
         ```
-3. Double-check that you correctly formatted your release note and its metadata. Double-check that the Release Notes section is properly rendered on the About page. If you do not correctly carry out step 2 above, all release notes may fail to display on the About page. Note that anything written above the first note in `RELEASE_NOTES.md` will not appear on the About page. **To see how `RELEASE_NOTES.md` and `release_notes_metadata.json` are parsed to construct the Release Notes section on the About page, check out `get_release_notes()` in `app_helper.py`.**  
+        - NOTE: Any images for release notes should be saved in `static/release_notes_pics` folder. 
+        - NOTE: The `<!-- NOTE  -->` and `<!-- BODY  -->` delimiters (in that order) must be included for each note.
+3. Double-check that you correctly formatted your release note and its metadata. Double-check that the Release Notes section is properly rendered on the About page. If you do not correctly carry out step 2 above, all release notes may fail to display on the About page. Push your changes to the TigerSnatch repo.
+- Note that anything written above the first note in `RELEASE_NOTES.md` will not appear on the About page. **To see how `RELEASE_NOTES.md` and `release_notes_metadata.json` are parsed to construct the Release Notes section on the About page, check out `get_release_notes()` in `app_helper.py`.**  

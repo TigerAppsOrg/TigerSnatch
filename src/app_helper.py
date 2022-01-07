@@ -90,12 +90,16 @@ def get_release_notes():
         # get body of each release note and convert to HTML
         bodies = []
         for note in notes_raw:
-            bodies.append(markdown(note.split(BODY_DELIMITER)[1]))
+            split_note = note.split(BODY_DELIMITER)
+            # if RELEASE_NOTES.md is correctly formatted, check should fail
+            if len(split_note) != 2:
+                return False, []
+            bodies.append(markdown(split_note[1]))
 
         # get metadata for each release note
         metadata = json.load(f2)
 
-        # if RELEASE_NOTES.md and release_notes_metadata.json are correctly formatted, check should fail
+        # if RELEASE_NOTES.md and release_notes_metadata.json are correctly formatted / contain equal number of notes, check should fail
         num_notes = len(bodies)
         if num_notes != len(metadata):
             return False, []
@@ -104,6 +108,9 @@ def get_release_notes():
         notes = []
         for i in range(num_notes):
             data = metadata[i]
+            # if metadata obj in release_notes_metadata.json contain correct keys, check should fail
+            if "title" not in data or "date" not in data or "tags" not in data:
+                return False, []
             data["body"] = bodies[i]
             notes.append(data)
 
