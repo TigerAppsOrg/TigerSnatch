@@ -95,13 +95,13 @@
     </div>
   <hr class="my-3"
           style="width: 80%; margin: auto" />
-  <div class="row mb-2">
+  <div class="row">
     <p class="text-center fs-1 mt-2 mb-3"
          style="letter-spacing: 1px">
         <span class="badge bg-warning text-dark font-monospace fs-1 px-2 pb-2">Release Notes</span>
       </p>
-      <div id="release-notes-desc" class="text-center" style="margin-bottom: 20px;">
-        <div style="margin: auto; margin-bottom: 5px;">Stay informed about the newest TigerSnatch updates with Release Notes!</div>
+      <div id="release-notes-desc" class="text-center mb-3">
+        <div>Stay informed about the newest TigerSnatch updates with Release Notes!</div>
         <div class="release-tags">
           <strong>Tag Categories:</strong>
           <span class="badge rounded-pill bg-success">Type of Update</span>
@@ -110,7 +110,7 @@
         </div>
       </div>
     </div>
-    <div class="row">
+  <div class="row">
 
     {% if not release_notes_success %}
 
@@ -118,7 +118,7 @@
 
     {% else %}
 
-      <div id="release-notes-accordion" class="accordion">
+      <div id="release-notes-accordion" class="accordion" style="margin-bottom: 100px">
 
         {% for note in release_notes %}
           {% set i = loop.index %}
