@@ -703,6 +703,9 @@ class Database:
 
         return res
 
+    def get_total_user_count(self):
+        return self._db.users.count_documents({})
+
     def get_users_who_subscribe(self):
         data = self._db.users.find({}, {"waitlists": 1, "_id": 0})
         return sum([len(k["waitlists"]) > 0 for k in data])
@@ -744,6 +747,7 @@ class Database:
             {},
             {
                 "stats_top_subs": 1,
+                "stats_total_users": 1,
                 "stats_subbed_users": 1,
                 "stats_subbed_sections": 1,
                 "stats_subbed_courses": 1,
