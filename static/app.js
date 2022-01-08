@@ -285,7 +285,7 @@ const toastBlacklistFail = $(
     data-bs-delay="3000"
 >
     <div class="d-flex">
-        <div class="toast-body">Failed to blacklist/unblacklist user.</div>
+        <div class="toast-body">Failed to block/unblock user.</div>
         <button
             type="button"
             class="btn-close btn-close-white me-2 m-auto"
@@ -744,68 +744,6 @@ let navbarAutoclose = function () {
   });
 };
 
-// helper method to show blacklist success/fail toast
-let blacklistToastHelper = function (type) {
-  if (type === "success") {
-    $(".toast-container").prepend(
-      toastBlacklistSuccess.clone().attr("id", "toast-blacklist-success-" + ++i)
-    );
-    $("#toast-blacklist-success-" + i).toast("show");
-    $("*").css("pointer-events", "none");
-    setTimeout(() => location.reload(), 3100);
-  } else if (type === "fail") {
-    $(".toast-container").prepend(
-      toastBlacklistFail.clone().attr("id", "toast-blacklist-fail-" + ++i)
-    );
-    $("#toast-blacklist-fail-" + i).toast("show");
-  }
-};
-
-// listens for "Confirm" removal from waitlist
-let blacklistListener = function () {
-  $("button.btn-blacklist").on("click", function (e) {
-    e.preventDefault();
-
-    if (!confirm("Are you sure you want to blacklist this user?")) return;
-
-    disableAdminFunction();
-    netid = e.target.getAttribute("data-netid");
-
-    $.post(`/add_to_blacklist/${netid}`, function (res) {
-      // checks that user successfully removed from waitlist on back-end
-      if (!res["isSuccess"]) {
-        enableAdminFunction();
-        blacklistToastHelper("fail");
-        return;
-      }
-
-      blacklistToastHelper("success");
-    });
-  });
-};
-
-// listens for "Confirm" removal from waitlist
-let blacklistRemovalListener = function () {
-  $("button.btn-blacklist-removal").on("click", function (e) {
-    e.preventDefault();
-
-    if (!confirm("Are you sure you want to unblacklist this user?")) return;
-
-    disableAdminFunction();
-    netid = e.target.getAttribute("data-netid");
-
-    $.post(`/remove_from_blacklist/${netid}`, function (res) {
-      // checks that user successfully removed from waitlist on back-end
-      if (!res["isSuccess"]) {
-        blacklistToastHelper("fail");
-        enableAdminFunction();
-        return;
-      }
-      blacklistToastHelper("success");
-    });
-  });
-};
-
 // listens for "Info" button on user list
 let getUserInfoListener = function () {
   let helper = function (res, label) {
@@ -893,7 +831,6 @@ let getAllSubscriptionsListener = function () {
 
 // enables all admin function buttons
 let enableAdminFunction = function () {
-  $(".btn-blacklist").attr("disabled", false);
   $(".btn-blacklist-removal").attr("disabled", false);
   $(".btn-user-info").attr("disabled", false);
   $("#notifs-sheet-link").attr("disabled", false);
@@ -918,11 +855,12 @@ let enableAdminFunction = function () {
   $("#get-user-trade-data-input").attr("disabled", false);
   $("#get-user-trade-data-submit").attr("disabled", false);
   $("#fill-section-submit").attr("disabled", false);
+  $("#block-user-input").attr("disabled", false);
+  $("#block-user-submit").attr("disabled", false);
 };
 
 // disables all admin function buttons
 let disableAdminFunction = function () {
-  $(".btn-blacklist").attr("disabled", true);
   $(".btn-blacklist-removal").attr("disabled", true);
   $(".btn-user-info").attr("disabled", true);
   $("#notifs-sheet-link").attr("disabled", true);
@@ -947,6 +885,8 @@ let disableAdminFunction = function () {
   $("#get-user-trade-data-input").attr("disabled", true);
   $("#get-user-trade-data-submit").attr("disabled", true);
   $("#fill-section-submit").attr("disabled", true);
+  $("#block-user-input").attr("disabled", true);
+  $("#block-user-submit").attr("disabled", true);
 };
 
 // listens for email notifications switch toggle
@@ -1220,6 +1160,60 @@ let getUserDataListener = function () {
     });
   });
 };
+
+// listens for a user block or unblock query
+let blockUserListener = function () {
+  // helper method to show blacklist success/fail toast
+  let blockToastHelper = function (type) {
+    if (type === "success") {
+      $(".toast-container").prepend(
+        toastBlacklistSuccess.clone().attr("id", "toast-blacklist-success-" + ++i)
+      );
+      $("#toast-blacklist-success-" + i).toast("show");
+      $("*").css("pointer-events", "none");
+      setTimeout(() => location.reload(), 3100);
+    } else if (type === "fail") {
+      $(".toast-container").prepend(
+        toastBlacklistFail.clone().attr("id", "toast-blacklist-fail-" + ++i)
+      );
+      $("#toast-blacklist-fail-" + i).toast("show");
+    }
+  };
+
+  $("#block-user").on("submit", function (e) {
+    e.preventDefault();
+    netid = $(`#block-user-input`).val();
+
+    if (!confirm(`Are you sure you want to block user ${netid}?`)) return;
+
+    disableAdminFunction();
+    $.post(`/add_to_blacklist/${netid}`, function (res) {
+      if (!res["isSuccess"]) {
+        enableAdminFunction();
+        blockToastHelper("fail");
+        return;
+      }
+      blockToastHelper("success");
+    });
+  });
+
+  $("button.btn-blacklist-removal").on("click", function (e) {
+    e.preventDefault();
+
+    if (!confirm("Are you sure you want to unblock this user?")) return;
+
+    disableAdminFunction();
+    netid = e.target.getAttribute("data-netid");
+    $.post(`/remove_from_blacklist/${netid}`, function (res) {
+      if (!res["isSuccess"]) {
+        blockToastHelper("fail");
+        enableAdminFunction();
+        return;
+      }
+      blockToastHelper("success");
+    });
+  });
+}
 
 // disables trade functionality buttons
 let disableTradeFunction = function () {
@@ -1501,8 +1495,7 @@ let mobileViewFunctions = function () {
 
 // handles features on the admin panel
 let adminFunctions = function () {
-  blacklistListener();
-  blacklistRemovalListener();
+  blockUserListener();
   clearAllWaitlistsListener();
   clearAllTradesListener();
   clearAllLogsListener();
