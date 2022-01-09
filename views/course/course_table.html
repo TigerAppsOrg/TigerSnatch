@@ -61,7 +61,9 @@
         <th scope="col">Enrollment</th>
         <th scope="col">Days</th>
         <th scope="col">Time</th>
+        {% if user_is_admin %}
         <th scope="col">ClassID (admin)</th>
+        {% endif %}
       </tr>
     </thead>
     <tbody>
