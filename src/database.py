@@ -903,14 +903,12 @@ class Database:
             dashboard_data[classid]["capacity"] = class_stats["capacity"]
 
             try:
-                class_waitlist = self._db.waitlists.find_one({"classid": classid})[
-                    "waitlist"
-                ]
-                dashboard_data[classid]["position"] = class_waitlist.index(netid) + 1
-            except ValueError:
-                raise ValueError(f"user {netid} not found in waitlist for {classid}")
-            except:
-                raise RuntimeError(f"classid {classid} not found in waitlists")
+                time_of_last_notif = self.get_time_of_last_notif(classid)
+            except Exception:
+                time_of_last_notif = None
+            dashboard_data[classid]["time_of_last_notif"] = (
+                time_of_last_notif if time_of_last_notif is not None else "-"
+            )
 
         return dashboard_data
 
