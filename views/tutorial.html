@@ -98,6 +98,7 @@
     </div>
   </div>
 
+  {% if loggedin %}
   <form method="get"
         action="/dashboard"
         class="text-center my-4">
@@ -107,6 +108,9 @@
       Go to Dashboard &#8594;
     </button>
   </form>
+  {% else %}
+  <br />
+  {% endif %}
 
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/js/bootstrap.bundle.min.js"
           integrity="sha384-JEW9xMcG8R+pH31jmWH6WWP0WintQrMb4s7ZOdauHnUtxwoG2vI5DkLtS3qm9Ekf"
