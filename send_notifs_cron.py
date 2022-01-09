@@ -42,6 +42,15 @@ def schedule_jobs(update_db=False):
             hour="4",
             timezone=tz,
         )
+
+        print("[Scheduler] adding global soft course update job at 5am ET daily")
+        sched.add_job(
+            do_update_async_SOFT,
+            "cron",
+            hour="5",
+            timezone=tz,
+        )
+
         print("[Scheduler] adding stats update job every 10 minutes")
         sched.add_job(
             update_stats,
