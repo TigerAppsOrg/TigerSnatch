@@ -32,15 +32,21 @@ def process_dept_codes(dept_codes: str, current_term_code: str, hard_reset: bool
     try:
         db = Database()
         old_enrollments = list(
-            db._db.enrollments.find({}, {"_id": 0, "classid": 1, "last_notif": 1})
+            db._db.enrollments.find(
+                {}, {"_id": 0, "classid": 1, "last_notif": 1, "prev_enrollment": 1}
+            )
         )
 
         # precompute dictionary of times of last notif
         old_last_notifs = {}
+        old_prev_enrollments = {}
         for enrollment in old_enrollments:
-            if "last_notif" not in enrollment:
-                continue
-            old_last_notifs[enrollment["classid"]] = enrollment["last_notif"]
+            if "last_notif" in enrollment:
+                old_last_notifs[enrollment["classid"]] = enrollment["last_notif"]
+            if "prev_enrollment" in enrollment:
+                old_prev_enrollments[enrollment["classid"]] = enrollment[
+                    "prev_enrollment"
+                ]
 
         courses = _api.get_courses(term=current_term_code, subject=dept_codes)
 
@@ -147,6 +153,12 @@ def process_dept_codes(dept_codes: str, current_term_code: str, hard_reset: bool
                     if not hard_reset and classid in old_last_notifs:
                         print("preserving time of last notif for class", classid)
                         new_class_enrollment["last_notif"] = old_last_notifs[classid]
+
+                    if not hard_reset and classid in old_prev_enrollments:
+                        print("preserving previous enrollment for class", classid)
+                        new_class_enrollment["prev_enrollment"] = old_prev_enrollments[
+                            classid
+                        ]
 
                     print(
                         "inserting",
