@@ -554,17 +554,6 @@ let searchResultListener = function () {
   });
 };
 
-// listens for when user clicks on course in dashboard
-// to navigate to its course page
-let dashboardCourseSelectListener = function () {
-  $(".dashboard-course-link").on("click", function (e) {
-    // blur frame while loading
-    $("#loading-overlay").css("display", "flex");
-    $("#main").css("pointer-events", "none");
-    $("#main").css("filter", "blur(2px)");
-  });
-};
-
 let disableSwitchFunctions = function () {
   $(".waitlist-switch").attr("disabled", true);
   $("#auto-resub-switch").attr("disabled", true);
@@ -1543,7 +1532,6 @@ $(document).ready(function () {
   showAllListener();
   pageBackListener();
   initTooltipsToasts();
-  dashboardCourseSelectListener();
   initTutorial();
   accountSettingsFunctions();
 });
