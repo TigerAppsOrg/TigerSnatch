@@ -187,6 +187,7 @@ def update_stats():
     try:
         stats_top_subs = db.get_top_subscriptions(target_num=10, unique_courses=True)
         stats_total_users = db.get_total_user_count()
+        stats_total_subs = db.get_total_subscriptions()
         stats_subbed_users = db.get_users_who_subscribe()
         stats_subbed_sections = db.get_num_subscribed_sections()
         stats_subbed_courses = db.get_num_subscribed_courses()
@@ -201,6 +202,7 @@ def update_stats():
                 "$set": {
                     "stats_top_subs": stats_top_subs,
                     "stats_total_users": stats_total_users,
+                    "stats_total_subs": stats_total_subs,
                     "stats_subbed_users": stats_subbed_users,
                     "stats_subbed_sections": stats_subbed_sections,
                     "stats_subbed_courses": stats_subbed_courses,
