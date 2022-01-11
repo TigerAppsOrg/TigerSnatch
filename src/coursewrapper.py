@@ -37,14 +37,20 @@ class CourseWrapper:
         for k in self._new_enroll:
             try:
                 if self._has_reserved_seats:
+                    # spot openings = previous enrollment - new enrollment
                     d = (
                         self._db.get_prev_enrollment_RESERVED_SEATS_ONLY(k)
                         - self._new_enroll[k]
                     )
+                    # update (rolling) previous enrollment with new enrollment
                     self._db.update_prev_enrollment_RESERVED_SEATS_ONLY(
                         k, self._new_enroll[k]
                     )
+                    # detects the case where spots have opened but enrollment is still not possible (enrollment >= capacity)
+                    if self._new_enroll[k] >= self._new_cap[k]:
+                        d = 0
                 else:
+                    # spot openings = new capacity - new enrollment
                     d = self._new_cap[k] - self._new_enroll[k]
             except:
                 raise RuntimeError(f"missing key {k} in either new_cap or new_enroll")
