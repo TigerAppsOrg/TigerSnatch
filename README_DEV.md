@@ -52,6 +52,7 @@ For non-minor changes:
 
 **To view Heroku logs**
 - Do `heroku logs --tail -a <app_name>`
+- Use Papertrail in Heroku (stores more logs & logs are search-able)
 
 **To visit API Store**
 1. Connect to vpn.princeton.edu using GlobalProtect VPN.
