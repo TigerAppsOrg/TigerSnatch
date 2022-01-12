@@ -1151,6 +1151,17 @@ class Database:
         except:
             return False
 
+    # checks if a course (via its entire original "displayname" key) is a top-N subscribed course
+
+    def is_course_top_n_subscribed(self, displayname):
+        try:
+            displayname = " / ".join(displayname.split("/"))
+            data = self._db.admin.find_one({}, {"_id": 0, "stats_top_subs": 1})
+            top_courses = set([e["deptnum"] for e in data["stats_top_subs"]])
+            return displayname in top_courses
+        except:
+            return False
+
     # ----------------------------------------------------------------------
     # CLASS METHODS
     # ----------------------------------------------------------------------
