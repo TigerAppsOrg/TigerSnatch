@@ -1,6 +1,13 @@
 <div class="px-4 pt-3">
-  <span class="badge bg-warning text-dark font-monospace px-1 py-1 fs-5">{{
-    course_details.displayname.split('/')[0] }}
+  <span class="badge bg-warning text-dark font-monospace px-1 py-1 fs-5">
+    {% set crosslistings = course_details.displayname.split('/') %}
+    {{ crosslistings[0] }}
+    {%- for i in range(1, [crosslistings|length, 3]|min) -%}
+      /{{ crosslistings[i] }}
+    {%- endfor %}
+    {%- if crosslistings|length > 3 -%}
+      /...
+    {% endif %}
   </span>
   {% if is_course_disabled %}
   <span class="badge bg-danger text-light font-monospace fw-bold px-1 py-1 ms-2 fs-5 animate__animated animate__flash"
