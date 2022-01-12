@@ -302,7 +302,7 @@ class Database:
         return curr != data
 
     # generates a string representing the current/next notifications interval
-    def get_current_or_next_notifs_interval(self, fmt="%b %-d @ %-I:%M %p"):
+    def get_current_or_next_notifs_interval(self, fmt="%-m/%-d @ %-I:%M %p"):
         tz_utc = pytz.timezone("UTC")
         tz_et = pytz.timezone("US/Eastern")
         curr = self._db.admin.find_one({}, {"notifs_schedule": 1, "_id": 0})[
@@ -668,7 +668,7 @@ class Database:
                     if len(courses) >= target_num:
                         break
                     deptnum, name, section, _ = self.classid_to_classinfo(
-                        data["classid"]
+                        data["classid"], entire_crosslisting=True
                     )
                     if deptnum not in courses:
                         courses.add(deptnum)
@@ -688,7 +688,7 @@ class Database:
                 waitlists = self.get_all_subscriptions_raw()[0:target_num]
                 for data in waitlists:
                     deptnum, name, section, _ = self.classid_to_classinfo(
-                        data["classid"]
+                        data["classid"], entire_crosslisting=True
                     )
                     res.append(
                         {
@@ -1196,7 +1196,7 @@ class Database:
     # returns information about a class including course depts, numbers, title
     # and section number, for display in email/text messages
 
-    def classid_to_classinfo(self, classid):
+    def classid_to_classinfo(self, classid, entire_crosslisting=False):
         try:
             classinfo = self._db.enrollments.find_one({"classid": classid})
             courseid = classinfo["courseid"]
@@ -1212,6 +1212,8 @@ class Database:
             raise Exception(f"courseid {courseid} cannot be found")
 
         dept_num = displayname.split("/")[0]
+        if entire_crosslisting:
+            dept_num = " / ".join(displayname.split("/"))
         return dept_num, title, sectionname, courseid
 
     # get dictionary for class with given classid in courses
