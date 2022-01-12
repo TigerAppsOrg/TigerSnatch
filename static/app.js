@@ -1439,7 +1439,7 @@ let initTutorial = function () {
   });
 }
 
-// contact information change confirmation alerts
+// contact information change listeners
 let initContactInfoChangeAlerts = function () {
   $("#new-email").submit(function (e) {
     alert(`Email address successfully changed to ${$("#new-email-input").val()}!`);
@@ -1451,6 +1451,22 @@ let initContactInfoChangeAlerts = function () {
     else
       alert("Phone number successfully removed!");
   });
+  let curr_email = $("#new-email-input").val();
+  let curr_phone = $("#new-phone-input").val();
+  $("#new-email-input").on("input", function (e) {
+    if ($("#new-email-input").val() == curr_email) {
+      $(this).next("button").attr("disabled", true);
+      return;
+    }
+    $(this).next("button").attr("disabled", false);
+  })
+  $("#new-phone-input").on("input", function (e) {
+    if ($("#new-phone-input").val() == curr_phone) {
+      $(this).next("button").attr("disabled", true);
+      return;
+    }
+    $(this).next("button").attr("disabled", false);
+  })
 }
 
 // listens for account settings button and the account settings alert banner
