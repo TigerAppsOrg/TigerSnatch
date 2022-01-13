@@ -449,33 +449,50 @@ let searchFormListener = function () {
     e.preventDefault();
 
     // get search query
-    query = encodeURIComponent($("#search-form-input").prop("value"));
-    if (query.length < 2) return;
-    if (query.length == 2) {
+    query_raw = $("#search-form-input").prop("value")
+    query = encodeURIComponent(query_raw);
+
+    curr_path = location.pathname;
+    params = location.search.replace("?", "").split("&");
+
+    if (query_raw.length < 2) return;
+
+    // when user enters 3 characters then deletes one
+    if (query_raw.length == 2) {
+      // remove query from URL
+      curr_path += "?";
+      ind = 0
+      params.forEach(param => {
+        if (!param.startsWith("query")) {
+            if (ind > 0) curr_path += "&";
+            curr_path += param;
+            ind += 1
+        } 
+      })
+
       $.post("/searchresults_placeholder", function (res) {
         $("div#search-results").html(res);
+        window.history.pushState(
+          { restore: "search", html: res },
+          "restore search results",
+          curr_path
+        );
       })
+
       return;
     }
 
     // close the tooltip if open
     $("#search-form-input").tooltip("hide");
 
-    // construct new URL
-    params = location.search;
-    curr_path = location.pathname;
-    if (params === "") {
-      curr_path = curr_path + "?query=" + query;
-    } else {
-      curr_path = curr_path + "?";
-      params = params.replace("?", "");
-      arr = params.split("&");
-      for (let i = 0; i < arr.length; i++) {
-        if (i > 0) curr_path += "&";
-        if (arr[i].startsWith("query")) curr_path = curr_path + "query=" + query;
-        else curr_path += arr[i];
-      }
+    // add query to URL
+    curr_path += `?query=${query}`;
+    if (location.search !== "") {
+      params.forEach(param => {
+        if (!param.startsWith("query")) curr_path += `&${param}`;
+      })
     }
+
     // get search results
     if (query.trim() === "") {
       endpoint = "/searchresults";
