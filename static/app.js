@@ -464,10 +464,10 @@ let searchFormListener = function () {
       ind = 0
       params.forEach(param => {
         if (!param.startsWith("query")) {
-            if (ind > 0) curr_path += "&";
-            curr_path += param;
-            ind += 1
-        } 
+          if (ind > 0) curr_path += "&";
+          curr_path += param;
+          ind += 1
+        }
       })
 
       $.post("/searchresults_placeholder", function (res) {
@@ -1205,11 +1205,11 @@ let blockUserListener = function () {
 
   $("button.btn-blacklist-removal").on("click", function (e) {
     e.preventDefault();
+    netid = e.target.getAttribute("data-netid");
 
-    if (!confirm("Are you sure you want to unblock this user?")) return;
+    if (!confirm(`Are you sure you want to unblock user ${netid}?`)) return;
 
     disableAdminFunction();
-    netid = e.target.getAttribute("data-netid");
     $.post(`/remove_from_blacklist/${netid}`, function (res) {
       if (!res["isSuccess"]) {
         blockToastHelper("fail");
@@ -1461,6 +1461,7 @@ let initContactInfoChangeAlerts = function () {
   $("#new-email").submit(function (e) {
     alert(`Email address successfully changed to ${$("#new-email-input").val()}!`);
   });
+
   $("#new-phone").submit(function (e) {
     let newPhone = $("#new-phone-input").val();
     if (newPhone)
@@ -1468,8 +1469,10 @@ let initContactInfoChangeAlerts = function () {
     else
       alert("Phone number successfully removed!");
   });
+
   let curr_email = $("#new-email-input").val();
   let curr_phone = $("#new-phone-input").val();
+
   $("#new-email-input").on("input", function (e) {
     if ($("#new-email-input").val() == curr_email) {
       $(this).next("button").attr("disabled", true);
@@ -1477,6 +1480,7 @@ let initContactInfoChangeAlerts = function () {
     }
     $(this).next("button").attr("disabled", false);
   })
+
   $("#new-phone-input").on("input", function (e) {
     if ($("#new-phone-input").val() == curr_phone) {
       $(this).next("button").attr("disabled", true);
