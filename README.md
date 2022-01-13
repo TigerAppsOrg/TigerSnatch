@@ -4,14 +4,7 @@
 
 > TigerSnatch began as a Spring '21 COS333 project at Princeton University by Shannon Heh '23, Nicholas Padmanabhan '23, and Byron Zhang '23.
 
----
-
-<div class="row">
-    <p class="text-center mt-3"
-        style="letter-spacing: 1px">
-        <span class="badge bg-warning text-dark font-monospace fs-3 px-2 py-2">Tutorial</span>
-    </p>
-</div>
+# Tutorial
 
 <div class="container-fluid">
     <div class="row">
@@ -43,6 +36,7 @@
         of your Subscriptions) and who are subscribed to your currently enrolled section.
         </p>
     </div>
+    <br />
     <div class="row">
         <div class="my-4 tutorial-image">
         <img src="static/COURSE_TUTORIAL.jpeg"
@@ -50,6 +44,7 @@
                 width="95%" />
         </div>
     </div>
+    <br />
     <div class="row">
         <p class="fw-light text-center fs-5 tutorial-text my-4">
         Return to the Dashboard to check out your Subscriptions and the sections you wish to trade
@@ -57,6 +52,7 @@
         <br />
         </p>
     </div>
+    <br />
     <div class="row">
         <div class="my-4 tutorial-image">
         <img src="static/DASHBOARD_TUTORIAL.jpeg"
@@ -64,6 +60,7 @@
                 width="95%" />
         </div>
     </div>
+    <br />
     <div class="row">
         <p class="fw-light text-center mt-4 fs-5 tutorial-text">
         It's that simple! The next time a spot opens up in a subscribed section, you'll be
@@ -79,6 +76,7 @@
         Release Notes on the About page!
         </p>
     </div>
+    <br />
     <div class="row">
         <div class="my-4 tutorial-image">
         <img src="static/ACTIVITY_TUTORIAL.jpeg"
@@ -86,45 +84,35 @@
                 width="95%" />
         </div>
     </div>
-    <div class="row">
-        <p class="fw-light text-center mt-4 mb-3 tutorial-text">
-        TigerSnatch Subscriptions are independent from official course waitlists. You might not be
-        able to enroll in courses shown on TigerSnatch even if spots free up. Always check Course
-        Offerings for course-specific enrollment and waitlist info.
-        </p>
-    </div>
 </div>
+<br />
 
----
+_TigerSnatch Subscriptions are independent from official course waitlists. You might not be able to enroll in courses shown on TigerSnatch even if spots free up. Always check Course Offerings for course-specific enrollment and waitlist info._
+
+# Original Team
 
 <div class="container-fluid">
-    <div class="row">
-        <p class="text-center mt-3"
-            style="letter-spacing: 1px">
-            <span class="badge bg-warning text-dark font-monospace fs-3 px-2 py-2">Original Team</span>
-        </p>
-    </div>
     <div class="row">
         <div class="col-xl-4">
         <img class="img-shadow rounded-circle border border-3 border-warning mx-auto mt-3 d-block"
                 src="static/Shannon.jpg"
                 width="250px"
                 height="250px" />
-        <h2 class="fs-4 text-center pt-4 pb-0">Shannon Heh '23</h2>
+            <p><b class="fs-4 text-center pt-4 pb-0">Shannon Heh '23</b></p>
         </div>
         <div class="col-xl-4">
         <img class="img-shadow rounded-circle border border-3 border-warning mx-auto mt-3 d-block"
                 src="static/Nick.jpg"
                 width="250px"
                 height="250px" />
-        <h2 class="fs-4 text-center pt-4 pb-0">Nicholas Padmanabhan '23</h2>
+            <p><b class="fs-4 text-center pt-4 pb-0">Nicholas Padmanabhan '23</b></p>
         </div>
         <div class="col-xl-4">
         <img class="img-shadow rounded-circle border border-3 border-warning mx-auto mt-3 d-block"
                 src="static/Byron.jpg"
                 width="250px"
                 height="250px" />
-        <h2 class="fs-4 text-center pt-4 pb-0">Byron Zhang '23</h2>
+            <p><b class="fs-4 text-center pt-4 pb-0">Byron Zhang '23</b></p>
     </div>
 </div>
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-eOJMYsd53ii+scO/bJGFsiCZc+5NDVN2yr8+0RDqr0Ql0h+rP48ckxlpbzKgwra6" crossorigin="anonymous" />
