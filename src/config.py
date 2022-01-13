@@ -29,7 +29,7 @@ CONSUMER_KEY = environ["CONSUMER_KEY"]
 CONSUMER_SECRET = environ["CONSUMER_SECRET"]
 
 # CAS key
-APP_SECRET_KEY = b"N|\x193\\\xb8\xdaTc\x89\x15r\xb0-\xbb\x02"
+APP_SECRET_KEY = environ["APP_SECRET_KEY"]
 
 # Heroku API key
 HEROKU_API_KEY = environ["HEROKU_API_KEY"]
