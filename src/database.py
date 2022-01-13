@@ -451,14 +451,18 @@ class Database:
         try:
             if self.is_admin(netid):
                 self._add_admin_log(f"user {netid} is an admin - cannot be blocked")
-                return
+                return False
+
+            if not self.is_user_created(netid):
+                self._add_admin_log(f"user {netid} does not exist - cannot be blocked")
+                return False
 
             blacklist = self.get_blacklist()
 
             # check if user is already in blacklist
             if netid in blacklist:
                 self._add_admin_log(f"user {netid} already blocked - not added")
-                return
+                return False
 
             if self.is_user_created(netid):
                 remove_user(netid)
@@ -482,6 +486,12 @@ class Database:
 
     def remove_from_blacklist(self, netid, admin_netid):
         try:
+            if not self.is_user_created(netid):
+                self._add_admin_log(
+                    f"user {netid} does not exist - cannot be unblocked"
+                )
+                return False
+
             blacklist = self.get_blacklist()
             if netid not in blacklist:
                 self._add_admin_log(f"user {netid} not blocked - not removed")
