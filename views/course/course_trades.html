@@ -4,7 +4,7 @@
              width="18"
              height="18"
              fill="currentColor"
-             class="bi bi-info-square-fill text-primary ms-1"
+             class="bi bi-info-square-fill text-primary"
              viewBox="0 0 16 20"
              data-bs-toggle="tooltip"
              data-bs-placement="auto"
@@ -14,12 +14,12 @@
         </svg>
 </div>
 {% if trade_unavailable %}
-<div class="">Trades unavailable - this course has fewer than 2 sections outside of lecture.</div>
+<div class="">Trades unavailable: this course has &lt2 non-lecture sections.</div>
 {% else %}
 <form class="trade-form"
       courseid="{{courseid}}">
         <div class="input-group pb-2">
-                <span class="input-group-text">Your current enrollment: </span>
+                <span class="input-group-text">Your current enrollment:</span>
                 <select class="form-select"
                         id="sections-{{courseid}}"
                         required>

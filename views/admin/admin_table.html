@@ -188,6 +188,29 @@
         </form>
       </tr>
       <tr class="dashboard-course-row">
+        <td>Block User</td>
+        <form id="block-user">
+          <td>
+            <input id="block-user-input"
+                   class="form-control"
+                   type="text"
+                   maxlength="20"
+                   pattern="^[a-zA-Z0-9]+$"
+                   placeholder="netID (e.g. sheh)"
+                   required
+                   autocomplete="off"
+                   autocapitalize="off" />
+          </td>
+          <td>
+            <button id="block-user-submit"
+                    type="submit"
+                    class="btn btn-warning">
+              Block
+            </button>
+          </td>
+        </form>
+      </tr>
+      <tr class="dashboard-course-row">
         <td>Fill Section Enrollment</td>
         <form id="fill-section">
           <td>

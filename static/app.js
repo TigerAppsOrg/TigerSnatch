@@ -285,7 +285,7 @@ const toastBlacklistFail = $(
     data-bs-delay="3000"
 >
     <div class="d-flex">
-        <div class="toast-body">Failed to blacklist/unblacklist user.</div>
+        <div class="toast-body">Failed to block/unblock user.</div>
         <button
             type="button"
             class="btn-close btn-close-white me-2 m-auto"
@@ -449,33 +449,50 @@ let searchFormListener = function () {
     e.preventDefault();
 
     // get search query
-    query = encodeURIComponent($("#search-form-input").prop("value"));
-    if (query.length < 2) return;
-    if (query.length == 2) {
+    query_raw = $("#search-form-input").prop("value")
+    query = encodeURIComponent(query_raw);
+
+    curr_path = location.pathname;
+    params = location.search.replace("?", "").split("&");
+
+    if (query_raw.length < 2) return;
+
+    // when user enters 3 characters then deletes one
+    if (query_raw.length == 2) {
+      // remove query from URL
+      curr_path += "?";
+      ind = 0
+      params.forEach(param => {
+        if (!param.startsWith("query")) {
+          if (ind > 0) curr_path += "&";
+          curr_path += param;
+          ind += 1
+        }
+      })
+
       $.post("/searchresults_placeholder", function (res) {
         $("div#search-results").html(res);
+        window.history.pushState(
+          { restore: "search", html: res },
+          "restore search results",
+          curr_path
+        );
       })
+
       return;
     }
 
     // close the tooltip if open
     $("#search-form-input").tooltip("hide");
 
-    // construct new URL
-    params = location.search;
-    curr_path = location.pathname;
-    if (params === "") {
-      curr_path = curr_path + "?query=" + query;
-    } else {
-      curr_path = curr_path + "?";
-      params = params.replace("?", "");
-      arr = params.split("&");
-      for (let i = 0; i < arr.length; i++) {
-        if (i > 0) curr_path += "&";
-        if (arr[i].startsWith("query")) curr_path = curr_path + "query=" + query;
-        else curr_path += arr[i];
-      }
+    // add query to URL
+    curr_path += `?query=${query}`;
+    if (location.search !== "") {
+      params.forEach(param => {
+        if (!param.startsWith("query")) curr_path += `&${param}`;
+      })
     }
+
     // get search results
     if (query.trim() === "") {
       endpoint = "/searchresults";
@@ -551,17 +568,6 @@ let searchResultListener = function () {
       removeCurrentSection();
       findMatches();
     });
-  });
-};
-
-// listens for when user clicks on course in dashboard
-// to navigate to its course page
-let dashboardCourseSelectListener = function () {
-  $(".dashboard-course-link").on("click", function (e) {
-    // blur frame while loading
-    $("#loading-overlay").css("display", "flex");
-    $("#main").css("pointer-events", "none");
-    $("#main").css("filter", "blur(2px)");
   });
 };
 
@@ -744,68 +750,6 @@ let navbarAutoclose = function () {
   });
 };
 
-// helper method to show blacklist success/fail toast
-let blacklistToastHelper = function (type) {
-  if (type === "success") {
-    $(".toast-container").prepend(
-      toastBlacklistSuccess.clone().attr("id", "toast-blacklist-success-" + ++i)
-    );
-    $("#toast-blacklist-success-" + i).toast("show");
-    $("*").css("pointer-events", "none");
-    setTimeout(() => location.reload(), 3100);
-  } else if (type === "fail") {
-    $(".toast-container").prepend(
-      toastBlacklistFail.clone().attr("id", "toast-blacklist-fail-" + ++i)
-    );
-    $("#toast-blacklist-fail-" + i).toast("show");
-  }
-};
-
-// listens for "Confirm" removal from waitlist
-let blacklistListener = function () {
-  $("button.btn-blacklist").on("click", function (e) {
-    e.preventDefault();
-
-    if (!confirm("Are you sure you want to blacklist this user?")) return;
-
-    disableAdminFunction();
-    netid = e.target.getAttribute("data-netid");
-
-    $.post(`/add_to_blacklist/${netid}`, function (res) {
-      // checks that user successfully removed from waitlist on back-end
-      if (!res["isSuccess"]) {
-        enableAdminFunction();
-        blacklistToastHelper("fail");
-        return;
-      }
-
-      blacklistToastHelper("success");
-    });
-  });
-};
-
-// listens for "Confirm" removal from waitlist
-let blacklistRemovalListener = function () {
-  $("button.btn-blacklist-removal").on("click", function (e) {
-    e.preventDefault();
-
-    if (!confirm("Are you sure you want to unblacklist this user?")) return;
-
-    disableAdminFunction();
-    netid = e.target.getAttribute("data-netid");
-
-    $.post(`/remove_from_blacklist/${netid}`, function (res) {
-      // checks that user successfully removed from waitlist on back-end
-      if (!res["isSuccess"]) {
-        blacklistToastHelper("fail");
-        enableAdminFunction();
-        return;
-      }
-      blacklistToastHelper("success");
-    });
-  });
-};
-
 // listens for "Info" button on user list
 let getUserInfoListener = function () {
   let helper = function (res, label) {
@@ -893,7 +837,6 @@ let getAllSubscriptionsListener = function () {
 
 // enables all admin function buttons
 let enableAdminFunction = function () {
-  $(".btn-blacklist").attr("disabled", false);
   $(".btn-blacklist-removal").attr("disabled", false);
   $(".btn-user-info").attr("disabled", false);
   $("#notifs-sheet-link").attr("disabled", false);
@@ -918,11 +861,12 @@ let enableAdminFunction = function () {
   $("#get-user-trade-data-input").attr("disabled", false);
   $("#get-user-trade-data-submit").attr("disabled", false);
   $("#fill-section-submit").attr("disabled", false);
+  $("#block-user-input").attr("disabled", false);
+  $("#block-user-submit").attr("disabled", false);
 };
 
 // disables all admin function buttons
 let disableAdminFunction = function () {
-  $(".btn-blacklist").attr("disabled", true);
   $(".btn-blacklist-removal").attr("disabled", true);
   $(".btn-user-info").attr("disabled", true);
   $("#notifs-sheet-link").attr("disabled", true);
@@ -947,6 +891,8 @@ let disableAdminFunction = function () {
   $("#get-user-trade-data-input").attr("disabled", true);
   $("#get-user-trade-data-submit").attr("disabled", true);
   $("#fill-section-submit").attr("disabled", true);
+  $("#block-user-input").attr("disabled", true);
+  $("#block-user-submit").attr("disabled", true);
 };
 
 // listens for email notifications switch toggle
@@ -1221,6 +1167,60 @@ let getUserDataListener = function () {
   });
 };
 
+// listens for a user block or unblock query
+let blockUserListener = function () {
+  // helper method to show blacklist success/fail toast
+  let blockToastHelper = function (type) {
+    if (type === "success") {
+      $(".toast-container").prepend(
+        toastBlacklistSuccess.clone().attr("id", "toast-blacklist-success-" + ++i)
+      );
+      $("#toast-blacklist-success-" + i).toast("show");
+      $("*").css("pointer-events", "none");
+      setTimeout(() => location.reload(), 3100);
+    } else if (type === "fail") {
+      $(".toast-container").prepend(
+        toastBlacklistFail.clone().attr("id", "toast-blacklist-fail-" + ++i)
+      );
+      $("#toast-blacklist-fail-" + i).toast("show");
+    }
+  };
+
+  $("#block-user").on("submit", function (e) {
+    e.preventDefault();
+    netid = $(`#block-user-input`).val();
+
+    if (!confirm(`Are you sure you want to block user ${netid}?`)) return;
+
+    disableAdminFunction();
+    $.post(`/add_to_blacklist/${netid}`, function (res) {
+      if (!res["isSuccess"]) {
+        enableAdminFunction();
+        blockToastHelper("fail");
+        return;
+      }
+      blockToastHelper("success");
+    });
+  });
+
+  $("button.btn-blacklist-removal").on("click", function (e) {
+    e.preventDefault();
+    netid = e.target.getAttribute("data-netid");
+
+    if (!confirm(`Are you sure you want to unblock user ${netid}?`)) return;
+
+    disableAdminFunction();
+    $.post(`/remove_from_blacklist/${netid}`, function (res) {
+      if (!res["isSuccess"]) {
+        blockToastHelper("fail");
+        enableAdminFunction();
+        return;
+      }
+      blockToastHelper("success");
+    });
+  });
+}
+
 // disables trade functionality buttons
 let disableTradeFunction = function () {
   $(".submit-trade").attr("disabled", true);
@@ -1456,11 +1456,12 @@ let initTutorial = function () {
   });
 }
 
-// contact information change confirmation alerts
+// contact information change listeners
 let initContactInfoChangeAlerts = function () {
   $("#new-email").submit(function (e) {
     alert(`Email address successfully changed to ${$("#new-email-input").val()}!`);
   });
+
   $("#new-phone").submit(function (e) {
     let newPhone = $("#new-phone-input").val();
     if (newPhone)
@@ -1468,6 +1469,25 @@ let initContactInfoChangeAlerts = function () {
     else
       alert("Phone number successfully removed!");
   });
+
+  let curr_email = $("#new-email-input").val();
+  let curr_phone = $("#new-phone-input").val();
+
+  $("#new-email-input").on("input", function (e) {
+    if ($("#new-email-input").val() == curr_email) {
+      $(this).next("button").attr("disabled", true);
+      return;
+    }
+    $(this).next("button").attr("disabled", false);
+  })
+
+  $("#new-phone-input").on("input", function (e) {
+    if ($("#new-phone-input").val() == curr_phone) {
+      $(this).next("button").attr("disabled", true);
+      return;
+    }
+    $(this).next("button").attr("disabled", false);
+  })
 }
 
 // listens for account settings button and the account settings alert banner
@@ -1501,8 +1521,7 @@ let mobileViewFunctions = function () {
 
 // handles features on the admin panel
 let adminFunctions = function () {
-  blacklistListener();
-  blacklistRemovalListener();
+  blockUserListener();
   clearAllWaitlistsListener();
   clearAllTradesListener();
   clearAllLogsListener();
@@ -1550,7 +1569,6 @@ $(document).ready(function () {
   showAllListener();
   pageBackListener();
   initTooltipsToasts();
-  dashboardCourseSelectListener();
   initTutorial();
   accountSettingsFunctions();
 });

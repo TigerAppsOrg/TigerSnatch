@@ -302,7 +302,7 @@ class Database:
         return curr != data
 
     # generates a string representing the current/next notifications interval
-    def get_current_or_next_notifs_interval(self, fmt="%b %-d @ %-I:%M %p"):
+    def get_current_or_next_notifs_interval(self, fmt="%-m/%-d @ %-I:%M %p"):
         tz_utc = pytz.timezone("UTC")
         tz_et = pytz.timezone("US/Eastern")
         curr = self._db.admin.find_one({}, {"notifs_schedule": 1, "_id": 0})[
@@ -451,14 +451,18 @@ class Database:
         try:
             if self.is_admin(netid):
                 self._add_admin_log(f"user {netid} is an admin - cannot be blocked")
-                return
+                return False
+
+            if not self.is_user_created(netid):
+                self._add_admin_log(f"user {netid} does not exist - cannot be blocked")
+                return False
 
             blacklist = self.get_blacklist()
 
             # check if user is already in blacklist
             if netid in blacklist:
                 self._add_admin_log(f"user {netid} already blocked - not added")
-                return
+                return False
 
             if self.is_user_created(netid):
                 remove_user(netid)
@@ -482,6 +486,12 @@ class Database:
 
     def remove_from_blacklist(self, netid, admin_netid):
         try:
+            if not self.is_user_created(netid):
+                self._add_admin_log(
+                    f"user {netid} does not exist - cannot be unblocked"
+                )
+                return False
+
             blacklist = self.get_blacklist()
             if netid not in blacklist:
                 self._add_admin_log(f"user {netid} not blocked - not removed")
@@ -668,7 +678,7 @@ class Database:
                     if len(courses) >= target_num:
                         break
                     deptnum, name, section, _ = self.classid_to_classinfo(
-                        data["classid"]
+                        data["classid"], entire_crosslisting=True
                     )
                     if deptnum not in courses:
                         courses.add(deptnum)
@@ -688,7 +698,7 @@ class Database:
                 waitlists = self.get_all_subscriptions_raw()[0:target_num]
                 for data in waitlists:
                     deptnum, name, section, _ = self.classid_to_classinfo(
-                        data["classid"]
+                        data["classid"], entire_crosslisting=True
                     )
                     res.append(
                         {
@@ -702,6 +712,13 @@ class Database:
                 print("failed to retrieve top subscribed sections", file=stderr)
 
         return res
+
+    def get_total_user_count(self):
+        return self._db.users.count_documents({})
+
+    def get_total_subscriptions(self):
+        data = self._db.waitlists.find({}, {"waitlist": 1, "_id": 0})
+        return sum([len(k["waitlist"]) for k in data])
 
     def get_users_who_subscribe(self):
         data = self._db.users.find({}, {"waitlists": 1, "_id": 0})
@@ -744,6 +761,8 @@ class Database:
             {},
             {
                 "stats_top_subs": 1,
+                "stats_total_users": 1,
+                "stats_total_subs": 1,
                 "stats_subbed_users": 1,
                 "stats_subbed_sections": 1,
                 "stats_subbed_courses": 1,
@@ -899,14 +918,12 @@ class Database:
             dashboard_data[classid]["capacity"] = class_stats["capacity"]
 
             try:
-                class_waitlist = self._db.waitlists.find_one({"classid": classid})[
-                    "waitlist"
-                ]
-                dashboard_data[classid]["position"] = class_waitlist.index(netid) + 1
-            except ValueError:
-                raise ValueError(f"user {netid} not found in waitlist for {classid}")
-            except:
-                raise RuntimeError(f"classid {classid} not found in waitlists")
+                time_of_last_notif = self.get_time_of_last_notif(classid)
+            except Exception:
+                time_of_last_notif = None
+            dashboard_data[classid]["time_of_last_notif"] = (
+                time_of_last_notif if time_of_last_notif is not None else "-"
+            )
 
         return dashboard_data
 
@@ -1144,6 +1161,17 @@ class Database:
         except:
             return False
 
+    # checks if a course (via its entire original "displayname" key) is a top-N subscribed course
+
+    def is_course_top_n_subscribed(self, displayname):
+        try:
+            displayname = " / ".join(displayname.split("/"))
+            data = self._db.admin.find_one({}, {"_id": 0, "stats_top_subs": 1})
+            top_courses = set([e["deptnum"] for e in data["stats_top_subs"]])
+            return displayname in top_courses
+        except:
+            return False
+
     # ----------------------------------------------------------------------
     # CLASS METHODS
     # ----------------------------------------------------------------------
@@ -1189,7 +1217,7 @@ class Database:
     # returns information about a class including course depts, numbers, title
     # and section number, for display in email/text messages
 
-    def classid_to_classinfo(self, classid):
+    def classid_to_classinfo(self, classid, entire_crosslisting=False):
         try:
             classinfo = self._db.enrollments.find_one({"classid": classid})
             courseid = classinfo["courseid"]
@@ -1205,6 +1233,8 @@ class Database:
             raise Exception(f"courseid {courseid} cannot be found")
 
         dept_num = displayname.split("/")[0]
+        if entire_crosslisting:
+            dept_num = " / ".join(displayname.split("/"))
         return dept_num, title, sectionname, courseid
 
     # get dictionary for class with given classid in courses
