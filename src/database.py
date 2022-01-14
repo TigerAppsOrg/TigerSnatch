@@ -741,6 +741,20 @@ class Database:
         ]
 
     def add_stats_notif_log(self, log):
+        stats_notifs_logs = self._db.admin.find_one(
+            {}, {"_id": 0, "stats_notifs_logs": 1}
+        )["stats_notifs_logs"]
+
+        try:
+            if (
+                len(stats_notifs_logs) > 0
+                and stats_notifs_logs[0].split(" \u2192 ")[1] == log
+            ):
+                print("duplicate stats notifs log detected - skipping", file=stderr)
+                return
+        except:
+            pass
+
         log = f"{(datetime.now(TZ)).strftime('%b %d, %Y @ %-I:%M %p ET')} \u2192 {log}"
 
         self._db.admin.update_one(
@@ -1711,5 +1725,5 @@ if __name__ == "__main__":
     # print(db.get_current_or_next_notifs_interval())
     # print(db.get_all_subscriptions())
     # print(",".join(db._get_all_emails_csv().split(",")[997:]))
-    print(",".join(db._get_all_emails_csv().split(",")[490 * 3 : 490 * 4]))
+    # print(",".join(db._get_all_emails_csv().split(",")[490 * 3 : 490 * 4]))
     # print(db.get_prev_enrollment_RESERVED_SEATS_ONLY("40268"))
