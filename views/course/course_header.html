@@ -3,19 +3,19 @@
     {% set crosslistings = course_details.displayname.split('/') %}
     {{ crosslistings[0] }}
     {%- for i in range(1, [crosslistings|length, 3]|min) -%}
-      /{{ crosslistings[i] }}
+    /{{ crosslistings[i] }}
     {%- endfor %}
     {%- if crosslistings|length > 3 -%}
-      /...
+    /...
     {% endif %}
   </span>
   {% if is_top_n %}
-    <span class="badge bg-warning text-light font-monospace fw-bold px-1 py-1 me-2 mb-1 fs-5 animate__animated animate__heartBeat"
+  <span class="badge bg-warning text-light font-monospace fw-bold px-1 py-1 me-2 mb-1 fs-5 animate__animated animate__heartBeat"
         style="cursor: help;"
         data-bs-toggle="tooltip"
         data-bs-placement="auto"
         title="This is one of the 10 most-subscribed courses on TigerSnatch!">
-        🔥
+    🔥
   </span>
   {% endif %}
   {% if is_course_disabled %}

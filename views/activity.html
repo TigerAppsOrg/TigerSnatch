@@ -12,101 +12,109 @@
   <div class="container-fluid">
     <div class="row activity-row">
       <p class="text-center px-5 mt-4 mb-4"
-          style="letter-spacing: 1px">
+         style="letter-spacing: 1px">
         <span class="badge bg-warning text-dark font-monospace fs-3 px-2 py-2">Statistics</span>
       </p>
-      <div id="stats-activity-col-l" class="stats-col col-xl-6">
-          <div class="card activity-card mt-3">
-            <div class="card-body">
-              <div class="card-title text-center">Top Subscribed Courses</div>
-              <div class="card-subtitle mb-2 text-muted text-center">Last Updated: {{ stats['stats_update_time'] }}. <br/>  Only the top subscribed section from a course is shown. </div>
-              {% if stats['stats_top_subs'] == [] %}
-                <div>No data available.</div>
-              {% else %}
-                <ul class="list-group">
-                  {% for sub in stats['stats_top_subs'] %}
-                      <div class= "list-group-item d-flex align-items-center justify-content-between">
-                          <label class="stats-top-course">
-                            {{sub['deptnum']}}: {{sub['name']}} ({{sub['section']}})
-                          </label>
-                          <span class="badge">{{ sub['size'] }}</span>
-                      </div>
-                  {% endfor %}
-                </ul>
-              {% endif %}
-            </div> <!-- card-body -->
-          </div> <!-- card -->
+      <div id="stats-activity-col-l"
+           class="stats-col col-xl-6">
+        <div class="card activity-card mt-3">
+          <div class="card-body">
+            <div class="card-title text-center">Top Subscribed Courses</div>
+            <div class="card-subtitle mb-2 text-muted text-center">Last Updated: {{
+              stats['stats_update_time'] }}. <br /> Only the top subscribed section from a course is
+              shown.
+            </div>
+            {% if stats['stats_top_subs'] == [] %}
+            <div>No data available.</div>
+            {% else %}
+            <ul class="list-group">
+              {% for sub in stats['stats_top_subs'] %}
+              <div class="list-group-item d-flex align-items-center justify-content-between">
+                <label class="stats-top-course">
+                  {{sub['deptnum']}}: {{sub['name']}} ({{sub['section']}})
+                </label>
+                <span class="badge">{{ sub['size'] }}</span>
+              </div>
+              {% endfor %}
+            </ul>
+            {% endif %}
+          </div> <!-- card-body -->
+        </div> <!-- card -->
       </div> <!-- stats-activity-col-l -->
 
-      <div id="stats-activity-col-r" class="stats-col col-xl-6">
-          <div class="card activity-card text-center mt-3">
-            <div class="card-body">
-              <div class="card-title">
-                General Stats
+      <div id="stats-activity-col-r"
+           class="stats-col col-xl-6">
+        <div class="card activity-card text-center mt-3">
+          <div class="card-body">
+            <div class="card-title">
+              General Stats
+            </div>
+            <div class="card-subtitle mb-2 text-muted">Last Updated: {{ stats['stats_update_time']
+              }}.</div>
+            <div class="list-group">
+              <div class="list-group-item align-items-center stats-item">
+                <label>
+                  Number of Users:
+                </label>
+                <span class="badge">{{ stats['stats_total_users'] }}</span>
               </div>
-              <div class="card-subtitle mb-2 text-muted">Last Updated: {{ stats['stats_update_time'] }}.</div>
-              <div class="list-group">
-                <div class="list-group-item align-items-center stats-item">
-                  <label>
-                    Number of Users: 
-                  </label>
-                  <span class="badge">{{ stats['stats_total_users'] }}</span>
-                </div>
-                <div class="list-group-item align-items-center stats-item">
-                  <label>
-                    Number of Subscribed Users: 
-                  </label>
-                  <span class="badge">{{ stats['stats_subbed_users'] }}</span>
-                </div>
-                <div class="list-group-item align-items-center stats-item">
-                  <label>
-                    Number of Subscriptions: 
-                  </label>
-                  <span class="badge">{{ stats['stats_total_subs'] }}</span>
-                </div>
-                <div class="list-group-item d-flex justify-content-center align-items-center stats-item">
-                  <label>
-                    Number of Sections with Subscriptions: 
-                  </label>
-                  <span class="badge">{{ stats['stats_subbed_sections'] }}</span>
-                </div>
-                <div class="list-group-item align-items-center stats-item">
-                  <label>
-                    Number of Courses with Subscriptions: 
-                  </label>
-                  <span class="badge">{{ stats['stats_subbed_courses'] }}</span>
-                </div>
-                <div class="list-group-item align-items-center stats-item">
-                  <label>
-                    Number of Emails/Texts Sent:
-                  </label>
-                  <span class="badge">{{ stats['stats_total_notifs'] }}</span>
-                </div>
-              </div> <!-- list-group -->
-            </div> <!-- card-body -->
-          </div> <!-- card -->
+              <div class="list-group-item align-items-center stats-item">
+                <label>
+                  Number of Subscribed Users:
+                </label>
+                <span class="badge">{{ stats['stats_subbed_users'] }}</span>
+              </div>
+              <div class="list-group-item align-items-center stats-item">
+                <label>
+                  Number of Subscriptions:
+                </label>
+                <span class="badge">{{ stats['stats_total_subs'] }}</span>
+              </div>
+              <div
+                   class="list-group-item d-flex justify-content-center align-items-center stats-item">
+                <label>
+                  Number of Sections with Subscriptions:
+                </label>
+                <span class="badge">{{ stats['stats_subbed_sections'] }}</span>
+              </div>
+              <div class="list-group-item align-items-center stats-item">
+                <label>
+                  Number of Courses with Subscriptions:
+                </label>
+                <span class="badge">{{ stats['stats_subbed_courses'] }}</span>
+              </div>
+              <div class="list-group-item align-items-center stats-item">
+                <label>
+                  Number of Emails/Texts Sent:
+                </label>
+                <span class="badge">{{ stats['stats_total_notifs'] }}</span>
+              </div>
+            </div> <!-- list-group -->
+          </div> <!-- card-body -->
+        </div> <!-- card -->
 
-          <div class="card activity-card text-center mt-3">
-            <div class="card-body">
-              <div class="card-title">
-                Most Recent Notifications
+        <div class="card activity-card text-center mt-3">
+          <div class="card-body">
+            <div class="card-title">
+              Most Recent Notifications
+            </div>
+            <div class="card-subtitle mb-2 text-muted">Always up-to-date. Only at most 5
+              notifications are shown.</div>
+            {% if stats['stats_notifs_logs'] == [] %}
+            <div>No data available.</div>
+            {% else %}
+            <ul class="list-group">
+              {% for log in stats['stats_notifs_logs'] %}
+              <div class="list-group-item d-flex align-items-center justify-content-center">
+                <label>
+                  {{ log }}
+                </label>
               </div>
-              <div class="card-subtitle mb-2 text-muted">Always up-to-date. Only at most 5 notifications are shown.</div>
-              {% if stats['stats_notifs_logs'] == [] %}
-                <div>No data available.</div>
-              {% else %}
-                <ul class="list-group">
-                  {% for log in stats['stats_notifs_logs'] %}
-                      <div class= "list-group-item d-flex align-items-center justify-content-center">
-                          <label>
-                            {{ log }}
-                          </label>
-                      </div>
-                  {% endfor %}
-                </ul>
-              {% endif %}
-            </div> <!-- card-body -->
-          </div> <!-- card -->
+              {% endfor %}
+            </ul>
+            {% endif %}
+          </div> <!-- card-body -->
+        </div> <!-- card -->
       </div> <!-- stats-activity-col-r -->
     </div> <!-- row -->
 
@@ -135,7 +143,7 @@
         </div>
         {% endfor %} {% endif %}
       </div> <!-- subscription-activity-col -->
-      
+
       <div id="trade-activity-col"
            class="col-xl-6 mb-5">
         <p class="text-center px-5 mt-4 mb-4"
