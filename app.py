@@ -16,6 +16,8 @@ from waitlist import Waitlist
 from app_helper import do_search, pull_course, is_admin, get_release_notes
 from urllib.parse import quote_plus, unquote_plus
 from sys import stderr
+from os import listdir
+from os.path import isfile, join
 
 app = Flask(__name__, template_folder="./views")
 app.secret_key = APP_SECRET_KEY
@@ -723,3 +725,29 @@ def fill_section(classid):
         return jsonify({"isSuccess": False})
 
     return jsonify({"isSuccess": True})
+
+
+@app.template_filter("version")
+def version_filter(file_path):
+    """
+    Filter used in HTML script tags in order to import
+    the most up-to-date version of JS or CSS files.
+    """
+
+    # file_path is "/static/<file>"
+    FOLDER = "static"
+    file = file_path[len(f"/{FOLDER}/") :]
+
+    file_split = file.split(".")
+    FNAME = file_split[0]  # "app" or "styles"
+    EXT = file_split[-1]  # "js" or "css"
+
+    static_files = [f for f in listdir(FOLDER) if isfile(join(FOLDER, f))]
+    VERSION = "."
+    for f in static_files:
+        if f[: len(FNAME)] == FNAME and f[-len(EXT) :] == EXT and f != f"{FNAME}.{EXT}":
+            VERSION = f[len(FNAME) : -(len(EXT))]  # ".<version_num>."
+
+    print(f"/{FOLDER}/{FNAME}{VERSION}{EXT}")
+    # "/static/app.<version_num>.js" or "/static/styles.<version_num>.css"
+    return f"/{FOLDER}/{FNAME}{VERSION}{EXT}"

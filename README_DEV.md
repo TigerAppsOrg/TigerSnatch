@@ -26,13 +26,9 @@ For non-minor changes:
 2. Navigate to `localhost:<port_num>` in your browser.
 
 **To edit JS/CSS files**
-1. Change the version number of the minified JS/CSS files, to make these file stored in the browser cache are updated. 
+- After editing a JS or CSS file, change the version number of the file. This ensures the browser downloads the newest version of the file (and doesn't used the cached version).
     - e.g. If the filename is `app.min.x.y.js` , change to `x+1` for major changes, `y+1` for minor changes.
-    - Be sure to update to the new filename in `script` and/or `stylesheet` tags everywhere. You can use global find-and-replace in VSCode (cmd-shift-F) to accomplish this.
-2. To update the minified files:
-    - To update the minified JS file, run `closure-compiler --js app.js --js_output_file app.min.x.y.js` in the terminal.
-    - To update the minified CSS file, use an online tool to unminify (before editing) and minify (after editing) the CSS and copy the minified code into the CSS file.
-    - Again, be sure to update the version number and the relevant `script` and/or `stylesheet` tags everywhere (see #1).
+- If you ever want to rename the JS file (away from `app.js`) or CS file (away from `styles.css`), make sure to update the version filter logic in `version_filter()` in `app.py`. 
 
 **To interact with the DB**
 1. Install the MongoDB Compass Desktop app for easier visual interaction.
