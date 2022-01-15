@@ -26,9 +26,8 @@ For non-minor changes:
 2. Navigate to `localhost:<port_num>` in your browser.
 
 **To edit JS/CSS files**
-- After editing a JS or CSS file, change the version number of the file. This ensures the browser downloads the newest version of the file (and doesn't used the cached version).
-    - e.g. If the filename is `app.min.x.y.js` , change to `x+1` for major changes, `y+1` for minor changes.
-- If you ever want to rename the JS file (away from `app.js`) or CS file (away from `styles.css`), make sure to update the version filter logic in `version_filter()` in `app.py`. 
+- After editing a JS or CSS file, up the version number of the file. This ensures the browser downloads the newest version of the file (and doesn't used the cached version).
+    - e.g. For `app.x.y.js`, the version number is `x.y`. Change `x` to `x+1` for major changes, `y` to `y+1` for minor changes.
 
 **To interact with the DB**
 1. Install the MongoDB Compass Desktop app for easier visual interaction.

@@ -748,6 +748,5 @@ def version_filter(file_path):
         if f[: len(FNAME)] == FNAME and f[-len(EXT) :] == EXT and f != f"{FNAME}.{EXT}":
             VERSION = f[len(FNAME) : -(len(EXT))]  # ".<version_num>."
 
-    print(f"/{FOLDER}/{FNAME}{VERSION}{EXT}")
     # "/static/app.<version_num>.js" or "/static/styles.<version_num>.css"
     return f"/{FOLDER}/{FNAME}{VERSION}{EXT}"

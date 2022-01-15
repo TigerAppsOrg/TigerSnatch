@@ -263,8 +263,12 @@ div#course-warning {
     font-size: 0.8em;
 }
 body#error-container,
-body#landing-container {
+body#landing-container,
+body#tutorial-container {
     background: var(--color-blue);
+}
+p.tutorial-text, p.about-desc {
+    font-size: 1.15rem;
 }
 div#landing-auth-req {
     color: var(--color-orange);
