@@ -1658,13 +1658,6 @@ class Database:
         emails = [k["email"] for k in data]
         return ",".join(emails)
 
-    def _get_admin_emails_csv(self):
-        data = self._db.admin.find_one({}, {"_id": 0, "admins": 1})
-        emails = data["admins"]
-        if len(emails) == 0:
-            return ""
-        return "@princeton.edu,".join(emails) + "@princeton.edu"
-
     # checks that all required collections are available in self._db;
     # raises a RuntimeError if not
 
