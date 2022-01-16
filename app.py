@@ -213,15 +213,21 @@ def about():
 
 @app.route("/activity", methods=["GET"])
 def activity():
+    stats = _db.get_stats()
+
     if redirect_landing():
-        return redirect(url_for("landing"))
+        html = render_template(
+            "activity.html",
+            loggedin=False,
+            stats=stats,
+        )
+        return make_response(html)
 
     netid = _cas.authenticate()
 
     waitlist_logs = _db.get_user_waitlist_log(netid)
     trade_logs = _db.get_user_trade_log(netid)
     term_name = _db.get_current_term_code()[1]
-    stats = _db.get_stats()
 
     html = render_template(
         "activity.html",
