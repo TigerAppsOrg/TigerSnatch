@@ -432,6 +432,9 @@ div.swap-table {
     color: #4a4a4a;
     font-size: 18px;
 }
+.tutorial-style .introjs-skipbutton {
+    display: none;
+}
 .tutorial-style .introjs-tooltip-title {
     color: #ffc107;
 }
