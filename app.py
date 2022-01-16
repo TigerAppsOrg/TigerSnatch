@@ -13,7 +13,13 @@ from database import Database
 from CASClient import CASClient
 from config import APP_SECRET_KEY
 from waitlist import Waitlist
-from app_helper import do_search, pull_course, is_admin, get_release_notes
+from app_helper import (
+    do_search,
+    pull_course,
+    is_admin,
+    get_release_notes,
+    get_notifs_status_data,
+)
 from urllib.parse import quote_plus, unquote_plus
 from sys import stderr
 from os import listdir
@@ -60,11 +66,13 @@ def index():
 
 @app.route("/landing", methods=["GET"])
 def landing():
+    notifs_status_data = get_notifs_status_data()
+
     html = render_template(
         "landing.html",
-        notifs_online=_db.get_cron_notification_status(),
-        next_notifs=_db.get_current_or_next_notifs_interval(),
-        term_name=_db.get_current_term_code()[1],
+        notifs_online=notifs_status_data["notifs_online"],
+        next_notifs=notifs_status_data["next_notifs"],
+        term_name=notifs_status_data["term_name"],
     )
     return make_response(html)
 
@@ -87,13 +95,15 @@ def login():
 
 @app.route("/tutorial", methods=["GET"])
 def tutorial():
+    notifs_status_data = get_notifs_status_data()
+
     if redirect_landing():
         html = render_template(
             "tutorial.html",
             loggedin=False,
-            notifs_online=_db.get_cron_notification_status(),
-            next_notifs=_db.get_current_or_next_notifs_interval(),
-            term_name=_db.get_current_term_code()[1],
+            notifs_online=notifs_status_data["notifs_online"],
+            next_notifs=notifs_status_data["next_notifs"],
+            term_name=notifs_status_data["term_name"],
         )
         return make_response(html)
 
@@ -101,9 +111,9 @@ def tutorial():
         "tutorial.html",
         user_is_admin=is_admin(_cas.authenticate(), _db),
         loggedin=True,
-        notifs_online=_db.get_cron_notification_status(),
-        next_notifs=_db.get_current_or_next_notifs_interval(),
-        term_name=_db.get_current_term_code()[1],
+        notifs_online=notifs_status_data["notifs_online"],
+        next_notifs=notifs_status_data["next_notifs"],
+        term_name=notifs_status_data["term_name"],
     )
     return make_response(html)
 
@@ -161,6 +171,8 @@ def dashboard():
 
     curr_sections = _db.get_current_sections(netid)
 
+    notifs_status_data = get_notifs_status_data()
+
     html = render_template(
         "base.html",
         is_dashboard=True,
@@ -176,9 +188,9 @@ def dashboard():
         phone=phone,
         auto_resub=auto_resub,
         curr_sections=curr_sections,
-        notifs_online=_db.get_cron_notification_status(),
-        next_notifs=_db.get_current_or_next_notifs_interval(),
-        term_name=_db.get_current_term_code()[1],
+        notifs_online=notifs_status_data["notifs_online"],
+        next_notifs=notifs_status_data["next_notifs"],
+        term_name=notifs_status_data["term_name"],
     )
 
     return make_response(html)
@@ -194,14 +206,15 @@ def update_auto_resub(auto_resub):
 @app.route("/about", methods=["GET"])
 def about():
     release_notes_success, release_notes = get_release_notes()
+    notifs_status_data = get_notifs_status_data()
 
     if redirect_landing():
         html = render_template(
             "about.html",
             loggedin=False,
-            notifs_online=_db.get_cron_notification_status(),
-            next_notifs=_db.get_current_or_next_notifs_interval(),
-            term_name=_db.get_current_term_code()[1],
+            notifs_online=notifs_status_data["notifs_online"],
+            next_notifs=notifs_status_data["next_notifs"],
+            term_name=notifs_status_data["term_name"],
             release_notes_success=release_notes_success,
             release_notes=release_notes,
         )
@@ -211,9 +224,9 @@ def about():
         "about.html",
         user_is_admin=is_admin(_cas.authenticate(), _db),
         loggedin=True,
-        notifs_online=_db.get_cron_notification_status(),
-        next_notifs=_db.get_current_or_next_notifs_interval(),
-        term_name=_db.get_current_term_code()[1],
+        notifs_online=notifs_status_data["notifs_online"],
+        next_notifs=notifs_status_data["next_notifs"],
+        term_name=notifs_status_data["term_name"],
         release_notes_success=release_notes_success,
         release_notes=release_notes,
     )
@@ -223,14 +236,15 @@ def about():
 @app.route("/activity", methods=["GET"])
 def activity():
     stats = _db.get_stats()
+    notifs_status_data = get_notifs_status_data()
 
     if redirect_landing():
         html = render_template(
             "activity.html",
             loggedin=False,
-            notifs_online=_db.get_cron_notification_status(),
-            next_notifs=_db.get_current_or_next_notifs_interval(),
-            term_name=_db.get_current_term_code()[1],
+            notifs_online=notifs_status_data["notifs_online"],
+            next_notifs=notifs_status_data["next_notifs"],
+            term_name=notifs_status_data["term_name"],
             stats=stats,
         )
         return make_response(html)
@@ -246,9 +260,9 @@ def activity():
         loggedin=True,
         waitlist_logs=waitlist_logs,
         trade_logs=trade_logs,
-        notifs_online=_db.get_cron_notification_status(),
-        next_notifs=_db.get_current_or_next_notifs_interval(),
-        term_name=_db.get_current_term_code()[1],
+        notifs_online=notifs_status_data["notifs_online"],
+        next_notifs=notifs_status_data["next_notifs"],
+        term_name=notifs_status_data["term_name"],
         stats=stats,
     )
 
@@ -301,6 +315,8 @@ def get_course():
         netid=netid,
     )
 
+    notifs_status_data = get_notifs_status_data()
+
     html = render_template(
         "base.html",
         is_dashboard=False,
@@ -321,8 +337,8 @@ def get_course():
         term_name=term_name,
         last_query=quote_plus(new_query),
         last_query_unquoted=unquote_plus(new_query),
-        notifs_online=_db.get_cron_notification_status(),
-        next_notifs=_db.get_current_or_next_notifs_interval(),
+        notifs_online=notifs_status_data["notifs_online"],
+        next_notifs=notifs_status_data["next_notifs"],
         is_course_disabled=_db.is_course_disabled(courseid),
         has_reserved_seats=_db.does_course_have_reserved_seats(courseid),
         is_top_n=_db.is_course_top_n_subscribed(course_details["displayname"]),
@@ -397,6 +413,8 @@ def get_course_info(courseid):
             netid=netid,
         )
 
+    notifs_status_data = get_notifs_status_data()
+
     html = render_template(
         "course/course.html",
         netid=netid,
@@ -412,8 +430,8 @@ def get_course_info(courseid):
         term_name=term_name,
         curr_waitlists=curr_waitlists,
         section_names=section_names,
-        notifs_online=_db.get_cron_notification_status(),
-        next_notifs=_db.get_current_or_next_notifs_interval(),
+        notifs_online=notifs_status_data["notifs_online"],
+        next_notifs=notifs_status_data["next_notifs"],
         is_course_disabled=_db.is_course_disabled(courseid),
         has_reserved_seats=_db.does_course_have_reserved_seats(courseid),
         is_top_n=_db.is_course_top_n_subscribed(course_details["displayname"]),
@@ -516,6 +534,7 @@ def admin():
     search_res, new_query, total_users = _db.search_for_user(query)
 
     term_code, term_name = _db.get_current_term_code()
+    notifs_status_data = get_notifs_status_data()
 
     html = render_template(
         "base.html",
@@ -528,8 +547,8 @@ def admin():
         username=netid,
         admin_logs=admin_logs,
         blacklist=_db.get_blacklist(),
-        notifs_online=_db.get_cron_notification_status(),
-        next_notifs=_db.get_current_or_next_notifs_interval(),
+        notifs_online=notifs_status_data["notifs_online"],
+        next_notifs=notifs_status_data["next_notifs"],
         current_term_code=term_code,
         term_name=term_name,
         total_users=total_users,
