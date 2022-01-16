@@ -1429,8 +1429,8 @@ let findMatches = function () {
 };
 
 // change the name of this variable to force all users to see the tutorial and the alert banner
-var doneKeyTutorial = "completed2";
-var doneKeyBanner = "completed4";
+var doneKeyTutorial = "completed3";
+var doneKeyBanner = "completed5";
 
 // introJS tutorial
 let initTutorial = function () {
@@ -1444,6 +1444,8 @@ let initTutorial = function () {
       showBullets: false,
       showProgress: true,
       tooltipClass: "tutorial-style",
+      exitOnOverlayClick: false,
+      exitOnEsc: false,
     }).start()
 
     tutorial.oncomplete(function () {

@@ -3,6 +3,7 @@
 # Defines helper methods to construct endpoints.
 # ----------------------------------------------------------------------
 
+from database import Database
 from monitor import Monitor
 import re
 from sys import stderr
@@ -126,6 +127,15 @@ def get_release_notes():
     except:
         print("failed to open or parse release note files", file=stderr)
         return False, []
+
+
+def get_notifs_status_data():
+    db = Database()
+    return {
+        "notifs_online": db.get_cron_notification_status(),
+        "next_notifs": db.get_current_or_next_notifs_interval(),
+        "term_name": db.get_current_term_code()[1],
+    }
 
 
 if __name__ == "__main__":

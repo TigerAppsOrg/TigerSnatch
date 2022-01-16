@@ -11,7 +11,7 @@
            height="40"
            alt="TigerSnatch logo"
            class="d-inline-block align-text-center mx-2" />
-      TigerSnatch
+      TigerSnatch {% include 'utils/status_indicator.html' %}
     </a>
     <button class="navbar-toggler"
             type="button"
@@ -26,6 +26,10 @@
   <div id="navbarNavAltMarkup"
        class="collapse navbar-collapse">
     <ul class="navbar-nav">
+      <li class="nav-item">
+        <a class="nav-link ms-4 fs-5 fw-light hvr-underline-from-center active"
+           href="/activity">Activity</a>
+      </li>
       <li class="nav-item">
         <a class="nav-link ms-4 fs-5 fw-light hvr-underline-from-center active"
            href="/about">About</a>
@@ -46,30 +50,5 @@
         </form>
       </li>
     </ul>
-  </div>
-</nav>
-
-<nav id="nav"
-     class="navbar navbar-expand-lg navbar-light fixed-bottom">
-  <div class="container-fluid">
-    <p id="landing-bottom-text"
-       class="mb-0 text-center">
-      TigerSnatch began as a Spring '21 COS333 project by
-      <span class="badge bg-warning text-dark font-monospace px-1 py-1"
-            data-bs-toggle="tooltip"
-            data-bs-placement="auto"
-            title="Shannon Heh"
-            style="cursor: default">sheh@</span>,
-      <span class="badge bg-warning text-dark font-monospace px-1 py-1"
-            data-bs-toggle="tooltip"
-            data-bs-placement="auto"
-            title="Nicholas Padmanabhan"
-            style="cursor: default">ntyp@</span>, and
-      <span class="badge bg-warning text-dark font-monospace px-1 py-1"
-            data-bs-toggle="tooltip"
-            data-bs-placement="auto"
-            title="Byron Zhang"
-            style="cursor: default">zishuoz@</span>.
-    </p>
   </div>
 </nav>

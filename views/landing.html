@@ -7,7 +7,7 @@
 </head>
 
 <body id="landing-container">
-  {% include 'nav/nav_landing.html' %}
+  {% include 'nav/nav_logged_out.html' %}
   <div class="d-flex flex-column"
        style="height: calc(100% - 120px)">
     <div class="px-3 py-5 mx-0 row flex-grow-1">
@@ -19,6 +19,31 @@
       </div>
     </div>
   </div>
+
+  <nav id="nav"
+       class="navbar navbar-expand-lg navbar-light fixed-bottom">
+    <div class="container-fluid">
+      <p id="landing-bottom-text"
+         class="mb-0 text-center">
+        TigerSnatch began as a Spring '21 COS333 project by
+        <span class="badge bg-warning text-dark font-monospace px-1 py-1"
+              data-bs-toggle="tooltip"
+              data-bs-placement="auto"
+              title="Shannon Heh"
+              style="cursor: default">sheh@</span>,
+        <span class="badge bg-warning text-dark font-monospace px-1 py-1"
+              data-bs-toggle="tooltip"
+              data-bs-placement="auto"
+              title="Nicholas Padmanabhan"
+              style="cursor: default">ntyp@</span>, and
+        <span class="badge bg-warning text-dark font-monospace px-1 py-1"
+              data-bs-toggle="tooltip"
+              data-bs-placement="auto"
+              title="Byron Zhang"
+              style="cursor: default">zishuoz@</span>.
+      </p>
+    </div>
+  </nav>
 
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/js/bootstrap.bundle.min.js"
           integrity="sha384-JEW9xMcG8R+pH31jmWH6WWP0WintQrMb4s7ZOdauHnUtxwoG2vI5DkLtS3qm9Ekf"

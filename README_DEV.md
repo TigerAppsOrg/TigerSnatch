@@ -54,7 +54,7 @@ For non-minor changes:
 2. Navigate to https://api-store.princeton.edu/store/.
 3. Login with TigerSnatch credentials for access to MobileApp API.
 
-## How to add a Release Note
+## To add a Release Note
 1. Write down a title for your product update, the date it was deployed, and any short tags to describe this update (e.g. What type of update is it - new feature, bug fix, feature enhancement? On which page is this feature located? How important is this update for your users - high, medium, low?)  
 2. Open `RELEASE_NOTES.md` and `release_notes_metadata.json`. `RELEASE_NOTES.md` is the human-readable version of our release notes in the Github Repo. This file contains the "body" of each release note, written in markdown. `release_notes_metadata.json` stores the metadata for each release note: the title, date, and tags. In both files, release notes are organized in reverse chronological order (i.e. release notes should be in the same order in both files!)
     - In `release_notes_metadata.json`, follow the existing format to add metadata about your new note, i.e. your note's metadata is contained in an object within an ordered (reverse chron.) list: 
@@ -88,6 +88,18 @@ For non-minor changes:
 
 3. Double-check that you correctly formatted your release note and its metadata. Double-check that the Release Notes section is properly rendered on the About page. If you do not correctly carry out step 2 above, all release notes may fail to display on the About page. Push your changes to the TigerSnatch repo.
 - Note that anything written above the first note in `RELEASE_NOTES.md` will not appear on the About page. **To see how `RELEASE_NOTES.md` and `release_notes_metadata.json` are parsed to construct the Release Notes section on the About page, check out `get_release_notes()` in `app_helper.py`.**  
+
+## To force the Dashboard tutorial and/or the alert banner to reappear for all users
+1. In `app.x.y.js`, search for `doneKeyTutorial`:
+```
+var doneKeyTutorial = "completed3";
+var doneKeyBanner = "completed5";
+```
+
+- To force the Dashboard tutorial, change `doneKeyTutorial` to something other than its current value (e.g. increment the number).
+- To force the alert banner, change `doneKeyBanner` to something other than its current value (e.g. increment the number).
+
+2. Follow the steps in the "To edit JS/CSS files" section above.
 
 **Things for Shannon to Remember**
 - Data on course page is read from DB. If it has been more than 5 mins since course page was last visited, then API is queried and this course's data is updated in DB. Notifs script directly queries API for new enrollment/cap and checks if spots are available; does not update DB.
