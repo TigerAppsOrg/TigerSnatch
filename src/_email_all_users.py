@@ -4,35 +4,23 @@
 # make sure that all environment variables are already set. See Heroku
 # Config Vars to get these variables.
 #
-# Note: Please don't commit your custom subject and message!
-#
 # Script to email all TigerSnatch users. This uses a SendGrid dynamic
-# template (edit on SendGrid --> Dynamic Templates). To use this script,
-# set the variable MESSAGE (can include new-line characters and HTML tags)
-# to the body of the email you'd like to send, and SUBJECT to the subject.
-# Then, execute the script. Always test your email by sending it to admins
-# with --test, before sending it to everyone with --all!
+# template (edit on SendGrid --> Dynamic Templates). To use this script:
 #
-# Specify one of the following flags:
-#   --test: Send email to only admins
-# 	--all: Send email to all users
+# 1. Create a file named MESSAGE in the same directory as this script
+#    and type the body of your email (can include new-lines and HTML
+#    tags).
+# 2. Create a file named SUBJECT in the same directory as this script
+#    and type the subject of your email (must be on a single line,
+#    without any HTML tags).
+# 3. Execute the script. Always test your email by first sending it to
+#    admins with --test, before sending it to everyone with --all!
 #
-# Example: python _email_all_users.py --test
-# ----------------------------------------------------------------------
-
-# set the email subject exactly as you want it displayed
-SUBJECT = "Your subject goes here!"
-
-# set the email message exactly as you want it displayed (leave the leading
-# and trailing new-lines). you may use HTML tags and new-line characters!
-# note: the email template already has "Greetings" at the beginning
-# and "~ TigerSnatch Team" at the end
-MESSAGE = """
-Your <b><a href="https://tigersnatch.com">message</a></b> goes here!
-
-You can use multiple lines if necessary.
-"""
-
+#    Specify one of the following flags:
+#       --test: Send email to only admins
+# 	    --all: Send email to all users
+#
+#    Example: python _email_all_users.py --test
 # ----------------------------------------------------------------------
 
 from database import Database
@@ -49,6 +37,14 @@ if __name__ == "__main__":
             print("\t--all: send email to ALL users")
             exit(2)
         return argv[1] == "--all"
+
+    DIR = "/".join(__file__.split("/")[:-1])
+    SUBJECT_FILEPATH = f"{DIR}/SUBJECT"
+    MESSAGE_FILEPATH = f"{DIR}/MESSAGE"
+
+    with open(SUBJECT_FILEPATH, "r") as subj, open(MESSAGE_FILEPATH, "r") as msg:
+        SUBJECT = subj.read()
+        MESSAGE = msg.read()
 
     send_to_all_users = process_args()
     send_to_admins = not send_to_all_users
