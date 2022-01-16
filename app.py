@@ -87,15 +87,13 @@ def login():
 
 @app.route("/tutorial", methods=["GET"])
 def tutorial():
-    term_name = _db.get_current_term_code()[1]
-
     if redirect_landing():
         html = render_template(
             "tutorial.html",
             loggedin=False,
             notifs_online=_db.get_cron_notification_status(),
             next_notifs=_db.get_current_or_next_notifs_interval(),
-            term_name=term_name,
+            term_name=_db.get_current_term_code()[1],
         )
         return make_response(html)
 
@@ -105,7 +103,7 @@ def tutorial():
         loggedin=True,
         notifs_online=_db.get_cron_notification_status(),
         next_notifs=_db.get_current_or_next_notifs_interval(),
-        term_name=term_name,
+        term_name=_db.get_current_term_code()[1],
     )
     return make_response(html)
 
@@ -162,7 +160,6 @@ def dashboard():
     search_res, new_query = do_search(query, _db)
 
     curr_sections = _db.get_current_sections(netid)
-    term_name = _db.get_current_term_code()[1]
 
     html = render_template(
         "base.html",
@@ -181,7 +178,7 @@ def dashboard():
         curr_sections=curr_sections,
         notifs_online=_db.get_cron_notification_status(),
         next_notifs=_db.get_current_or_next_notifs_interval(),
-        term_name=term_name,
+        term_name=_db.get_current_term_code()[1],
     )
 
     return make_response(html)
@@ -197,7 +194,6 @@ def update_auto_resub(auto_resub):
 @app.route("/about", methods=["GET"])
 def about():
     release_notes_success, release_notes = get_release_notes()
-    term_name = _db.get_current_term_code()[1]
 
     if redirect_landing():
         html = render_template(
@@ -205,7 +201,7 @@ def about():
             loggedin=False,
             notifs_online=_db.get_cron_notification_status(),
             next_notifs=_db.get_current_or_next_notifs_interval(),
-            term_name=term_name,
+            term_name=_db.get_current_term_code()[1],
             release_notes_success=release_notes_success,
             release_notes=release_notes,
         )
@@ -217,7 +213,7 @@ def about():
         loggedin=True,
         notifs_online=_db.get_cron_notification_status(),
         next_notifs=_db.get_current_or_next_notifs_interval(),
-        term_name=term_name,
+        term_name=_db.get_current_term_code()[1],
         release_notes_success=release_notes_success,
         release_notes=release_notes,
     )
@@ -227,7 +223,6 @@ def about():
 @app.route("/activity", methods=["GET"])
 def activity():
     stats = _db.get_stats()
-    term_name = _db.get_current_term_code()[1]
 
     if redirect_landing():
         html = render_template(
@@ -235,7 +230,7 @@ def activity():
             loggedin=False,
             notifs_online=_db.get_cron_notification_status(),
             next_notifs=_db.get_current_or_next_notifs_interval(),
-            term_name=term_name,
+            term_name=_db.get_current_term_code()[1],
             stats=stats,
         )
         return make_response(html)
@@ -253,7 +248,7 @@ def activity():
         trade_logs=trade_logs,
         notifs_online=_db.get_cron_notification_status(),
         next_notifs=_db.get_current_or_next_notifs_interval(),
-        term_name=term_name,
+        term_name=_db.get_current_term_code()[1],
         stats=stats,
     )
 
