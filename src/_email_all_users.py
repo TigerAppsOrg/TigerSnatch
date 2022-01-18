@@ -90,20 +90,27 @@ if __name__ == "__main__":
         print("Exiting...")
         exit(0)
 
-    print("Sending... ", end="")
+    print("Sending...")
 
-    data = {
-        "personalizations": [
-            {
-                "to": [{"email": email}],
-                "dynamic_template_data": {"subject": SUBJECT, "message": MESSAGE},
-            }
-            for email in emails
-        ],
-        "from": {"email": TS_EMAIL, "name": "TigerSnatch"},
-        "template_id": "d-e688d68d1bac424382aa8535026d6f36",
-    }
+    n = len(emails)
+    for i, email in enumerate(emails):
+        print(f"({i+1}/{n}) Sending to {email}", end="...")
+        data = {
+            "personalizations": [
+                {
+                    "to": [{"email": email}],
+                    "dynamic_template_data": {"subject": SUBJECT, "message": MESSAGE},
+                }
+            ],
+            "from": {"email": TS_EMAIL, "name": "TigerSnatch"},
+            "template_id": "d-e688d68d1bac424382aa8535026d6f36",
+        }
 
-    SendGridAPIClient(SENDGRID_API_KEY).client.mail.send.post(request_body=data)
+        try:
+            SendGridAPIClient(SENDGRID_API_KEY).client.mail.send.post(request_body=data)
+            print("success")
+        except Exception as e:
+            print("failed with exception:")
+            print(e)
 
     print(f"{len(emails)} emails sent!")
