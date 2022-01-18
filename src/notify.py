@@ -44,9 +44,7 @@ class Notify:
             self._coursename = f"{self._deptnum}: {self._title}"
             self._netids = db.get_class_waitlist(classid)["waitlist"]
 
-            user_log = (
-                f"{n_new_slots} spots available in {self._deptnum} {self._sectionname}"
-            )
+            user_log = f"{n_new_slots} spot{'s'[:n_new_slots^1]} available in {self._deptnum} {self._sectionname}"
 
             # courses with reserved seating use different logic for notifying
             if not self._has_reserved_seats:
