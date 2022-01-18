@@ -13,7 +13,13 @@ from config import (
     TWILIO_SID,
     TWILIO_TOKEN,
     TS_DOMAIN,
+    MIN_NOTIFS_DELAY_MINS,
 )
+from datetime import datetime
+import pytz
+
+TZ_ET = pytz.timezone("US/Eastern")
+TZ_UTC = pytz.timezone("UTC")
 
 
 class Notify:
@@ -23,6 +29,7 @@ class Notify:
 
     def __init__(self, classid, n_new_slots, db):
         self._classid = classid
+        self.n_new_slots = n_new_slots
         self.db = db
         try:
             (
@@ -40,8 +47,39 @@ class Notify:
             user_log = (
                 f"{n_new_slots} spots available in {self._deptnum} {self._sectionname}"
             )
+
+            # courses with reserved seating use different logic for notifying
+            if not self._has_reserved_seats:
+                # reduce spam by filtering netIDs such that notifs are sent to users if either:
+                #   1. the number of new spots (non-zero) has changed from the previous count
+                #   2. it's been more than MIN_NOTIFS_DELAY_MINS minutes since the last notif was sent
+                temp_netids = []
+                for netid in self._netids:
+                    # if user is not auto resubbed, then always send notif
+                    # (they will be removed from waitlist in this script anyway)
+                    if not db.get_user_auto_resub(netid):
+                        temp_netids.append(netid)
+                        continue
+
+                    history = db.get_user_notifs_history(netid, classid)
+                    open_spots_changed = n_new_slots != history["n_open_spots"]
+                    time_diff_mins = (
+                        datetime.now(TZ_ET) - TZ_UTC.localize(history["last_notif"])
+                    ).total_seconds() / 60
+                    notifs_delay_exceeded = (
+                        n_new_slots == history["n_open_spots"]
+                        and time_diff_mins >= MIN_NOTIFS_DELAY_MINS
+                    )
+
+                    # send notif if # open spots changes OR if last_notif time is >=MIN_NOTIFS_DELAY_MINS mins ago
+                    if open_spots_changed or notifs_delay_exceeded:
+                        temp_netids.append(netid)
+                self._netids = temp_netids
+                db.update_users_notifs_history(self._netids, classid, n_new_slots)
+
             self._emails = []
             self._phones = []
+
             for netid in self._netids:
                 self._emails.append(db.get_user(netid, "email"))
                 self._phones.append(db.get_user(netid, "phone"))
@@ -102,6 +140,7 @@ class Notify:
                                 "tigerhub_url": "https://phubprod.princeton.edu/psp/phubprod/?cmd=start",
                                 "dashboard_url": f"{TS_DOMAIN}/dashboard?&skip",
                                 "course_url": f"{TS_DOMAIN}/course?query=&courseid={self._courseid}&skip",
+                                "n_open_spots": self.n_new_slots,
                             },
                         }
                     ],
@@ -119,8 +158,8 @@ class Notify:
 
     def send_sms(self):
         reserved = "This course has reserved seats, so enrollment may not be possible. "
-        msg_unsubbed = f"{self._sectionname} in {self._deptnum} has open spots! {reserved if self._has_reserved_seats else ''}Resubscribe: {TS_DOMAIN}/course?courseid={self._courseid}&skip"
-        msg_resubbed = f"{self._sectionname} in {self._deptnum} has open spots! {reserved if self._has_reserved_seats else ''}Unsubscribe: {TS_DOMAIN}/dashboard?&skip"
+        msg_unsubbed = f"{self._sectionname} in {self._deptnum} has {self.n_new_slots} open spot(s)! {reserved if self._has_reserved_seats else ''}Resubscribe: {TS_DOMAIN}/course?courseid={self._courseid}&skip"
+        msg_resubbed = f"{self._sectionname} in {self._deptnum} has {self.n_new_slots} open spot(s)! {reserved if self._has_reserved_seats else ''}Unsubscribe: {TS_DOMAIN}/dashboard?&skip"
         send_text_args = []
         for i, phone in enumerate(self._phones):
             try:

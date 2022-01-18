@@ -446,6 +446,7 @@ class Database:
 
             print("removing user", netid, "from users and logs collections")
             self._db.users.delete_one({"netid": netid})
+            self._db.notifs.delete_one({"netid": netid})
             self._db.logs.delete_one({"netid": netid})
 
         try:
@@ -829,6 +830,7 @@ class Database:
                 "auto_resub": False,
             }
         )
+        self._db.notifs.insert_one({"netid": netid})
         self._db.logs.insert_one({"netid": netid, "waitlist_log": [], "trade_log": []})
         print(f"successfully created user {netid}")
 
@@ -1011,6 +1013,28 @@ class Database:
             return auto_resub_dict["auto_resub"]
         except:
             raise Exception(f"failed to get key auto_resub flag for netid {netid}")
+
+    # returns data in notifs collection corresponding to netid > classid
+
+    def get_user_notifs_history(self, netid, classid):
+        return self._db.notifs.find_one({"netid": netid}, {classid: 1, "_id": 0})[
+            classid
+        ]
+
+    # updates n_open_spots and last_notif fields for data in notifs collection
+
+    def update_users_notifs_history(self, netids, classid, n_open_spots):
+        # update n_open_spots for all users subbed to classid (key classid exists)
+        self._db.notifs.update_many(
+            {classid: {"$exists": True}},
+            {"$set": {f"{classid}.n_open_spots": n_open_spots}},
+        )
+
+        # update last_notif for only users who received notifs (i.e. netids)
+        self._db.notifs.update_many(
+            {"netid": {"$in": netids}, classid: {"$exists": True}},
+            {"$set": {f"{classid}.last_notif": datetime.now(TZ)}},
+        )
 
     # ----------------------------------------------------------------------
     # TERM METHODS
@@ -1446,6 +1470,12 @@ class Database:
             {"classid": classid}, {"$set": {"waitlist": class_waitlist}}
         )
 
+        # add class to user's document in notifs collection with default values
+        self._db.notifs.update_one(
+            {"netid": netid},
+            {"$set": {classid: {"n_open_spots": 0, "last_notif": datetime.now(TZ)}}},
+        )
+
         print(
             f"user {netid} successfully added to waitlist for class {classid} in {coursedeptnum}"
         )
@@ -1498,6 +1528,9 @@ class Database:
             self._db.waitlists.update_one(
                 {"classid": classid}, {"$set": {"waitlist": class_waitlist}}
             )
+
+        # remove class from user's document in notifs collection
+        self._db.notifs.update_one({"netid": netid}, {"$unset": {classid: ""}})
 
         print(
             f"user {netid} successfully removed from waitlist for class {classid} in {coursedeptnum}"

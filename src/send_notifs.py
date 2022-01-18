@@ -35,30 +35,27 @@ def cronjob():
     # get all class openings (for waited-on classes) from MobileApp
     new_slots, _ = monitor.get_classes_with_changed_enrollments()
 
-    total = 0
     names = ""
     emails_to_send, texts_to_send = [], []
     n_sections = 0
     for classid, n_new_slots in new_slots.items():
         if n_new_slots == 0:
             continue
-        try:
-            n_notifs = db.get_class_waitlist_size(classid)
-        except Exception as e:
-            print(e, file=stderr)
-            continue
 
         try:
             notify = Notify(classid, n_new_slots, db)
+            netids = notify.get_netids()
+            if len(netids) == 0:
+                continue
             print(notify)
-            print("\t> sending emails to", notify.get_netids())
+            print("\t> sending emails to", netids)
             print("\t> sending texts to", notify.get_phones())
+            print()
             stdout.flush()
 
             emails_to_send.extend(notify.send_emails_html())
             texts_to_send.extend(notify.send_sms())
 
-            total += n_notifs
             names += " " + notify.get_name() + ","
             n_sections += 1
 
@@ -77,9 +74,7 @@ def cronjob():
     if len(texts_res) > 0 and n_texts_sent == 0:
         print("failed to send texts")
 
-    if n_emails_sent + n_texts_sent == 0:
-        total = 0
-
+    total = n_emails_sent + n_texts_sent
     print()
 
     duration = round(time() - tic)
