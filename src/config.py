@@ -22,6 +22,7 @@ COLLECTIONS = {
     "admin",
     "logs",
     "system",
+    "notifs",
 }
 
 # MobileApp keys
@@ -69,6 +70,10 @@ MAX_ADMIN_LOG_LENGTH = int(environ["MAX_ADMIN_LOG_LENGTH"])
 
 # interval on which the notifications scheduling spreadsheet is polled
 NOTIFS_SHEET_POLL_MINS = int(environ["NOTIFS_SHEET_POLL_MINS"])
+
+# for auto-resubbed users, time between notifications sent for a section
+# if the num of open spots doesn't change
+MIN_NOTIFS_DELAY_MINS = int(environ["MIN_NOTIFS_DELAY_MINS"])
 
 # Twilio SMS
 TWILIO_PHONE = environ["TWILIO_PHONE"]
