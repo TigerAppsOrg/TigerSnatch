@@ -116,10 +116,6 @@ class Monitor:
             # class_ is classid
             for class_, n_slots in course.get_available_slots().items():
                 data[class_] = n_slots
-                # cover edge case where the number of open spots is 0 (not covered in Notify)
-                # prevent updating times of last notif by passing [] as netids
-                if n_slots == 0:
-                    self._db.update_users_notifs_history([], class_, 0)
 
         self._changed_enrollments = data
         print(f"success: approx. {round(time()-tic)} seconds")

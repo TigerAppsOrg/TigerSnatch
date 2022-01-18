@@ -40,6 +40,8 @@ def cronjob():
     n_sections = 0
     for classid, n_new_slots in new_slots.items():
         if n_new_slots == 0:
+            # cover edge case where the number of open spots is 0 (not covered in Notify)
+            db.update_users_notifs_history([], classid, 0)
             continue
 
         try:
