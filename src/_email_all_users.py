@@ -64,6 +64,9 @@ if __name__ == "__main__":
     else:
         emails = argv[2:]
 
+    # SendGrid will error only if there is no '@' in an address - this step is to prevent errors when sending
+    # so that we don't end up with a partial set of emails processed
+    emails = [email for email in emails if "@" in email]
     SUBJECT = SUBJECT.strip()
     MESSAGE = MESSAGE.strip().replace("\n", "<br>")
 
