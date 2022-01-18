@@ -18,7 +18,8 @@ from config import (
 from schema import COURSES_SCHEMA, CLASS_SCHEMA, MAPPINGS_SCHEMA, ENROLLMENTS_SCHEMA
 from pymongo import MongoClient
 from pymongo.errors import ConnectionFailure
-from datetime import datetime
+from datetime import datetime, timedelta
+from random import randint
 import pytz
 import heroku3
 
@@ -1031,9 +1032,14 @@ class Database:
         )
 
         # update last_notif for only users who received notifs (i.e. netids)
+        # add or subtract a random small amount of time to help spread out notifs
+        RAND_OFFSET_MINS = 5
+        new_last_notif = datetime.now(TZ) + timedelta(
+            minutes=randint(-RAND_OFFSET_MINS, RAND_OFFSET_MINS)
+        )
         self._db.notifs.update_many(
             {"netid": {"$in": netids}, classid: {"$exists": True}},
-            {"$set": {f"{classid}.last_notif": datetime.now(TZ)}},
+            {"$set": {f"{classid}.last_notif": new_last_notif}},
         )
 
     # ----------------------------------------------------------------------
