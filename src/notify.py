@@ -85,9 +85,9 @@ class Notify:
 
             db.update_time_of_last_notif(classid)
 
-        except:
+        except Exception as e:
             raise Exception(
-                f"unable to get notification data for subscriptions of class {classid}"
+                f"unable to get notification data for subscriptions of class {classid} with error: {e}"
             )
 
     # returns the netIDs of this Notify object
