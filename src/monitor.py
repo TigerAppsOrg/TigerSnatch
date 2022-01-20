@@ -29,7 +29,11 @@ class Monitor:
 
         for class_ in waited_classes:
             classid = class_["classid"]
-            deptnum, courseid = self._db.classid_to_course_info(classid)
+            try:
+                deptnum, courseid = self._db.classid_to_course_info(classid)
+            except Exception as e:
+                print(f"failed to get course info for class {classid} with error: {e}")
+                continue
 
             # skip sections whose course is disabled
             if courseid in disabled_courses:
