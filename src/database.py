@@ -534,7 +534,10 @@ class Database:
         res = []
 
         for classid in classids:
-            deptnum, name, section, _ = self.classid_to_classinfo(classid)
+            try:
+                deptnum, name, section, _ = self.classid_to_classinfo(classid)
+            except:
+                continue
             res.append(f"{name} ({deptnum}): {section}")
 
         if len(res) == 0:
@@ -908,10 +911,9 @@ class Database:
         except:
             raise RuntimeError(f"user {netid} does not exist")
         for classid in waitlists:
-            try:
-                class_stats = self.get_class_enrollment(classid)
-            except:
-                raise RuntimeError(f"classid {classid} not found in enrollments")
+            class_stats = self.get_class_enrollment(classid)
+            if class_stats is None:
+                continue
 
             dashboard_data[classid] = {}
 
@@ -984,7 +986,10 @@ class Database:
 
         for courseid in current_sections.keys():
             course_name = self.courseid_to_displayname(courseid)
-            section_name = self.classid_to_sectionname(current_sections[courseid])
+            try:
+                section_name = self.classid_to_sectionname(current_sections[courseid])
+            except:
+                continue
             res.append((course_name, section_name, courseid))
 
         return res
