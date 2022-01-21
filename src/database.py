@@ -212,8 +212,9 @@ class Database:
 
     # prints log and adds log to admin collection to track admin activity
 
-    def _add_admin_log(self, log):
-        print(log)
+    def _add_admin_log(self, log, print_=True):
+        if print_:
+            print(log)
         log = f"{(datetime.now(TZ)).strftime('%b %d, %Y @ %-I:%M %p ET')} \u2192 {log}"
 
         self._db.admin.update_one(
@@ -854,8 +855,6 @@ class Database:
                 }
             },
         )
-
-        print(f"user {netid} log: {entry}")
 
     # gets user netid's waitlist log in array-of-strings format
 
@@ -1741,12 +1740,12 @@ class Database:
 
     # adds log message to logs array in system collection
 
-    def _add_system_log(self, type, meta, netid=None, log=True):
+    def _add_system_log(self, type, meta, netid=None, print_=True):
         meta["type"] = type
         meta["time"] = datetime.now(TZ)
         if netid is not None:
             meta["netid"] = netid
-        if "message" in meta and log:
+        if "message" in meta and print_:
             print(
                 f'System Log @ {meta["time"].strftime("%-I:%M:%S %p ET")} > {meta["message"]}'
             )

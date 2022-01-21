@@ -56,9 +56,6 @@ def cronjob():
             if len(netids) == 0:
                 continue
             print(notify)
-            print("\t> sending emails to", netids)
-            print("\t> sending texts to", notify.get_phones())
-            print()
             stdout.flush()
 
             emails_to_send.extend(notify.send_emails_html())
@@ -89,7 +86,8 @@ def cronjob():
 
     if total > 0:
         db._add_admin_log(
-            f"sent {total} emails and texts in {duration} seconds ({n_sections} sections):{names[:-1]}"
+            f"sent {total} emails and texts in {duration} seconds ({n_sections} sections):{names[:-1]}",
+            print_=False,
         )
         db.add_stats_notif_log(
             f"{total} notif{'s'[:total^1]} sent for {n_sections} section{'s'[:n_sections^1]}:{names[:-1]}"
@@ -97,18 +95,16 @@ def cronjob():
         db._add_system_log(
             "cron",
             {
-                "message": f"sent {total} emails and texts in {duration} seconds ({n_sections} sections):{names[:-1]}"
+                "message": f"✅ sent {total} emails and texts in {duration} seconds ({n_sections} sections):{names[:-1]}"
             },
-            log=False,
         )
         db.increment_email_counter(total)
     elif total == 0:
         db._add_system_log(
             "cron",
             {
-                "message": f"sent 0 emails and texts in {duration} seconds ({n_sections} sections)"
+                "message": f"✅  sent 0 emails and texts in {duration} seconds ({n_sections} sections)"
             },
-            log=False,
         )
         print(f"sent 0 emails and texts in {duration} seconds ({n_sections} sections)")
         stdout.flush()

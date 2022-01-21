@@ -68,14 +68,12 @@ class CourseWrapper:
         if sum(self._available_slots.values()) == 0:
             return ""
 
-        ret = f"\ncourse_deptnum {self._course_deptnum}"
-        ret += f"\nreserved seats: {self._has_reserved_seats}\n"
+        ret = f"\ncourse {self._course_deptnum}\n"
 
         for k, v in self._available_slots.items():
             if v == 0:
                 continue
-            ret += f"\tclassid {k}: {v} open spot(s) with enrollment "
-            ret += f"{self._new_enroll[k]}/{self._new_cap[k]}\n"
+            ret += f"   classid {k}: {v} open spot(s) with enrollment {self._new_enroll[k]}/{self._new_cap[k]}\n"
 
         return ret
 

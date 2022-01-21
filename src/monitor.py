@@ -31,8 +31,7 @@ class Monitor:
             classid = class_["classid"]
             try:
                 deptnum, courseid = self._db.classid_to_course_info(classid)
-            except Exception as e:
-                print(f"failed to get course info for class {classid} with error: {e}")
+            except:
                 continue
 
             # skip sections whose course is disabled
@@ -77,7 +76,7 @@ class Monitor:
             course_wrapper = CourseWrapper(
                 course_deptnum, new_enroll, new_cap, courseid, self._db
             )
-            print(course_wrapper, end="")
+            # print(course_wrapper, end="")
             course_wrappers.append(course_wrapper)
 
         self._waited_course_wrappers = course_wrappers
@@ -99,7 +98,7 @@ class Monitor:
             pass
 
         tic = time()
-
+        print(f"🧮 calculating open spots")
         self._construct_waited_classes()
         try:
             self._waited_classes
@@ -122,7 +121,7 @@ class Monitor:
                 data[class_] = n_slots
 
         self._changed_enrollments = data
-        print(f"success: approx. {round(time()-tic)} seconds")
+        print(f"✅ calculated open spots: approx. {round(time()-tic)} seconds")
         return self._changed_enrollments, len(self._waited_course_wrappers)
 
     # updates all course data if it has been 2 minutes since last update
