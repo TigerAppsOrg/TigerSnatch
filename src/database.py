@@ -1725,6 +1725,12 @@ class Database:
             {"message": f'maintenance mode set to {"on" if status else "off"}'},
         )
 
+    # get Heroku maintenance status: ON (True) or OFF (False)
+
+    def get_maintenance_status(self):
+        app = self._connect_to_heroku()
+        return app.maintenance
+
     # connects to Heroku and returns app variable so you can do
     # operations with Heroku
 

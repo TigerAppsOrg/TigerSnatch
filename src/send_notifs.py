@@ -32,6 +32,12 @@ def cronjob():
 
     db._add_system_log("cron", {"message": "notifications script executing"})
 
+    if db.get_maintenance_status():
+        db._add_system_log(
+            "cron", {"message": "app in maintenance mode: notifications script killed"}
+        )
+        return
+
     # get all class openings (for waited-on classes) from MobileApp
     new_slots, _ = monitor.get_classes_with_changed_enrollments()
 
