@@ -49,6 +49,9 @@
         </th>
         <th scope="col">Days</th>
         <th scope="col">Time</th>
+        {% if user_is_admin %}
+        <th scope="col">ClassID (admin)</th>
+        {% endif %}
       </tr>
     </thead>
     <tbody>
@@ -78,6 +81,9 @@
         <td>{{data[classid].start_time}}</td>
         {% else %}
         <td>{{data[classid].start_time}} - {{data[classid].end_time}}</td>
+        {% endif %}
+        {% if user_is_admin %}
+        <td>{{classid}}</td>
         {% endif %}
       </tr>
       {%endfor%}
