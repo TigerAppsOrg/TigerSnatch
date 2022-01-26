@@ -61,9 +61,6 @@ def get_new_mobileapp_data(
                 continue
             # skip classes whose status is not "Open" (enrollment is not possible)
             if class_["pu_calc_status"] != "Open":
-                print(
-                    f"class {classid} in course {courseid} skipped: status is {class_['pu_calc_status']}"
-                )
                 continue
             if courseid not in new_enroll:
                 new_enroll[courseid] = {}

@@ -57,8 +57,11 @@ class Database:
         # sections that user is waiting for for given courseid
         user_course_waitlists = []
         for classid in user_waitlists:
-            if self.is_classid_in_courseid(classid, courseid):
-                user_course_waitlists.append(classid)
+            try:
+                if self.is_classid_in_courseid(classid, courseid):
+                    user_course_waitlists.append(classid)
+            except:
+                continue
 
         # get user's currect section
         curr_section = self.get_current_section(netid, courseid)
@@ -67,14 +70,24 @@ class Database:
                 f"current section of course {courseid} for {netid} not found - match cannot be made"
             )
 
+        # verify that current section exists (i.e. has not been deleted/removed)
+        if self.get_class_enrollment(curr_section) is None:
+            print(f"no matches found for user {netid} in course {courseid}")
+            return []
+
         matches = []
         # for each section that user wants
         for classid in user_course_waitlists:
             # skip case where user subscribes to current section
             if classid == curr_section:
                 continue
-            # get netids that want to swap out of the sections you want
-            swapout_list = self.get_swapout_for_class(classid)
+
+            try:
+                # get netids that want to swap out of the sections you want
+                swapout_list = self.get_swapout_for_class(classid)
+            except:
+                continue
+
             for match_netid in swapout_list:
                 # prevents self match
                 if match_netid == netid:
@@ -88,7 +101,11 @@ class Database:
                     )
 
                 match_email = self.get_user(match_netid, "email")
-                match_section = self.classid_to_sectionname(classid)
+
+                try:
+                    match_section = self.classid_to_sectionname(classid)
+                except:
+                    continue
 
                 # ensure that only sections of the same type (e.g. P, C, S, B) are matches
                 # if match_section[0] != self.classid_to_sectionname(curr_section)[0]:
@@ -979,8 +996,8 @@ class Database:
         res = []
 
         for courseid in current_sections.keys():
-            course_name = self.courseid_to_displayname(courseid)
             try:
+                course_name = self.courseid_to_displayname(courseid)
                 section_name = self.classid_to_sectionname(current_sections[courseid])
             except:
                 continue
@@ -1673,9 +1690,6 @@ class Database:
         def clear_coll(coll):
             print("clearing", coll)
             self._db[coll].delete_many({})
-
-        print("clearing current_sections in users")
-        self._db.users.update_many({}, {"$set": {"current_sections": {}}})
 
         clear_coll("mappings")
         clear_coll("courses")
