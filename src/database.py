@@ -1497,9 +1497,13 @@ class Database:
             {"$set": {classid: {"n_open_spots": 0, "last_notif": datetime.now(TZ)}}},
         )
 
-        print(
-            f"user {netid} successfully added to waitlist for class {classid} in {coursedeptnum}"
+        self._add_system_log(
+            "subscription",
+            {
+                "message": f"user {netid} successfully subscribed to class {classid} in {coursedeptnum}"
+            },
         )
+
         return 1
 
     # removes user of given netid to waitlist for class classid
@@ -1553,8 +1557,11 @@ class Database:
         # remove class from user's document in notifs collection
         self._db.notifs.update_one({"netid": netid}, {"$unset": {classid: ""}})
 
-        print(
-            f"user {netid} successfully removed from waitlist for class {classid} in {coursedeptnum}"
+        self._add_system_log(
+            "subscription",
+            {
+                "message": f"user {netid} successfully unsubscribed from class {classid} in {coursedeptnum}"
+            },
         )
 
     # ----------------------------------------------------------------------
