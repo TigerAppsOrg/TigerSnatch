@@ -29,6 +29,7 @@ def get_new_mobileapp_data(
     new_cap = {}
     courseids = set(courseids)
     classids = set(classids)
+    db = Database()
 
     for course in data["course"]:
         courseid = course["course_id"]
@@ -37,6 +38,8 @@ def get_new_mobileapp_data(
             continue
         if "classes" not in course:
             continue
+
+        has_reserved_seats = db.does_course_have_reserved_seats(courseid)
 
         """
         Create the following structure for each of new_cap and new_enroll:
@@ -61,6 +64,15 @@ def get_new_mobileapp_data(
                 continue
             # skip classes whose status is not "Open" (enrollment is not possible)
             if class_["pu_calc_status"] != "Open":
+                # for classes with reserved seats that are currenly Closed, update (rolling)
+                # previous enrollment to the class's capacity. this will ensure that if the
+                # class's status changes to Open, notifs will be sent with accurate # of open
+                # seats.
+                # if the class is open, this will happen in CourseWrapper.
+                if has_reserved_seats:
+                    db.update_prev_enrollment_RESERVED_SEATS_ONLY(
+                        classid, int(class_["capacity"])
+                    )
                 continue
             if courseid not in new_enroll:
                 new_enroll[courseid] = {}
