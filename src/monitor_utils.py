@@ -140,6 +140,7 @@ def get_course_in_mobileapp(term, course_, curr_time, db: Database):
                     "days": " ".join(meetings["days"]),
                     "enrollment": int(class_["enrollment"]),
                     "capacity": int(class_["capacity"]),
+                    "status_is_open": class_["pu_calc_status"] == "Open",
                 }
 
                 new_enroll[classid] = int(class_["enrollment"])

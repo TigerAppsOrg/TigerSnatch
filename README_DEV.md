@@ -41,7 +41,7 @@ For non-minor changes:
 - When you open a PR and make a commit, a review app (with url `tigersnatch-pr-xx.herokuapp.com` where `xx` is the PR number) is automatically created and will automatically deploy from your PR's commits.
 
 ## To simulate one run of the notifications script
-1. If needed, first manually fill a course section using the Admin panel and then subscribe to that section.
+1. If needed, first manually fill a course section using the Admin panel and then subscribe to that section. Also, in the database `courses` collection, set the section's `status_is_open` key to `false` (you first need to search for the section's containing course).
     - Be sure to visit the section's course page before doing this step to force a data update for that course.
 2. Run `python send_notifs.py` (locally) or `heroku run python src/send_notifs.py -a <app_name>` (on a specific Heroku app).
 

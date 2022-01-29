@@ -147,6 +147,7 @@ def process_dept_codes(dept_codes: str, current_term_code: str, hard_reset: bool
                         "days": " ".join(days_),
                         "enrollment": int(class_["enrollment"]),
                         "capacity": int(class_["capacity"]),
+                        "status_is_open": class_["pu_calc_status"] == "Open",
                     }
 
                     # new_class_enrollment will contain enrollment and

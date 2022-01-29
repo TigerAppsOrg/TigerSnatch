@@ -1145,10 +1145,18 @@ class Database:
                 class_data = self.get_class_enrollment(classid)
                 class_dict["enrollment"] = class_data["enrollment"]
                 class_dict["capacity"] = class_data["capacity"]
+                # we mark a class as full (i.e. allow subbing) if at least one is true:
+                #   1. capacity is non-zero and enrollment is at least as large as capacity
+                #   2. class has reserved seating and positive enrollment
+                #   3. class is closed
                 class_dict["isFull"] = (
-                    class_dict["capacity"] > 0
-                    and class_dict["enrollment"] >= class_dict["capacity"]
-                ) or (has_reserved_seats and class_dict["enrollment"] > 0)
+                    (
+                        class_dict["capacity"] > 0
+                        and class_dict["enrollment"] >= class_dict["capacity"]
+                    )
+                    or (has_reserved_seats and class_dict["enrollment"] > 0)
+                    or not class_dict["status_is_open"]
+                )
         return course_info
 
     # updates time that a course page was last updated
@@ -1436,26 +1444,50 @@ class Database:
                 self.classid_to_course_info(classid)[1]
             )
 
+            # if user does not exist, do not allow sub
             if not self.is_user_created(netid):
                 raise Exception(f"user {netid} does not exist")
+
             class_enrollment = self.get_class_enrollment(classid)
+            # if class does not exist, do not allow sub
             if class_enrollment is None:
                 raise Exception(f"class {classid} does not exist")
-            if not is_class_full(class_enrollment) and not has_reserved_seats:
-                raise Exception(
-                    f"user cannot enter waitlist for non-full class {classid}"
-                )
-            if has_reserved_seats and class_enrollment["enrollment"] == 0:
-                raise Exception(
-                    f"user cannot enter waitlist for reserved class {classid} because its enrollment is 0"
-                )
+
+            # if user is already subbed to class, do not allow sub
             if classid in self.get_user(netid, "waitlists"):
                 raise Exception(
                     f"user {netid} is already in waitlist for class {classid}"
                 )
+
+            # if class is in a disabled course, do not allow sub
             if self.is_course_disabled(courseid):
                 raise Exception(
                     f"{netid}: class {classid} is in disabled course {courseid}"
+                )
+
+            course_info = self.get_course(courseid)
+            class_status_is_open = course_info[f"class_{classid}"]["status_is_open"]
+
+            # if class is open and doesn't have reserved seats, do not allow sub
+            if class_status_is_open and not has_reserved_seats:
+                raise Exception(f"class {classid} is not Closed")
+
+            # otherwise if class is closed, allow sub in all cases
+            if not class_status_is_open:
+                return
+
+            # if class is not full and does not have reserved seats, do not allow sub
+            if not is_class_full(class_enrollment) and not has_reserved_seats:
+                raise Exception(
+                    f"user cannot enter waitlist for non-full class {classid}"
+                )
+
+            # if class has reserved seats and has 0 enrollment, do not allow sub
+            #   in this case, we know the class is open, has reserved seats, and all
+            #   seat categories are empty, so subbing is useless
+            if has_reserved_seats and class_enrollment["enrollment"] == 0:
+                raise Exception(
+                    f"user cannot enter waitlist for reserved class {classid} because its enrollment is 0"
                 )
 
         netid = netid.strip()

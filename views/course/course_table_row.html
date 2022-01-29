@@ -41,6 +41,7 @@
 {% endif %}
 <td>{{class.wl_size}}</td>
 <td>{{class.time_of_last_notif}}</td>
+<td>{{'Open' if class.status_is_open else 'Closed'}}</td>
 <td>{{class.enrollment}} / {{class.capacity}}</td>
 <td>{{class.days}}</td>
 {% if class.end_time == "" %}
