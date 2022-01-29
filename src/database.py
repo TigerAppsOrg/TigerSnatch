@@ -651,7 +651,12 @@ class Database:
                 return ["No Subscriptions found"]
             res = []
             for s_data in data:
-                deptnum, name, section, _ = self.classid_to_classinfo(s_data["classid"])
+                try:
+                    deptnum, name, section, _ = self.classid_to_classinfo(
+                        s_data["classid"], entire_crosslisting=True
+                    )
+                except:
+                    continue
                 res.append(f"[{s_data['size']}] {name} ({deptnum}): {section}")
             return res
 
@@ -1791,3 +1796,4 @@ if __name__ == "__main__":
     # print(",".join(db._get_all_emails_csv().split(",")[997:]))
     # print(",".join(db._get_all_emails_csv().split(",")[490 * 3 : 490 * 4]))
     # print(db.get_prev_enrollment_RESERVED_SEATS_ONLY("40268"))
+    print(db.get_all_subscriptions())
