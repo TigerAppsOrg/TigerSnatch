@@ -1335,6 +1335,7 @@ class Database:
         new_cap,
         entirely_new_enrollment,
         update_courses_entry=True,
+        set_status_to_closed=False,
     ):
         # handles the situation where an additional section is added to a course after the initial TigerSnatch
         # term update. the previous issue was that `update_one` DOES NOT add to a collection; it simply updates
@@ -1358,6 +1359,17 @@ class Database:
                     "$set": {
                         f"class_{classid}.enrollment": new_enroll,
                         f"class_{classid}.capacity": new_cap,
+                    }
+                },
+            )
+
+        # used by the "fill section" feature on the admin panel so that subbing is possible
+        if set_status_to_closed:
+            self._db.courses.update_one(
+                {"courseid": courseid},
+                {
+                    "$set": {
+                        f"class_{classid}.status_is_open": False,
                     }
                 },
             )
