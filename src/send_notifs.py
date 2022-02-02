@@ -11,13 +11,12 @@
 import pandas as pd
 from datetime import datetime, timedelta
 import pytz
-import requests
 from notify import Notify
 from monitor import Monitor
 from database import Database
 from sys import stdout, stderr
 from time import time
-from config import OIT_NOTIFS_OFFSET_MINS, DMS_URL
+from config import OIT_NOTIFS_OFFSET_MINS
 from notify import send_email, send_text
 from multiprocess import Pool
 from os import cpu_count
@@ -108,14 +107,6 @@ def cronjob():
         )
         print(f"sent 0 emails and texts in {duration} seconds ({n_sections} sections)")
         stdout.flush()
-
-    # ping Dead Man's Snitch (see heroku addons)
-    requests.post(
-        DMS_URL,
-        data={
-            "m": f"Sent {total} notifications in {duration} seconds ({n_sections} sections)"
-        },
-    )
 
 
 def set_status_indicator_to_on():
