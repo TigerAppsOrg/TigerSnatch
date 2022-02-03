@@ -404,10 +404,8 @@ class Database:
                 f"unsubscribing users {class_waitlist} from class {classid}"
             )
 
-            self._db.users.update_many(
-                {"netid": {"$in": class_waitlist}}, {"$pull": {"waitlists": classid}}
-            )
-            self._db.waitlists.delete_one({"classid": classid})
+            for netid in class_waitlist:
+                self.remove_from_waitlist(netid, classid)
 
             self._add_system_log(
                 "admin",
@@ -1734,6 +1732,11 @@ class Database:
         clear_coll("courses")
         clear_coll("enrollments")
         clear_coll("waitlists")
+        clear_coll("notifs")
+
+        print("repopulating documents in notifs")
+        for doc in self._db.users.find({}, {"netid": 1}):
+            self._db.notifs.insert_one({"netid": doc["netid"]})
 
     # does the following:
     #   * deletes all documents from mappings

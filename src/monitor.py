@@ -98,7 +98,7 @@ class Monitor:
             pass
 
         tic = time()
-        print(f"🧮 calculating open spots")
+        print("🧮 calculating open spots")
         self._construct_waited_classes()
         try:
             self._waited_classes

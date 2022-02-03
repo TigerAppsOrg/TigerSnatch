@@ -83,6 +83,3 @@ TWILIO_TOKEN = environ["TWILIO_TOKEN"]
 # offset in minutes that is added to all provided notifications start times
 # (this was an OIT request to alleviate load on endpoints during the first few minutes of enrollment)
 OIT_NOTIFS_OFFSET_MINS = int(environ["OIT_NOTIFS_OFFSET_MINS"])
-
-# Dead Man's Snitch URL (see heroku addons)
-DMS_URL = environ["DMS_URL"]
