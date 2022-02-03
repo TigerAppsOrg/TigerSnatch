@@ -64,14 +64,12 @@ def get_new_mobileapp_data(
                 continue
             # skip classes whose status is not "Open" (enrollment is not possible)
             if class_["pu_calc_status"] != "Open":
-                # for classes with reserved seats that are currenly Closed, update (rolling)
-                # previous enrollment to the class's capacity. this will ensure that if the
-                # class's status changes to Open, notifs will be sent with accurate # of open
-                # seats.
-                # if the class is open, this will happen in CourseWrapper.
+                # for classes with reserved seats that are currently Closed, update (rolling)
+                # previous enrollment with new enrollment. if a class is Open, this will
+                # happen in CourseWrapper.
                 if has_reserved_seats:
                     db.update_prev_enrollment_RESERVED_SEATS_ONLY(
-                        classid, int(class_["capacity"])
+                        classid, int(class_["enrollment"])
                     )
                 continue
             if courseid not in new_enroll:
