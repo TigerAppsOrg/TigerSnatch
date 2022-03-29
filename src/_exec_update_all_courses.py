@@ -70,7 +70,7 @@ def do_update(reset_type):
     db.set_maintenance_status(False)
 
     log_msg = f"{'hard' if hard_reset else 'soft'}-updated to term code {current_term_code} in {round(time()-tic)} seconds ({n_courses} courses, {n_classes} sections)"
-    if not hard_reset:
+    if not hard_reset and len(new_courses) > 0:
         log_msg += f" - new courses: {', '.join(new_courses)}"
 
     db._add_admin_log(log_msg)
