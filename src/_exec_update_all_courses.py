@@ -63,19 +63,21 @@ def do_update(reset_type):
     print(f"getting all courses in term code {current_term_code}")
 
     DEPT_CODES = ",".join(get_all_dept_codes(current_term_code))
-    n_courses, n_classes = process_dept_codes(DEPT_CODES, current_term_code, hard_reset)
+    n_courses, n_classes, new_courses = process_dept_codes(
+        DEPT_CODES, current_term_code, hard_reset
+    )
 
     db.set_maintenance_status(False)
 
-    db._add_admin_log(
-        f"{'hard' if hard_reset else 'soft'}-updated to term code {current_term_code} in {round(time()-tic)} seconds ({n_courses} courses, {n_classes} sections)"
-    )
+    log_msg = f"{'hard' if hard_reset else 'soft'}-updated to term code {current_term_code} in {round(time()-tic)} seconds ({n_courses} courses, {n_classes} sections)"
+    if not hard_reset:
+        log_msg += f" - new courses: {', '.join(new_courses)}"
+
+    db._add_admin_log(log_msg)
 
     db._add_system_log(
         "admin",
-        {
-            "message": f"{'hard' if hard_reset else 'soft'}-updated to term code {current_term_code} in {round(time()-tic)} seconds ({n_courses} courses, {n_classes} sections)"
-        },
+        {"message": log_msg},
         netid="SYSTEM_AUTO",
     )
 
