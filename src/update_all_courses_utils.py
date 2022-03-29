@@ -43,6 +43,9 @@ def process_dept_codes(dept_codes: str, current_term_code: str, hard_reset: bool
                 },
             )
         )
+        old_courses = list(db._db.courses.find({}, {"_id": 0, "displayname": 1}))
+        old_courses = set(map(lambda x: x["displayname"], old_courses))
+        new_courses = set()
 
         # precompute dictionary of times of last notif
         old_last_notifs = {}
@@ -98,6 +101,8 @@ def process_dept_codes(dept_codes: str, current_term_code: str, hard_reset: bool
                     new["displayname_whitespace"] += (
                         "/" + x["subject"] + " " + x["catalog_number"]
                     )
+
+                new_courses.add(new["displayname"])
 
                 print("inserting", new["displayname"], "into mappings")
                 db.add_to_mappings(new)
@@ -206,7 +211,7 @@ def process_dept_codes(dept_codes: str, current_term_code: str, hard_reset: bool
 
         print(f"> processed {n_courses} courses and {n_sections} sections")
         print(f"> performed a {'hard' if hard_reset else 'soft'} reset")
-        return n_courses, n_sections
+        return n_courses, n_sections, list(new_courses - old_courses)
 
     except Exception as e:
         print(f"failed to get new course data with exception message {e}", file=stderr)
