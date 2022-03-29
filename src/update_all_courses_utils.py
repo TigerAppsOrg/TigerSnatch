@@ -96,13 +96,13 @@ def process_dept_codes(dept_codes: str, current_term_code: str, hard_reset: bool
                     "has_reserved_seats": course["detail"]["seat_reservations"] == "Y",
                 }
 
-                new_courses.add(new["displayname"])
-
                 for x in course["crosslistings"]:
                     new["displayname"] += "/" + x["subject"] + x["catalog_number"]
                     new["displayname_whitespace"] += (
                         "/" + x["subject"] + " " + x["catalog_number"]
                     )
+
+                new_courses.add(new["displayname"])
 
                 print("inserting", new["displayname"], "into mappings")
                 db.add_to_mappings(new)
