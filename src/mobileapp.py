@@ -95,7 +95,7 @@ class Configs:
     def __init__(self):
         self.CONSUMER_KEY = CONSUMER_KEY
         self.CONSUMER_SECRET = CONSUMER_SECRET
-        self.BASE_URL = "https://api.princeton.edu:443/mobile-app/1.0.4"
+        self.BASE_URL = "https://api.princeton.edu:443/student-app/1.0.1"
         self.COURSE_SEATS = "/courses/seats"
         self.COURSE_COURSES = "/courses/courses"
         self.COURSE_TERMS = "/courses/terms"
@@ -120,5 +120,6 @@ class Configs:
 
 if __name__ == "__main__":
     api = MobileApp()
+    print(api.get_courses(term="1224", search="COS333"))
     # print(api.get_courses(term='1214', subject='list'))
     # print(api.get_courses(term="1214", search="NEU350"))
