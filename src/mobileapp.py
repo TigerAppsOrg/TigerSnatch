@@ -1,8 +1,9 @@
 # ----------------------------------------------------------------------
 # mobileapp.py
 # Contains MobileApp, a class used to communicate with the MobileApp API
-# from the Princeton OIT.
-# Credit: vr2amesh https://github.com/vr2amesh/COS333-API-Code-Examples
+# from the Princeton OIT. NOTE: TigerSnatch now uses StudentApp, which
+# OIT created for use in student-made applications.
+# Adapted from https://github.com/vr2amesh/COS333-API-Code-Examples
 # ----------------------------------------------------------------------
 
 import requests
