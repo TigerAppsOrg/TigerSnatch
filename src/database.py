@@ -6,6 +6,7 @@
 
 from sys import stderr, stdout
 import re
+import certifi
 from config import (
     DB_CONNECTION_STR,
     COLLECTIONS,
@@ -33,7 +34,10 @@ class Database:
 
     def __init__(self):
         self._db = MongoClient(
-            DB_CONNECTION_STR, serverSelectionTimeoutMS=5000, maxIdleTimeMS=600000
+            DB_CONNECTION_STR,
+            serverSelectionTimeoutMS=5000,
+            maxIdleTimeMS=600000,
+            tlsCAFile=certifi.where(),
         )
 
         try:
@@ -1837,10 +1841,20 @@ class Database:
 
 
 if __name__ == "__main__":
-    db = Database()
-    # print(db.get_current_or_next_notifs_interval())
-    # print(db.get_all_subscriptions())
-    # print(",".join(db._get_all_emails_csv().split(",")[997:]))
-    # print(",".join(db._get_all_emails_csv().split(",")[490 * 3 : 490 * 4]))
-    # print(db.get_prev_enrollment_RESERVED_SEATS_ONLY("40268"))
-    print(db.get_all_subscriptions())
+    # generate list of all sections that had open-spot notifs with timestamps
+    db = Database()._db
+    res = db.system.find(
+        {
+            "type": "cron",
+            "message": {"$regex": ":"},
+            "time": {"$gt": datetime(2022, 4, 11)},
+        }
+    )
+
+    with open("all-notifs.txt", "w") as f:
+        for doc in res:
+            sections = doc["message"].split(": ")
+            if len(sections) < 2:
+                continue
+            for section in sections[1].split(", "):
+                f.write(f'{doc["time"].isoformat()} {section}\n')

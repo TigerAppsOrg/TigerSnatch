@@ -102,7 +102,7 @@ def cronjob():
         db._add_system_log(
             "cron",
             {
-                "message": f"✅  sent 0 emails and texts in {duration} seconds ({n_sections} sections)"
+                "message": f"✅ sent 0 emails and texts in {duration} seconds ({n_sections} sections)"
             },
         )
         print(f"sent 0 emails and texts in {duration} seconds ({n_sections} sections)")
