@@ -55,17 +55,27 @@ def do_update(reset_type):
         raise Exception("failed to get current term code")
 
     db.set_maintenance_status(True)
-    db._add_system_log(
-        "admin",
-        {"message": f"{'hard' if hard_reset else 'soft'} course term update started"},
-        netid="SYSTEM_AUTO",
-    )
-    print(f"getting all courses in term code {current_term_code}")
+    try:
+        db._add_system_log(
+            "admin",
+            {
+                "message": f"{'hard' if hard_reset else 'soft'} course term update started"
+            },
+            netid="SYSTEM_AUTO",
+        )
+        print(f"getting all courses in term code {current_term_code}")
 
-    DEPT_CODES = ",".join(get_all_dept_codes(current_term_code))
-    n_courses, n_classes, new_courses = process_dept_codes(
-        DEPT_CODES, current_term_code, hard_reset
-    )
+        DEPT_CODES = ",".join(get_all_dept_codes(current_term_code))
+        n_courses, n_classes, new_courses = process_dept_codes(
+            DEPT_CODES, current_term_code, hard_reset
+        )
+    except:
+        if hard_reset:
+            raise Exception(
+                "failed to hard-update courses and did not disable maintenance mode"
+            )
+        db.set_maintenance_status(False)
+        raise Exception("failed to soft-update courses and disabled maintenance mode")
 
     db.set_maintenance_status(False)
 
