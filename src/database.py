@@ -1843,11 +1843,12 @@ class Database:
 if __name__ == "__main__":
     # generate list of all sections that had open-spot notifs with timestamps
     db = Database()._db
+    start_date = datetime(2022, 9, 5)
     res = db.system.find(
         {
             "type": "cron",
             "message": {"$regex": ":"},
-            "time": {"$gt": datetime(2022, 4, 11)},
+            "time": {"$gte": start_date, "$lte": start_date + timedelta(days=1)},
         }
     )
 
