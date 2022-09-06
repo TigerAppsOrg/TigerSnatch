@@ -3,7 +3,7 @@
 # Contains various credentials for API and database access.
 # ----------------------------------------------------------------------
 
-from os import environ
+from os import environ, getenv
 
 # TigerSnatch host URL
 TS_HOST = "localhost"
@@ -83,3 +83,5 @@ TWILIO_TOKEN = environ["TWILIO_TOKEN"]
 # offset in minutes that is added to all provided notifications start times
 # (this was an OIT request to alleviate load on endpoints during the first few minutes of enrollment)
 OIT_NOTIFS_OFFSET_MINS = int(environ["OIT_NOTIFS_OFFSET_MINS"])
+
+PROD = getenv("PROD", "False").lower() in ("true", "1", "t")
