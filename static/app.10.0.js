@@ -449,7 +449,7 @@ let searchFormListener = function () {
     e.preventDefault();
 
     // get search query
-    query_raw = $("#search-form-input").prop("value")
+    query_raw = $("#search-form-input").prop("value");
     query = encodeURIComponent(query_raw);
 
     curr_path = location.pathname;
@@ -461,14 +461,14 @@ let searchFormListener = function () {
     if (query_raw.length == 2) {
       // remove query from URL
       curr_path += "?";
-      ind = 0
-      params.forEach(param => {
+      ind = 0;
+      params.forEach((param) => {
         if (!param.startsWith("query")) {
           if (ind > 0) curr_path += "&";
           curr_path += param;
-          ind += 1
+          ind += 1;
         }
-      })
+      });
 
       $.post("/searchresults_placeholder", function (res) {
         $("div#search-results").html(res);
@@ -477,7 +477,7 @@ let searchFormListener = function () {
           "restore search results",
           curr_path
         );
-      })
+      });
 
       return;
     }
@@ -488,9 +488,9 @@ let searchFormListener = function () {
     // add query to URL
     curr_path += `?query=${query}`;
     if (location.search !== "") {
-      params.forEach(param => {
+      params.forEach((param) => {
         if (!param.startsWith("query")) curr_path += `&${param}`;
-      })
+      });
     }
 
     // get search results
@@ -527,7 +527,9 @@ let searchResultListener = function () {
 
     // remove gray background from currently selected course entry
     $("a.selected-course").css("background-color", "");
-    $("a.selected-course").removeClass("selected-course border border-3 border-warning");
+    $("a.selected-course").removeClass(
+      "selected-course border border-3 border-warning"
+    );
 
     closest_a = $(this).closest("a");
 
@@ -554,7 +556,11 @@ let searchResultListener = function () {
       $("#main").css("pointer-events", "");
 
       // update URL
-      window.history.pushState({ restore: "right", html: res }, "", course_link);
+      window.history.pushState(
+        { restore: "right", html: res },
+        "",
+        course_link
+      );
 
       // add listener to new switches & modals, and re-initialize
       // all tooltips and toasts
@@ -619,7 +625,9 @@ let switchListener = function () {
         $(switchid).attr("data-bs-target", "#confirm-remove-waitlist");
         enableSwitchFunctions();
 
-        $(".toast-container").prepend(toastAdded.clone().attr("id", "toast-added-" + ++i));
+        $(".toast-container").prepend(
+          toastAdded.clone().attr("id", "toast-added-" + ++i)
+        );
         $("#toast-added-" + i).toast("show");
       });
     }
@@ -634,17 +642,21 @@ let autoResubSwitchListener = function () {
     $.post(`/update_auto_resub/${checkedProp}`, function (res) {
       if (res["isSuccess"]) {
         if (checkedProp) {
-          alert("Notification settings successfully changed: You will keep receiving open-spot notifications for a section until you manually unsubscribe.")
+          alert(
+            "Notification settings successfully changed: You will keep receiving open-spot notifications for a section until you manually unsubscribe."
+          );
         } else {
-          alert("Notification settings successfully changed: You will be automatically unsubscribed from a section upon first notification.")
+          alert(
+            "Notification settings successfully changed: You will be automatically unsubscribed from a section upon first notification."
+          );
         }
       } else {
         $("#auto-resub-switch").prop("checked", !checkedProp);
       }
       enableSwitchFunctions();
-    })
+    });
   });
-}
+};
 
 // listens for "Confirm" removal from waitlist
 let modalConfirmListener = function () {
@@ -663,13 +675,17 @@ let modalConfirmListener = function () {
       // decrements # tigers
       n_tigers.html(Number(n_tigers.html()) - 1);
 
-      $(`${switchid}.dashboard-switch`).closest("tr.dashboard-course-row").remove();
+      $(`${switchid}.dashboard-switch`)
+        .closest("tr.dashboard-course-row")
+        .remove();
       $(switchid).removeAttr("checked");
       $(switchid).removeAttr("data-bs-toggle");
       $(switchid).removeAttr("data-bs-target");
       enableSwitchFunctions();
 
-      $(".toast-container").prepend(toastRemoved.clone().attr("id", "toast-removed-" + ++i));
+      $(".toast-container").prepend(
+        toastRemoved.clone().attr("id", "toast-removed-" + ++i)
+      );
       $("#toast-removed-" + i).toast("show");
     });
   });
@@ -723,7 +739,9 @@ let searchSkip = function () {
 
 // initialize all tooltips
 let initTooltipsToasts = function () {
-  let tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
+  let tooltipTriggerList = [].slice.call(
+    document.querySelectorAll('[data-bs-toggle="tooltip"]')
+  );
   let tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
     return new bootstrap.Tooltip(tooltipTriggerEl);
   });
@@ -755,7 +773,9 @@ let getUserInfoListener = function () {
   let helper = function (res, label) {
     if (res["data"] === "missing") {
       $(".toast-container").prepend(
-        toastUserDoesNotExist.clone().attr("id", "toast-user-does-not-exist-" + ++i)
+        toastUserDoesNotExist
+          .clone()
+          .attr("id", "toast-user-does-not-exist-" + ++i)
       );
       $("#toast-user-does-not-exist-" + i).toast("show");
       enableAdminFunction();
@@ -777,7 +797,9 @@ let getUserInfoListener = function () {
     netid = e.target.getAttribute("data-netid");
     $.post(`/get_user_data/${netid}/${false}`, function (res) {
       helper(res, "user-data");
-      $("#staticBackdropLabelUserData").html(`Subscribed Sections for ${netid}`);
+      $("#staticBackdropLabelUserData").html(
+        `Subscribed Sections for ${netid}`
+      );
       enableAdminFunction();
     });
   });
@@ -918,7 +940,9 @@ let initToggleEmailNotificationsButton = function () {
 // helper method to display fail/success toasts for waitlist clearing
 let clearWaitlistsToastHelper = function (res) {
   if (!res["isSuccess"]) {
-    $(".toast-container").prepend(toastClearFail.clone().attr("id", "toast-clear-fail-" + ++i));
+    $(".toast-container").prepend(
+      toastClearFail.clone().attr("id", "toast-clear-fail-" + ++i)
+    );
     $("#toast-clear-fail-" + i).toast("show");
   } else {
     $(".toast-container").prepend(
@@ -932,7 +956,9 @@ let clearWaitlistsToastHelper = function (res) {
 let disableEnableCourseToastHelper = function (res) {
   if (!res["isSuccess"]) {
     $(".toast-container").prepend(
-      toastDisableEnableCourseFail.clone().attr("id", "toast-disable-enable-course-fail-" + ++i)
+      toastDisableEnableCourseFail
+        .clone()
+        .attr("id", "toast-disable-enable-course-fail-" + ++i)
     );
     $("#toast-disable-enable-course-fail-" + i).toast("show");
   } else {
@@ -948,7 +974,9 @@ let disableEnableCourseToastHelper = function (res) {
 // helper method to display fail/success toasts for waitlist clearing
 let fillSectionToastHelper = function (res) {
   if (!res["isSuccess"]) {
-    $(".toast-container").prepend(toastFillFail.clone().attr("id", "toast-clear-fail-" + ++i));
+    $(".toast-container").prepend(
+      toastFillFail.clone().attr("id", "toast-clear-fail-" + ++i)
+    );
     $("#toast-clear-fail-" + i).toast("show");
   } else {
     $(".toast-container").prepend(
@@ -965,7 +993,9 @@ let clearAllWaitlistsListener = function () {
     disableAdminFunction();
 
     if (
-      !confirm("Are you sure you want to clear all subscriptions? This action is irreversible.")
+      !confirm(
+        "Are you sure you want to clear all subscriptions? This action is irreversible."
+      )
     ) {
       enableAdminFunction();
       return;
@@ -985,7 +1015,11 @@ let clearAllTradesListener = function () {
     e.preventDefault();
     disableAdminFunction();
 
-    if (!confirm("Are you sure you want to clear all Trades? This action is irreversible.")) {
+    if (
+      !confirm(
+        "Are you sure you want to clear all Trades? This action is irreversible."
+      )
+    ) {
       enableAdminFunction();
       return;
     }
@@ -1004,7 +1038,11 @@ let clearAllLogsListener = function () {
     e.preventDefault();
     disableAdminFunction();
 
-    if (!confirm("Are you sure you want to clear all user logs? This action is irreversible.")) {
+    if (
+      !confirm(
+        "Are you sure you want to clear all user logs? This action is irreversible."
+      )
+    ) {
       enableAdminFunction();
       return;
     }
@@ -1128,7 +1166,9 @@ let getUserDataListener = function () {
   let helper = function (res, label) {
     if (res["data"] === "missing") {
       $(".toast-container").prepend(
-        toastUserDoesNotExist.clone().attr("id", "toast-user-does-not-exist-" + ++i)
+        toastUserDoesNotExist
+          .clone()
+          .attr("id", "toast-user-does-not-exist-" + ++i)
       );
       $("#toast-user-does-not-exist-" + i).toast("show");
       enableAdminFunction();
@@ -1150,7 +1190,9 @@ let getUserDataListener = function () {
     disableAdminFunction();
     $.post(`/get_user_data/${netid}/${false}`, function (res) {
       helper(res, "user-data");
-      $("#staticBackdropLabelUserData").html(`Subscribed Sections for ${netid}`);
+      $("#staticBackdropLabelUserData").html(
+        `Subscribed Sections for ${netid}`
+      );
       enableAdminFunction();
     });
   });
@@ -1173,7 +1215,9 @@ let blockUserListener = function () {
   let blockToastHelper = function (type) {
     if (type === "success") {
       $(".toast-container").prepend(
-        toastBlacklistSuccess.clone().attr("id", "toast-blacklist-success-" + ++i)
+        toastBlacklistSuccess
+          .clone()
+          .attr("id", "toast-blacklist-success-" + ++i)
       );
       $("#toast-blacklist-success-" + i).toast("show");
       $("*").css("pointer-events", "none");
@@ -1219,7 +1263,7 @@ let blockUserListener = function () {
       blockToastHelper("success");
     });
   });
-}
+};
 
 // disables trade functionality buttons
 let disableTradeFunction = function () {
@@ -1243,7 +1287,9 @@ let enableTradeFunction = function () {
 let updateSectionToastHelper = function (res) {
   if (!res["isSuccess"]) {
     $(".toast-container").prepend(
-      toastAddedSectionFail.clone().attr("id", "toast-updatesection-fail-" + ++i)
+      toastAddedSectionFail
+        .clone()
+        .attr("id", "toast-updatesection-fail-" + ++i)
     );
     $("#toast-updatesection-fail-" + i).toast("show");
   } else {
@@ -1258,12 +1304,16 @@ let updateSectionToastHelper = function (res) {
 let removeSectionToastHelper = function (res) {
   if (!res["isSuccess"]) {
     $(".toast-container").prepend(
-      toastRemovedSectionFail.clone().attr("id", "toast-removedsection-fail-" + ++i)
+      toastRemovedSectionFail
+        .clone()
+        .attr("id", "toast-removedsection-fail-" + ++i)
     );
     $("#toast-removedsection-fail-" + i).toast("show");
   } else {
     $(".toast-container").prepend(
-      toastRemovedSection.clone().attr("id", "toast-removedsection-success-" + ++i)
+      toastRemovedSection
+        .clone()
+        .attr("id", "toast-removedsection-success-" + ++i)
     );
     $("#toast-removedsection-success-" + i).toast("show");
   }
@@ -1409,7 +1459,9 @@ let findMatches = function () {
           window.open($(this).prop("href"), "_blank");
 
           $.post(
-            `/contact_trade/${coursename.split("/")[0]}/${matchNetid}/${matchSection}`,
+            `/contact_trade/${
+              coursename.split("/")[0]
+            }/${matchNetid}/${matchSection}`,
             function (res) {
               // checks that user successfully updated section on back-end
               $(".contact-button").attr("disabled", false);
@@ -1441,13 +1493,15 @@ let initTutorial = function () {
     if (window.location.pathname !== "/dashboard") return;
     if (window.innerWidth < 992) return;
     if (localStorage.getItem("EventTour") === doneKeyTutorial) return;
-    tutorial.setOptions({
-      showBullets: false,
-      showProgress: true,
-      tooltipClass: "tutorial-style",
-      exitOnOverlayClick: false,
-      exitOnEsc: false,
-    }).start()
+    tutorial
+      .setOptions({
+        showBullets: false,
+        showProgress: true,
+        tooltipClass: "tutorial-style",
+        exitOnOverlayClick: false,
+        exitOnEsc: false,
+      })
+      .start();
 
     tutorial.oncomplete(function () {
       localStorage.setItem("EventTour", doneKeyTutorial);
@@ -1457,20 +1511,23 @@ let initTutorial = function () {
       localStorage.setItem("EventTour", doneKeyTutorial);
     });
   });
-}
+};
 
 // contact information change listeners
 let initContactInfoChangeAlerts = function () {
   $("#new-email").submit(function (e) {
-    alert(`Email address successfully changed to ${$("#new-email-input").val()}!`);
+    alert(
+      `Email address successfully changed to ${$("#new-email-input").val()}!`
+    );
   });
 
   $("#new-phone").submit(function (e) {
     let newPhone = $("#new-phone-input").val();
     if (newPhone)
-      alert(`Phone number successfully changed to ${$("#new-phone-input").val()}!`);
-    else
-      alert("Phone number successfully removed!");
+      alert(
+        `Phone number successfully changed to ${$("#new-phone-input").val()}!`
+      );
+    else alert("Phone number successfully removed!");
   });
 
   let curr_email = $("#new-email-input").val();
@@ -1482,7 +1539,7 @@ let initContactInfoChangeAlerts = function () {
       return;
     }
     $(this).next("button").attr("disabled", false);
-  })
+  });
 
   $("#new-phone-input").on("input", function (e) {
     if ($("#new-phone-input").val() == curr_phone) {
@@ -1490,8 +1547,8 @@ let initContactInfoChangeAlerts = function () {
       return;
     }
     $(this).next("button").attr("disabled", false);
-  })
-}
+  });
+};
 
 // listens for account settings button and the account settings alert banner
 let accountSettings = function () {
@@ -1566,7 +1623,7 @@ let accountSettingsFunctions = function () {
   autoResubSwitchListener();
   initContactInfoChangeAlerts();
   accountSettings();
-}
+};
 
 // jQuery 'on' only applies listeners to elements currently on DOM
 // applies listeners to current elements when document is loaded
