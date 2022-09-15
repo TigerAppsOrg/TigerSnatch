@@ -139,6 +139,7 @@ class Notify:
                                 "dashboard_url": f"{TS_DOMAIN}/dashboard?&skip",
                                 "course_url": f"{TS_DOMAIN}/course?query=&courseid={self._courseid}&skip",
                                 "n_open_spots": self.n_new_slots,
+                                "n_other_students": len(self._netids) - 1,
                             },
                         }
                     ],
@@ -156,8 +157,8 @@ class Notify:
 
     def send_sms(self):
         reserved = "This course has reserved seats, so enrollment may not be possible. "
-        msg_unsubbed = f"{self._sectionname} in {self._deptnum} has {self.n_new_slots} open spot(s)! {reserved if self._has_reserved_seats else ''}Resubscribe: {TS_DOMAIN}/course?courseid={self._courseid}&skip"
-        msg_resubbed = f"{self._sectionname} in {self._deptnum} has {self.n_new_slots} open spot(s)! {reserved if self._has_reserved_seats else ''}Unsubscribe: {TS_DOMAIN}/dashboard?&skip"
+        msg_unsubbed = f"{self._sectionname} in {self._deptnum} has {self.n_new_slots} open spot(s)! {len(self._netids) - 1} other student(s) notified. {reserved if self._has_reserved_seats else ''}Resubscribe: {TS_DOMAIN}/course?courseid={self._courseid}&skip"
+        msg_resubbed = f"{self._sectionname} in {self._deptnum} has {self.n_new_slots} open spot(s)! {len(self._netids) - 1} other student(s) notified. {reserved if self._has_reserved_seats else ''}Unsubscribe: {TS_DOMAIN}/dashboard?&skip"
         send_text_args = []
         for i, phone in enumerate(self._phones):
             try:
