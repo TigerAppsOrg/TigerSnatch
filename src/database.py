@@ -701,9 +701,14 @@ class Database:
                 for data in waitlists:
                     if len(courses) >= target_num:
                         break
-                    deptnum, name, section, _ = self.classid_to_classinfo(
-                        data["classid"], entire_crosslisting=True
-                    )
+
+                    try:
+                        deptnum, name, section, _ = self.classid_to_classinfo(
+                            data["classid"], entire_crosslisting=True
+                        )
+                    except:
+                        continue
+
                     if deptnum not in courses:
                         courses.add(deptnum)
                         res.append(
@@ -719,11 +724,18 @@ class Database:
 
         else:
             try:
-                waitlists = self.get_all_subscriptions_raw()[0:target_num]
+                waitlists = self.get_all_subscriptions_raw()
                 for data in waitlists:
-                    deptnum, name, section, _ = self.classid_to_classinfo(
-                        data["classid"], entire_crosslisting=True
-                    )
+                    if len(res) >= target_num:
+                        break
+
+                    try:
+                        deptnum, name, section, _ = self.classid_to_classinfo(
+                            data["classid"], entire_crosslisting=True
+                        )
+                    except:
+                        continue
+
                     res.append(
                         {
                             "deptnum": deptnum,
