@@ -1871,3 +1871,26 @@ if __name__ == "__main__":
                 continue
             for section in sections[1].split(", "):
                 f.write(f'{doc["time"].isoformat()} {section}\n')
+
+    # generate unique number of users who subscribed in a given period
+    db = Database()._db
+    # change the datetime
+    res = db.system.find(
+        {
+            "type": "subscription",
+            "time": {"$gt": datetime.datetime(2022, 3, 24, 0, 0, 0, 0)},
+            "message": {"$regex": " subscribed"},
+        },
+        {"message": 1, "_id": 0},
+    )
+    res = list(res)
+
+    user_set = set()
+    for message in res:
+        text = message["message"]
+        end_idx = text.find(" successfully")
+        start_idx = 5
+        name = text[start_idx:end_idx]
+        user_set.add(name)
+
+    print(len(user_set))
