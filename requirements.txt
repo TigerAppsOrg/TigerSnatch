@@ -8,7 +8,7 @@ Jinja2==3.1.1
 dnspython==1.16.0
 APScheduler==3.7.0
 heroku3==4.2.3
-pandas==1.2.3
+pandas==1.5.1
 sendgrid==6.0.5
 twilio==6.63.0
 markdown==3.3.6
