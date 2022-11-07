@@ -1481,9 +1481,8 @@ let findMatches = function () {
 };
 
 // change the name of this variable to force all users to see the tutorial and the alert banner
-var doneKeyTutorial = "completed3";
-var doneKeyBanner = "completed6";
-var doneKeyFeedbackBanner = "completed1";
+var doneKeyTutorial = "completed4";
+var doneKeyBanner = "completed7";
 
 // introJS tutorial
 let initTutorial = function () {
@@ -1562,13 +1561,6 @@ let accountSettings = function () {
 
   $("#new-features-alert-close").click(function (e) {
     localStorage.setItem("NewFeaturesAlert", doneKeyBanner);
-  });
-
-  if (localStorage.getItem("FeedbackAlert") !== doneKeyFeedbackBanner)
-    $("#feedback-alert").removeClass("d-none");
-
-  $("#feedback-alert-close").click(function (e) {
-    localStorage.setItem("FeedbackAlert", doneKeyFeedbackBanner);
   });
 };
 
