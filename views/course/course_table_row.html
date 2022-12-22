@@ -39,7 +39,14 @@
 {% endif %} {% else %}
 <td></td>
 {% endif %}
-<td>{{class.wl_size}}</td>
+<td>
+  {{class.wl_size}}
+  {% if class.wl_size > 0 %}
+  <button id="subs-stats-button"
+          type="button"
+          class="btn btn-warning py-0 px-1 ms-1">Who?</button>
+  {% endif %}
+</td>
 <td>{{class.time_of_last_notif}}</td>
 <td>{{'Open' if class.status_is_open else 'Closed'}}</td>
 <td>{{class.enrollment}} / {{class.capacity}}</td>
