@@ -47,7 +47,7 @@
           class="btn btn-warning py-0 px-1 ms-1"
           data-bs-toggle="tooltip"
           data-bs-placement="auto"
-          title="Todo <br /> Todo">Who?</button>
+          title="{{class.subs_stats | replace('|', '<br/>')}}">Who?</button>
   {% endif %}
 </td>
 <td>{{class.time_of_last_notif}}</td>
