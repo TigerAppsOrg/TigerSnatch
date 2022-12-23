@@ -50,8 +50,23 @@ def pull_course(courseid, db: Database):
             return "Failed to get data"
 
         netids = waitlist_obj.get("waitlist")
+        users = db.get_users(netids)
 
-        return "|".join(netids)
+        years = {}
+        for user in users:
+            try:
+                year = user["year"]
+            except:
+                continue
+
+            if year not in years:
+                years[year] = 0
+            years[year] += 1
+
+        years_fmt = [f"{year}: {count}" for year, count in years.items()]
+        years_fmt.sort()
+
+        return "|".join(years_fmt)
 
     if courseid is None or courseid == "" or db.get_course(courseid) is None:
         return None, None

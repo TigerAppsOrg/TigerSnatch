@@ -932,6 +932,11 @@ class Database:
         except:
             raise Exception(f"failed to get key {key} for netid {netid}")
 
+    # return data for all users in array netids
+
+    def get_users(self, netids):
+        return list(self._db.users.find({"netid": {"$in": netids}}))
+
     # returns all data needed to display user waitlists on dashboard
 
     def get_dashboard_data(self, netid):
