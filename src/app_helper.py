@@ -59,6 +59,9 @@ def pull_course(courseid, db: Database):
             except:
                 continue
 
+            if not year:
+                year = "Other"
+
             if year not in years:
                 years[year] = 0
             years[year] += 1
