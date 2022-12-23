@@ -41,10 +41,17 @@ def do_search(query, db):
 
 # pulls most recent course info and returns dictionary with
 # course details and list with class info
-def pull_course(courseid, db):
-    def generate_subs_stats_string():
+def pull_course(courseid, db: Database):
+    def generate_subs_stats_string(classid):
         # "|" represents a newline character
-        return "Todo|Todo"
+        waitlist_obj = db.get_class_waitlist(classid)
+
+        if not waitlist_obj or not waitlist_obj.get("waitlist"):
+            return "Failed to get data"
+
+        netids = waitlist_obj.get("waitlist")
+
+        return "|".join(netids)
 
     if courseid is None or courseid == "" or db.get_course(courseid) is None:
         return None, None
@@ -60,19 +67,20 @@ def pull_course(courseid, db):
     for key in course.keys():
         if key.startswith("class_"):
             curr_class = course[key]
+            classid = curr_class["classid"]
             try:
-                waitlist_count = db.get_class_waitlist_size(curr_class["classid"])
+                waitlist_count = db.get_class_waitlist_size(classid)
             except Exception:
                 waitlist_count = 0
             try:
-                time_of_last_notif = db.get_time_of_last_notif(curr_class["classid"])
+                time_of_last_notif = db.get_time_of_last_notif(classid)
             except Exception:
                 time_of_last_notif = None
             curr_class["wl_size"] = waitlist_count
             curr_class["time_of_last_notif"] = (
                 time_of_last_notif if time_of_last_notif is not None else "-"
             )
-            curr_class["subs_stats"] = generate_subs_stats_string()
+            curr_class["subs_stats"] = generate_subs_stats_string(classid)
             classes_list.append(curr_class)
         else:
             course_details[key] = course[key]
