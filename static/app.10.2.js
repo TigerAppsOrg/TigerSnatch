@@ -625,6 +625,13 @@ let switchListener = function () {
         originalStatsSubs = parts.slice(1).join(" ");
         newHTML = String(newNumber) + originalStatsSubs;
         n_tigers.html(String(newNumber) + originalStatsSubs);
+
+        statsSubsBadge = n_tigers.children()[0];
+        $(statsSubsBadge).attr(
+          "data-bs-original-title",
+          "Reload to see stats!"
+        );
+
         initTooltipsToasts();
 
         $(switchid).attr("checked", true);
@@ -687,6 +694,10 @@ let modalConfirmListener = function () {
       originalStatsSubs = parts.slice(1).join(" ");
       newHTML = String(newNumber) + originalStatsSubs;
       n_tigers.html(String(newNumber) + originalStatsSubs);
+
+      statsSubsBadge = n_tigers.children()[0];
+      $(statsSubsBadge).attr("data-bs-original-title", "Reload to see stats!");
+
       initTooltipsToasts();
 
       $(`${switchid}.dashboard-switch`)
