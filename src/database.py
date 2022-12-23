@@ -7,6 +7,7 @@
 from sys import stderr, stdout
 import re
 import certifi
+from activedirectory import ActiveDirectory
 from config import (
     DB_CONNECTION_STR,
     COLLECTIONS,
@@ -851,6 +852,24 @@ class Database:
     # creates user entry in users collection
 
     def create_user(self, netid):
+        def get_year():
+            data = ActiveDirectory(Database()).get_user(netid)
+
+            if not data:
+                print("no ActiveDirectory data found for user", netid)
+                return None
+
+            data = data[0]
+            pustatus = data["pustatus"]
+            if pustatus == "graduate":
+                return "Grad"
+            elif pustatus == "undergraduate":
+                return data["department"].split(" ")[-1]
+            elif pustatus == "fac" or pustatus == "stf":
+                return "Faculty"
+
+            return None
+
         if self.is_user_created(netid):
             print(f"user {netid} already exists", file=stderr)
             return
@@ -863,6 +882,7 @@ class Database:
                 "waitlists": [],
                 "current_sections": {},
                 "auto_resub": False,
+                "year": get_year(),
             }
         )
         self._db.notifs.insert_one({"netid": netid})

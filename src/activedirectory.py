@@ -9,14 +9,13 @@ import requests
 import json
 import base64
 from config import CONSUMER_KEY, CONSUMER_SECRET
-from database import Database
 from time import time
 
 
 class ActiveDirectory:
-    def __init__(self):
+    def __init__(self, db):
         self.configs = Configs()
-        self._db = Database()
+        self._db = db
 
     # wrapper function for _getJSON with the users endpoint.
 
@@ -98,6 +97,8 @@ class Configs:
 
 
 if __name__ == "__main__":
+    from database import Database
+
     api = ActiveDirectory()
     db = Database()
     all_users = db._db.users.find({})
