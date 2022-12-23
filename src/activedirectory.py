@@ -99,4 +99,31 @@ class Configs:
 
 if __name__ == "__main__":
     api = ActiveDirectory()
-    print(api.get_user("ntyp"))
+    db = Database()
+    all_users = db._db.users.find({})
+
+    i = 1
+    for user in all_users:
+        netid = user["netid"]
+        print(f"processing user {netid} ({i})")
+        i += 1
+        data = api.get_user(netid)
+
+        if not data:
+            print("no data found for user", netid)
+            db._db.users.update_one({"netid": netid}, {"$set": {"year": None}})
+            continue
+
+        data = data[0]
+        pustatus = data["pustatus"]
+        if pustatus == "graduate":
+            year = "Grad"
+        elif pustatus == "undergraduate":
+            year = data["department"].split(" ")[-1]
+        elif pustatus == "fac" or pustatus == "stf":
+            year = "Faculty"
+        else:
+            year = None
+
+        print("year set as", year)
+        db._db.users.update_one({"netid": netid}, {"$set": {"year": year}})
