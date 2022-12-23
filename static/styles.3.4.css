@@ -518,6 +518,6 @@ label.stats-top-course {
     width: 80%;
     margin: auto;
 }
-#stats-subs-badge {
+.stats-subs-badge {
     cursor: help;
 }
