@@ -617,20 +617,19 @@ let switchListener = function () {
           return;
         }
 
-        // increments # tigers
-        originalHTML = n_tigers.html();
-        parts = originalHTML.trim().split(" ");
-        originalNumber = Number(parts[0].trim());
+        // increment # tigers and change tooltip message
+        originalNumber = Number(n_tigers.text().trim());
         newNumber = originalNumber + 1;
-        originalStatsSubs = parts.slice(1).join(" ");
-        newHTML = String(newNumber) + originalStatsSubs;
-        n_tigers.html(String(newNumber) + originalStatsSubs);
-
-        statsSubsBadge = n_tigers.children()[0];
-        $(statsSubsBadge).attr(
-          "data-bs-original-title",
-          "Reload to see stats!"
-        );
+        statsBadge = n_tigers.children()[0];
+        if (statsBadge != null) {
+          n_tigers.html(`${newNumber} ${statsBadge.outerHTML}`);
+          $(n_tigers.children()[0]).attr(
+            "data-bs-original-title",
+            "Reload to see stats!"
+          );
+        } else {
+          n_tigers.html(`${newNumber}`);
+        }
 
         initTooltipsToasts();
 
@@ -686,17 +685,19 @@ let modalConfirmListener = function () {
       // checks that user successfully removed from waitlist on back-end
       if (!res["isSuccess"]) return;
 
-      // decrements # tigers
-      originalHTML = n_tigers.html();
-      parts = originalHTML.trim().split(" ");
-      originalNumber = Number(parts[0].trim());
+      // decrement # tigers and change tooltip message
+      originalNumber = Number(n_tigers.text().trim());
       newNumber = originalNumber - 1;
-      originalStatsSubs = parts.slice(1).join(" ");
-      newHTML = String(newNumber) + originalStatsSubs;
-      n_tigers.html(String(newNumber) + originalStatsSubs);
-
-      statsSubsBadge = n_tigers.children()[0];
-      $(statsSubsBadge).attr("data-bs-original-title", "Reload to see stats!");
+      statsBadge = n_tigers.children()[0];
+      if (statsBadge != null && newNumber !== 0) {
+        n_tigers.html(`${newNumber} ${statsBadge.outerHTML}`);
+        $(n_tigers.children()[0]).attr(
+          "data-bs-original-title",
+          "Reload to see stats!"
+        );
+      } else {
+        n_tigers.html(`${newNumber}`);
+      }
 
       initTooltipsToasts();
 
