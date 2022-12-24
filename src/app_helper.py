@@ -68,6 +68,7 @@ def pull_course(courseid, db: Database):
 
         years_fmt = [f"{year}: {count}" for year, count in years.items()]
         years_fmt.sort()
+        years_fmt = ["Who's subscribed?"] + years_fmt
 
         return "|".join(years_fmt)
 
