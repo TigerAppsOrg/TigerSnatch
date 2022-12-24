@@ -520,4 +520,8 @@ label.stats-top-course {
 }
 .stats-subs-badge {
     cursor: help;
+    padding-left: 3px;
+    padding-right: 2.4px;
+    padding-bottom: 0.9px;
+    padding-top: 4px;
 }
