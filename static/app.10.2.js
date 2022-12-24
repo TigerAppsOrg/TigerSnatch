@@ -618,7 +618,21 @@ let switchListener = function () {
         }
 
         // increments # tigers
-        n_tigers.html(Number(n_tigers.html()) + 1);
+        originalHTML = n_tigers.html();
+        parts = originalHTML.trim().split(" ");
+        originalNumber = Number(parts[0].trim());
+        newNumber = originalNumber + 1;
+        originalStatsSubs = parts.slice(1).join(" ");
+        newHTML = String(newNumber) + originalStatsSubs;
+        n_tigers.html(String(newNumber) + originalStatsSubs);
+
+        statsSubsBadge = n_tigers.children()[0];
+        $(statsSubsBadge).attr(
+          "data-bs-original-title",
+          "Reload to see stats!"
+        );
+
+        initTooltipsToasts();
 
         $(switchid).attr("checked", true);
         $(switchid).attr("data-bs-toggle", "modal");
@@ -673,7 +687,18 @@ let modalConfirmListener = function () {
       if (!res["isSuccess"]) return;
 
       // decrements # tigers
-      n_tigers.html(Number(n_tigers.html()) - 1);
+      originalHTML = n_tigers.html();
+      parts = originalHTML.trim().split(" ");
+      originalNumber = Number(parts[0].trim());
+      newNumber = originalNumber - 1;
+      originalStatsSubs = parts.slice(1).join(" ");
+      newHTML = String(newNumber) + originalStatsSubs;
+      n_tigers.html(String(newNumber) + originalStatsSubs);
+
+      statsSubsBadge = n_tigers.children()[0];
+      $(statsSubsBadge).attr("data-bs-original-title", "Reload to see stats!");
+
+      initTooltipsToasts();
 
       $(`${switchid}.dashboard-switch`)
         .closest("tr.dashboard-course-row")
@@ -743,7 +768,7 @@ let initTooltipsToasts = function () {
     document.querySelectorAll('[data-bs-toggle="tooltip"]')
   );
   let tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
-    return new bootstrap.Tooltip(tooltipTriggerEl);
+    return new bootstrap.Tooltip(tooltipTriggerEl, { html: true });
   });
   $("#status-indicator").on("click", function (e) {
     e.preventDefault();
