@@ -590,13 +590,18 @@ class Database:
             total_count = sum([e[1] for e in counts])
 
             ret = ""
+            other_str = ""
             for year, count in counts:
+                percentage = round(count / total_count * 100, 1)
                 if not year:
-                    year = "Other"
-                percentage = round(count / total_count * 100, 2)
-                ret += f"{year}: {count} - {percentage}%, "
+                    other_str = f"other: {count} ({percentage}%)"
+                    continue
+                ret += f"{year}: {count} ({percentage}%), "
 
-            return ret[:-2]
+            if not other_str:
+                return ret[:-2]
+
+            return ret + other_str
 
         def get_total_subscriptions():
             data = self._db.waitlists.find({}, {"waitlist": 1, "_id": 0})
