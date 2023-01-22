@@ -570,6 +570,34 @@ class Database:
         def get_total_users():
             return self._db.users.count_documents({})
 
+        def get_user_distribution():
+            res = self._db.users.aggregate(
+                [
+                    {"$group": {"_id": {"$toLower": "$year"}, "count": {"$sum": 1}}},
+                    {
+                        "$group": {
+                            "_id": None,
+                            "counts": {"$push": {"k": "$_id", "v": "$count"}},
+                        }
+                    },
+                    {"$replaceRoot": {"newRoot": {"$arrayToObject": "$counts"}}},
+                ]
+            )
+
+            counts = list(res)[0]
+            counts = [(year, count) for year, count in counts.items()]
+            counts.sort(key=lambda x: x[1], reverse=True)
+            total_count = sum([e[1] for e in counts])
+
+            ret = ""
+            for year, count in counts:
+                if not year:
+                    year = "Other"
+                percentage = round(count / total_count * 100, 2)
+                ret += f"{year}: {count} - {percentage}%, "
+
+            return ret[:-2]
+
         def get_total_subscriptions():
             data = self._db.waitlists.find({}, {"waitlist": 1, "_id": 0})
             return sum([len(k["waitlist"]) for k in data])
@@ -621,22 +649,25 @@ class Database:
                 )
             )
 
+        line_break = "===================="
+
         try:
             res = [
                 f"Current term: {get_current_term_name()}",
-                f"# users: {get_total_users()}",
-                f"# users with >0 subscriptions: {self.get_users_who_subscribe()}",
-                f"# users with auto resub on: {get_users_who_auto_resub()}",
-                f"# subscriptions: {get_total_subscriptions()}",
-                f"# subscribed sections: {self.get_num_subscribed_sections()}",
-                f"# subscribed courses: {self.get_num_subscribed_courses()}",
-                f"# notifications sent: {self.get_email_counter()}",
-                "====================",
+                f"Users: {get_total_users()}",
+                f"Userbase: {get_user_distribution()}",
+                f"Users with >0 subscriptions: {self.get_users_who_subscribe()}",
+                f"Users with auto resub on: {get_users_who_auto_resub()}",
+                f"Subscriptions: {get_total_subscriptions()}",
+                f"Subscribed sections: {self.get_num_subscribed_sections()}",
+                f"Subscribed courses: {self.get_num_subscribed_courses()}",
+                f"Notifications sent: {self.get_email_counter()}",
+                line_break,
             ]
             res.extend(get_top_n_subscribed_sections(n=10))
-            res.append("====================")
+            res.append(line_break)
             res.extend(get_disabled_courses())
-            res.append("====================")
+            res.append(line_break)
             res.extend(get_notifs_schedule())
             return "{".join(res)
 
