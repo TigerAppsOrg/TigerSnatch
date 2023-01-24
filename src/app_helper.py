@@ -47,30 +47,42 @@ def pull_course(courseid, db: Database):
         waitlist_obj = db.get_class_waitlist(classid)
 
         if not waitlist_obj or not waitlist_obj.get("waitlist"):
-            return "Failed to get data"
+            fail_msg = "Failed to get data"
+            return fail_msg, fail_msg
 
         netids = waitlist_obj.get("waitlist")
         users = db.get_users(netids)
 
-        years = {}
+        netids = {}
         for user in users:
             try:
                 year = user["year"]
+                netid = user["netid"]
             except:
                 continue
 
             if not year:
                 year = "Other"
 
-            if year not in years:
-                years[year] = 0
-            years[year] += 1
+            if year not in netids:
+                netids[year] = []
 
-        years_fmt = [f"{year}: {count}" for year, count in years.items()]
+            netids[year].append(netid)
+
+        years_fmt = [f"{year}: {len(users)}" for year, users in netids.items()]
+        years_fmt_admin = [
+            f"{year}: {len(users)} ({', '.join(users)})"
+            for year, users in netids.items()
+        ]
+
         years_fmt.sort()
-        years_fmt = ["Who's subscribed?"] + years_fmt
+        years_fmt_admin.sort()
 
-        return "|".join(years_fmt)
+        header = ["Who's subscribed?"]
+        years_fmt = header + years_fmt
+        years_fmt_admin = header + years_fmt_admin
+
+        return "|".join(years_fmt), "|".join(years_fmt_admin)
 
     if courseid is None or courseid == "" or db.get_course(courseid) is None:
         return None, None
@@ -99,7 +111,10 @@ def pull_course(courseid, db: Database):
             curr_class["time_of_last_notif"] = (
                 time_of_last_notif if time_of_last_notif is not None else "-"
             )
-            curr_class["subs_stats"] = generate_subs_stats_string(classid)
+            (
+                curr_class["subs_stats"],
+                curr_class["subs_stats_admin"],
+            ) = generate_subs_stats_string(classid)
             classes_list.append(curr_class)
         else:
             course_details[key] = course[key]

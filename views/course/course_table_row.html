@@ -45,7 +45,7 @@
   <span class="stats-subs-badge badge bg-primary text-light ms-1"
         data-bs-toggle="tooltip"
         data-bs-placement="auto"
-        title="{{class.subs_stats | replace('|', '<br/>')}}">
+        title="{{class.subs_stats | replace('|', '<br/>') if not user_is_admin else class.subs_stats_admin | replace('|', '<br/>')}}">
     <svg xmlns="http://www.w3.org/2000/svg"
          width="12"
          height="15"
