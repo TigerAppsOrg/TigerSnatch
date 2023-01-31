@@ -52,6 +52,9 @@ class Notify:
                 #   1. the number of new spots (non-zero) has changed from the previous count
                 #   2. it's been more than MIN_NOTIFS_DELAY_MINS minutes since the last notif was sent
                 temp_netids = []
+                print(
+                    f"course {self._deptnum}, original netids: {self._netids} (length {len(self._netids)})"
+                )
                 for netid in self._netids:
                     # if user is not auto resubbed, then always send notif
                     # (they will be removed from waitlist in this script anyway)
@@ -69,11 +72,18 @@ class Notify:
                         and time_diff_mins >= MIN_NOTIFS_DELAY_MINS
                     )
 
+                    print(
+                        f"course {self._deptnum}, user {netid}: open_spots_changed is {open_spots_changed}, notifs_delay_exceeded is {notifs_delay_exceeded}, notifying: {open_spots_changed or notifs_delay_exceeded}"
+                    )
+
                     # send notif if # open spots changes OR if last_notif time is >=MIN_NOTIFS_DELAY_MINS mins ago
                     if open_spots_changed or notifs_delay_exceeded:
                         temp_netids.append(netid)
                 self._netids = temp_netids
                 db.update_users_notifs_history(self._netids, classid, n_new_slots)
+                print(
+                    f"course {self._deptnum}, filtered netids: {self._netids} (length {len(self._netids)})"
+                )
 
             self._emails = []
             self._phones = []
