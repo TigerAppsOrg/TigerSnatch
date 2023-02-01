@@ -83,7 +83,8 @@ class Notify:
                 self._phones.append(db.get_user(netid, "phone"))
                 db.update_user_waitlist_log(netid, user_log)
 
-            db.update_time_of_last_notif(classid)
+            if len(self._netids) > 0:
+                db.update_time_of_last_notif(classid)
 
         except Exception as e:
             raise Exception(
