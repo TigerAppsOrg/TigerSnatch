@@ -136,26 +136,30 @@ class Notify:
                         # no auto-resub | no reserved seats
                         template_id = "d-2607514c41ef48cdb649bad3d4f0c660"
 
+                template_data = {
+                    "netid": self._netids[i],
+                    "sectionname": self._sectionname,
+                    "coursename": self._coursename,
+                    "deptnum": self._deptnum,
+                    "tigerhub_url": "https://phubprod.princeton.edu/psp/phubprod/?cmd=start",
+                    "dashboard_url": f"{TS_DOMAIN}/dashboard?&skip",
+                    "course_url": f"{TS_DOMAIN}/course?query=&courseid={self._courseid}&skip",
+                    "n_open_spots": self.n_new_slots,
+                    "n_other_students": len(self._netids) - 1,
+                }
+
                 data = {
-                    "personalizations": [
-                        {
-                            "to": [{"email": self._emails[i]}],
-                            "dynamic_template_data": {
-                                "netid": self._netids[i],
-                                "sectionname": self._sectionname,
-                                "coursename": self._coursename,
-                                "deptnum": self._deptnum,
-                                "tigerhub_url": "https://phubprod.princeton.edu/psp/phubprod/?cmd=start",
-                                "dashboard_url": f"{TS_DOMAIN}/dashboard?&skip",
-                                "course_url": f"{TS_DOMAIN}/course?query=&courseid={self._courseid}&skip",
-                                "n_open_spots": self.n_new_slots,
-                                "n_other_students": len(self._netids) - 1,
-                            },
-                        }
-                    ],
+                    "personalizations": [template_data],
                     "from": {"email": TS_EMAIL, "name": "TigerSnatch"},
                     "template_id": template_id,
                 }
+
+                self.db._add_system_log(
+                    "notif_email",
+                    template_data,
+                    netid=self._netids[i],
+                    print_=False,
+                )
 
                 send_email_args.append([data])
             except Exception as e:
@@ -179,6 +183,18 @@ class Notify:
                             phone,
                             msg_resubbed if is_auto_resub else msg_unsubbed,
                         ]
+                    )
+
+                    self.db._add_system_log(
+                        "notif_text",
+                        {
+                            "netid": self._netids[i],
+                            "sectionname": self._sectionname,
+                            "coursename": self._coursename,
+                            "deptnum": self._deptnum,
+                        },
+                        netid=self._netids[i],
+                        print_=False,
                     )
                 if not is_auto_resub:
                     self.db.remove_from_waitlist(self._netids[i], self._classid)
