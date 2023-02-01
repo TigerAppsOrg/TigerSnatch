@@ -1623,9 +1623,8 @@ class Database:
 
         self._add_system_log(
             "subscription",
-            {
-                "message": f"user {netid} successfully subscribed to class {classid} in {coursedeptnum}"
-            },
+            {"message": f"{netid} subscribed to class {classid} ({coursedeptnum})"},
+            netid=netid,
         )
 
         return 1
@@ -1683,9 +1682,8 @@ class Database:
 
         self._add_system_log(
             "subscription",
-            {
-                "message": f"user {netid} successfully unsubscribed from class {classid} in {coursedeptnum}"
-            },
+            {"message": f"{netid} unsubscribed from class {classid} ({coursedeptnum})"},
+            netid=netid,
         )
 
     # ----------------------------------------------------------------------
