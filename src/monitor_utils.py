@@ -64,6 +64,12 @@ def get_new_mobileapp_data(
                 continue
             # skip classes whose status is not "Open" (enrollment is not possible)
             if class_["pu_calc_status"] != "Open":
+                # set number of open spots to 0 for all subscribers to this class
+                # ensures that notifications are sent after this sequence of events:
+                # 1. x spots open  2. x spots are taken and/or the class is closed
+                # 3. x spots open again/remain open within the non-notification time frame
+                db.update_users_notifs_history([], classid, 0)
+
                 # for classes with reserved seats that are currently Closed, update (rolling)
                 # previous enrollment with new enrollment. if a class is Open, this will
                 # happen in CourseWrapper.
