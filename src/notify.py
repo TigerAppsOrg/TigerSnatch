@@ -148,6 +148,22 @@ class Notify:
                 }
 
                 send_email_args.append([data])
+
+                self.db._add_system_log(
+                    "notif_email",
+                    {
+                        "netid": self._netids[i],
+                        "sectionname": self._sectionname,
+                        "coursename": self._coursename,
+                        "deptnum": self._deptnum,
+                        "n_other_students": len(self._netids) - 1,
+                        "n_open_spots": self.n_new_slots,
+                        "reserved_seats": self._has_reserved_seats,
+                        "email": self._emails[i],
+                    },
+                    netid=self._netids[i],
+                    print_=False,
+                )
             except Exception as e:
                 print(e, file=stderr)
 
@@ -172,6 +188,23 @@ class Notify:
                     )
                 if not is_auto_resub:
                     self.db.remove_from_waitlist(self._netids[i], self._classid)
+
+                if phone != "":
+                    self.db._add_system_log(
+                        "notif_text",
+                        {
+                            "netid": self._netids[i],
+                            "sectionname": self._sectionname,
+                            "coursename": self._coursename,
+                            "deptnum": self._deptnum,
+                            "n_other_students": len(self._netids) - 1,
+                            "n_open_spots": self.n_new_slots,
+                            "reserved_seats": self._has_reserved_seats,
+                            "phone": phone,
+                        },
+                        netid=self._netids[i],
+                        print_=False,
+                    )
             except Exception as e:
                 print(e, file=stderr)
 
