@@ -542,6 +542,7 @@ class Database:
                 if trades
                 else self.get_user(netid, "waitlists")
             )
+            year = self.get_user(netid, "year")
         except:
             print("user", netid, "does not exist", file=stderr)
             return "missing"
@@ -554,10 +555,13 @@ class Database:
                 continue
             res.append(f"{name} ({deptnum}): {section}")
 
-        if len(res) == 0:
-            return "No data"
+        if not year:
+            year = "Other"
 
-        return "{".join(sorted(res))
+        if len(res) == 0:
+            return "{".join([f"Year: {year}", "No data"])
+
+        return "{".join([f"Year: {year}"] + sorted(res))
 
     # generates TigerSnatch usage summary: # users, total subscriptions,
     # top n most-subscribed sections, list of scheduled notifications
