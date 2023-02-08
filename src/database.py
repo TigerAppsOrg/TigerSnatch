@@ -16,6 +16,7 @@ from config import (
     MAX_ADMIN_LOG_LENGTH,
     HEROKU_API_KEY,
     HEROKU_APP_NAME,
+    MAX_AUTO_RESUB_NOTIFS,
 )
 from schema import COURSES_SCHEMA, CLASS_SCHEMA, MAPPINGS_SCHEMA, ENROLLMENTS_SCHEMA
 from pymongo import MongoClient
@@ -1103,14 +1104,37 @@ class Database:
 
     # returns whether user opted to auto resubscribe
 
-    def get_user_auto_resub(self, netid):
+    def get_user_auto_resub(self, netid, classid=""):
         try:
             auto_resub_dict = self._db.users.find_one(
                 {"netid": netid}, {"auto_resub": 1, "_id": 0}
             )
             if "auto_resub" not in auto_resub_dict:
                 return False
-            return auto_resub_dict["auto_resub"]
+
+            # if classID is not provided (i.e. old behavior), just return the actual value of auto_resub
+            # (the only time classID is provided is when we're checking whether to unsub the user of not)
+            if classid == "":
+                return auto_resub_dict["auto_resub"]
+
+            # if classID is provided, check whether or not the user has exceeded the maximum notification
+            # count for the given classID (the user is subscribed to this classID)
+
+            # if auto-resub is False, just return False (and unsub them)
+            if not auto_resub_dict["auto_resub"]:
+                return False
+
+            # if auto-resub is True, check whether user has exceeded max number of notifs for the classID
+
+            user_notifs_history = self.get_user_notifs_history(netid, classid)
+            num_notifs_for_classid = user_notifs_history.get("num_notifs", 0)
+
+            # if the max number of notifs is reached, return False (and unsub them)
+            if num_notifs_for_classid >= MAX_AUTO_RESUB_NOTIFS:
+                return False
+
+            # otherwise the max number of notifs has not yet been exceeded, so return True (auto-resub them)
+            return True
         except:
             raise Exception(f"failed to get key auto_resub flag for netid {netid}")
 
