@@ -11,7 +11,7 @@ from flask import Flask
 from flask import render_template, make_response, request, redirect, url_for, jsonify
 from database import Database
 from CASClient import CASClient
-from config import APP_SECRET_KEY
+from config import APP_SECRET_KEY, MAX_AUTO_RESUB_NOTIFS
 from waitlist import Waitlist
 from app_helper import (
     do_search,
@@ -191,6 +191,7 @@ def dashboard():
         notifs_online=notifs_status_data["notifs_online"],
         next_notifs=notifs_status_data["next_notifs"],
         term_name=notifs_status_data["term_name"],
+        max_auto_resub_notifs=MAX_AUTO_RESUB_NOTIFS,
     )
 
     return make_response(html)
