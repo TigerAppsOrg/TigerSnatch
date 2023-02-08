@@ -1636,7 +1636,7 @@ class Database:
     # removes user of given netid to waitlist for class classid
     # if waitlist for class is empty now, delete entry from waitlists collection
 
-    def remove_from_waitlist(self, netid, classid):
+    def remove_from_waitlist(self, netid, classid, force_remove=False):
         def validate(courseid):
             if not self.is_user_created(netid):
                 raise Exception(f"user {netid} does not exist")
@@ -1657,29 +1657,32 @@ class Database:
 
         netid = netid.strip()
         coursedeptnum, courseid = self.classid_to_course_info(classid)
-        validate(courseid)
+        if not force_remove:
+            validate(courseid)
 
         # remove classid from user's waitlist
         user_waitlists = self.get_user(netid, "waitlists")
-        user_waitlists.remove(classid)
-        self._db.users.update_one(
-            {"netid": netid}, {"$set": {"waitlists": user_waitlists}}
-        )
+        if classid in user_waitlists:
+            user_waitlists.remove(classid)
+            self._db.users.update_one(
+                {"netid": netid}, {"$set": {"waitlists": user_waitlists}}
+            )
 
         # remove user from waitlist for classid
         class_waitlist = self.get_class_waitlist(classid)["waitlist"]
-        class_waitlist.remove(netid)
-        if len(class_waitlist) == 0:
-            self._db.waitlists.delete_one({"classid": classid})
-            # reset prev_enrollment to 0 if the course has reserved seats
-            if self.does_course_have_reserved_seats(
-                self.classid_to_course_info(classid)[1]
-            ):
-                self.update_prev_enrollment_RESERVED_SEATS_ONLY(classid, 0)
-        else:
-            self._db.waitlists.update_one(
-                {"classid": classid}, {"$set": {"waitlist": class_waitlist}}
-            )
+        if netid in class_waitlist:
+            class_waitlist.remove(netid)
+            if len(class_waitlist) == 0:
+                self._db.waitlists.delete_one({"classid": classid})
+                # reset prev_enrollment to 0 if the course has reserved seats
+                if self.does_course_have_reserved_seats(
+                    self.classid_to_course_info(classid)[1]
+                ):
+                    self.update_prev_enrollment_RESERVED_SEATS_ONLY(classid, 0)
+            else:
+                self._db.waitlists.update_one(
+                    {"classid": classid}, {"$set": {"waitlist": class_waitlist}}
+                )
 
         # remove class from user's document in notifs collection
         self._db.notifs.update_one({"netid": netid}, {"$unset": {classid: ""}})

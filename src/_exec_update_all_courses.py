@@ -28,6 +28,7 @@ from sys import argv, exit
 from time import time
 from os import system
 from update_all_courses_utils import get_all_dept_codes, process_dept_codes
+from fix_partial_subscriptions import fix_partial_subscriptions
 
 
 # True --> hard reset
@@ -76,6 +77,13 @@ def do_update(reset_type):
             )
         db.set_maintenance_status(False)
         raise Exception("failed to soft-update courses and disabled maintenance mode")
+
+    try:
+        fix_partial_subscriptions()
+    except:
+        raise Exception(
+            "failed to run fix-subscriptions script and did not disable maintenance mode"
+        )
 
     db.set_maintenance_status(False)
 
