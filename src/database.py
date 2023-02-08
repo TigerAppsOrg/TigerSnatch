@@ -1139,6 +1139,7 @@ class Database:
         self._db.notifs.update_many(
             {"netid": {"$in": netids}, classid: {"$exists": True}},
             {"$set": {f"{classid}.last_notif": new_last_notif}},
+            {"$inc": {f"{classid}.num_notifs": 1}}, # increments by 1 if exists, otherwise sets to 1
         )
 
     # ----------------------------------------------------------------------
@@ -1622,7 +1623,15 @@ class Database:
         # add class to user's document in notifs collection with default values
         self._db.notifs.update_one(
             {"netid": netid},
-            {"$set": {classid: {"n_open_spots": 0, "last_notif": datetime.now(TZ)}}},
+            {
+                "$set": {
+                    classid: {
+                        "n_open_spots": 0,
+                        "last_notif": datetime.now(TZ),
+                        "num_notifs": 0,
+                    }
+                }
+            },
         )
 
         self._add_system_log(
