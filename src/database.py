@@ -1130,7 +1130,7 @@ class Database:
             num_notifs_for_classid = user_notifs_history.get("num_notifs", 0)
 
             # if the max number of notifs is reached, return False (and unsub them)
-            if num_notifs_for_classid >= MAX_AUTO_RESUB_NOTIFS:
+            if num_notifs_for_classid >= MAX_AUTO_RESUB_NOTIFS - 1:
                 return False
 
             # otherwise the max number of notifs has not yet been exceeded, so return True (auto-resub them)
@@ -1163,7 +1163,9 @@ class Database:
         self._db.notifs.update_many(
             {"netid": {"$in": netids}, classid: {"$exists": True}},
             {"$set": {f"{classid}.last_notif": new_last_notif}},
-            {"$inc": {f"{classid}.num_notifs": 1}}, # increments by 1 if exists, otherwise sets to 1
+            {
+                "$inc": {f"{classid}.num_notifs": 1}
+            },  # increments by 1 if exists, otherwise sets to 1
         )
 
     # ----------------------------------------------------------------------
