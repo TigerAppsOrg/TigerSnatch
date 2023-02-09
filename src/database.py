@@ -1147,7 +1147,21 @@ class Database:
 
     # updates n_open_spots and last_notif fields for data in notifs collection
 
-    def update_users_notifs_history(self, netids, classid, n_open_spots):
+    def update_users_notifs_history(
+        self, netids, classid, n_open_spots, reserved_seats=False
+    ):
+        # if the class has reserved seating, update only the num_notifs counter
+        if reserved_seats:
+            self._db.notifs.update_many(
+                {"netid": {"$in": netids}, classid: {"$exists": True}},
+                {
+                    "$inc": {
+                        f"{classid}.num_notifs": 1
+                    },  # increments by 1 if exists, otherwise sets to 1
+                },
+            )
+            return
+
         # update n_open_spots for all users subbed to classid (key classid exists)
         self._db.notifs.update_many(
             {classid: {"$exists": True}},

@@ -73,7 +73,13 @@ class Notify:
                     if open_spots_changed or notifs_delay_exceeded:
                         temp_netids.append(netid)
                 self._netids = temp_netids
-                db.update_users_notifs_history(self._netids, classid, n_new_slots)
+
+            db.update_users_notifs_history(
+                self._netids,
+                classid,
+                n_new_slots,
+                reserved_seats=self._has_reserved_seats,
+            )
 
             self._emails = []
             self._phones = []
