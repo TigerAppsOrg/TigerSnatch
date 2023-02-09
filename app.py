@@ -554,7 +554,7 @@ def admin():
         is_dashboard=False,
         is_admin=True,
         user_is_admin=True,
-        search_res=search_res[:20],
+        search_res=search_res,
         last_query=quote_plus(new_query),
         last_query_unquoted=unquote_plus(new_query),
         username=netid,

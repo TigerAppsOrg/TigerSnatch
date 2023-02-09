@@ -1065,7 +1065,11 @@ class Database:
         query = " ".join(query.split())
         query = re.sub(r"[^0-9a-zA-Z]+", "", query)
         query_re = re.compile(query, re.IGNORECASE)
-        res = list(self._db.users.find({"netid": {"$regex": query_re}}))
+        res = list(
+            self._db.users.find({"netid": {"$regex": query_re}})
+            .sort("$natural", -1)
+            .limit(20)
+        )
         res.reverse()
         total_users = self._db.users.count_documents({})
         return res, query, total_users
