@@ -75,6 +75,10 @@ NOTIFS_SHEET_POLL_MINS = int(environ["NOTIFS_SHEET_POLL_MINS"])
 # if the num of open spots doesn't change
 MIN_NOTIFS_DELAY_MINS = int(environ["MIN_NOTIFS_DELAY_MINS"])
 
+# for auto-resubbed users, max number of times they can remain auto-resubbed to a
+# specific section (saves a lot of money for inactive/unresponsive users)
+MAX_AUTO_RESUB_NOTIFS = int(environ["MAX_AUTO_RESUB_NOTIFS"])
+
 # Twilio SMS
 TWILIO_PHONE = environ["TWILIO_PHONE"]
 TWILIO_SID = environ["TWILIO_SID"]
