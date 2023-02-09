@@ -1104,7 +1104,7 @@ class Database:
 
     # returns whether user opted to auto resubscribe
 
-    def get_user_auto_resub(self, netid, classid=""):
+    def get_user_auto_resub(self, netid, classid="", print_max_resub_msg=False):
         try:
             auto_resub_dict = self._db.users.find_one(
                 {"netid": netid}, {"auto_resub": 1, "_id": 0}
@@ -1131,6 +1131,10 @@ class Database:
 
             # if the max number of notifs is reached, return False (and unsub them)
             if num_notifs_for_classid >= MAX_AUTO_RESUB_NOTIFS:
+                if print_max_resub_msg:
+                    print(
+                        f"> {netid} reached maximum auto resubs ({MAX_AUTO_RESUB_NOTIFS}) for class {classid}"
+                    )
                 return False
 
             # otherwise the max number of notifs has not yet been exceeded, so return True (auto-resub them)

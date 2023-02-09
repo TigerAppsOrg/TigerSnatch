@@ -190,7 +190,7 @@ class Notify:
         for i, phone in enumerate(self._phones):
             try:
                 is_auto_resub = self.db.get_user_auto_resub(
-                    self._netids[i], classid=self._classid
+                    self._netids[i], classid=self._classid, print_max_resub_msg=True
                 )
                 if phone != "":
                     send_text_args.append(
