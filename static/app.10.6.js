@@ -656,11 +656,11 @@ let autoResubSwitchListener = function () {
       if (res["isSuccess"]) {
         if (checkedProp) {
           alert(
-            "Notification settings successfully changed: You will keep receiving open-spot notifications for a section until you manually unsubscribe."
+            "Notification settings successfully changed: You have enabled the Stay Subscribed option."
           );
         } else {
           alert(
-            "Notification settings successfully changed: You will be automatically unsubscribed from a section upon first notification."
+            "Notification settings successfully changed: You have disabled the Stay Subscribed option."
           );
         }
       } else {
