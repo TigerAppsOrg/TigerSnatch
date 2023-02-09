@@ -1162,10 +1162,12 @@ class Database:
         )
         self._db.notifs.update_many(
             {"netid": {"$in": netids}, classid: {"$exists": True}},
-            {"$set": {f"{classid}.last_notif": new_last_notif}},
             {
-                "$inc": {f"{classid}.num_notifs": 1}
-            },  # increments by 1 if exists, otherwise sets to 1
+                "$set": {f"{classid}.last_notif": new_last_notif},
+                "$inc": {
+                    f"{classid}.num_notifs": 1
+                },  # increments by 1 if exists, otherwise sets to 1
+            },
         )
 
     # ----------------------------------------------------------------------
