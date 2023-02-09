@@ -119,14 +119,18 @@ class Notify:
         for i in range(len(self._emails)):
             try:
                 if self._has_reserved_seats:
-                    if self.db.get_user_auto_resub(self._netids[i]):
+                    if self.db.get_user_auto_resub(
+                        self._netids[i], classid=self._classid
+                    ):
                         # yes auto-resub | yes reserved seats
                         template_id = "d-b32c7a8c99f2491899322ced801b216b"
                     else:
                         # no auto-resub | yes reserved seats
                         template_id = "d-632e8760499b40d680742b9acdb8d129"
                 else:
-                    if self.db.get_user_auto_resub(self._netids[i]):
+                    if self.db.get_user_auto_resub(
+                        self._netids[i], classid=self._classid
+                    ):
                         # yes auto-resub | no reserved seats
                         template_id = "d-c04bc32123ea45ec80889919cc5c377e"
                     else:
