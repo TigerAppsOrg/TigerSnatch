@@ -1318,18 +1318,28 @@ class Database:
     # contain user query string
 
     def search_for_course(self, query):
-        query = re.compile(query, re.IGNORECASE)
+        autocomplete_fields = [
+            {
+                "autocomplete": {
+                    "query": query,
+                    "path": path,
+                    "fuzzy": {
+                        "maxEdits": 1,
+                        "prefixLength": 1,
+                        "maxExpansions": 256,
+                    },
+                }
+            }
+            for path in ["displayname", "displayname_whitespace", "title"]
+        ]
 
         res = list(
-            self._db.mappings.find(
-                {
-                    "$or": [
-                        {"displayname": {"$regex": query}},
-                        {"displayname_whitespace": {"$regex": query}},
-                        {"title": {"$regex": query}},
-                    ]
-                }
-            ).sort("displayname")
+            self._db.mappings.aggregate(
+                [
+                    {"$search": {"compound": {"should": autocomplete_fields}}},
+                    {"$limit": 10},
+                ]
+            )
         )
 
         return res

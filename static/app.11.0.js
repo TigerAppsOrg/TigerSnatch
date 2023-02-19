@@ -455,33 +455,6 @@ let searchFormListener = function () {
     curr_path = location.pathname;
     params = location.search.replace("?", "").split("&");
 
-    if (query_raw.length < 2) return;
-
-    // when user enters 3 characters then deletes one
-    if (query_raw.length == 2) {
-      // remove query from URL
-      curr_path += "?";
-      ind = 0;
-      params.forEach((param) => {
-        if (!param.startsWith("query")) {
-          if (ind > 0) curr_path += "&";
-          curr_path += param;
-          ind += 1;
-        }
-      });
-
-      $.post("/searchresults_placeholder", function (res) {
-        $("div#search-results").html(res);
-        window.history.pushState(
-          { restore: "search", html: res },
-          "restore search results",
-          curr_path
-        );
-      });
-
-      return;
-    }
-
     // close the tooltip if open
     $("#search-form-input").tooltip("hide");
 
