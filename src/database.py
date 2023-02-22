@@ -819,7 +819,6 @@ class Database:
                 "email": f"{netid}@princeton.edu",
                 "phone": "",
                 "waitlists": [],
-                "current_sections": {},
                 "auto_resub": False,
                 "year": get_year(),
             }
@@ -943,26 +942,6 @@ class Database:
         res.reverse()
         total_users = self._db.users.count_documents({})
         return res, query, total_users
-
-    # returns a user's current sections
-
-    def get_current_sections(self, netid):
-        try:
-            current_sections = self.get_user(netid, "current_sections")
-        except:
-            print("user", netid, "does not exist", file=stderr)
-            return None
-        res = []
-
-        for courseid in current_sections.keys():
-            try:
-                course_name = self.courseid_to_displayname(courseid)
-                section_name = self.classid_to_sectionname(current_sections[courseid])
-            except:
-                continue
-            res.append((course_name, section_name, courseid))
-
-        return res
 
     # sets auto resubscribe flag for user
 
@@ -1738,10 +1717,8 @@ class Database:
             print("clearing", coll)
             self._db[coll].delete_many({})
 
-        print("clearing waitlists and current_sections in users")
-        self._db.users.update_many(
-            {}, {"$set": {"waitlists": [], "current_sections": {}}}
-        )
+        print("clearing waitlists in users")
+        self._db.users.update_many({}, {"$set": {"waitlists": []}})
 
         print("resetting user logs")
         self._db.logs.update_many({}, {"$set": {"waitlist_log": []}})

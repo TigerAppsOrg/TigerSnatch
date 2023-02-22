@@ -167,7 +167,6 @@ def get_course_in_mobileapp(term, course_, curr_time, db: Database):
                     "section": section,
                     "enrollment": int(class_["enrollment"]),
                     "capacity": int(class_["capacity"]),
-                    "swap_out": [],
                 }
 
                 # pre-recorded lectures are marked as 01:00 AM start

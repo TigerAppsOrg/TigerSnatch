@@ -169,8 +169,6 @@ def dashboard():
         query = query[:100]
     search_res, new_query = do_search(query, _db)
 
-    curr_sections = _db.get_current_sections(netid)
-
     notifs_status_data = get_notifs_status_data()
 
     html = render_template(
@@ -187,7 +185,6 @@ def dashboard():
         email=email,
         phone=phone,
         auto_resub=auto_resub,
-        curr_sections=curr_sections,
         notifs_online=notifs_status_data["notifs_online"],
         next_notifs=notifs_status_data["next_notifs"],
         term_name=notifs_status_data["term_name"],
