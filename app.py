@@ -298,17 +298,6 @@ def get_course():
     num_full = sum(class_data["isFull"] for class_data in classes_list)
     term_code, term_name = _db.get_current_term_code()
     section_names = _db.get_section_names_in_course(courseid)
-    current_section = _db.get_current_section(netid, courseid)
-
-    try:
-        current_sectionname = (
-            _db.classid_to_sectionname(current_section)
-            if current_section is not None
-            else ""
-        )
-    except:
-        current_section = None
-        current_sectionname = ""
 
     trade_unavailable = False
     if not section_names or len(section_names) < 2:
@@ -330,8 +319,6 @@ def get_course():
         is_admin=False,
         user_is_admin=is_admin(netid, _db),
         netid=netid,
-        current_section=current_section,
-        current_sectionname=current_sectionname,
         courseid=courseid,
         course_details=course_details,
         classes_list=classes_list,
@@ -398,17 +385,6 @@ def get_course_info(courseid):
     course_details, classes_list = pull_course(courseid, _db)
     curr_waitlists = _db.get_user(netid, "waitlists")
     section_names = _db.get_section_names_in_course(courseid)
-    current_section = _db.get_current_section(netid, courseid)
-
-    try:
-        current_sectionname = (
-            _db.classid_to_sectionname(current_section)
-            if current_section is not None
-            else ""
-        )
-    except:
-        current_section = None
-        current_sectionname = ""
 
     trade_unavailable = False
     if not section_names or len(section_names) < 2:
@@ -437,8 +413,6 @@ def get_course_info(courseid):
         classes_list=classes_list,
         trade_unavailable=trade_unavailable,
         num_full=num_full,
-        current_section=current_section,
-        current_sectionname=current_sectionname,
         term_code=term_code,
         term_name=term_name,
         curr_waitlists=curr_waitlists,
@@ -466,26 +440,8 @@ def remove_from_waitlist(classid):
     return jsonify({"isSuccess": waitlist.remove_from_waitlist(classid)})
 
 
-@app.route("/update_user_section/<courseid>/<classid>", methods=["POST"])
-def update_user_section(courseid, classid):
-    netid = _cas.authenticate()
-    status = _db.update_current_section(netid, courseid, classid)
-    return jsonify({"isSuccess": status})
-
-
-@app.route("/remove_user_section/<courseid>", methods=["POST"])
-def remove_user_section(courseid):
-    netid = _cas.authenticate()
-    status = _db.remove_current_section(netid, courseid)
-    return jsonify({"isSuccess": status})
-
-
-@app.route("/find_matches/<courseid>", methods=["POST"])
-def find_matches(courseid):
-    netid = _cas.authenticate()
-    matches = _db.find_matches(netid, courseid)
-    return jsonify({"data": matches})
-
+"""
+Retired Trades method
 
 @app.route(
     "/contact_trade/<course_name>/<match_netid>/<section_name>", methods=["POST"]
@@ -513,7 +469,7 @@ def contact_trade(course_name, match_netid, section_name):
     except:
         return jsonify({"isSuccess": False})
     return jsonify({"isSuccess": True})
-
+"""
 
 # ----------------------------------------------------------------------
 # ACCESSIBLE BY ADMIN ONLY, VIA URL

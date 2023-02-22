@@ -320,98 +320,6 @@ const toastBlacklistSuccess = $(
 `)
 );
 
-const toastAddedSection = $(
-  $.parseHTML(`
-<div
-    id="toast-updatesection"
-    class="toast align-items-center text-white bg-success border-0"
-    role="alert"
-    aria-live="assertive"
-    aria-atomic="true"
-    data-bs-delay="3000"
->
-    <div class="d-flex">
-        <div class="toast-body">Successfully saved your current section for this course!</div>
-        <button
-            type="button"
-            class="btn-close btn-close-white me-2 m-auto"
-            data-bs-dismiss="toast"
-            aria-label="Close"
-        ></button>
-    </div>
-</div>
-`)
-);
-
-const toastAddedSectionFail = $(
-  $.parseHTML(`
-<div
-    id="toast-updatesection-fail"
-    class="toast align-items-center text-white bg-danger border-0"
-    role="alert"
-    aria-live="assertive"
-    aria-atomic="true"
-    data-bs-delay="3000"
->
-    <div class="d-flex">
-        <div class="toast-body">Failed to save your current section for this course.</div>
-        <button
-            type="button"
-            class="btn-close btn-close-white me-2 m-auto"
-            data-bs-dismiss="toast"
-            aria-label="Close"
-        ></button>
-    </div>
-</div>
-`)
-);
-
-const toastRemovedSection = $(
-  $.parseHTML(`
-<div
-    id="toast-removedsection-success"
-    class="toast align-items-center text-white bg-warning border-0"
-    role="alert"
-    aria-live="assertive"
-    aria-atomic="true"
-    data-bs-delay="3000"
->
-    <div class="d-flex">
-        <div class="toast-body">Successfully removed your current section for this course!</div>
-        <button
-            type="button"
-            class="btn-close btn-close-white me-2 m-auto"
-            data-bs-dismiss="toast"
-            aria-label="Close"
-        ></button>
-    </div>
-</div>
-`)
-);
-
-const toastRemovedSectionFail = $(
-  $.parseHTML(`
-<div
-    id="toast-removedsection-fail"
-    class="toast align-items-center text-white bg-danger border-0"
-    role="alert"
-    aria-live="assertive"
-    aria-atomic="true"
-    data-bs-delay="3000"
->
-    <div class="d-flex">
-        <div class="toast-body">Failed to remove your current section for this course.</div>
-        <button
-            type="button"
-            class="btn-close btn-close-white me-2 m-auto"
-            data-bs-dismiss="toast"
-            aria-label="Close"
-        ></button>
-    </div>
-</div>
-`)
-);
-
 i = 0; // dummy variable used for toast ids
 
 // scrolls to the bottom of id #dest
@@ -543,9 +451,6 @@ let searchResultListener = function () {
       modalCancelListener();
       modalConfirmListener();
       searchSkip();
-      updateCurrentSection();
-      removeCurrentSection();
-      findMatches();
     });
   });
 };
@@ -1224,97 +1129,8 @@ let blockUserListener = function () {
   });
 };
 
-// disables trade functionality buttons
-let disableTradeFunction = function () {
-  $(".submit-trade").attr("disabled", true);
-  $(".save-trade").attr("disabled", true);
-  $(".remove-trade").attr("disabled", true);
-  $("*").css("pointer-events", "none");
-  $("*").css("cursor", "wait");
-};
-
-// enables trade functionality buttons
-let enableTradeFunction = function () {
-  $(".submit-trade").attr("disabled", false);
-  $(".remove-trade").attr("disabled", false);
-  $(".save-trade").attr("disabled", false);
-  $("*").css("pointer-events", "");
-  $("*").css("cursor", "");
-};
-
-// helper method to display fail/success toasts for updating current section
-let updateSectionToastHelper = function (res) {
-  if (!res["isSuccess"]) {
-    $(".toast-container").prepend(
-      toastAddedSectionFail
-        .clone()
-        .attr("id", "toast-updatesection-fail-" + ++i)
-    );
-    $("#toast-updatesection-fail-" + i).toast("show");
-  } else {
-    $(".toast-container").prepend(
-      toastAddedSection.clone().attr("id", "toast-updatesection-success-" + ++i)
-    );
-    $("#toast-updatesection-success-" + i).toast("show");
-  }
-};
-
-// helper method to display fail/success toasts for removing current section
-let removeSectionToastHelper = function (res) {
-  if (!res["isSuccess"]) {
-    $(".toast-container").prepend(
-      toastRemovedSectionFail
-        .clone()
-        .attr("id", "toast-removedsection-fail-" + ++i)
-    );
-    $("#toast-removedsection-fail-" + i).toast("show");
-  } else {
-    $(".toast-container").prepend(
-      toastRemovedSection
-        .clone()
-        .attr("id", "toast-removedsection-success-" + ++i)
-    );
-    $("#toast-removedsection-success-" + i).toast("show");
-  }
-};
-
-// listens for update current section button
-let updateCurrentSection = function () {
-  $(".trade-form").on("submit", function (e) {
-    e.preventDefault();
-    courseid = e.target.getAttribute("courseid");
-    classid = $(`#sections-${courseid}`).val();
-
-    disableTradeFunction();
-
-    $.post(`/update_user_section/${courseid}/${classid}`, function (res) {
-      // checks that user successfully updated section on back-end
-      updateSectionToastHelper(res);
-      curr_section = $(`#sections-${courseid} option:selected`).text();
-      $(".submit-trade").attr("curr-section", curr_section);
-      enableTradeFunction();
-    });
-  });
-};
-
-// listens for reset current section button
-let removeCurrentSection = function () {
-  $(".remove-trade").on("click", function (e) {
-    e.preventDefault();
-    courseid = e.target.getAttribute("courseid");
-
-    disableTradeFunction();
-
-    $.post(`/remove_user_section/${courseid}`, function (res) {
-      // checks that user successfully updated section on back-end
-      removeSectionToastHelper(res);
-      $(".save-trade").attr("disabled", false);
-      $("*").css("pointer-events", "");
-      $("*").css("cursor", "");
-      $(`#sections-${courseid}`).val("");
-    });
-  });
-};
+/**
+ * Retired Trades functions
 
 // helper function to build email link
 let createEmail = function (
@@ -1439,6 +1255,8 @@ let findMatches = function () {
   });
 };
 
+*/
+
 // change the name of this variable to force all users to see the tutorial and the alert banner
 var doneKeyTutorial = "completed4";
 var doneKeyBanner = "completed8";
@@ -1523,13 +1341,6 @@ let accountSettings = function () {
   });
 };
 
-// handles button clicks in the Trade Panel
-let tradeFunctions = function () {
-  updateCurrentSection();
-  removeCurrentSection();
-  findMatches();
-};
-
 // handles functions that optimizes mobile view
 let mobileViewFunctions = function () {
   dashboardSkip();
@@ -1578,7 +1389,6 @@ let accountSettingsFunctions = function () {
 // jQuery 'on' only applies listeners to elements currently on DOM
 // applies listeners to current elements when document is loaded
 $(document).ready(function () {
-  tradeFunctions();
   mobileViewFunctions();
   adminFunctions();
   searchFunctions();
