@@ -253,14 +253,12 @@ def activity():
     netid = _cas.authenticate()
 
     waitlist_logs = _db.get_user_waitlist_log(netid)
-    trade_logs = _db.get_user_trade_log(netid)
 
     html = render_template(
         "activity.html",
         user_is_admin=is_admin(_cas.authenticate(), _db),
         loggedin=True,
         waitlist_logs=waitlist_logs,
-        trade_logs=trade_logs,
         notifs_online=notifs_status_data["notifs_online"],
         next_notifs=notifs_status_data["next_notifs"],
         term_name=notifs_status_data["term_name"],
@@ -299,10 +297,6 @@ def get_course():
     term_code, term_name = _db.get_current_term_code()
     section_names = _db.get_section_names_in_course(courseid)
 
-    trade_unavailable = False
-    if not section_names or len(section_names) < 2:
-        trade_unavailable = True
-
     _db._add_system_log(
         "user",
         {
@@ -322,7 +316,6 @@ def get_course():
         courseid=courseid,
         course_details=course_details,
         classes_list=classes_list,
-        trade_unavailable=trade_unavailable,
         curr_waitlists=curr_waitlists,
         search_res=search_res,
         num_full=num_full,
@@ -386,10 +379,6 @@ def get_course_info(courseid):
     curr_waitlists = _db.get_user(netid, "waitlists")
     section_names = _db.get_section_names_in_course(courseid)
 
-    trade_unavailable = False
-    if not section_names or len(section_names) < 2:
-        trade_unavailable = True
-
     num_full = sum(class_data["isFull"] for class_data in classes_list)
     term_code, term_name = _db.get_current_term_code()
 
@@ -411,7 +400,6 @@ def get_course_info(courseid):
         courseid=courseid,
         course_details=course_details,
         classes_list=classes_list,
-        trade_unavailable=trade_unavailable,
         num_full=num_full,
         term_code=term_code,
         term_name=term_name,

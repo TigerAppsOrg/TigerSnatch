@@ -296,14 +296,12 @@ class Database:
 
     def clear_all_user_logs(self, admin_netid):
         try:
-            self._add_admin_log("clearing all user subscriptions and trades logs")
-            self._db.logs.update_many(
-                {}, {"$set": {"waitlist_log": [], "trade_log": []}}
-            )
+            self._add_admin_log("clearing all user subscriptions logs")
+            self._db.logs.update_many({}, {"$set": {"waitlist_log": []}})
 
             self._add_system_log(
                 "admin",
-                {"message": "all user subscriptions and trades logs cleared"},
+                {"message": "all user subscriptions logs cleared"},
                 netid=admin_netid,
             )
             return True
@@ -827,7 +825,7 @@ class Database:
             }
         )
         self._db.notifs.insert_one({"netid": netid})
-        self._db.logs.insert_one({"netid": netid, "waitlist_log": [], "trade_log": []})
+        self._db.logs.insert_one({"netid": netid, "waitlist_log": []})
         print(f"successfully created user {netid}")
 
     # update user netid's waitlist log
@@ -855,34 +853,6 @@ class Database:
     def get_user_waitlist_log(self, netid):
         return self._db.logs.find_one({"netid": netid}, {"waitlist_log": 1, "_id": 0})[
             "waitlist_log"
-        ]
-
-    # update user netid's waitlist log
-
-    def update_user_trade_log(self, netid, entry):
-        entry = (
-            f"{(datetime.now(TZ)).strftime('%b %-d, %Y @ %-I:%M %p ET')} \u2192 {entry}"
-        )
-
-        self._db.logs.update_one(
-            {"netid": netid},
-            {
-                "$push": {
-                    "trade_log": {
-                        "$each": [entry],
-                        "$position": 0,
-                        "$slice": MAX_LOG_LENGTH,
-                    }
-                }
-            },
-        )
-        print(f"user {netid} log: {entry}")
-
-    # gets user netid's trade log in array-of-strings format
-
-    def get_user_trade_log(self, netid):
-        return self._db.logs.find_one({"netid": netid}, {"trade_log": 1, "_id": 0})[
-            "trade_log"
         ]
 
     # returns user data given netid and a key from the users collection
@@ -1774,7 +1744,7 @@ class Database:
         )
 
         print("resetting user logs")
-        self._db.logs.update_many({}, {"$set": {"waitlist_log": [], "trade_log": []}})
+        self._db.logs.update_many({}, {"$set": {"waitlist_log": []}})
 
         print("clearing disabled courses")
         self._db.admin.update_one({}, {"$set": {"disabled_courses": []}})
