@@ -649,18 +649,6 @@ def set_notifications_status(status):
     return jsonify({})
 
 
-@app.route("/clear_all_trades", methods=["POST"])
-def clear_all_trades():
-    netid = _cas.authenticate()
-    try:
-        if not is_admin(netid, _db):
-            return redirect(url_for("landing"))
-    except:
-        return redirect(url_for("landing"))
-
-    return jsonify({"isSuccess": _db.clear_all_trades(netid)})
-
-
 @app.route("/clear_all_user_logs", methods=["POST"])
 def clear_all_user_logs():
     netid = _cas.authenticate()
@@ -709,8 +697,8 @@ def clear_by_course(courseid):
     return jsonify({"isSuccess": _db.clear_course_waitlists(courseid, netid)})
 
 
-@app.route("/get_user_data/<netid>/<isTrade>", methods=["POST"])
-def get_user_data(netid, isTrade):
+@app.route("/get_user_data/<netid>", methods=["POST"])
+def get_user_data(netid):
     netid_ = _cas.authenticate()
     try:
         if not is_admin(netid_, _db):
@@ -718,9 +706,7 @@ def get_user_data(netid, isTrade):
     except:
         return redirect(url_for("landing"))
 
-    return jsonify(
-        {"data": _db.get_waited_sections(netid.strip(), trades=isTrade == "true")}
-    )
+    return jsonify({"data": _db.get_waited_sections(netid.strip())})
 
 
 @app.route("/get_usage_summary", methods=["POST"])

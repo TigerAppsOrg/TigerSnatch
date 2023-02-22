@@ -794,7 +794,7 @@ let getUserInfoListener = function () {
     e.preventDefault();
     disableAdminFunction();
     netid = e.target.getAttribute("data-netid");
-    $.post(`/get_user_data/${netid}/${false}`, function (res) {
+    $.post(`/get_user_data/${netid}`, function (res) {
       helper(res, "user-data");
       $("#staticBackdropLabelUserData").html(
         `Subscribed Sections for ${netid}`
@@ -864,7 +864,6 @@ let enableAdminFunction = function () {
   $("#usage-summary").attr("disabled", false);
   $("#all-subscriptions").attr("disabled", false);
   $("#clear-all").attr("disabled", false);
-  $("#clear-all-trades").attr("disabled", false);
   $("#clear-all-logs").attr("disabled", false);
   $("#update-term").attr("disabled", false);
   $("#toggle-emails").attr("disabled", false);
@@ -879,8 +878,6 @@ let enableAdminFunction = function () {
   $("#get-user-data-input").attr("disabled", false);
   $("#get-user-data-submit").attr("disabled", false);
   $("#fill-section-input").attr("disabled", false);
-  $("#get-user-trade-data-input").attr("disabled", false);
-  $("#get-user-trade-data-submit").attr("disabled", false);
   $("#fill-section-submit").attr("disabled", false);
   $("#block-user-input").attr("disabled", false);
   $("#block-user-submit").attr("disabled", false);
@@ -894,7 +891,6 @@ let disableAdminFunction = function () {
   $("#usage-summary").attr("disabled", true);
   $("#all-subscriptions").attr("disabled", true);
   $("#clear-all").attr("disabled", true);
-  $("#clear-all-trades").attr("disabled", true);
   $("#clear-all-logs").attr("disabled", true);
   $("#update-term").attr("disabled", true);
   $("#toggle-emails").attr("disabled", true);
@@ -909,8 +905,6 @@ let disableAdminFunction = function () {
   $("#get-user-data-input").attr("disabled", true);
   $("#get-user-data-submit").attr("disabled", true);
   $("#fill-section-input").attr("disabled", true);
-  $("#get-user-trade-data-input").attr("disabled", true);
-  $("#get-user-trade-data-submit").attr("disabled", true);
   $("#fill-section-submit").attr("disabled", true);
   $("#block-user-input").attr("disabled", true);
   $("#block-user-submit").attr("disabled", true);
@@ -1001,29 +995,6 @@ let clearAllWaitlistsListener = function () {
     }
 
     $.post("/clear_all_waitlists", function (res) {
-      // checks that user successfully removed from waitlist on back-end
-      clearWaitlistsToastHelper(res);
-      enableAdminFunction();
-    });
-  });
-};
-
-// listens for clear all trades button
-let clearAllTradesListener = function () {
-  $("#clear-all-trades").on("click", function (e) {
-    e.preventDefault();
-    disableAdminFunction();
-
-    if (
-      !confirm(
-        "Are you sure you want to clear all Trades? This action is irreversible."
-      )
-    ) {
-      enableAdminFunction();
-      return;
-    }
-
-    $.post("/clear_all_trades", function (res) {
       // checks that user successfully removed from waitlist on back-end
       clearWaitlistsToastHelper(res);
       enableAdminFunction();
@@ -1187,22 +1158,11 @@ let getUserDataListener = function () {
     e.preventDefault();
     netid = $(`#get-user-data-input`).val();
     disableAdminFunction();
-    $.post(`/get_user_data/${netid}/${false}`, function (res) {
+    $.post(`/get_user_data/${netid}`, function (res) {
       helper(res, "user-data");
       $("#staticBackdropLabelUserData").html(
         `Subscribed Sections for ${netid}`
       );
-      enableAdminFunction();
-    });
-  });
-
-  $("#get-user-trade-data").on("submit", function (e) {
-    e.preventDefault();
-    netid = $(`#get-user-trade-data-input`).val();
-    disableAdminFunction();
-    $.post(`/get_user_data/${netid}/${true}`, function (res) {
-      helper(res, "user-trade-data");
-      $("#staticBackdropLabelUserData").html(`Trade Sections for ${netid}`);
       enableAdminFunction();
     });
   });
@@ -1581,7 +1541,6 @@ let mobileViewFunctions = function () {
 let adminFunctions = function () {
   blockUserListener();
   clearAllWaitlistsListener();
-  clearAllTradesListener();
   clearAllLogsListener();
   clearClassWaitlistListener();
   clearCourseWaitlistListener();

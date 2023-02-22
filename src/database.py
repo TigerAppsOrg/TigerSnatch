@@ -367,22 +367,6 @@ class Database:
         except:
             return False
 
-    # clears and removes users from all Trades
-
-    def clear_all_trades(self, admin_netid):
-        try:
-            self._add_admin_log("clearing all trades")
-            self._db.users.update_many({}, {"$set": {"current_sections": {}}})
-
-            self._db.enrollments.update_many({}, {"$set": {"swap_out": []}})
-
-            self._add_system_log(
-                "admin", {"message": "all trades cleared"}, netid=admin_netid
-            )
-            return True
-        except:
-            return False
-
     # clears all user logs
 
     def clear_all_user_logs(self, admin_netid):
@@ -536,13 +520,9 @@ class Database:
 
     # returns a user's waited-on sections
 
-    def get_waited_sections(self, netid, trades=False):
+    def get_waited_sections(self, netid):
         try:
-            classids = (
-                self.get_user(netid, "current_sections").values()
-                if trades
-                else self.get_user(netid, "waitlists")
-            )
+            classids = self.get_user(netid, "waitlists")
             year = self.get_user(netid, "year")
         except:
             print("user", netid, "does not exist", file=stderr)
