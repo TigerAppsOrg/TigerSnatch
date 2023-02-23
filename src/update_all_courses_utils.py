@@ -39,7 +39,6 @@ def process_dept_codes(dept_codes: str, current_term_code: str, hard_reset: bool
                     "classid": 1,
                     "last_notif": 1,
                     "prev_enrollment": 1,
-                    "swap_out": 1,
                 },
             )
         )
@@ -50,7 +49,6 @@ def process_dept_codes(dept_codes: str, current_term_code: str, hard_reset: bool
         # precompute dictionary of times of last notif
         old_last_notifs = {}
         old_prev_enrollments = {}
-        old_swap_outs = {}
         for enrollment in old_enrollments:
             if "last_notif" in enrollment:
                 old_last_notifs[enrollment["classid"]] = enrollment["last_notif"]
@@ -58,8 +56,6 @@ def process_dept_codes(dept_codes: str, current_term_code: str, hard_reset: bool
                 old_prev_enrollments[enrollment["classid"]] = enrollment[
                     "prev_enrollment"
                 ]
-            if "swap_out" in enrollment and len(enrollment["swap_out"]) > 0:
-                old_swap_outs[enrollment["classid"]] = enrollment["swap_out"]
 
         courses = _api.get_courses(term=current_term_code, subject=dept_codes)
 
@@ -163,7 +159,6 @@ def process_dept_codes(dept_codes: str, current_term_code: str, hard_reset: bool
                         "section": section,
                         "enrollment": int(class_["enrollment"]),
                         "capacity": int(class_["capacity"]),
-                        "swap_out": [],
                     }
 
                     if not hard_reset and classid in old_last_notifs:
@@ -175,10 +170,6 @@ def process_dept_codes(dept_codes: str, current_term_code: str, hard_reset: bool
                         new_class_enrollment["prev_enrollment"] = old_prev_enrollments[
                             classid
                         ]
-
-                    if not hard_reset and classid in old_swap_outs:
-                        print("preserving trades list for class", classid)
-                        new_class_enrollment["swap_out"] = old_swap_outs[classid]
 
                     print(
                         "inserting",

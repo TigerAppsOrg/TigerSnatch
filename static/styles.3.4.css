@@ -237,22 +237,15 @@ div#dashboard-prefs {
         margin-left: 10px;
     }
 }
-div#course-trades-header,
 div#guide-header,
 div#links-header,
-div#notifications-header,
-div#trades-tracker-header {
+div#notifications-header {
     font-weight: 500;
 }
 div#guide-content,
 div#links-content,
-div#logs-content-admin,
-div#trades-tracker {
+div#logs-content-admin {
     font-size: 0.9em;
-}
-div#trades-tracker {
-    max-height: 70px;
-    overflow: auto;
 }
 div#logs-content,
 div#logs-content-admin {

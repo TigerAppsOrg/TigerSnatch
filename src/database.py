@@ -51,9 +51,8 @@ class Database:
         self._db = self._db.tigersnatch
         self._check_basic_integrity()
 
-    # ----------------------------------------------------------------------
-    # TRADES METHODS
-    # ----------------------------------------------------------------------
+    """
+    Retired Trades method
 
     # core Trade matching algorithm!
 
@@ -125,81 +124,7 @@ class Database:
             print(f"matches found for user {netid} in course {courseid}")
 
         return matches
-
-    # returns list of users who want to swap out of a class
-
-    def get_swapout_for_class(self, classid):
-        return self._db.enrollments.find_one(
-            {"classid": classid}, {"swap_out": 1, "_id": 0}
-        )["swap_out"]
-
-    # updates a user's current section (classid) for a course (courseid)
-
-    def update_current_section(self, netid, courseid, classid):
-        """
-        possibly need to check whether the desired classid is in the user's waitlists
-        """
-        try:
-            self.is_classid_in_courseid(classid, courseid)  # throws Exception
-            current_sections = self.get_user(netid, "current_sections")
-
-            print(
-                "setting current section in course",
-                courseid,
-                "to class",
-                classid,
-                "for user",
-                netid,
-            )
-            current_sections[courseid] = classid
-            self._db.users.update_one(
-                {"netid": netid}, {"$set": {"current_sections": current_sections}}
-            )
-
-            self._db.enrollments.update_one(
-                {"classid": classid}, {"$addToSet": {"swap_out": netid}}
-            )
-        except:
-            return False
-
-        return True
-
-    # removes a user's current section given a courseid
-
-    def remove_current_section(self, netid, courseid):
-        try:
-            current_sections = self.get_user(netid, "current_sections")
-            print("removing current section in course", courseid, "for user", netid)
-
-            if courseid in current_sections:
-                classid = current_sections[courseid]
-                del current_sections[courseid]
-
-                self._db.users.update_one(
-                    {"netid": netid}, {"$set": {"current_sections": current_sections}}
-                )
-
-                self._db.enrollments.update_one(
-                    {"classid": classid}, {"$pull": {"swap_out": netid}}
-                )
-            else:
-                print(
-                    "user",
-                    netid,
-                    "does not have a current section in course (non-fatal)",
-                    courseid,
-                    file=stderr,
-                )
-                return False
-        except:
-            return False
-
-        return True
-
-    # gets a user's current section given a courseid
-
-    def get_current_section(self, netid, courseid):
-        return self.get_user(netid, "current_sections").get(courseid, None)
+    """
 
     # ----------------------------------------------------------------------
     # ADMIN PANEL METHODS
@@ -367,34 +292,16 @@ class Database:
         except:
             return False
 
-    # clears and removes users from all Trades
-
-    def clear_all_trades(self, admin_netid):
-        try:
-            self._add_admin_log("clearing all trades")
-            self._db.users.update_many({}, {"$set": {"current_sections": {}}})
-
-            self._db.enrollments.update_many({}, {"$set": {"swap_out": []}})
-
-            self._add_system_log(
-                "admin", {"message": "all trades cleared"}, netid=admin_netid
-            )
-            return True
-        except:
-            return False
-
     # clears all user logs
 
     def clear_all_user_logs(self, admin_netid):
         try:
-            self._add_admin_log("clearing all user subscriptions and trades logs")
-            self._db.logs.update_many(
-                {}, {"$set": {"waitlist_log": [], "trade_log": []}}
-            )
+            self._add_admin_log("clearing all user subscriptions logs")
+            self._db.logs.update_many({}, {"$set": {"waitlist_log": []}})
 
             self._add_system_log(
                 "admin",
-                {"message": "all user subscriptions and trades logs cleared"},
+                {"message": "all user subscriptions logs cleared"},
                 netid=admin_netid,
             )
             return True
@@ -461,11 +368,6 @@ class Database:
             classids = self.get_user(netid, "waitlists")
             for classid in classids:
                 self.remove_from_waitlist(netid, classid)
-
-            print("removing user", netid, "from all swap_out lists")
-            courseids = self.get_user(netid, "current_sections").keys()
-            for courseid in courseids:
-                self.remove_current_section(netid, courseid)
 
             print("removing user", netid, "from users and logs collections")
             self._db.users.delete_one({"netid": netid})
@@ -536,13 +438,9 @@ class Database:
 
     # returns a user's waited-on sections
 
-    def get_waited_sections(self, netid, trades=False):
+    def get_waited_sections(self, netid):
         try:
-            classids = (
-                self.get_user(netid, "current_sections").values()
-                if trades
-                else self.get_user(netid, "waitlists")
-            )
+            classids = self.get_user(netid, "waitlists")
             year = self.get_user(netid, "year")
         except:
             print("user", netid, "does not exist", file=stderr)
@@ -921,13 +819,12 @@ class Database:
                 "email": f"{netid}@princeton.edu",
                 "phone": "",
                 "waitlists": [],
-                "current_sections": {},
                 "auto_resub": False,
                 "year": get_year(),
             }
         )
         self._db.notifs.insert_one({"netid": netid})
-        self._db.logs.insert_one({"netid": netid, "waitlist_log": [], "trade_log": []})
+        self._db.logs.insert_one({"netid": netid, "waitlist_log": []})
         print(f"successfully created user {netid}")
 
     # update user netid's waitlist log
@@ -955,34 +852,6 @@ class Database:
     def get_user_waitlist_log(self, netid):
         return self._db.logs.find_one({"netid": netid}, {"waitlist_log": 1, "_id": 0})[
             "waitlist_log"
-        ]
-
-    # update user netid's waitlist log
-
-    def update_user_trade_log(self, netid, entry):
-        entry = (
-            f"{(datetime.now(TZ)).strftime('%b %-d, %Y @ %-I:%M %p ET')} \u2192 {entry}"
-        )
-
-        self._db.logs.update_one(
-            {"netid": netid},
-            {
-                "$push": {
-                    "trade_log": {
-                        "$each": [entry],
-                        "$position": 0,
-                        "$slice": MAX_LOG_LENGTH,
-                    }
-                }
-            },
-        )
-        print(f"user {netid} log: {entry}")
-
-    # gets user netid's trade log in array-of-strings format
-
-    def get_user_trade_log(self, netid):
-        return self._db.logs.find_one({"netid": netid}, {"trade_log": 1, "_id": 0})[
-            "trade_log"
         ]
 
     # returns user data given netid and a key from the users collection
@@ -1073,26 +942,6 @@ class Database:
         res.reverse()
         total_users = self._db.users.count_documents({})
         return res, query, total_users
-
-    # returns a user's current sections
-
-    def get_current_sections(self, netid):
-        try:
-            current_sections = self.get_user(netid, "current_sections")
-        except:
-            print("user", netid, "does not exist", file=stderr)
-            return None
-        res = []
-
-        for courseid in current_sections.keys():
-            try:
-                course_name = self.courseid_to_displayname(courseid)
-                section_name = self.classid_to_sectionname(current_sections[courseid])
-            except:
-                continue
-            res.append((course_name, section_name, courseid))
-
-        return res
 
     # sets auto resubscribe flag for user
 
@@ -1868,13 +1717,11 @@ class Database:
             print("clearing", coll)
             self._db[coll].delete_many({})
 
-        print("clearing waitlists and current_sections in users")
-        self._db.users.update_many(
-            {}, {"$set": {"waitlists": [], "current_sections": {}}}
-        )
+        print("clearing waitlists in users")
+        self._db.users.update_many({}, {"$set": {"waitlists": []}})
 
         print("resetting user logs")
-        self._db.logs.update_many({}, {"$set": {"waitlist_log": [], "trade_log": []}})
+        self._db.logs.update_many({}, {"$set": {"waitlist_log": []}})
 
         print("clearing disabled courses")
         self._db.admin.update_one({}, {"$set": {"disabled_courses": []}})
