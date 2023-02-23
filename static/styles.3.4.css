@@ -248,6 +248,9 @@ div#links-content,
 div#logs-content-admin {
     font-size: 0.9em;
 }
+div#links-content {
+    flex-wrap: wrap;
+}
 div#logs-content,
 div#logs-content-admin {
     max-height: 70px;
@@ -330,6 +333,7 @@ input#login-btn:active {
 }
 .course-quick-link {
     text-decoration: underline;
+    white-space: nowrap;
 }
 @media (min-width: 992px) {
     a#dashboard-skip,
