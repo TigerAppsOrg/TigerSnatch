@@ -205,7 +205,8 @@ div#course-links,
 div#course-mss,
 div#dashboard-guide,
 div#dashboard-logs,
-div#dashboard-prefs {
+div#dashboard-prefs,
+div#notifs-info {
     background: #fff;
     margin-top: 20px;
     border-radius: 10px;
