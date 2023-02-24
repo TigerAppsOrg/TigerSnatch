@@ -205,7 +205,8 @@ div#course-links,
 div#course-mss,
 div#dashboard-guide,
 div#dashboard-logs,
-div#dashboard-prefs {
+div#dashboard-prefs,
+div#notifs-info {
     background: #fff;
     margin-top: 20px;
     border-radius: 10px;
@@ -228,7 +229,7 @@ div#dashboard-prefs {
 }
 @media (min-width: 1200px) {
     div#admin-prefs,
-    div#course-mss,
+    div#course-links,
     div#dashboard-prefs {
         margin-right: 10px;
     }
@@ -246,6 +247,9 @@ div#guide-content,
 div#links-content,
 div#logs-content-admin {
     font-size: 0.9em;
+}
+div#links-content {
+    flex-wrap: wrap;
 }
 div#logs-content,
 div#logs-content-admin {
@@ -329,6 +333,7 @@ input#login-btn:active {
 }
 .course-quick-link {
     text-decoration: underline;
+    white-space: nowrap;
 }
 @media (min-width: 992px) {
     a#dashboard-skip,
