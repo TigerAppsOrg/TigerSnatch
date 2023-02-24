@@ -42,20 +42,12 @@
 <td>
   {{class.wl_size}}
   {% if class.wl_size > 0 %}
-  <span class="stats-subs-badge badge bg-primary text-light ms-1"
+  <span class="text-light ms-1"
         data-bs-toggle="tooltip"
         data-bs-placement="auto"
         title="{{class.subs_stats | replace('|', '<br/>') if not user_is_admin else class.subs_stats_admin | replace('|', '<br/>')}}">
-    <svg xmlns="http://www.w3.org/2000/svg"
-         width="12"
-         height="15"
-         fill="currentColor"
-         class="bi bi-person-circle"
-         viewBox="0 0 17 21">
-      <path d="M11 6a3 3 0 1 1-6 0 3 3 0 0 1 6 0z" />
-      <path fill-rule="evenodd"
-            d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8zm8-7a7 7 0 0 0-5.468 11.37C3.242 11.226 4.805 10 8 10s4.757 1.225 5.468 2.37A7 7 0 0 0 8 1z" />
-    </svg>
+    <i class="bi bi-person-circle bg-primary rounded-1"
+       style="padding: 1px 2px"></i>
   </span>
   {% endif %}
 </td>

@@ -1,28 +1,13 @@
 <span id="status-indicator"
-      class="fs-6 ms-3 mb-5 animate__animated animate__fadeIn"
+      class="fs-6 ms-3 animate__animated animate__fadeIn"
       data-title="Status"
       data-intro="Hover over this badge to get a summary of TigerSnatch's current status!"
       data-step="2"
-      style="
-    background-color: #ffc107;
-    border-radius: 0.25rem;
-    padding: 5px;
-    letter-spacing: 1px;
-    cursor: help;
-  "
+      style="background-color: #ffc107; border-radius: 0.25rem; padding: 5px; letter-spacing: 0.5px; cursor: help;"
       data-bs-toggle="tooltip"
       data-bs-placement="auto"
-      title="Term: {{term_name}}. {{'TigerSnatch is actively sending notifications for open spots!' if notifs_online else 'TigerSnatch is not currently sending notifications for open spots.'}} {{next_notifs}}">status<svg
-       id="status-indicator-tooltip"
-       xmlns="http://www.w3.org/2000/svg"
-       width="16"
-       height="16"
-       fill="currentColor"
-       class="bi bi-circle-fill {{ 'text-success' if notifs_online else 'text-danger' }} ms-1"
-       viewBox="0 0 16 16"
-       style="margin-bottom: 2px">
-    <circle cx="8"
-            cy="8"
-            r="8" />
-  </svg>
+      title="Term: {{term_name}}. {{'TigerSnatch is actively sending notifications for open spots!' if notifs_online else 'TigerSnatch is not currently sending notifications for open spots.'}} {{next_notifs}}">
+  status:
+  <i
+     class="fs-6 bi {{ 'bi-bell-fill' if notifs_online else 'bi-bell-slash-fill' }} {{ 'text-success' if notifs_online else 'text-danger' }}"></i>
 </span>
