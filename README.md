@@ -38,7 +38,7 @@
     <br />
     <div class="row">
         <div class="my-4 tutorial-image">
-        <img src="static/COURSE_TUTORIAL.jpeg"
+        <img src="static/COURSE_TUTORIAL.png"
                 class="img-shadow rounded border border-3 border-warning mx-auto d-block"
                 width="95%" />
         </div>
@@ -54,7 +54,7 @@
     <br />
     <div class="row">
         <div class="my-4 tutorial-image">
-        <img src="static/DASHBOARD_TUTORIAL.jpeg"
+        <img src="static/DASHBOARD_TUTORIAL.png"
                 class="img-shadow rounded border border-3 border-warning mx-auto d-block"
                 width="95%" />
         </div>
@@ -79,7 +79,7 @@
     <br />
     <div class="row">
         <div class="my-4 tutorial-image">
-        <img src="static/ACTIVITY_TUTORIAL.jpeg"
+        <img src="static/ACTIVITY_TUTORIAL.png"
                 class="img-shadow rounded border border-3 border-warning mx-auto d-block"
                 width="95%" />
         </div>
@@ -91,8 +91,8 @@ _TigerSnatch Subscriptions are independent from official course waitlists. You m
 
 # Original Team
 
-| **Shannon Heh '23** | **Nicholas Padmanabhan '23** | **Byron Zhang '23** |
-| - | - | - |
+| **Shannon Heh '23**                                                                                                    | **Nicholas Padmanabhan '23**                                                                                        | **Byron Zhang '23**                                                                                                  |
+| ---------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------- |
 | <img class="img-shadow rounded-circle border border-3 border-warning mx-auto mt-3 d-block" src="static/Shannon.jpg" /> | <img class="img-shadow rounded-circle border border-3 border-warning mx-auto mt-3 d-block" src="static/Nick.jpg" /> | <img class="img-shadow rounded-circle border border-3 border-warning mx-auto mt-3 d-block" src="static/Byron.jpg" /> |
 
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-eOJMYsd53ii+scO/bJGFsiCZc+5NDVN2yr8+0RDqr0Ql0h+rP48ckxlpbzKgwra6" crossorigin="anonymous" />
