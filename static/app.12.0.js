@@ -1,3 +1,10 @@
+// dummy variable used for toast ids
+i = 0;
+
+// change the name of this variable to force all users to see the tutorial and the alert banner
+var doneKeyTutorial = "completed4";
+var doneKeyBanner = "completed8";
+
 const toastAdded = $(
   $.parseHTML(`
 <div
@@ -296,8 +303,6 @@ const toastBlacklistSuccess = $(
 </div>
 `)
 );
-
-i = 0; // dummy variable used for toast ids
 
 // scrolls to the bottom of id #dest
 let scrollBottom = function (dest) {
@@ -1170,10 +1175,6 @@ let findMatches = function () {
 };
 
 */
-
-// change the name of this variable to force all users to see the tutorial and the alert banner
-var doneKeyTutorial = "completed4";
-var doneKeyBanner = "completed8";
 
 // introJS tutorial
 let initTutorial = function () {
