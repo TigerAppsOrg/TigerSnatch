@@ -251,29 +251,6 @@ const toastFillFail = $(
 `)
 );
 
-const toastUpdateTerm = $(
-  $.parseHTML(`
-<div
-    id="toast-update-term"
-    class="toast align-items-center text-white bg-success border-0"
-    role="alert"
-    aria-live="assertive"
-    aria-atomic="true"
-    data-bs-delay="3000"
->
-    <div class="d-flex">
-        <div class="toast-body">TigerSnatch will update to the latest term and go offline for 2-3 minutes. Reloading in a few seconds...</div>
-        <button
-            type="button"
-            class="btn-close btn-close-white me-2 m-auto"
-            data-bs-dismiss="toast"
-            aria-label="Close"
-        ></button>
-    </div>
-</div>
-`)
-);
-
 const toastBlacklistFail = $(
   $.parseHTML(`
 <div
@@ -768,10 +745,6 @@ let enableAdminFunction = function () {
   $("#notifs-sheet-link").attr("disabled", false);
   $("#usage-summary").attr("disabled", false);
   $("#all-subscriptions").attr("disabled", false);
-  $("#clear-all").attr("disabled", false);
-  $("#clear-all-logs").attr("disabled", false);
-  $("#update-term").attr("disabled", false);
-  $("#toggle-emails").attr("disabled", false);
   $("#disable-course-input").attr("disabled", false);
   $("#disable-course-submit").attr("disabled", false);
   $("#enable-course-input").attr("disabled", false);
@@ -795,10 +768,6 @@ let disableAdminFunction = function () {
   $("#notifs-sheet-link").attr("disabled", true);
   $("#usage-summary").attr("disabled", true);
   $("#all-subscriptions").attr("disabled", true);
-  $("#clear-all").attr("disabled", true);
-  $("#clear-all-logs").attr("disabled", true);
-  $("#update-term").attr("disabled", true);
-  $("#toggle-emails").attr("disabled", true);
   $("#disable-course-input").attr("disabled", true);
   $("#disable-course-submit").attr("disabled", true);
   $("#enable-course-input").attr("disabled", true);
@@ -823,15 +792,6 @@ let toggleEmailNotificationsListener = function () {
       "https://docs.google.com/spreadsheets/d/1iSWihUcWa0yX8MsS_FKC-DuGH75AukdiuAigbSkPm8k/edit#gid=550138744",
       "_blank"
     );
-  });
-};
-
-// sets the state of the toggle notifications button
-let initToggleEmailNotificationsButton = function () {
-  $.post("/get_notifications_status", function (res) {
-    if (res["isOn"]) $("#toggle-emails").html("Turn Off");
-    else $("#toggle-emails").html("Turn On");
-    enableAdminFunction();
   });
 };
 
@@ -882,52 +842,6 @@ let fillSectionToastHelper = function (res) {
     );
     $("#toast-clear-success-" + i).toast("show");
   }
-};
-
-// listens for clear all waitlists button
-let clearAllWaitlistsListener = function () {
-  $("#clear-all").on("click", function (e) {
-    e.preventDefault();
-    disableAdminFunction();
-
-    if (
-      !confirm(
-        "Are you sure you want to clear all subscriptions? This action is irreversible."
-      )
-    ) {
-      enableAdminFunction();
-      return;
-    }
-
-    $.post("/clear_all_waitlists", function (res) {
-      // checks that user successfully removed from waitlist on back-end
-      clearWaitlistsToastHelper(res);
-      enableAdminFunction();
-    });
-  });
-};
-
-// listens for clear all logs button
-let clearAllLogsListener = function () {
-  $("#clear-all-logs").on("click", function (e) {
-    e.preventDefault();
-    disableAdminFunction();
-
-    if (
-      !confirm(
-        "Are you sure you want to clear all user logs? This action is irreversible."
-      )
-    ) {
-      enableAdminFunction();
-      return;
-    }
-
-    $.post("/clear_all_user_logs", function (res) {
-      // checks that user successfully removed from waitlist on back-end
-      clearWaitlistsToastHelper(res);
-      enableAdminFunction();
-    });
-  });
 };
 
 // listens for clear class waitlist button

@@ -577,43 +577,6 @@ def get_notifications_status():
     return jsonify({"isOn": _db.get_cron_notification_status()})
 
 
-@app.route("/set_notifications_status/<status>", methods=["POST"])
-def set_notifications_status(status):
-    netid = _cas.authenticate()
-    try:
-        if not is_admin(netid, _db):
-            return redirect(url_for("landing"))
-    except:
-        return redirect(url_for("landing"))
-
-    _db.set_cron_notification_status(status == "true", admin_netid=netid)
-    return jsonify({})
-
-
-@app.route("/clear_all_user_logs", methods=["POST"])
-def clear_all_user_logs():
-    netid = _cas.authenticate()
-    try:
-        if not is_admin(netid, _db):
-            return redirect(url_for("landing"))
-    except:
-        return redirect(url_for("landing"))
-
-    return jsonify({"isSuccess": _db.clear_all_user_logs(netid)})
-
-
-@app.route("/clear_all_waitlists", methods=["POST"])
-def clear_all_waitlists():
-    netid = _cas.authenticate()
-    try:
-        if not is_admin(netid, _db):
-            return redirect(url_for("landing"))
-    except:
-        return redirect(url_for("landing"))
-
-    return jsonify({"isSuccess": _db.clear_all_waitlists(netid)})
-
-
 @app.route("/clear_by_class/<classid>", methods=["POST"])
 def clear_by_class(classid):
     netid = _cas.authenticate()

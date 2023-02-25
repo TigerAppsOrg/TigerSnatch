@@ -276,38 +276,6 @@ class Database:
     def update_notifs_schedule(self, data):
         self._db.admin.update_one({}, {"$set": {"notifs_schedule": data}})
 
-    # clears and removes users from all waitlists
-
-    def clear_all_waitlists(self, admin_netid):
-        try:
-            self._add_admin_log("clearing all subscriptions")
-            self._db.users.update_many({}, {"$set": {"waitlists": []}})
-
-            self._db["waitlists"].delete_many({})
-
-            self._add_system_log(
-                "admin", {"message": "all subscriptions cleared"}, netid=admin_netid
-            )
-            return True
-        except:
-            return False
-
-    # clears all user logs
-
-    def clear_all_user_logs(self, admin_netid):
-        try:
-            self._add_admin_log("clearing all user subscriptions logs")
-            self._db.logs.update_many({}, {"$set": {"waitlist_log": []}})
-
-            self._add_system_log(
-                "admin",
-                {"message": "all user subscriptions logs cleared"},
-                netid=admin_netid,
-            )
-            return True
-        except:
-            return False
-
     # clears and removes users from the waitlist for class classid
 
     def clear_class_waitlist(self, classid, admin_netid, log_classid_skip=True):
