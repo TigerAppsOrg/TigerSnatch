@@ -1266,8 +1266,6 @@ let mobileViewFunctions = function () {
 // handles features on the admin panel
 let adminFunctions = function () {
   blockUserListener();
-  clearAllWaitlistsListener();
-  clearAllLogsListener();
   clearClassWaitlistListener();
   clearCourseWaitlistListener();
   disableCourseListener();
@@ -1276,7 +1274,6 @@ let adminFunctions = function () {
   getAllSubscriptionsListener();
   getUserDataListener();
   getUserInfoListener();
-  initToggleEmailNotificationsButton();
   toggleEmailNotificationsListener();
   fillSectionListener();
 };
