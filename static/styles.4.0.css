@@ -30,9 +30,9 @@
     font-size: 0.93rem;
 }
 :root {
-    --color-yellow: #ffe58a;
+    --color-yellow: #ffe4aa;
     --color-green: #51a451;
-    --color-blue: #e3f3ff8c;
+    --color-gray: #f4f4f4;
     --color-orange: #e87822e7;
 }
 .vsc-initialized,
@@ -80,7 +80,7 @@ div.row.align-items-start {
     }
 }
 ul.navbar-nav {
-    background: #ffe68a;
+    background: var(--color-yellow);
 }
 .navbar-brand#nav-logo {
     letter-spacing: 0.1em;
@@ -132,7 +132,7 @@ div.search-results-displayname {
     font-size: 0.9rem;
 }
 div#search-wrapper {
-    background: var(--color-blue);
+    background: var(--color-gray);
     padding: 30px 10px 10px;
     height: 100%;
 }
@@ -161,7 +161,7 @@ div#right-wrapper {
 div#admin-header,
 div#course-header,
 div#dashboard-header {
-    background: var(--color-blue);
+    background: var(--color-gray);
     font-weight: 500;
     margin-left: 10px;
     margin-right: 0;
@@ -170,7 +170,7 @@ div#dashboard-header {
 div#admin-content,
 div#course-content,
 div#dashboard-content {
-    background: var(--color-blue);
+    background: var(--color-gray);
     margin: 10px;
     margin-right: 0;
     padding: 20px;
@@ -262,7 +262,7 @@ div#course-warning {
 body#error-container,
 body#landing-container,
 body#tutorial-container {
-    background: var(--color-blue);
+    background: var(--color-gray);
 }
 p.tutorial-text, p.about-desc {
     font-size: 1.15rem;
