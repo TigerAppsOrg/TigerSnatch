@@ -60,17 +60,6 @@ div.row.align-items-start {
         margin-left: 23px;
     }
 }
-#dev-warning,
-#status-indicator,
-#status-tooltip {
-    cursor: default;
-}
-@media (max-width: 349.98px) {
-    #status-indicator,
-    #status-tooltip {
-        display: none;
-    }
-}
 @media (max-width: 575.98px) {
     img#tigersnatch-icon {
         display: none !important;
