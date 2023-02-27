@@ -55,6 +55,13 @@ div.row.align-items-start {
     background-color: var(--color-yellow);
     height: 4rem;
 }
+#status-indicator {
+    background-color: #ffc107;
+    border-radius: 0.25rem;
+    padding: 1px 6px;
+    letter-spacing: 0.5px;
+    cursor: help;
+}
 @media (max-width: 991.98px) {
     a#admin-nav-link {
         margin-left: 23px;
@@ -72,7 +79,9 @@ ul.navbar-nav {
     background: var(--color-yellow);
 }
 .navbar-brand#nav-logo {
-    letter-spacing: 0.1em;
+    letter-spacing: 1.5px;
+    display: flex;
+    align-items: center;
 }
 .form-check-input:checked {
     background-color: var(--color-green) !important;

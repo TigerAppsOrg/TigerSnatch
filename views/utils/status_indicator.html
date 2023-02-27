@@ -3,11 +3,10 @@
       data-title="Status"
       data-intro="Hover over this badge to get a summary of TigerSnatch's current status!"
       data-step="2"
-      style="background-color: #ffc107; border-radius: 0.25rem; padding: 5px; letter-spacing: 0.5px; cursor: help;"
       data-bs-toggle="tooltip"
       data-bs-placement="auto"
       title="Term: {{term_name}}. {{'TigerSnatch is actively sending notifications for open spots!' if notifs_online else 'TigerSnatch is not currently sending notifications for open spots.'}} {{next_notifs}}">
-  status:
-  <i
-     class="fs-6 bi {{ 'bi-bell-fill' if notifs_online else 'bi-bell-slash-fill' }} {{ 'text-success' if notifs_online else 'text-danger' }}"></i>
+    status:
+    <i
+       class="fs-6 bi {{ 'bi-bell-fill' if notifs_online else 'bi-bell-slash-fill' }} {{ 'text-success' if notifs_online else 'text-danger' }}"></i>
 </span>
