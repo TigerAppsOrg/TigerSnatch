@@ -1,16 +1,9 @@
 <nav id="nav"
      class="navbar navbar-expand-lg navbar-light sticky-top">
   <div id="nav-container"
-       class="container-fluid">
-    <a id="nav-logo"
-       class="navbar-brand fs-3 me-0"
+       class="container-fluid ps-0">
+    <a class="navbar-brand fs-3 me-0 ms-4 d-flex align-items-center"
        href="/dashboard">
-      <img id="tigersnatch-icon"
-           src="/static/logo-nav.svg"
-           width="40"
-           height="40"
-           alt="TigerSnatch logo"
-           class="d-inline-block align-text-center mx-2" />
       TigerSnatch {% include 'utils/status_indicator.html' %}
     </a>
     <button class="navbar-toggler"
@@ -25,17 +18,17 @@
   </div>
   <div id="navbarNavAltMarkup"
        class="collapse navbar-collapse">
-    <ul class="navbar-nav">
+    <ul class="navbar-nav align-items-center">
       <li class="nav-item">
-        <a class="nav-link ms-4 fs-5 fw-light active"
+        <a class="nav-link mx-2 fs-5 fw-light active"
            href="/activity">Activity</a>
       </li>
       <li class="nav-item">
-        <a class="nav-link ms-4 fs-5 fw-light active"
+        <a class="nav-link mx-2 fs-5 fw-light active"
            href="/about">About</a>
       </li>
       <li class="nav-item">
-        <a class="nav-link ms-4 me-2 fs-5 fw-light active"
+        <a class="nav-link mx-2 me-2 fs-5 fw-light active"
            href="/tutorial">Tutorial</a>
       </li>
       <li>
@@ -43,7 +36,7 @@
               action="/login"
               method="get">
           <button id="login-btn"
-                  class="btn btn-warning text-dark fs-5 px-3 fw-light nav-button"
+                  class="btn btn-warning text-dark fs-5 fw-light nav-button py-0 px-2"
                   type="submit">
             Login
           </button>

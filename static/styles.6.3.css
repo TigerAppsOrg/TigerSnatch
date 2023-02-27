@@ -68,21 +68,8 @@ div.row.align-items-start {
     margin-left: 23px;
   }
 }
-@media (max-width: 575.98px) {
-  img#tigersnatch-icon {
-    display: none !important;
-  }
-  a#nav-logo {
-    font-size: calc(1.325rem + 0.9vw) !important;
-  }
-}
 ul.navbar-nav {
   background: var(--color-yellow);
-}
-.navbar-brand#nav-logo {
-  letter-spacing: 1.5px;
-  display: flex;
-  align-items: center;
 }
 .form-check-input:checked {
   background-color: var(--color-green) !important;

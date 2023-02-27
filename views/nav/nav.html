@@ -2,8 +2,7 @@
      class="navbar navbar-expand-lg navbar-light sticky-top">
   <div id="nav-container"
        class="container-fluid ps-0">
-    <a id="nav-logo"
-       class="navbar-brand fs-3 me-0 ms-4"
+    <a class="navbar-brand fs-3 me-0 ms-4 d-flex align-items-center"
        href="/dashboard">
       TigerSnatch {% include 'utils/status_indicator.html' %}
     </a>
@@ -19,33 +18,33 @@
   </div>
   <div id="navbarNavAltMarkup"
        class="collapse navbar-collapse">
-    <ul class="navbar-nav">
+    <ul class="navbar-nav align-items-center">
       {% if user_is_admin %}
       <li class="nav-item">
         <a id="admin-nav-link"
-           class="nav-link fs-5 fw-light active"
+           class="nav-link mx-2 fs-5 fw-light active"
            href="/admin">Admin</a>
       </li>
       {% endif %}
       <li class="nav-item">
-        <a class="nav-link ms-4 fs-5 fw-light active"
+        <a class="nav-link mx-2 fs-5 fw-light active"
            href="/dashboard">Dashboard</a>
       </li>
       <li class="nav-item">
-        <a class="nav-link ms-4 fs-5 fw-light active"
+        <a class="nav-link mx-2 fs-5 fw-light active"
            href="/activity"
            data-title="Statistics"
            data-intro="View statistics about TigerSnatch and discover popular courses here!"
            data-step="3">Activity</a>
       </li>
       <li class="nav-item">
-        <a class="nav-link ms-4 fs-5 fw-light active"
+        <a class="nav-link mx-2 fs-5 fw-light active"
            href="/about"
            data-title="Feedback"
            data-intro="Provide feedback to the TigerSnatch team here!">About</a>
       </li>
       <li class="nav-item">
-        <a class="nav-link ms-4 me-2 fs-5 fw-light active"
+        <a class="nav-link mx-2 me-2 fs-5 fw-light active"
            href="/tutorial">Tutorial</a>
       </li>
       <li class="">
@@ -53,7 +52,7 @@
               action="/logout"
               method="get">
           <button id="logout-btn"
-                  class="btn btn-warning text-dark fs-5 px-3 fw-light nav-button"
+                  class="btn btn-warning text-dark fs-5 fw-light nav-button py-0 px-2"
                   type="submit">
             Logout
           </button>
