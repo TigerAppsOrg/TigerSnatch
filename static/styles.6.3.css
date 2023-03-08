@@ -257,7 +257,7 @@ p.about-desc {
 div#landing-auth-req {
   color: var(--color-orange);
 }
-strong#landing-tigersnatch-highlight {
+strong.landing-tigersnatch-highlight {
   background-color: var(--color-yellow);
 }
 p#landing-bottom-text {
