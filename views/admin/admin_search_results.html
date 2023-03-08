@@ -1,22 +1,24 @@
 {% if search_res == [] %}
-<p id="admin-results-message"
-   class="fw-light fs-4">
-  <img src="/static/search-tiger.svg"
-       width="100"
-       height="100"
-       alt="TigerSnatch no matches"
-       class="d-inline-block align-text-center mx-2" />
+<p id="admin-results-message" class="fw-light fs-4">
+  <img
+    src="/static/search-tiger.svg"
+    width="100"
+    height="100"
+    alt="TigerSnatch no matches"
+    class="d-inline-block align-text-center mx-2"
+  />
   <br />
   No matches! Try another netID query.
 </p>
 {% elif search_res is none %}
-<p id="admin-results-message"
-   class="fw-light fs-4">
-  <img src="/static/search-tiger.svg"
-       width="100"
-       height="100"
-       alt="TigerSnatch search"
-       class="d-inline-block align-text-center mx-2" />
+<p id="admin-results-message" class="fw-light fs-4">
+  <img
+    src="/static/search-tiger.svg"
+    width="100"
+    height="100"
+    alt="TigerSnatch search"
+    class="d-inline-block align-text-center mx-2"
+  />
   <br />
   Search for netIDs above!
   <br />
@@ -24,23 +26,26 @@
 </p>
 {% else %} {% for user in search_res %}
 <div>
-  <div id="admin-results-{{user['netid']}}"
-       class="card search-results-card">
+  <div id="admin-results-{{user['netid']}}" class="card search-results-card">
     <div class="card-body row">
       <div class="d-flex col-6 align-items-center">
-        <a href="https://collface.deptcpanel.princeton.edu/"
-           target="_blank"
-           class="text-decoration-none text-dark">
-          <strong class="font-monospace"
-                  style="text-decoration: none">{{user['netid']}}</strong>
+        <a
+          href="https://collface.deptcpanel.princeton.edu/"
+          target="_blank"
+          class="text-decoration-none text-dark"
+        >
+          <strong class="font-monospace" style="text-decoration: none"
+            >{{user['netid']}}</strong
+          >
         </a>
       </div>
-      <div class="d-flex justify-content-end col-6 px-0"
-           style="margin: auto">
-        <button id="button-{{user['netid']}}"
-                data-netid="{{user['netid']}}"
-                type="button"
-                class="btn btn-sm btn-warning btn-user-info fs-6 py-2 px-2 me-3">
+      <div class="d-flex justify-content-end col-6 px-0" style="margin: auto">
+        <button
+          id="button-{{user['netid']}}"
+          data-netid="{{user['netid']}}"
+          type="button"
+          class="btn btn-sm btn-warning btn-user-info fs-6 py-2 px-2 me-3"
+        >
           Info
         </button>
       </div>

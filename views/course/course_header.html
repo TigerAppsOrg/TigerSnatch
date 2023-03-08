@@ -1,43 +1,43 @@
 <div class="px-4 pt-3">
-  <span class="badge bg-warning text-dark font-monospace fw-bold px-1 py-1 me-2 mb-1 fs-5">
-    {% set crosslistings = course_details.displayname.split('/') %}
-    {{ crosslistings[0] }}
-    {%- for i in range(1, [crosslistings|length, 3]|min) -%}
-    /{{ crosslistings[i] }}
-    {%- endfor %}
-    {%- if crosslistings|length > 3 -%}
-    /...
-    {% endif %}
+  <span
+    class="badge bg-warning text-dark font-monospace fw-bold px-1 py-1 me-2 mb-1 fs-5"
+  >
+    {% set crosslistings = course_details.displayname.split('/') %} {{
+    crosslistings[0] }} {%- for i in range(1, [crosslistings|length, 3]|min) -%}
+    /{{ crosslistings[i] }} {%- endfor %} {%- if crosslistings|length > 3 -%}
+    /... {% endif %}
   </span>
   {% if is_top_n %}
-  <span class="badge bg-warning text-light font-monospace fw-bold px-1 py-1 me-2 mb-1 fs-5 animate__animated animate__heartBeat"
-        style="cursor: help;"
-        data-bs-toggle="tooltip"
-        data-bs-placement="auto"
-        title="This is one of the 10 most-subscribed courses on TigerSnatch!">
+  <span
+    class="badge bg-warning text-light font-monospace fw-bold px-1 py-1 me-2 mb-1 fs-5 animate__animated animate__heartBeat"
+    style="cursor: help"
+    data-bs-toggle="tooltip"
+    data-bs-placement="auto"
+    title="This is one of the 10 most-subscribed courses on TigerSnatch!"
+  >
     🔥
   </span>
-  {% endif %}
-  {% if is_course_disabled %}
-  <span class="badge bg-danger text-light font-monospace fw-bold px-1 py-1 me-2 mb-1 fs-5 animate__animated animate__flash"
-        style="cursor: help;"
-        data-bs-toggle="tooltip"
-        data-bs-placement="auto"
-        title="A department coordinator has disabled TigerSnatch Subscriptions for this course. Email and text message notifications will not be sent, and further subscriptions are not allowed. Check Official Course Offerings or contact a department coordinator for more details."><i
-       class="bi bi-exclamation-triangle-fill text-light fs-5 me-1"></i>DISABLED
+  {% endif %} {% if is_course_disabled %}
+  <span
+    class="badge bg-danger text-light font-monospace fw-bold px-1 py-1 me-2 mb-1 fs-5 animate__animated animate__flash"
+    style="cursor: help"
+    data-bs-toggle="tooltip"
+    data-bs-placement="auto"
+    title="A department coordinator has disabled TigerSnatch Subscriptions for this course. Email and text message notifications will not be sent, and further subscriptions are not allowed. Check Official Course Offerings or contact a department coordinator for more details."
+    ><i class="bi bi-exclamation-triangle-fill text-light fs-5 me-1"></i
+    >DISABLED
   </span>
-  {% endif %}
-  {% if has_reserved_seats %}
-  <span class="badge bg-danger text-light font-monospace fw-bold px-1 py-1 mb-1 fs-5 animate__animated animate__flash"
-        style="cursor: help;"
-        data-bs-toggle="tooltip"
-        data-bs-placement="auto"
-        title="This course has reserved seats. Even if a spot opens up, you may not be able to enroll. TigerSnatch is unable to determine whether an open spot corresponds to a particular reserved seat category. Check Official Course Offerings or contact a department coordinator for more details."><i
-       class="bi bi-exclamation-triangle-fill text-light fs-5 me-1"></i>RESERVED SEATS
+  {% endif %} {% if has_reserved_seats %}
+  <span
+    class="badge bg-danger text-light font-monospace fw-bold px-1 py-1 mb-1 fs-5 animate__animated animate__flash"
+    style="cursor: help"
+    data-bs-toggle="tooltip"
+    data-bs-placement="auto"
+    title="This course has reserved seats. Even if a spot opens up, you may not be able to enroll. TigerSnatch is unable to determine whether an open spot corresponds to a particular reserved seat category. Check Official Course Offerings or contact a department coordinator for more details."
+    ><i class="bi bi-exclamation-triangle-fill text-light fs-5 me-1"></i
+    >RESERVED SEATS
   </span>
   {% endif %}
 </div>
 
-<div class="px-4 pt-0 pb-1 fs-2">
-  {{ course_details.title }}
-</div>
+<div class="px-4 pt-0 pb-1 fs-2">{{ course_details.title }}</div>

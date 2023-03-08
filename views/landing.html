@@ -1,54 +1,60 @@
 <!DOCTYPE html>
 <html>
+  <head>
+    {% include 'common.html' %}
+    <title>TigerSnatch</title>
+  </head>
 
-<head>
-  {% include 'common.html' %}
-  <title>TigerSnatch</title>
-</head>
-
-<body id="landing-container">
-  {% include 'nav/nav_logged_out.html' %}
-  <div class="d-flex flex-column"
-       style="height: calc(100% - 120px)">
-    <div class="px-3 py-5 mx-0 row flex-grow-1">
-      <div class="col-xxl justify-content-center align-self-center">
-        {% include 'landing/landing_left.html' %}
-      </div>
-      <div class="col-xxl justify-content-center align-self-center">
-        {% include 'landing/landing_right.html' %}
+  <body id="landing-container">
+    {% include 'nav/nav_logged_out.html' %}
+    <div class="d-flex flex-column" style="height: calc(100% - 120px)">
+      <div class="px-3 py-5 mx-0 row flex-grow-1">
+        <div class="col-xxl justify-content-center align-self-center">
+          {% include 'landing/landing_left.html' %}
+        </div>
+        <div class="col-xxl justify-content-center align-self-center">
+          {% include 'landing/landing_right.html' %}
+        </div>
       </div>
     </div>
-  </div>
 
-  <nav id="nav"
-       class="navbar navbar-expand-lg navbar-light fixed-bottom">
-    <div class="container-fluid">
-      <p id="landing-bottom-text"
-         class="mb-0 text-center">
-        TigerSnatch began as a Spring '21 COS333 project by
-        <span class="badge bg-warning text-dark font-monospace fs-6 px-1 py-1"
-              data-bs-toggle="tooltip"
-              data-bs-placement="auto"
-              title="Shannon Heh"
-              style="cursor: default">sheh@</span>,
-        <span class="badge bg-warning text-dark font-monospace fs-6 px-1 py-1"
-              data-bs-toggle="tooltip"
-              data-bs-placement="auto"
-              title="Nicholas Padmanabhan"
-              style="cursor: default">ntyp@</span>, and
-        <span class="badge bg-warning text-dark font-monospace fs-6 px-1 py-1"
-              data-bs-toggle="tooltip"
-              data-bs-placement="auto"
-              title="Byron Zhang"
-              style="cursor: default">zishuoz@</span>.
-      </p>
-    </div>
-  </nav>
+    <nav id="nav" class="navbar navbar-expand-lg navbar-light fixed-bottom">
+      <div class="container-fluid">
+        <p id="landing-bottom-text" class="mb-0 text-center">
+          TigerSnatch began as a Spring '21 COS333 project by
+          <span
+            class="badge bg-warning text-dark font-monospace fs-6 px-1 py-1"
+            data-bs-toggle="tooltip"
+            data-bs-placement="auto"
+            title="Shannon Heh"
+            style="cursor: default"
+            >sheh@</span
+          >,
+          <span
+            class="badge bg-warning text-dark font-monospace fs-6 px-1 py-1"
+            data-bs-toggle="tooltip"
+            data-bs-placement="auto"
+            title="Nicholas Padmanabhan"
+            style="cursor: default"
+            >ntyp@</span
+          >, and
+          <span
+            class="badge bg-warning text-dark font-monospace fs-6 px-1 py-1"
+            data-bs-toggle="tooltip"
+            data-bs-placement="auto"
+            title="Byron Zhang"
+            style="cursor: default"
+            >zishuoz@</span
+          >.
+        </p>
+      </div>
+    </nav>
 
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"
-          integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p"
-          crossorigin="anonymous"></script>
-  <script src="{{url_for('static', filename='app.js')|version}}"></script>
-</body>
-
+    <script
+      src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"
+      integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p"
+      crossorigin="anonymous"
+    ></script>
+    <script src="{{url_for('static', filename='app.js')|version}}"></script>
+  </body>
 </html>

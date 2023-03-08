@@ -15,24 +15,30 @@
         <th scope="col">Section</th>
         <th scope="col">
           Subscribe
-          <i class="bi bi-info-square-fill text-primary"
-             data-bs-toggle="tooltip"
-             data-bs-placement="top"
-             title="Subscribe to a section by turning on its switch!{% if not has_reserved_seats %} Only full or closed sections have switches.{% endif %}"></i>
+          <i
+            class="bi bi-info-square-fill text-primary"
+            data-bs-toggle="tooltip"
+            data-bs-placement="top"
+            title="Subscribe to a section by turning on its switch!{% if not has_reserved_seats %} Only full or closed sections have switches.{% endif %}"
+          ></i>
         </th>
         <th scope="col">
           # Tigers
-          <i class="bi bi-info-square-fill text-primary"
-             data-bs-toggle="tooltip"
-             data-bs-placement="top"
-             title="This shows the total number of Subscriptions for a section."></i>
+          <i
+            class="bi bi-info-square-fill text-primary"
+            data-bs-toggle="tooltip"
+            data-bs-placement="top"
+            title="This shows the total number of Subscriptions for a section."
+          ></i>
         </th>
         <th scope="col">
           Last Notif
-          <i class="bi bi-info-square-fill text-primary"
-             data-bs-toggle="tooltip"
-             data-bs-placement="top"
-             title="When did TigerSnatch last send notifications (ET) for open spots in a section?"></i>
+          <i
+            class="bi bi-info-square-fill text-primary"
+            data-bs-toggle="tooltip"
+            data-bs-placement="top"
+            title="When did TigerSnatch last send notifications (ET) for open spots in a section?"
+          ></i>
         </th>
         <th scope="col">Status</th>
         <th scope="col">Enrollment</th>
@@ -56,8 +62,7 @@
     </tbody>
   </table>
   {% if num_full == 0 %}
-  <div id="no-full-message"
-       class="container-fluid">
+  <div id="no-full-message" class="container-fluid">
     <div class="row text-center">
       <p class="fs-5 px-0 py-1">
         This course has no full sections. <br />

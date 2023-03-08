@@ -1,19 +1,19 @@
 <title>TigerSnatch | Admin</title>
 <div class="d-flex flex-column h-100">
-     <div id="admin-header">{% include 'admin/admin_header.html' %}</div>
-     <div id="admin-content"
-          class="d-flex flex-column flex-grow-1">
-          <div id="admin-table"
-               class="px-3 row flex-grow-1">{% include 'admin/admin_table.html' %}</div>
-          <div id="admin-other"
-               class="px-0 row">
-               <div id="admin-prefs"
-                    class="col-xl px-3 py-2">{% include 'admin/blocklist.html' %}</div>
-               <div id="admin-logs"
-                    class="col-xl px-3 py-2">{% include 'admin/admin_logs.html' %}</div>
-          </div>
-     </div>
+  <div id="admin-header">{% include 'admin/admin_header.html' %}</div>
+  <div id="admin-content" class="d-flex flex-column flex-grow-1">
+    <div id="admin-table" class="px-3 row flex-grow-1">
+      {% include 'admin/admin_table.html' %}
+    </div>
+    <div id="admin-other" class="px-0 row">
+      <div id="admin-prefs" class="col-xl px-3 py-2">
+        {% include 'admin/blocklist.html' %}
+      </div>
+      <div id="admin-logs" class="col-xl px-3 py-2">
+        {% include 'admin/admin_logs.html' %}
+      </div>
+    </div>
+  </div>
 </div>
-<script
-        src="https://ajax.aspnetcdn.com/ajax/jquery.validate/1.11.1/jquery.validate.min.js"></script>
+<script src="https://ajax.aspnetcdn.com/ajax/jquery.validate/1.11.1/jquery.validate.min.js"></script>
 {% include 'utils/waitlist_toast.html' %}

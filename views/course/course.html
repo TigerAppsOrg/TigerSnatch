@@ -1,36 +1,37 @@
 {% if course_details is none %}
 <title>TigerSnatch | Courses</title>
 {% else %}
-<title>TigerSnatch | {{course_details.displayname.split('/') | join(' / ')}}</title>
+<title>
+  TigerSnatch | {{course_details.displayname.split('/') | join(' / ')}}
+</title>
 {% endif %}
 
 <div class="d-flex flex-column h-100">
-     <div id="course-header">{% include 'course/course_header.html' %}</div>
-     <div id="course-content"
-          class="d-flex flex-column flex-grow-1">
-          <div id="filter-full-wrapper"
-               class="form-check fw-bold">
-               <input class="form-check-input"
-                      type="checkbox"
-                      value=""
-                      id="show-all-check" />
-               <label class="form-check-label"
-                      for="show-all-check"> Show all sections </label>
-          </div>
-          <div id="course-table"
-               class="row px-3 flex-grow-1">{% include 'course/course_table.html' %}</div>
-          <div id="course-other"
-               class="row px-0">
-               <div id="course-links"
-                    class="col-xl px-3 py-2 flex-grow-1">
-                    {% include 'course/course_links.html' %}
-               </div>
-               <div id="notifs-info"
-                    class="col-xl px-3 py-2 flex-grow-1">
-                    {% include 'dashboard/notifs_info.html' %}
-               </div>
-          </div>
-     </div>
+  <div id="course-header">{% include 'course/course_header.html' %}</div>
+  <div id="course-content" class="d-flex flex-column flex-grow-1">
+    <div id="filter-full-wrapper" class="form-check fw-bold">
+      <input
+        class="form-check-input"
+        type="checkbox"
+        value=""
+        id="show-all-check"
+      />
+      <label class="form-check-label" for="show-all-check">
+        Show all sections
+      </label>
+    </div>
+    <div id="course-table" class="row px-3 flex-grow-1">
+      {% include 'course/course_table.html' %}
+    </div>
+    <div id="course-other" class="row px-0">
+      <div id="course-links" class="col-xl px-3 py-2 flex-grow-1">
+        {% include 'course/course_links.html' %}
+      </div>
+      <div id="notifs-info" class="col-xl px-3 py-2 flex-grow-1">
+        {% include 'dashboard/notifs_info.html' %}
+      </div>
+    </div>
+  </div>
 </div>
 
 {% include 'utils/waitlist_toast.html' %}

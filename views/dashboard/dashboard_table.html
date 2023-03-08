@@ -19,17 +19,21 @@
         <th scope="col">Section</th>
         <th scope="col">
           Subscribe
-          <i class="bi bi-info-square-fill text-primary"
-             data-bs-toggle="tooltip"
-             data-bs-placement="top"
-             title="Unsubscribe from a section by turning off its switch!"></i>
+          <i
+            class="bi bi-info-square-fill text-primary"
+            data-bs-toggle="tooltip"
+            data-bs-placement="top"
+            title="Unsubscribe from a section by turning off its switch!"
+          ></i>
         </th>
         <th scope="col">
           Last Notif
-          <i class="bi bi-info-square-fill text-primary"
-             data-bs-toggle="tooltip"
-             data-bs-placement="top"
-             title="When did TigerSnatch last send notifications (ET) for open spots in a section?"></i>
+          <i
+            class="bi bi-info-square-fill text-primary"
+            data-bs-toggle="tooltip"
+            data-bs-placement="top"
+            title="When did TigerSnatch last send notifications (ET) for open spots in a section?"
+          ></i>
         </th>
         <th scope="col">Days</th>
         <th scope="col">Time</th>
@@ -40,22 +44,29 @@
     </thead>
     <tbody>
       {% for classid in data.keys() %}
-      <tr class="dashboard-course-row"
-          data-courseid="{{data[classid].courseid}}">
+      <tr
+        class="dashboard-course-row"
+        data-courseid="{{data[classid].courseid}}"
+      >
         <td>
-          <a class="dashboard-course-link text-decoration-underline text-dark"
-             href="/course?query={{last_query}}&courseid={{data[classid].courseid}}&skip">{{data[classid].displayname}}</a>
+          <a
+            class="dashboard-course-link text-decoration-underline text-dark"
+            href="/course?query={{last_query}}&courseid={{data[classid].courseid}}&skip"
+            >{{data[classid].displayname}}</a
+          >
         </td>
         <td>{{data[classid].section}}</td>
         <td>
           <div class="form-check form-switch">
-            <input class="form-check-input waitlist-switch dashboard-switch"
-                   type="checkbox"
-                   id="switch-{{classid}}"
-                   data-classid="{{classid}}"
-                   data-bs-toggle="modal"
-                   data-bs-target="#confirm-remove-waitlist"
-                   checked />
+            <input
+              class="form-check-input waitlist-switch dashboard-switch"
+              type="checkbox"
+              id="switch-{{classid}}"
+              data-classid="{{classid}}"
+              data-bs-toggle="modal"
+              data-bs-target="#confirm-remove-waitlist"
+              checked
+            />
           </div>
         </td>
         <td>{{data[classid].time_of_last_notif}}</td>
@@ -64,8 +75,7 @@
         <td>{{data[classid].start_time}}</td>
         {% else %}
         <td>{{data[classid].start_time}} - {{data[classid].end_time}}</td>
-        {% endif %}
-        {% if user_is_admin %}
+        {% endif %} {% if user_is_admin %}
         <td>{{classid}}</td>
         {% endif %}
       </tr>

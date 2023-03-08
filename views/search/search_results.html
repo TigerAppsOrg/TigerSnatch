@@ -1,48 +1,58 @@
 {% if search_res == [] %}
-<p id="search-results-message"
-   class="fw-light fs-4">
-    <img src="/static/search-tiger.svg"
-         width="100"
-         height="100"
-         alt="TigerSnatch no matches"
-         class="d-inline-block align-text-center mx-2" />
-    <br />
-    No courses found!
+<p id="search-results-message" class="fw-light fs-4">
+  <img
+    src="/static/search-tiger.svg"
+    width="100"
+    height="100"
+    alt="TigerSnatch no matches"
+    class="d-inline-block align-text-center mx-2"
+  />
+  <br />
+  No courses found!
 </p>
 {% elif search_res is none %}
-<p id="search-results-message"
-   class="fw-light fs-4">
-    <img src="/static/search-tiger.svg"
-         width="100"
-         height="100"
-         alt="TigerSnatch search"
-         class="d-inline-block align-text-center mx-2" />
-    <br />
-    <a id="dashboard-skip"
-       href=""
-       class="fw-light fs-4 text-decoration-underline text-dark">
-        Skip to Dashboard/Course<i class="bi bi-arrow-down fs-5 ms-1"></i></a>
+<p id="search-results-message" class="fw-light fs-4">
+  <img
+    src="/static/search-tiger.svg"
+    width="100"
+    height="100"
+    alt="TigerSnatch search"
+    class="d-inline-block align-text-center mx-2"
+  />
+  <br />
+  <a
+    id="dashboard-skip"
+    href=""
+    class="fw-light fs-4 text-decoration-underline text-dark"
+  >
+    Skip to Dashboard/Course<i class="bi bi-arrow-down fs-5 ms-1"></i
+  ></a>
 </p>
 {% else %} {% for course in search_res %}
 <div>
-    <div id="search-results-{{course.courseid}}"
-         class="card search-results-card">
-        {% if courseid is not none and courseid == course.courseid %}
-        <a data-courseid="{{course.courseid}}"
-           class="search-results-link selected-course border border-3 border-warning"
-           href="course?query={{last_query}}&courseid={{course.courseid}}"
-           style="background-color: #ffe58a">
-            {% else %}
-            <a data-courseid="{{course.courseid}}"
-               class="search-results-link"
-               href="course?query={{last_query}}&courseid={{course.courseid}}">
-                {% endif %}
-                <div class="card-body">
-                    <strong class="search-results-displayname">{{course.displayname.split('/') |
-                        join(' / ')}}</strong>
-                    <div class="search-results-title">{{course.title}}</div>
-                </div>
-            </a>
-    </div>
+  <div id="search-results-{{course.courseid}}" class="card search-results-card">
+    {% if courseid is not none and courseid == course.courseid %}
+    <a
+      data-courseid="{{course.courseid}}"
+      class="search-results-link selected-course border border-3 border-warning"
+      href="course?query={{last_query}}&courseid={{course.courseid}}"
+      style="background-color: #ffe58a"
+    >
+      {% else %}
+      <a
+        data-courseid="{{course.courseid}}"
+        class="search-results-link"
+        href="course?query={{last_query}}&courseid={{course.courseid}}"
+      >
+        {% endif %}
+        <div class="card-body">
+          <strong class="search-results-displayname"
+            >{{course.displayname.split('/') | join(' / ')}}</strong
+          >
+          <div class="search-results-title">{{course.title}}</div>
+        </div>
+      </a>
+    </a>
+  </div>
 </div>
 {% endfor %} {% endif %}

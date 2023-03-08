@@ -1,50 +1,55 @@
 <!DOCTYPE html>
 <html>
+  <head>
+    {% block title %}{% endblock %} {% include 'common.html' %}
+  </head>
 
-<head>
-  {% block title %}{% endblock %} {% include 'common.html' %}
-</head>
-
-<body style="height: calc(100% - 60px)">
-  <div id="new-features-alert"
-       class="alert alert-danger alert-dismissible fade show py-2 my-0 d-none">
-    <i class="bi bi-info-circle-fill me-1"></i>
-    Auto-resubscription now processes up to <b>3 times</b> per subscribed section. This change was
-    done to save money. Open Dashboard Settings to learn more and enable/disable
-    auto-resubscription.
-    <button id="new-features-alert-close"
-            type="button"
-            class="btn-close pb-1"
-            data-bs-dismiss="alert"
-            aria-label="Close"></button>
-  </div>
-  <div id="loading-overlay">
-    <div id="loading-spinner"
-         class="spinner-border text-warning"
-         role="status"></div>
-  </div>
-  {% include 'nav/nav.html' %} {% if loggedin %} {% include 'about.html' %} {% else %}
-  <div id="main"
-       class="container-fluid">
-    <div class="row align-items-start">
-      <div id="search-wrapper"
-           class="d-flex flex-column col-lg-4">
-        {% if is_admin %} {% include 'admin/admin_search.html' %} {% else %} {% include
-        'search/search.html' %} {% endif %}
-      </div>
-      <div id="right-wrapper"
-           class="col-lg-8 px-0">
-        {% if is_dashboard %} {% include 'dashboard/dashboard.html' %} {% elif is_admin %} {%
-        include 'admin/admin.html' %} {% else %} {% include 'course/course.html' %} {% endif %}
+  <body style="height: calc(100% - 60px)">
+    <div
+      id="new-features-alert"
+      class="alert alert-danger alert-dismissible fade show py-2 my-0 d-none"
+    >
+      <i class="bi bi-info-circle-fill me-1"></i>
+      Auto-resubscription now processes up to <b>3 times</b> per subscribed
+      section. This change was done to save money. Open Dashboard Settings to
+      learn more and enable/disable auto-resubscription.
+      <button
+        id="new-features-alert-close"
+        type="button"
+        class="btn-close pb-1"
+        data-bs-dismiss="alert"
+        aria-label="Close"
+      ></button>
+    </div>
+    <div id="loading-overlay">
+      <div
+        id="loading-spinner"
+        class="spinner-border text-warning"
+        role="status"
+      ></div>
+    </div>
+    {% include 'nav/nav.html' %} {% if loggedin %} {% include 'about.html' %} {%
+    else %}
+    <div id="main" class="container-fluid">
+      <div class="row align-items-start">
+        <div id="search-wrapper" class="d-flex flex-column col-lg-4">
+          {% if is_admin %} {% include 'admin/admin_search.html' %} {% else %}
+          {% include 'search/search.html' %} {% endif %}
+        </div>
+        <div id="right-wrapper" class="col-lg-8 px-0">
+          {% if is_dashboard %} {% include 'dashboard/dashboard.html' %} {% elif
+          is_admin %} {% include 'admin/admin.html' %} {% else %} {% include
+          'course/course.html' %} {% endif %}
+        </div>
       </div>
     </div>
-  </div>
-  {% endif %}
+    {% endif %}
 
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"
-          integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p"
-          crossorigin="anonymous"></script>
-  <script src="{{url_for('static', filename='app.js')|version}}"></script>
-</body>
-
+    <script
+      src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"
+      integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p"
+      crossorigin="anonymous"
+    ></script>
+    <script src="{{url_for('static', filename='app.js')|version}}"></script>
+  </body>
 </html>

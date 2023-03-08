@@ -1,118 +1,122 @@
-<div class="modal fade"
-     id="account-settings-modal"
-     data-classid=""
-     data-bs-backdrop="static"
-     data-bs-keyboard="false"
-     tabindex="-1"
-     aria-labelledby="staticBackdropLabel"
-     aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title"
-                    id="staticBackdropLabel">Account Settings</h5>
-            </div>
-            <div class="modal-body"
-                 id="modal-body-account-settings">
-
-                <div class="container px-0 ms-0">
-                    <div class="row">
-                        <form id="new-email"
-                              action="/dashboard"
-                              method="post">
-                            <div class="input-group mb-2">
-                                <div class="input-group-text px-3 py-1">
-                                    <i class="bi bi-envelope-at fs-4"></i>
-                                </div>
-                                <input id="new-email-input"
-                                       class="form-control form-control-md"
-                                       name="new_email"
-                                       maxlength="75"
-                                       placeholder="Email address"
-                                       value="{{ email if email else '' }}"
-                                       pattern="^([\w-]+(?:\.[\w-]+)*)@((?:[\w-]+\.)*\w[\w-]{0,66})\.([a-z]{2,6}(?:\.[a-z]{2})?)$"
-                                       data-bs-toggle="tooltip"
-                                       data-bs-placement="top"
-                                       title="TigerSnatch will email you when a spot frees up! We recommend using your @princeton.edu address to prevent TigerSnatch emails from being marked as spam."
-                                       required />
-                                <button class="btn btn-warning"
-                                        disabled>Change Email</button>
-                            </div>
-                        </form>
-                    </div>
-
-                    <div class="row">
-                        <form id="new-phone"
-                              action="/dashboard"
-                              method="post">
-                            <div class="input-group mb-2">
-                                <div class="input-group-text px-3 py-1">
-                                    <i class="bi bi-phone fs-4"></i>
-                                </div>
-                                <input id="new-phone-input"
-                                       class="form-control form-control-md"
-                                       name="new_phone"
-                                       maxlength="10"
-                                       placeholder="Phone number"
-                                       value="{{ phone if phone else '' }}"
-                                       pattern="^\d{10}$"
-                                       data-bs-toggle="tooltip"
-                                       data-bs-placement="top"
-                                       title="TigerSnatch will text you when a spot frees up! Note that you must use a US phone number." />
-                                <button class="btn btn-warning"
-                                        disabled>Change Phone</button>
-                            </div>
-                        </form>
-                    </div>
-
-                    <div class="row"
-                         id="auto-resub-row">
-                        <div class="input-group mb-2">
-                            <div class="input-group-text px-3 py-1">
-                                <i class="bi bi-arrow-repeat fs-4"></i>
-                            </div>
-                            <label>Stay Subscribed?
-                                <i class="bi bi-info-square-fill text-primary"
-                                   data-bs-toggle="tooltip"
-                                   data-bs-placement="top"
-                                   title="Turn on the switch to keep receiving open-spot notifications (up to {{ max_auto_resub_notifs }} times) for a section until you manually unsubscribe. Turn off the switch to be auto-unsubscribed upon first notification."></i>
-                            </label>
-                            <div>
-                                {% if auto_resub %}
-                                <div class="form-check form-switch">
-                                    <input class="form-check-input"
-                                           type="checkbox"
-                                           id="auto-resub-switch"
-                                           checked />
-                                </div>
-                                {% else %}
-                                <div class="form-check form-switch">
-                                    <input class="form-check-input"
-                                           type="checkbox"
-                                           id="auto-resub-switch" />
-                                </div>
-                                {% endif %}
-                            </div>
-                        </div>
-                        <div class="form-text mt-0"
-                             style="line-height: 1.3;">
-                            To reduce spam for users who choose to stay subscribed, TigerSnatch
-                            sends notifications less often if the number of open spots for a section
-                            doesn't change, and auto-unsubscribes users from a section after
-                            {{ max_auto_resub_notifs }} open-spot notifications.
-                        </div>
-                    </div>
+<div
+  class="modal fade"
+  id="account-settings-modal"
+  data-classid=""
+  data-bs-backdrop="static"
+  data-bs-keyboard="false"
+  tabindex="-1"
+  aria-labelledby="staticBackdropLabel"
+  aria-hidden="true"
+>
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="staticBackdropLabel">Account Settings</h5>
+      </div>
+      <div class="modal-body" id="modal-body-account-settings">
+        <div class="container px-0 ms-0">
+          <div class="row">
+            <form id="new-email" action="/dashboard" method="post">
+              <div class="input-group mb-2">
+                <div class="input-group-text px-3 py-1">
+                  <i class="bi bi-envelope-at fs-4"></i>
                 </div>
+                <input
+                  id="new-email-input"
+                  class="form-control form-control-md"
+                  name="new_email"
+                  maxlength="75"
+                  placeholder="Email address"
+                  value="{{ email if email else '' }}"
+                  pattern="^([\w-]+(?:\.[\w-]+)*)@((?:[\w-]+\.)*\w[\w-]{0,66})\.([a-z]{2,6}(?:\.[a-z]{2})?)$"
+                  data-bs-toggle="tooltip"
+                  data-bs-placement="top"
+                  title="TigerSnatch will email you when a spot frees up! We recommend using your @princeton.edu address to prevent TigerSnatch emails from being marked as spam."
+                  required
+                />
+                <button class="btn btn-warning" disabled>Change Email</button>
+              </div>
+            </form>
+          </div>
 
+          <div class="row">
+            <form id="new-phone" action="/dashboard" method="post">
+              <div class="input-group mb-2">
+                <div class="input-group-text px-3 py-1">
+                  <i class="bi bi-phone fs-4"></i>
+                </div>
+                <input
+                  id="new-phone-input"
+                  class="form-control form-control-md"
+                  name="new_phone"
+                  maxlength="10"
+                  placeholder="Phone number"
+                  value="{{ phone if phone else '' }}"
+                  pattern="^\d{10}$"
+                  data-bs-toggle="tooltip"
+                  data-bs-placement="top"
+                  title="TigerSnatch will text you when a spot frees up! Note that you must use a US phone number."
+                />
+                <button class="btn btn-warning" disabled>Change Phone</button>
+              </div>
+            </form>
+          </div>
+
+          <div class="row" id="auto-resub-row">
+            <div class="input-group mb-2">
+              <div class="input-group-text px-3 py-1">
+                <i class="bi bi-arrow-repeat fs-4"></i>
+              </div>
+              <label
+                >Stay Subscribed?
+                <i
+                  class="bi bi-info-square-fill text-primary"
+                  data-bs-toggle="tooltip"
+                  data-bs-placement="top"
+                  title="Turn on the switch to keep receiving open-spot notifications (up to {{ max_auto_resub_notifs }} times) for a section until you manually unsubscribe. Turn off the switch to be auto-unsubscribed upon first notification."
+                ></i>
+              </label>
+              <div>
+                {% if auto_resub %}
+                <div class="form-check form-switch">
+                  <input
+                    class="form-check-input"
+                    type="checkbox"
+                    id="auto-resub-switch"
+                    checked
+                  />
+                </div>
+                {% else %}
+                <div class="form-check form-switch">
+                  <input
+                    class="form-check-input"
+                    type="checkbox"
+                    id="auto-resub-switch"
+                  />
+                </div>
+                {% endif %}
+              </div>
             </div>
-            <div class="modal-footer">
-                <button type="button"
-                        id="waitlist-modal-close"
-                        class="btn btn-warning"
-                        data-bs-dismiss="modal">
-                    Close
-                </button>
+            <div class="form-text mt-0" style="line-height: 1.3">
+              To reduce spam for users who choose to stay subscribed,
+              TigerSnatch sends notifications less often if the number of open
+              spots for a section doesn't change, and auto-unsubscribes users
+              from a section after {{ max_auto_resub_notifs }} open-spot
+              notifications.
             </div>
+          </div>
         </div>
+      </div>
+      <div class="modal-footer">
+        <button
+          type="button"
+          id="waitlist-modal-close"
+          class="btn btn-warning"
+          data-bs-dismiss="modal"
+        >
+          Close
+        </button>
+      </div>
     </div>
+  </div>
 </div>

@@ -1,31 +1,35 @@
 <!DOCTYPE html>
 <html>
+  <head>
+    <title>TigerSnatch</title>
+    {% include 'common.html' %}
+  </head>
 
-<head>
-  <title>TigerSnatch</title>
-  {% include 'common.html' %}
-</head>
-
-<body id="error-container">
-  <div class="container-fluid">
-    <div class="row text-center">
-      <p class="fs-3 px-0 pt-5">You have been blocked from accessing TigerSnatch.</p>
-      <p class="fs-5 px-0 pt-2">
-        If you believe this is a mistake, please contact the TigerSnatch admins
-        (tigersnatch@princeton.edu).
-      </p>
-      <img src="/static/forbidden.svg"
-           width="200"
-           height="200"
-           alt="TigerSnatch blocked"
-           class="d-inline-block align-text-center mb-5 mt-3" />
+  <body id="error-container">
+    <div class="container-fluid">
+      <div class="row text-center">
+        <p class="fs-3 px-0 pt-5">
+          You have been blocked from accessing TigerSnatch.
+        </p>
+        <p class="fs-5 px-0 pt-2">
+          If you believe this is a mistake, please contact the TigerSnatch
+          admins (tigersnatch@princeton.edu).
+        </p>
+        <img
+          src="/static/forbidden.svg"
+          width="200"
+          height="200"
+          alt="TigerSnatch blocked"
+          class="d-inline-block align-text-center mb-5 mt-3"
+        />
+      </div>
     </div>
-  </div>
 
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"
-          integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p"
-          crossorigin="anonymous"></script>
-  <script src="{{url_for('static', filename='app.js')|version}}"></script>
-</body>
-
+    <script
+      src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"
+      integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p"
+      crossorigin="anonymous"
+    ></script>
+    <script src="{{url_for('static', filename='app.js')|version}}"></script>
+  </body>
 </html>

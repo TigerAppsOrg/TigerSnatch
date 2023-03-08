@@ -1,43 +1,45 @@
-<nav id="nav"
-     class="navbar navbar-expand-lg navbar-light sticky-top">
-  <div id="nav-container"
-       class="container-fluid ps-0">
-    <a class="navbar-brand fs-3 me-0 ms-4 d-flex align-items-center"
-       href="/dashboard">
+<nav id="nav" class="navbar navbar-expand-lg navbar-light sticky-top">
+  <div id="nav-container" class="container-fluid ps-0">
+    <a
+      class="navbar-brand fs-3 me-0 ms-4 d-flex align-items-center"
+      href="/dashboard"
+    >
       TigerSnatch {% include 'utils/status_indicator.html' %}
     </a>
-    <button class="navbar-toggler"
-            type="button"
-            data-bs-toggle="collapse"
-            data-bs-target="#navbarNavAltMarkup"
-            aria-controls="navbarNavAltMarkup"
-            aria-expanded="true"
-            aria-label="Toggle navigation">
+    <button
+      class="navbar-toggler"
+      type="button"
+      data-bs-toggle="collapse"
+      data-bs-target="#navbarNavAltMarkup"
+      aria-controls="navbarNavAltMarkup"
+      aria-expanded="true"
+      aria-label="Toggle navigation"
+    >
       <span class="navbar-toggler-icon"></span>
     </button>
   </div>
-  <div id="navbarNavAltMarkup"
-       class="collapse navbar-collapse">
+  <div id="navbarNavAltMarkup" class="collapse navbar-collapse">
     <ul class="navbar-nav align-items-center">
       <li class="nav-item">
-        <a class="nav-link mx-2 fs-5 fw-light active"
-           href="/activity">Activity</a>
+        <a class="nav-link mx-2 fs-5 fw-light active" href="/activity"
+          >Activity</a
+        >
       </li>
       <li class="nav-item">
-        <a class="nav-link mx-2 fs-5 fw-light active"
-           href="/about">About</a>
+        <a class="nav-link mx-2 fs-5 fw-light active" href="/about">About</a>
       </li>
       <li class="nav-item">
-        <a class="nav-link mx-2 me-2 fs-5 fw-light active"
-           href="/tutorial">Tutorial</a>
+        <a class="nav-link mx-2 me-2 fs-5 fw-light active" href="/tutorial"
+          >Tutorial</a
+        >
       </li>
       <li>
-        <form class="d-flex mx-4 nav-button"
-              action="/login"
-              method="get">
-          <button id="login-btn"
-                  class="btn btn-warning text-dark fs-5 fw-light nav-button py-0 px-2"
-                  type="submit">
+        <form class="d-flex mx-4 nav-button" action="/login" method="get">
+          <button
+            id="login-btn"
+            class="btn btn-warning text-dark fs-5 fw-light nav-button py-0 px-2"
+            type="submit"
+          >
             Login
           </button>
         </form>

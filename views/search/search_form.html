@@ -1,22 +1,22 @@
-<div id="course-search"
-     class="input-group">
-     <input id="search-form-input"
-            class="form-control form-control-lg"
-            type="text"
-            name="query"
-            placeholder="Search for a course"
-            value="{{ last_query_unquoted }}"
-            pattern="^[a-zA-Z0-9-:?%\x22\x27\x26\x2C ]+$"
-            maxlength="100"
-            autocomplete="off"
-            data-bs-toggle="tooltip"
-            data-bs-placement="top"
-            data-bs-trigger="hover"
-            title="Search by course department, number, or title! Please enter only alphanumerics, spaces, commas, quotes, :, ?, % characters."
-            autofocus
-            autocapitalize="off" />
+<div id="course-search" class="input-group">
+  <input
+    id="search-form-input"
+    class="form-control form-control-lg"
+    type="text"
+    name="query"
+    placeholder="Search for a course"
+    value="{{ last_query_unquoted }}"
+    pattern="^[a-zA-Z0-9-:?%\x22\x27\x26\x2C ]+$"
+    maxlength="100"
+    autocomplete="off"
+    data-bs-toggle="tooltip"
+    data-bs-placement="top"
+    data-bs-trigger="hover"
+    title="Search by course department, number, or title! Please enter only alphanumerics, spaces, commas, quotes, :, ?, % characters."
+    autofocus
+    autocapitalize="off"
+  />
 </div>
-<small id="course-search-help"
-       class="form-text text-muted">
-     TigerSnatch Subscriptions are independent from official course waitlists.
+<small id="course-search-help" class="form-text text-muted">
+  TigerSnatch Subscriptions are independent from official course waitlists.
 </small>

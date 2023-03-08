@@ -1,186 +1,224 @@
 <!DOCTYPE html>
 <html>
+  <head>
+    {% include 'common.html' %}
+    <title>TigerSnatch | About</title>
+  </head>
 
-<head>
-  {% include 'common.html' %}
-  <title>TigerSnatch | About</title>
-</head>
-
-<body id="landing-container">
-  {% if not loggedin %} {% include 'nav/nav_logged_out.html' %} {% else %} {% include 'nav/nav.html'
-  %}{% endif %}
-  <div class="container-fluid">
-    <div class="row mb-2">
-      <br />
-      <p class="about-desc fw-light text-center mt-4 pt-2"
-         style="padding-left: 15%; padding-right: 15%;">
-        TigerSnatch helps Princeton students with course enrollment through its Subscriptions
-        feature. With Subscriptions, students can receive an email and text message when spots open
-        in a full course so they can avoid repeatedly checking official Course Offerings.
+  <body id="landing-container">
+    {% if not loggedin %} {% include 'nav/nav_logged_out.html' %} {% else %} {%
+    include 'nav/nav.html' %}{% endif %}
+    <div class="container-fluid">
+      <div class="row mb-2">
         <br />
-        <br />
-        <a href="https://forms.gle/prjNBnV4odi5w8hw7"
-           target="_blank"
-           class="text-decoration-none"
-           data-bs-toggle="tooltip"
-           data-bs-placement="auto"
-           title="Want to help improve TigerSnatch? Provide feedback here!">
-          <span class="text-dark ms-2 fs-5 fw-bold"
-                style="background-color: #ffc107; border-radius: 0.25rem; padding: 5px;">Give
-            Feedback <i class="bi bi-box-arrow-up-right fs-5 ms-1"></i>
-          </span>
-        </a>
-        <br />
-        <br />
-        The TigerApps Team actively maintains and upgrades TigerSnatch. We thank Professor Robert
-        Dondero and Sata Sengupta for their guidance on TigerSnatch.
-        <br />
-        <br />
-        <a class="mx-2 text-decoration-none"
-           href="https://tigerapps.org"
-           target="_blank">
-          <img src="/static/tigerapps.png"
-               class="img-shadow border border-3 border-warning p-2 mb-4"
-               style="height: 100px; border-radius: 10px"
-               data-bs-toggle="tooltip"
-               data-bs-placement="auto"
-               title="Check out other TigerApps!" />
-        </a>
-        <a class="mx-2"
-           href="https://github.com/PrincetonUSG/TigerSnatch"
-           target="_blank">
-          <img src="/static/github.png"
-               class="img-shadow border border-3 border-warning p-2 mb-4"
-               style="height: 100px; border-radius: 10px"
-               data-bs-toggle="tooltip"
-               data-bs-placement="auto"
-               title="Contribute to TigerSnatch!" />
-        </a>
-      </p>
-    </div>
-    <hr class="my-3 about-hr" />
-    <div class="row">
-      <p class="text-center mt-2"
-         style="letter-spacing: 1px">
-        <span class="badge bg-warning text-dark font-monospace fs-3 px-2 py-2">Original Team</span>
-      </p>
-    </div>
-    <div class="row">
-      <div class="col-xl-4">
-        <img class="img-shadow rounded-circle border border-3 border-warning mx-auto mt-3 d-block"
-             src="/static/Shannon.jpg"
-             width="250px"
-             height="250px" />
-        <h2 class="fs-5 text-center pt-4 pb-0">Shannon Heh '23</h2>
+        <p
+          class="about-desc fw-light text-center mt-4 pt-2"
+          style="padding-left: 15%; padding-right: 15%"
+        >
+          TigerSnatch helps Princeton students with course enrollment through
+          its Subscriptions feature. With Subscriptions, students can receive an
+          email and text message when spots open in a full course so they can
+          avoid repeatedly checking official Course Offerings.
+          <br />
+          <br />
+          <a
+            href="https://forms.gle/prjNBnV4odi5w8hw7"
+            target="_blank"
+            class="text-decoration-none"
+            data-bs-toggle="tooltip"
+            data-bs-placement="auto"
+            title="Want to help improve TigerSnatch? Provide feedback here!"
+          >
+            <span
+              class="text-dark ms-2 fs-5 fw-bold"
+              style="
+                background-color: #ffc107;
+                border-radius: 0.25rem;
+                padding: 5px;
+              "
+              >Give Feedback <i class="bi bi-box-arrow-up-right fs-5 ms-1"></i>
+            </span>
+          </a>
+          <br />
+          <br />
+          The TigerApps Team actively maintains and upgrades TigerSnatch. We
+          thank Professor Robert Dondero and Sata Sengupta for their guidance on
+          TigerSnatch.
+          <br />
+          <br />
+          <a
+            class="mx-2 text-decoration-none"
+            href="https://tigerapps.org"
+            target="_blank"
+          >
+            <img
+              src="/static/tigerapps.png"
+              class="img-shadow border border-3 border-warning p-2 mb-4"
+              style="height: 100px; border-radius: 10px"
+              data-bs-toggle="tooltip"
+              data-bs-placement="auto"
+              title="Check out other TigerApps!"
+            />
+          </a>
+          <a
+            class="mx-2"
+            href="https://github.com/PrincetonUSG/TigerSnatch"
+            target="_blank"
+          >
+            <img
+              src="/static/github.png"
+              class="img-shadow border border-3 border-warning p-2 mb-4"
+              style="height: 100px; border-radius: 10px"
+              data-bs-toggle="tooltip"
+              data-bs-placement="auto"
+              title="Contribute to TigerSnatch!"
+            />
+          </a>
+        </p>
       </div>
-      <div class="col-xl-4">
-        <img class="img-shadow rounded-circle border border-3 border-warning mx-auto mt-3 d-block"
-             src="/static/Nick.jpg"
-             width="250px"
-             height="250px" />
-        <h2 class="fs-5 text-center pt-4 pb-0">Nicholas Padmanabhan '23</h2>
+      <hr class="my-3 about-hr" />
+      <div class="row">
+        <p class="text-center mt-2" style="letter-spacing: 1px">
+          <span class="badge bg-warning text-dark font-monospace fs-3 px-2 py-2"
+            >Original Team</span
+          >
+        </p>
       </div>
-      <div class="col-xl-4">
-        <img class="img-shadow rounded-circle border border-3 border-warning mx-auto mt-3 d-block"
-             src="/static/Byron.jpg"
-             width="250px"
-             height="250px" />
-        <h2 class="fs-5 text-center pt-4 pb-0">Byron Zhang '23</h2>
-      </div>
-    </div>
-    <hr class="my-3 about-hr" />
-    <div class="row">
-      <p class="text-center mt-2 mb-3"
-         style="letter-spacing: 1px">
-        <span class="badge bg-warning text-dark font-monospace fs-3 px-2 pb-2">Release Notes</span>
-      </p>
-      <div id="release-notes-desc"
-           class="text-center mb-3">
-        <div>Stay informed about the newest TigerSnatch updates with Release Notes!</div>
-        <div class="release-tags">
-          <strong>Tag Categories:</strong>
-          <span class="badge rounded-pill bg-success fs-6">Type of Update</span>
-          <span class="badge rounded-pill bg-primary fs-6">Location of Update</span>
-          <span class="badge rounded-pill bg-danger fs-6">Importance of Update</span>
+      <div class="row">
+        <div class="col-xl-4">
+          <img
+            class="img-shadow rounded-circle border border-3 border-warning mx-auto mt-3 d-block"
+            src="/static/Shannon.jpg"
+            width="250px"
+            height="250px"
+          />
+          <h2 class="fs-5 text-center pt-4 pb-0">Shannon Heh '23</h2>
+        </div>
+        <div class="col-xl-4">
+          <img
+            class="img-shadow rounded-circle border border-3 border-warning mx-auto mt-3 d-block"
+            src="/static/Nick.jpg"
+            width="250px"
+            height="250px"
+          />
+          <h2 class="fs-5 text-center pt-4 pb-0">Nicholas Padmanabhan '23</h2>
+        </div>
+        <div class="col-xl-4">
+          <img
+            class="img-shadow rounded-circle border border-3 border-warning mx-auto mt-3 d-block"
+            src="/static/Byron.jpg"
+            width="250px"
+            height="250px"
+          />
+          <h2 class="fs-5 text-center pt-4 pb-0">Byron Zhang '23</h2>
         </div>
       </div>
-    </div>
-    <div class="row">
-
-      <!-- Replace the below conditional with `if not release_notes_success` when Release Notes is done! -->
-      {% if True %}
-
-      <div class="text-center mb-5">
-        Release Notes will be published soon. Stay tuned!
+      <hr class="my-3 about-hr" />
+      <div class="row">
+        <p class="text-center mt-2 mb-3" style="letter-spacing: 1px">
+          <span class="badge bg-warning text-dark font-monospace fs-3 px-2 pb-2"
+            >Release Notes</span
+          >
+        </p>
+        <div id="release-notes-desc" class="text-center mb-3">
+          <div>
+            Stay informed about the newest TigerSnatch updates with Release
+            Notes!
+          </div>
+          <div class="release-tags">
+            <strong>Tag Categories:</strong>
+            <span class="badge rounded-pill bg-success fs-6"
+              >Type of Update</span
+            >
+            <span class="badge rounded-pill bg-primary fs-6"
+              >Location of Update</span
+            >
+            <span class="badge rounded-pill bg-danger fs-6"
+              >Importance of Update</span
+            >
+          </div>
+        </div>
       </div>
+      <div class="row">
+        <!-- Replace the below conditional with `if not release_notes_success` when Release Notes is done! -->
+        {% if True %}
 
-      <!-- Delete the above block and uncomment the below block when Release Notes is done! -->
+        <div class="text-center mb-5">
+          Release Notes will be published soon. Stay tuned!
+        </div>
 
-      <!-- <div class="text-center mb-5">
+        <!-- Delete the above block and uncomment the below block when Release Notes is done! -->
+
+        <!-- <div class="text-center mb-5">
         Release Notes currently unavailable. Check them out on our
         <a href="https://github.com/PrincetonUSG/TigerSnatch"
            target="_blank"
            style="text-decoration: underline;">Github repo</a>.
       </div> -->
 
-      {% else %}
+        {% else %}
 
-      <div id="release-notes-accordion"
-           class="accordion mb-5">
-
-        {% for note in release_notes %}
-        {% set i = loop.index %}
-        <div class="accordion-item">
-          <h2 class="accordion-header"
-              id="heading-{{ i }}">
-            <div class="accordion-button collapsed"
-                 data-bs-toggle="collapse"
-                 data-bs-target="#collapse-{{ i }}"
-                 aria-controls="collapse-{{ i }}"
-                 aria-expanded="false"
-                 style="cursor:pointer;">
-              <div class="d-flex flex-column">
-                <div>
-                  <span id="release-title-{{ i }}"
-                        class="release-title">{{ note["title"] }}</span>
-                  <span id="release-date-{{ i }}"
-                        class="badge bg-secondary">{{ note["date"] }}</span>
-                </div>
-                <div class="release-tags"
-                     id="release-tags-{{ i }}">
-                  {% if "type" in note["tags"] %}
-                  <span class="badge rounded-pill bg-success">{{ note["tags"]["type"] }}</span>
-                  {% endif %}
-                  {% if "location" in note["tags"] %}
-                  <span class="badge rounded-pill bg-primary">{{ note["tags"]["location"] }}</span>
-                  {% endif %}
-                  {% if "importance" in note["tags"] %}
-                  <span class="badge rounded-pill bg-danger">{{ note["tags"]["importance"] }}</span>
-                  {% endif %}
+        <div id="release-notes-accordion" class="accordion mb-5">
+          {% for note in release_notes %} {% set i = loop.index %}
+          <div class="accordion-item">
+            <h2 class="accordion-header" id="heading-{{ i }}">
+              <div
+                class="accordion-button collapsed"
+                data-bs-toggle="collapse"
+                data-bs-target="#collapse-{{ i }}"
+                aria-controls="collapse-{{ i }}"
+                aria-expanded="false"
+                style="cursor: pointer"
+              >
+                <div class="d-flex flex-column">
+                  <div>
+                    <span id="release-title-{{ i }}" class="release-title"
+                      >{{ note["title"] }}</span
+                    >
+                    <span id="release-date-{{ i }}" class="badge bg-secondary"
+                      >{{ note["date"] }}</span
+                    >
+                  </div>
+                  <div class="release-tags" id="release-tags-{{ i }}">
+                    {% if "type" in note["tags"] %}
+                    <span class="badge rounded-pill bg-success"
+                      >{{ note["tags"]["type"] }}</span
+                    >
+                    {% endif %} {% if "location" in note["tags"] %}
+                    <span class="badge rounded-pill bg-primary"
+                      >{{ note["tags"]["location"] }}</span
+                    >
+                    {% endif %} {% if "importance" in note["tags"] %}
+                    <span class="badge rounded-pill bg-danger"
+                      >{{ note["tags"]["importance"] }}</span
+                    >
+                    {% endif %}
+                  </div>
                 </div>
               </div>
-            </div>
-          </h2>
-          <div id="collapse-{{ i }}"
-               class="accordion-collapse collapse"
-               aria-labelledby="heading-{{ i }}"
-               data-bs-parent="#release-notes-accordion">
-            <div id="release-content-{{ i }}"
-                 class="accordion-body">
-              {{ note["body"]|safe }}
+            </h2>
+            <div
+              id="collapse-{{ i }}"
+              class="accordion-collapse collapse"
+              aria-labelledby="heading-{{ i }}"
+              data-bs-parent="#release-notes-accordion"
+            >
+              <div id="release-content-{{ i }}" class="accordion-body">
+                {{ note["body"]|safe }}
+              </div>
             </div>
           </div>
+          {% endfor %}
         </div>
-        {% endfor %}
+        {% endif %}
       </div>
-      {% endif %}
     </div>
-  </div>
 
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"
-          integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p"
-          crossorigin="anonymous"></script>
-  <script src="{{url_for('static', filename='app.js')|version}}"></script>
-</body>
-
+    <script
+      src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"
+      integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p"
+      crossorigin="anonymous"
+    ></script>
+    <script src="{{url_for('static', filename='app.js')|version}}"></script>
+  </body>
 </html>
