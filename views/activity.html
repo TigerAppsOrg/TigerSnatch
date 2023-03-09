@@ -10,16 +10,16 @@
     include 'nav/nav.html' %}{% endif %}
     <div class="container-fluid">
       <div class="row activity-row">
-        <p class="text-center px-5 mt-4 mb-4" style="letter-spacing: 1px">
+        <p class="text-center px-5 mt-4 mb-1" style="letter-spacing: 1px">
           <strong class="landing-tigersnatch-highlight fs-3 fw-bold">
             Statistics
           </strong>
         </p>
         <div id="stats-activity-col-l" class="stats-col col-xl-6">
-          <div class="card activity-card mt-3">
+          <div class="card activity-card mt-4">
             <div class="card-body">
-              <div class="card-title text-center">Top Subscribed Courses</div>
-              <div class="card-subtitle mb-2 text-muted text-center">
+              <div class="fs-5 fw-bold text-center">Top Subscribed Courses</div>
+              <div class="card-subtitle mt-1 mb-3 text-muted text-center">
                 Last Updated: {{ stats['stats_update_time'] }}. <br />
                 Only the top subscribed section from a course is shown.
               </div>
@@ -31,7 +31,7 @@
                 <div
                   class="list-group-item d-flex align-items-center justify-content-between"
                 >
-                  <label class="stats-top-course">
+                  <label class="stats-top-course fs-6">
                     {{sub['deptnum']}}: {{sub['name']}} ({{sub['section']}})
                   </label>
                   <span class="badge fs-6">{{ sub['size'] }}</span>
@@ -47,29 +47,29 @@
         <!-- stats-activity-col-l -->
 
         <div id="stats-activity-col-r" class="stats-col col-xl-6">
-          <div class="card activity-card text-center mt-3">
+          <div class="card activity-card text-center mt-4">
             <div class="card-body">
-              <div class="card-title">General Stats</div>
-              <div class="card-subtitle mb-2 text-muted">
+              <div class="fs-5 fw-bold">General Stats</div>
+              <div class="card-subtitle mt-1 mb-3 text-muted">
                 Last Updated: {{ stats['stats_update_time'] }}. <br />
                 Subscription-related stats reset whenever next semester's
                 courses are released.
               </div>
               <div class="list-group">
                 <div class="list-group-item align-items-center stats-item">
-                  <label> Users: </label>
+                  <label class="fs-6">Users:</label>
                   <span class="badge fs-6"
                     >{{ stats['stats_total_users'] }}</span
                   >
                 </div>
                 <div class="list-group-item align-items-center stats-item">
-                  <label> Subscribed Users: </label>
+                  <label class="fs-6"> Subscribed Users: </label>
                   <span class="badge fs-6"
                     >{{ stats['stats_subbed_users'] }}</span
                   >
                 </div>
                 <div class="list-group-item align-items-center stats-item">
-                  <label> Subscriptions: </label>
+                  <label class="fs-6"> Subscriptions: </label>
                   <span class="badge fs-6"
                     >{{ stats['stats_total_subs'] }}</span
                   >
@@ -77,19 +77,19 @@
                 <div
                   class="list-group-item d-flex justify-content-center align-items-center stats-item"
                 >
-                  <label> Sections with Subscriptions: </label>
+                  <label class="fs-6"> Sections with Subscriptions: </label>
                   <span class="badge fs-6"
                     >{{ stats['stats_subbed_sections'] }}</span
                   >
                 </div>
                 <div class="list-group-item align-items-center stats-item">
-                  <label> Courses with Subscriptions: </label>
+                  <label class="fs-6"> Courses with Subscriptions: </label>
                   <span class="badge fs-6"
                     >{{ stats['stats_subbed_courses'] }}</span
                   >
                 </div>
                 <div class="list-group-item align-items-center stats-item">
-                  <label> Emails/Texts Sent: </label>
+                  <label class="fs-6"> Emails/Texts Sent: </label>
                   <span class="badge fs-6"
                     >{{ stats['stats_total_notifs'] }}</span
                   >
@@ -101,10 +101,10 @@
           </div>
           <!-- card -->
 
-          <div class="card activity-card text-center mt-3">
+          <div class="card activity-card text-center mt-4">
             <div class="card-body">
-              <div class="card-title">Most Recent Notifications</div>
-              <div class="card-subtitle mb-2 text-muted">
+              <div class="fs-5 fw-bold">Most Recent Notifications</div>
+              <div class="card-subtitle mt-1 mb-3 text-muted">
                 Always up-to-date. Only at most 5 notifications are shown.
               </div>
               {% if stats['stats_notifs_logs'] == [] %}
@@ -115,7 +115,7 @@
                 <div
                   class="list-group-item d-flex align-items-center justify-content-center"
                 >
-                  <label> {{ log }} </label>
+                  <label class="fs-6">{{ log }}</label>
                 </div>
                 {% endfor %}
               </ul>
@@ -131,21 +131,23 @@
 
       <div class="row justify-content-center activity-row">
         <div id="subscription-activity-col" class="col-xl-6 mb-5">
-          <p class="text-center px-5 mt-4 mb-4" style="letter-spacing: 1px">
+          <p class="text-center px-5 mt-4 mb-1" style="letter-spacing: 1px">
             <strong class="landing-tigersnatch-highlight fs-3 fw-bold">
               Notifications
             </strong>
           </p>
           {% if not loggedin %}
-          <div class="card activity-card text-center mt-3">
+          <div class="card activity-card text-center mt-4">
             <div class="card-body">
-              <div>Log in to view your Subscriptions activity!</div>
+              <div class="fs-6">
+                Log in to view your Subscriptions activity!
+              </div>
             </div>
           </div>
           {% endif %} {% if waitlist_logs == [] %}
-          <div class="card activity-card text-center mt-3">
+          <div class="card activity-card text-center mt-4">
             <div class="card-body">
-              <div>
+              <div class="fs-6">
                 Once a spot is available in one of your Subscribed sections and
                 you receive an email and text message about that spot, a message
                 will appear here!
@@ -153,9 +155,9 @@
             </div>
           </div>
           {% else %} {% for waitlist_log in waitlist_logs %}
-          <div class="card activity-card text-center mt-3">
+          <div class="card activity-card text-center mt-4">
             <div class="card-body">
-              <div>{{waitlist_log}}</div>
+              <div class="fs-6">{{waitlist_log}}</div>
             </div>
           </div>
           {% endfor %} {% endif %}

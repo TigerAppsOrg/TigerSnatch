@@ -12,7 +12,7 @@
       <div class="row mb-2">
         <br />
         <p
-          class="about-desc fw-light text-center mt-4 pt-2"
+          class="about-desc text-center mt-4 pt-2 fs-6"
           style="padding-left: 15%; padding-right: 15%"
         >
           TigerSnatch helps Princeton students with course enrollment through
@@ -29,14 +29,8 @@
             data-bs-placement="auto"
             title="Want to help improve TigerSnatch? Provide feedback here!"
           >
-            <span
-              class="text-dark ms-2 fs-5 fw-bold"
-              style="
-                background-color: #ffc107;
-                border-radius: 0.25rem;
-                padding: 5px;
-              "
-              >Give Feedback <i class="bi bi-box-arrow-up-right fs-5 ms-1"></i>
+            <span id="give-feedback-link" class="text-dark ms-2 fs-6 fw-bolder">
+              Give Feedback <i class="bi bi-box-arrow-up-right fs-6 ms-1"></i>
             </span>
           </a>
           <br />
@@ -53,8 +47,7 @@
           >
             <img
               src="/static/tigerapps.png"
-              class="img-shadow border border-3 border-warning p-2 mb-4"
-              style="height: 100px; border-radius: 10px"
+              class="about-external-link img-shadow border border-3 border-warning p-2 mb-4"
               data-bs-toggle="tooltip"
               data-bs-placement="auto"
               title="Check out other TigerApps!"
@@ -67,8 +60,7 @@
           >
             <img
               src="/static/github.png"
-              class="img-shadow border border-3 border-warning p-2 mb-4"
-              style="height: 100px; border-radius: 10px"
+              class="about-external-link img-shadow border border-3 border-warning p-2 mb-4"
               data-bs-toggle="tooltip"
               data-bs-placement="auto"
               title="Contribute to TigerSnatch!"
@@ -120,22 +112,20 @@
             Release Notes
           </strong>
         </p>
-        <div id="release-notes-desc" class="text-center mb-3">
-          <div>
+        <div id="release-notes-desc" class="text-center mb-2">
+          <div class="fs-6">
             Stay informed about the newest TigerSnatch updates with Release
             Notes!
           </div>
           <div class="release-tags">
-            <strong>Tag Categories:</strong>
-            <span class="badge rounded-pill bg-success fs-6"
-              >Type of Update</span
-            >
-            <span class="badge rounded-pill bg-primary fs-6"
-              >Location of Update</span
-            >
-            <span class="badge rounded-pill bg-danger fs-6"
-              >Importance of Update</span
-            >
+            <span class="fs-6 fw-bold me-1">Tag Categories:</span>
+            <span class="badge bg-success fs-6 fw-normal">Type of Update</span>
+            <span class="badge bg-primary fs-6 fw-normal">
+              Location of Update
+            </span>
+            <span class="badge bg-danger fs-6 fw-normal">
+              Importance of Update
+            </span>
           </div>
         </div>
       </div>
@@ -143,7 +133,7 @@
         <!-- Replace the below conditional with `if not release_notes_success` when Release Notes is done! -->
         {% if True %}
 
-        <div class="text-center mb-5">
+        <div class="text-center mb-5 fs-6">
           Release Notes will be published soon. Stay tuned!
         </div>
 

@@ -34,6 +34,7 @@
   --color-green: #6cba6c;
   --color-gray: #f4f4f4;
   --color-orange: #ed9856;
+  --color-warning: #ffca80;
 }
 .vsc-initialized,
 body,
@@ -57,7 +58,7 @@ div.row.align-items-start {
   height: 4rem;
 }
 #status-indicator {
-  background-color: #ffc107;
+  background-color: var(--color-warning);
   border-radius: 0.25rem;
   padding: 1px 6px;
   letter-spacing: 0.5px;
@@ -67,6 +68,9 @@ div.row.align-items-start {
   a#admin-nav-link {
     margin-left: 23px;
   }
+}
+.navbar-brand {
+  font-weight: 500;
 }
 ul.navbar-nav {
   background: var(--color-yellow);
@@ -250,10 +254,6 @@ body#landing-container,
 body#tutorial-container {
   background: var(--color-gray);
 }
-p.tutorial-text,
-p.about-desc {
-  font-size: 1.15rem;
-}
 div#landing-auth-req {
   color: var(--color-orange);
 }
@@ -351,7 +351,7 @@ tr {
   margin: auto;
 }
 .tutorial-image {
-  width: 60%;
+  width: 80%;
   margin: auto;
 }
 .tutorial-text {
@@ -392,7 +392,11 @@ div#stats-activity-col-r {
   }
 }
 .img-shadow {
-  box-shadow: 0 12px 10px #8888888e;
+  box-shadow: 0 10px 10px #8888888e;
+}
+.about-external-link {
+  height: 80px;
+  border-radius: 8px;
 }
 .table-white {
   --bs-table-bg: #fff;
@@ -423,13 +427,13 @@ div.swap-table {
   display: none;
 }
 .tutorial-style .introjs-tooltip-title {
-  color: #ffc107;
+  color: var(--color-warning) !important;
 }
 .tutorial-style .introjs-progressbar {
-  background-color: #ffc107;
+  background-color: var(--color-warning) !important;
 }
 .tutorial-style .introjs-button {
-  background-color: #ffc107;
+  background-color: var(--color-warning) !important;
   border: none;
   text-shadow: none;
 }
@@ -441,7 +445,7 @@ div.swap-table {
   transition-duration: 0.15s, 0.15s, 0.15s, 0.15s;
   transition-timing-function: ease-in-out, ease-in-out, ease-in-out, ease-in-out;
   transition-delay: 0s, 0s, 0s, 0s;
-  background-color: #ffca2c;
+  background-color: var(--color-warning) !important;
   border-color: #ffc720;
 }
 div.stats-item label {
@@ -451,16 +455,17 @@ label.stats-top-course {
   margin-right: 30px;
 }
 .stats-col .badge {
-  background-color: #ffca2c;
+  background-color: var(--color-warning) !important;
   color: #000;
   font-weight: 600;
 }
-.stats-col .card-title {
-  font-weight: 700;
-  font-size: 1.15rem;
-}
 .stats-col .card-subtitle {
   font-size: 0.85rem;
+}
+#give-feedback-link {
+  background-color: var(--color-warning);
+  border-radius: 0.25rem;
+  padding: 5px;
 }
 .release-title {
   margin-right: 5px;
