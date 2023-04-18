@@ -17,6 +17,7 @@ from config import (
     HEROKU_API_KEY,
     HEROKU_APP_NAME,
     MAX_AUTO_RESUB_NOTIFS,
+    NOTIFS_INTERVAL_SECS,
 )
 from schema import COURSES_SCHEMA, CLASS_SCHEMA, MAPPINGS_SCHEMA, ENROLLMENTS_SCHEMA
 from pymongo import MongoClient
@@ -31,7 +32,6 @@ TZ = pytz.timezone("US/Eastern")
 
 
 class Database:
-
     # creates a reference to the TigerSnatch MongoDB database
 
     def __init__(self):
@@ -538,6 +538,7 @@ class Database:
                 f"Subscribed sections: {self.get_num_subscribed_sections()}",
                 f"Subscribed courses: {self.get_num_subscribed_courses()}",
                 f"Notifications sent: {self.get_email_counter()}",
+                f"Notification frequency: {NOTIFS_INTERVAL_SECS}s",
                 line_break,
             ]
             res.extend(get_top_n_subscribed_sections(n=10))
