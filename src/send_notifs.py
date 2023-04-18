@@ -135,16 +135,19 @@ def generate_time_intervals():
     tz = pytz.timezone("US/Eastern")
     # see https://towardsdatascience.com/read-data-from-google-sheets-into-pandas-without-the-google-sheets-api-5c468536550
     # for how to create this link
-    google_sheets_url = "https://docs.google.com/spreadsheets/d/1iSWihUcWa0yX8MsS_FKC-DuGH75AukdiuAigbSkPm8k/gviz/tq?tqx=out:csv&sheet=Data"
-    data = pd.read_csv(google_sheets_url)[["start_datetime", "end_datetime"]]
+    google_sheets_url = "https://docs.google.com/spreadsheets/d/1iSWihUcWa0yX8MsS_FKC-DuGH75AukdiuAigbSkPm8k/gviz/tq?tqx=out:csv&sheet=Schedule"
+    data = pd.read_csv(google_sheets_url)[
+        ["start_date", "start_time", "end_date", "end_time"]
+    ]
     datetimes = list(data.itertuples(index=False, name=None))
+    datetimes = list(map(lambda x: (f"{x[0]} {x[1]}", f"{x[2]} {x[3]}"), datetimes))
     try:
         datetimes = list(
             map(
                 lambda x: [
-                    tz.localize(datetime.strptime(x[0], "%Y-%m-%d %I:%M %p"))
+                    tz.localize(datetime.strptime(x[0], "%m/%d/%Y %H:%M %p"))
                     + timedelta(minutes=OIT_NOTIFS_OFFSET_MINS),
-                    tz.localize(datetime.strptime(x[1], "%Y-%m-%d %I:%M %p")),
+                    tz.localize(datetime.strptime(x[1], "%m/%d/%Y %H:%M %p")),
                 ],
                 datetimes,
             )
