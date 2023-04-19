@@ -37,6 +37,10 @@ def log_system(message):
     _log(message, "SYSTEM", _Colors.OKCYAN)
 
 
+def log_info(message):
+    _log(message, "INFO", _Colors.OKCYAN)
+
+
 if __name__ == "__main__":
     log_notifs("Notifs Notification")
     log_error("Error Notification")
