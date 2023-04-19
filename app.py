@@ -120,23 +120,14 @@ def tutorial():
 
 # helper method to update user settings on dashboard
 def _update_user_settings(netid):
-
     new_email = request.form.get("new_email")
     new_phone = request.form.get("new_phone")
 
-    if new_email is not None:
-        if "<" in new_email or ">" in new_email or "script" in new_email.lower():
-            print("HTML code detected in", new_email, file=stderr)
-            return True
-
+    if new_email is not None and "<" not in new_email:
         _db.update_user(netid, new_email.strip())
         return True
 
-    if new_phone is not None:
-        if "<" in new_phone or ">" in new_phone or "script" in new_phone.lower():
-            print("HTML code detected in", new_phone, file=stderr)
-            return True
-
+    if new_phone is not None and "<" not in new_phone:
         _db.update_user_phone(netid, new_phone.strip())
         return True
 
