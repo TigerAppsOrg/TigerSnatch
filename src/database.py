@@ -1779,13 +1779,13 @@ class Database:
 
     # adds log message to logs array in system collection
 
-    def _add_system_log(self, type, meta, netid=None, print_=True):
+    def _add_system_log(self, type, meta, netid=None, print_=True, log_fn=log_system):
         meta["type"] = type
         meta["time"] = datetime.now(TZ)
         if netid is not None:
             meta["netid"] = netid
         if "message" in meta and print_:
-            log_system(meta["message"])
+            log_fn(meta["message"])
             stdout.flush()
         self._db.system.insert_one(meta)
 

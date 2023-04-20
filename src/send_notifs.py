@@ -30,11 +30,17 @@ def cronjob():
     db = Database()
     monitor = Monitor(db)
 
-    db._add_system_log("cron", {"message": "notifications script executing"})
+    db._add_system_log(
+        "cron",
+        {"message": "notifications script executing"},
+        log_fn=log_notifs,
+    )
 
     if db.get_maintenance_status():
         db._add_system_log(
-            "cron", {"message": "app in maintenance mode: notifications script killed"}
+            "cron",
+            {"message": "app in maintenance mode: notifications script killed"},
+            log_fn=log_notifs,
         )
         return
 
@@ -100,12 +106,14 @@ def cronjob():
             {
                 "message": f"sent {total} notifs in {duration} seconds ({n_sections} sections):{names[:-1]}"
             },
+            log_fn=log_notifs,
         )
         db.increment_email_counter(total)
     elif total == 0:
         db._add_system_log(
             "cron",
             {"message": f"sent 0 notifs in {duration} seconds ({n_sections} sections)"},
+            log_fn=log_notifs,
         )
     stdout.flush()
 
