@@ -526,6 +526,28 @@ class Database:
                 )
             )
 
+        def get_site_ref_counts():
+            raw_counts = self._db.admin.find_one({}, {"site_ref_counts": 1, "_id": 0})[
+                "site_ref_counts"
+            ]
+            counts = {}
+            for site_ref, count in raw_counts.items():
+                if site_ref == "princetoncourses":
+                    counts["Princeton Courses"] = count
+                elif site_ref == "recal":
+                    counts["ReCal"] = count
+
+            counts = [(k, v) for k, v in counts.items()]
+            counts.sort(key=lambda x: x[1], reverse=True)
+            total_count = sum([e[1] for e in counts])
+
+            ret = ""
+            for site_ref, count in counts:
+                percentage = round(count / total_count * 100, 1)
+                ret += f"{site_ref}: {count} ({percentage}%), "
+
+            return ret[:-2]
+
         line_break = "===================="
 
         try:
@@ -540,6 +562,7 @@ class Database:
                 f"Subscribed courses: {self.get_num_subscribed_courses()}",
                 f"Notifications sent: {self.get_email_counter()}",
                 f"Notification frequency: {NOTIFS_INTERVAL_SECS}s",
+                f"Site refs: {get_site_ref_counts()}",
                 line_break,
             ]
             res.extend(get_top_n_subscribed_sections(n=10))
