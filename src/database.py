@@ -766,6 +766,7 @@ class Database:
             {},
             {"$inc": {f"site_ref_counts.{ref}": 1}},
         )
+        log_info(f"Incremented site ref count for {ref}")
 
     # ----------------------------------------------------------------------
     # BLACKLIST UTILITY METHODS
