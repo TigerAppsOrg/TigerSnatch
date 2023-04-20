@@ -991,7 +991,7 @@ class Database:
             if num_notifs_for_classid >= MAX_AUTO_RESUB_NOTIFS:
                 if print_max_resub_msg:
                     log_info(
-                        f"{netid} reached maximum auto resubs ({MAX_AUTO_RESUB_NOTIFS}) for classID {classid}"
+                        f"User {netid} reached maximum auto resubs ({MAX_AUTO_RESUB_NOTIFS}) for classID {classid}"
                     )
                 return False
 
@@ -1468,7 +1468,7 @@ class Database:
             # if class is in a disabled course, do not allow sub
             if self.is_course_disabled(courseid):
                 raise Exception(
-                    f"{netid}: class {classid} is in disabled course {courseid}"
+                    f"User {netid}: class {classid} is in disabled course {courseid}"
                 )
 
             course_info = self.get_course(courseid)
@@ -1573,7 +1573,7 @@ class Database:
                 raise Exception(f"user {netid} not in waitlist for class {classid}")
             if self.is_course_disabled(courseid):
                 raise Exception(
-                    f"{netid}: class {classid} is in disabled course {courseid}"
+                    f"User {netid}: class {classid} is in disabled course {courseid}"
                 )
 
         netid = netid.strip()
