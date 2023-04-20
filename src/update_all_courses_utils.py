@@ -8,6 +8,7 @@ from mobileapp import MobileApp
 from database import Database
 from sys import stderr
 import time
+from log_utils import *
 
 _api = MobileApp()
 
@@ -72,11 +73,11 @@ def process_dept_codes(dept_codes: str, current_term_code: str, hard_reset: bool
 
         # iterate through all subjects, courses, and classes
         for subject in courses["term"][0]["subjects"]:
-            print("> processing dept code", subject["code"])
+            log_info(f"Processing dept code {subject['code']}")
             for course in subject["courses"]:
                 courseid = course["course_id"]
                 if db.courses_contains_courseid(courseid):
-                    print("already processed courseid", courseid, "- skipping")
+                    log_info(f"Already processed courseID {courseid} - skipping")
                     continue
 
                 # "new" will contain a single course document to be entered
@@ -100,7 +101,7 @@ def process_dept_codes(dept_codes: str, current_term_code: str, hard_reset: bool
 
                 new_courses.add(new["displayname"])
 
-                print("inserting", new["displayname"], "into mappings")
+                log_info(f"Inserting {new['displayname']} into mappings")
                 db.add_to_mappings(new)
 
                 del new["time"]
@@ -162,20 +163,19 @@ def process_dept_codes(dept_codes: str, current_term_code: str, hard_reset: bool
                     }
 
                     if not hard_reset and classid in old_last_notifs:
-                        print("preserving time of last notif for class", classid)
+                        log_info(f"Preserving time of last notif for classID {classid}")
                         new_class_enrollment["last_notif"] = old_last_notifs[classid]
 
                     if not hard_reset and classid in old_prev_enrollments:
-                        print("preserving previous enrollment for class", classid)
+                        log_info(
+                            f"Preserving previous enrollment for classID {classid}"
+                        )
                         new_class_enrollment["prev_enrollment"] = old_prev_enrollments[
                             classid
                         ]
 
-                    print(
-                        "inserting",
-                        new["displayname"],
-                        new_class["section"],
-                        "into enrollments",
+                    log_info(
+                        f"Inserting {new['displayname']} {new_class['section']} into enrollments"
                     )
                     db.add_to_enrollments(new_class_enrollment)
 
@@ -196,15 +196,16 @@ def process_dept_codes(dept_codes: str, current_term_code: str, hard_reset: bool
                 for i, new_class in enumerate(all_new_classes):
                     new[f'class_{new_class["classid"]}'] = new_class
 
-                print("inserting", new["displayname"], "into courses")
+                log_info(f"Inserting {new['displayname']} into courses")
                 db.add_to_courses(new)
 
                 n_courses += 1
 
-        print(f"> processed {n_courses} courses and {n_sections} sections")
-        print(f"> performed a {'hard' if hard_reset else 'soft'} reset")
+        log_info(f"Processed {n_courses} courses and {n_sections} sections")
+        log_info(f"Performed a {'hard' if hard_reset else 'soft'} reset")
         return n_courses, n_sections, list(new_courses - old_courses)
 
     except Exception as e:
-        print(f"failed to get new course data with exception message {e}", file=stderr)
+        log_error(f"Failed to get new course data")
+        print(e, file=stderr)
         return 0, 0

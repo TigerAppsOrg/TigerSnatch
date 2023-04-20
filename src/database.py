@@ -26,6 +26,7 @@ from datetime import datetime, timedelta
 from random import randint
 import pytz
 import heroku3
+from log_utils import *
 
 
 TZ = pytz.timezone("US/Eastern")
@@ -45,7 +46,7 @@ class Database:
         try:
             self._db.admin.command("ismaster")
         except ConnectionFailure:
-            print("failed (server not available)", file=stderr)
+            log_error("Failed (server not available)")
             raise Exception("server unavailable")
 
         self._db = self._db.tigersnatch
@@ -133,28 +134,27 @@ class Database:
     def add_disabled_course(self, courseid):
         course_data = self.get_course(courseid)
         if not course_data:
-            print(f"{courseid} is not a valid course ID", file=stderr)
+            log_error(f"{courseid} is an invalid courseID")
             return False
         try:
             self._db.admin.update_one({}, {"$addToSet": {"disabled_courses": courseid}})
             self.clear_course_waitlists(courseid, "SYSTEM_AUTO")
             return True
         except:
-            print(f"could not add {courseid} to list of disabled courses", file=stderr)
+            log_error(f"Could not add courseID {courseid} to list of disabled courses")
             return False
 
     def remove_disabled_course(self, courseid):
         course_data = self.get_course(courseid)
         if not course_data:
-            print(f"{courseid} is not a valid course ID", file=stderr)
+            log_error(f"{courseid} is an invalid courseID")
             return False
         try:
             self._db.admin.update_one({}, {"$pull": {"disabled_courses": courseid}})
             return True
         except:
-            print(
-                f"could not remove {courseid} from list of disabled courses",
-                file=stderr,
+            log_error(
+                f"Could not remove courseID {courseid} from list of disabled courses"
             )
             return False
 
@@ -162,7 +162,7 @@ class Database:
 
     def _add_admin_log(self, log, print_=True):
         if print_:
-            print(log)
+            log_system(log)
         log = f"{(datetime.now(TZ)).strftime('%b %d, %Y @ %-I:%M %p ET')} \u2192 {log}"
 
         self._db.admin.update_one(
@@ -294,12 +294,10 @@ class Database:
                 netid=admin_netid,
             )
             return True
-        except:
+        except Exception as e:
             if log_classid_skip:
-                print(
-                    f"waitlist for class {classid} does not exist - skipping",
-                    file=stderr,
-                )
+                log_error(f"Waitlist for classID {classid} does not exist - skipping")
+                print(e, file=stderr)
             return False
 
     # clears and removes users from all waitlists for class classid
@@ -322,7 +320,7 @@ class Database:
             )
             return True
         except Exception as e:
-            print(f"failed to clear waitlists for course {courseid}", file=stderr)
+            log_error(f"Failed to clear waitlists for courseID {courseid}")
             print(e, file=stderr)
             return False
 
@@ -332,12 +330,12 @@ class Database:
         # removes user profile from users collection
         # removes user from any waitlists
         def remove_user(netid):
-            print("removing user", netid, "from all waitlists")
+            log_info(f"Removing all Subscriptions for user {netid}")
             classids = self.get_user(netid, "waitlists")
             for classid in classids:
                 self.remove_from_waitlist(netid, classid)
 
-            print("removing user", netid, "from users and logs collections")
+            log_info(f"Removing user {netid} from users and logs collections")
             self._db.users.delete_one({"netid": netid})
             self._db.notifs.delete_one({"netid": netid})
             self._db.logs.delete_one({"netid": netid})
@@ -372,8 +370,9 @@ class Database:
             )
             return True
 
-        except Exception:
-            print(f"failed to block user {netid}", file=stderr)
+        except Exception as e:
+            log_error(f"Failed to block user {netid}")
+            print(e, file=stderr)
             return False
 
     # remove netid from app blacklist
@@ -395,8 +394,9 @@ class Database:
                 netid=admin_netid,
             )
             return True
-        except Exception:
-            print(f"failed to unblock user {netid}", file=stderr)
+        except Exception as e:
+            log_error(f"Failed to unblock user {netid}")
+            print(e, file=stderr)
             return False
 
     # returns list of blacklisted netids
@@ -410,8 +410,9 @@ class Database:
         try:
             classids = self.get_user(netid, "waitlists")
             year = self.get_user(netid, "year")
-        except:
-            print("user", netid, "does not exist", file=stderr)
+        except Exception as e:
+            log_error(f"Failed to get Subscriptions for user {netid}")
+            print(e, file=stderr)
             return "missing"
         res = []
 
@@ -548,8 +549,9 @@ class Database:
             res.extend(get_notifs_schedule())
             return "{".join(res)
 
-        except:
-            print("failed to generate usage history", file=stderr)
+        except Exception as e:
+            log_error("Failed to generate usage history")
+            print(e, file=stderr)
             return "error"
 
     # generates a sorted (popularity primary; course code secondary) list of
@@ -573,8 +575,9 @@ class Database:
 
         try:
             return "{".join(get_all_subscribed_sections())
-        except:
-            print("failed to get all subscriptions", file=stderr)
+        except Exception as e:
+            log_error("Failed to get all subscriptions")
+            print(e, file=stderr)
             return "error"
 
     # ----------------------------------------------------------------------
@@ -628,8 +631,9 @@ class Database:
                                 "size": data["size"],
                             }
                         )
-            except:
-                print("failed to retrieve top subscribed courses", file=stderr)
+            except Exception as e:
+                log_error("Failed to retrieve top subscribed courses")
+                print(e, file=stderr)
 
         else:
             try:
@@ -653,8 +657,9 @@ class Database:
                             "size": data["size"],
                         }
                     )
-            except:
-                print("failed to retrieve top subscribed sections", file=stderr)
+            except Exception as e:
+                log_error("Failed to retrieve top subscribed sections")
+                print(e, file=stderr)
 
         return res
 
@@ -695,7 +700,7 @@ class Database:
                 len(stats_notifs_logs) > 0
                 and stats_notifs_logs[0].split(" \u2192 ")[1] == log
             ):
-                print("duplicate stats notifs log detected - skipping", file=stderr)
+                log_info("Duplicate stats notifs log detected - skipping")
                 return
         except:
             pass
@@ -743,8 +748,9 @@ class Database:
         try:
             blacklist = self.get_blacklist()
             return netid in blacklist
-        except Exception:
-            print(f"error in checking if {netid} is on blacklist", file=stderr)
+        except Exception as e:
+            log_error(f"Failed to check if {netid} is blocked")
+            print(e, file=stderr)
 
     # ----------------------------------------------------------------------
     # USER METHODS
@@ -764,7 +770,7 @@ class Database:
             data = ActiveDirectory(Database()).get_user(netid)
 
             if not data:
-                print("no ActiveDirectory data found for user", netid)
+                log_info(f"No ActiveDirectory data found for user {netid}")
                 return None
 
             data = data[0]
@@ -779,7 +785,7 @@ class Database:
             return None
 
         if self.is_user_created(netid):
-            print(f"user {netid} already exists", file=stderr)
+            log_error(f"Failed to create user {netid} - already exists")
             return
         netid = netid.strip()
         self._db.users.insert_one(
@@ -794,7 +800,7 @@ class Database:
         )
         self._db.notifs.insert_one({"netid": netid})
         self._db.logs.insert_one({"netid": netid, "waitlist_log": []})
-        print(f"successfully created user {netid}")
+        log_info(f"Succesfully created user {netid}")
 
     # update user netid's waitlist log
 
@@ -855,8 +861,9 @@ class Database:
             course_data = self.get_course(courseid)
             try:
                 class_data = course_data[f"class_{classid}"]
-            except:
-                print(f"classid {classid} not found in courses", file=stderr)
+            except Exception as e:
+                log_error(f"ClassID {classid} not found in courses")
+                print(e, file=stderr)
                 del dashboard_data[classid]
                 continue
 
@@ -916,8 +923,9 @@ class Database:
                 {"netid": netid}, {"$set": {"auto_resub": auto_resub}}
             )
             return True
-        except:
-            print(f"attempt to update auto_resub for {netid} failed", file=stderr)
+        except Exception as e:
+            log_error(f"Attempt to update auto_resub for {netid} failed")
+            print(e, file=stderr)
             return False
 
     # returns whether user opted to auto resubscribe
@@ -950,8 +958,8 @@ class Database:
             # if the max number of notifs is reached, return False (and unsub them)
             if num_notifs_for_classid >= MAX_AUTO_RESUB_NOTIFS:
                 if print_max_resub_msg:
-                    print(
-                        f"> {netid} reached maximum auto resubs ({MAX_AUTO_RESUB_NOTIFS}) for class {classid}"
+                    log_info(
+                        f"{netid} reached maximum auto resubs ({MAX_AUTO_RESUB_NOTIFS}) for classID {classid}"
                     )
                 return False
 
@@ -1465,12 +1473,8 @@ class Database:
         user_waitlists = self.get_user(netid, "waitlists")
         try:
             if len(user_waitlists) >= MAX_WAITLIST_SIZE:
-                print(
-                    "user",
-                    netid,
-                    "exceeded the waitlist limit of",
-                    MAX_WAITLIST_SIZE,
-                    file=stderr,
+                log_info(
+                    f"User {netid} exceeded the waitlist limit of {MAX_WAITLIST_SIZE}"
                 )
                 return 0
         except Exception as e:
@@ -1679,16 +1683,16 @@ class Database:
 
     def reset_db(self):
         def clear_coll(coll):
-            print("clearing", coll)
+            log_info(f"Clearing {coll}")
             self._db[coll].delete_many({})
 
-        print("clearing waitlists in users")
+        log_info("Clearing waitlists in users")
         self._db.users.update_many({}, {"$set": {"waitlists": []}})
 
-        print("resetting user logs")
+        log_info("Resetting user logs")
         self._db.logs.update_many({}, {"$set": {"waitlist_log": []}})
 
-        print("clearing disabled courses")
+        log_info("Clearing disabled courses")
         self._db.admin.update_one({}, {"$set": {"disabled_courses": []}})
 
         clear_coll("mappings")
@@ -1697,7 +1701,7 @@ class Database:
         clear_coll("waitlists")
         clear_coll("notifs")
 
-        print("repopulating documents in notifs")
+        log_info("Repopulating documents in notifs")
         for doc in self._db.users.find({}, {"netid": 1}):
             self._db.notifs.insert_one({"netid": doc["netid"]})
 
@@ -1710,7 +1714,7 @@ class Database:
 
     def soft_reset_db(self):
         def clear_coll(coll):
-            print("clearing", coll)
+            log_info(f"Clearing {coll}")
             self._db[coll].delete_many({})
 
         clear_coll("mappings")
@@ -1781,9 +1785,7 @@ class Database:
         if netid is not None:
             meta["netid"] = netid
         if "message" in meta and print_:
-            print(
-                f'System Log @ {meta["time"].strftime("%-I:%M:%S %p ET")} > {meta["message"]}'
-            )
+            log_system(meta["message"])
             stdout.flush()
         self._db.system.insert_one(meta)
 

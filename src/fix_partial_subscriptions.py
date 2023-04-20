@@ -1,8 +1,9 @@
 from database import Database
+from log_utils import *
 
 
 def fix_partial_subscriptions():
-    print("fixing partial subscriptions/unsubscriptions...")
+    log_info("Fixing partial subscriptions/unsubscriptions...")
 
     database = Database()
     db = database._db
@@ -35,12 +36,11 @@ def fix_partial_subscriptions():
         if netids_from_waitlists_set != netids_from_users_set:
             diff = netids_from_waitlists_set ^ netids_from_users_set
 
-            print(f"{classid}: user diff to unsubscribe {diff}")
+            log_info(f"classID {classid}: user diff to unsubscribe {diff}")
             for netid in diff:
                 database.remove_from_waitlist(netid, classid, force_remove=True)
-            print("---")
 
-    print("done")
+    log_info("Done fixing partial subscriptions/unsubscriptions")
 
 
 if __name__ == "__main__":

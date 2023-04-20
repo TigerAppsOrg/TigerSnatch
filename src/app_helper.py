@@ -10,6 +10,7 @@ from sys import stderr
 from markdown import markdown
 import json
 import os
+from log_utils import *
 
 MAX_QUERY_LENGTH = 150
 
@@ -21,15 +22,15 @@ def validate_query(query):
 
 
 # searches for course based on user query
-def do_search(query, db):
+def do_search(query, db: Database):
     if query is None or not isinstance(query, str):
         return None, ""
 
     res = []
     if query.strip() == "":
         return None, ""
-    elif "<" in query or ">" in query or "script" in query:
-        print("HTML code detected in", query, file=stderr)
+    elif "<" in query:
+        log_error(f"HTML code detected in {query}")
         return None, ""
     else:
         query = " ".join(query.split())
@@ -171,7 +172,7 @@ def get_release_notes():
 
             return True, notes
     except:
-        print("failed to open or parse release note files", file=stderr)
+        log_error("Failed to open or parse release note files")
         return False, []
 
 

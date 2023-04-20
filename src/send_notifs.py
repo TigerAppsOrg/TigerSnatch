@@ -20,6 +20,7 @@ from config import OIT_NOTIFS_OFFSET_MINS
 from notify import send_email, send_text
 from multiprocess import Pool
 from os import cpu_count
+from log_utils import *
 
 TZ = pytz.timezone("US/Eastern")
 
@@ -56,6 +57,7 @@ def cronjob():
             netids = notify.get_netids()
             if len(netids) == 0:
                 continue
+            log_notifs(f"Sending notifs for classID {classid}")
             print(notify)
             stdout.flush()
 
@@ -74,11 +76,11 @@ def cronjob():
 
     n_emails_sent = sum(emails_res)
     if len(emails_res) > 0 and n_emails_sent == 0:
-        print("failed to send emails")
+        log_error("Failed to send emails")
 
     n_texts_sent = sum(texts_res)
     if len(texts_res) > 0 and n_texts_sent == 0:
-        print("failed to send texts")
+        log_error("Failed to send texts")
 
     total = n_emails_sent + n_texts_sent
     print()
@@ -87,7 +89,7 @@ def cronjob():
 
     if total > 0:
         db._add_admin_log(
-            f"sent {total} emails and texts in {duration} seconds ({n_sections} sections):{names[:-1]}",
+            f"sent {total} notifs in {duration} seconds ({n_sections} sections):{names[:-1]}",
             print_=False,
         )
         db.add_stats_notif_log(
@@ -96,19 +98,16 @@ def cronjob():
         db._add_system_log(
             "cron",
             {
-                "message": f"✅ sent {total} emails and texts in {duration} seconds ({n_sections} sections):{names[:-1]}"
+                "message": f"sent {total} notifs in {duration} seconds ({n_sections} sections):{names[:-1]}"
             },
         )
         db.increment_email_counter(total)
     elif total == 0:
         db._add_system_log(
             "cron",
-            {
-                "message": f"✅ sent 0 emails and texts in {duration} seconds ({n_sections} sections)"
-            },
+            {"message": f"sent 0 notifs in {duration} seconds ({n_sections} sections)"},
         )
-        print(f"sent 0 emails and texts in {duration} seconds ({n_sections} sections)")
-        stdout.flush()
+    stdout.flush()
 
 
 def set_status_indicator_to_on():
@@ -144,9 +143,8 @@ def generate_time_intervals():
         datetimes = list(data.itertuples(index=False, name=None))
         datetimes = list(map(lambda x: (f"{x[0]} {x[1]}", f"{x[2]} {x[3]}"), datetimes))
     except:
-        print(
-            f"[Scheduler] error reading Google Sheet ({google_sheets_url}) - make sure all columns in the Schedule tab are present and properly named/formatted",
-            file=stderr,
+        log_error(
+            f"Error reading Google Sheet ({google_sheets_url}) - please update/fix the Schedule tab"
         )
         return []
     try:
@@ -162,24 +160,19 @@ def generate_time_intervals():
         )
         datetimes = list(filter(lambda x: x[1] > datetime.now(tz), datetimes))
     except:
-        print(
-            "[Scheduler] error parsing datetimes - make sure that their format is YYYY-MM-DD HH:MM AM/PM",
-            file=stderr,
-        )
+        log_error("Error parsing datetimes - please update/fix the Schedule tab")
         return []
 
     # validate list of datetimes
     flat = [item for sublist in datetimes for item in sublist]
     if not all(flat[i] < flat[i + 1] for i in range(len(flat) - 1)):
-        print(
-            "[Scheduler] WARNING: datetime intervals either overlap or are not in ascending order. This may cause duplicate emails and texts to be sent!",
-            file=stderr,
+        log_error(
+            "Datetime intervals either overlap or are not in ascending order - please update/fix the Schedule tab"
         )
         return []
     if flat[-1] <= datetime.now(tz):
-        print(
-            "[Scheduler] WARNING: all time intervals are in the past - please update the schedule spreadsheet and be sure to use 24-hour time",
-            file=stderr,
+        log_warning(
+            "All time intervals are in the past - please update the Schedule tab"
         )
 
     return datetimes
@@ -214,8 +207,9 @@ def update_stats():
                 }
             },
         )
-    except:
-        print("failed to update stats on activity page", file=stderr)
+    except Exception as e:
+        log_error("Failed to update stats on activity page")
+        print(e, file=stderr)
 
 
 if __name__ == "__main__":

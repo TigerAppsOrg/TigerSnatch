@@ -12,6 +12,7 @@
 
 from sys import exit, argv
 from database import Database
+from log_utils import *
 
 if __name__ == "__main__":
 
@@ -26,4 +27,4 @@ if __name__ == "__main__":
     turn_on = process_args()
 
     Database().set_maintenance_status(turn_on)
-    print("done")
+    log_info(f"Maintenance mode {'enabled' if turn_on else 'disabled'}")

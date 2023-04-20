@@ -6,10 +6,10 @@
 
 from database import Database
 from sys import stderr
+from log_utils import *
 
 
 class Waitlist:
-
     # pass-in netid for a user
 
     def __init__(self, netid):
@@ -26,6 +26,7 @@ class Waitlist:
             status = self._db.add_to_waitlist(self._netid, classid)
             return status
         except Exception as e:
+            log_error(f"Error subscribing user {self._netid} to classID {classid}")
             print(e, file=stderr)
             return 2
 
@@ -36,6 +37,7 @@ class Waitlist:
             self._db.remove_from_waitlist(self._netid, classid)
             return True
         except Exception as e:
+            log_error(f"Error unsubscribing user {self._netid} from classID {classid}")
             print(e, file=stderr)
             return False
 

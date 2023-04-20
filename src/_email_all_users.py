@@ -28,6 +28,7 @@ from database import Database
 from sys import exit, argv
 from sendgrid import SendGridAPIClient
 from config import SENDGRID_API_KEY, TS_EMAIL
+from log_utils import *
 
 if __name__ == "__main__":
 
@@ -48,15 +49,18 @@ if __name__ == "__main__":
             SUBJECT = subj.read()
             MESSAGE = msg.read()
     except FileNotFoundError:
-        print("make sure that files SUBJECT and MESSAGE (no extensions) exist in /src!")
+        log_error(
+            "Make sure that files SUBJECT and MESSAGE (no extensions) exist in /src!"
+        )
         exit(1)
 
     send_to_all_users = process_args()
     send_to_custom = not send_to_all_users
 
     if send_to_custom and len(argv) < 3:
-        print("--test requires a space-separated list of 1+ email addresses!")
-        print("Example: $ python _email_all_users.py --test x@x.com y@y.com")
+        log_error(
+            "--test requires a space-separated list of 1+ email addresses! Example: $ python _email_all_users.py --test x@x.com y@y.com"
+        )
         exit(1)
 
     if send_to_all_users:
@@ -113,4 +117,6 @@ if __name__ == "__main__":
             print("failed with exception:")
             print(e)
 
-    print(f"{len(emails)} emails sent!")
+    log_info(
+        f"Sent email to {'ALL users' if send_to_all_users else argv[2:]} ({len(emails)} in total)."
+    )

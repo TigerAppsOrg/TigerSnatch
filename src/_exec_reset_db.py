@@ -15,6 +15,7 @@
 
 from database import Database
 from sys import exit, argv
+from log_utils import *
 
 if __name__ == "__main__":
 
@@ -30,7 +31,7 @@ if __name__ == "__main__":
 
     if hard_reset:
         Database().reset_db()
-        print("done")
+        log_info("Database hard reset done")
     else:
         Database().soft_reset_db()
-        print("done")
+        log_info("Database soft reset done")

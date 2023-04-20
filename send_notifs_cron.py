@@ -24,6 +24,7 @@ from config import (
 )
 from apscheduler.schedulers.blocking import BlockingScheduler
 from apscheduler.schedulers.background import BackgroundScheduler
+from log_utils import *
 
 
 def schedule_jobs(update_db=False):
@@ -35,7 +36,7 @@ def schedule_jobs(update_db=False):
         set_status_indicator_to_off(log=False)
         tz = pytz.timezone("US/Eastern")
 
-        print("[Scheduler] adding global soft course update job at 4am ET daily")
+        log_cron("Adding global soft course update job at 4am ET daily")
         sched.add_job(
             do_update_async_SOFT,
             "cron",
@@ -43,7 +44,7 @@ def schedule_jobs(update_db=False):
             timezone=tz,
         )
 
-        print("[Scheduler] adding global soft course update job at 5am ET daily")
+        log_cron("Adding global soft course update job at 5am ET daily")
         sched.add_job(
             do_update_async_SOFT,
             "cron",
@@ -51,17 +52,15 @@ def schedule_jobs(update_db=False):
             timezone=tz,
         )
 
-        print("[Scheduler] adding stats update job every 10 minutes")
+        log_cron("Adding stats update job every 10 mins")
         sched.add_job(
             update_stats,
             "interval",
             minutes=STATS_INTERVAL_MINS,
         )
 
-        print(
-            "[Scheduler] adding global hard course update job every",
-            GLOBAL_COURSE_UPDATE_INTERVAL_MINS,
-            "mins",
+        log_cron(
+            f"Adding global hard course update job every {GLOBAL_COURSE_UPDATE_INTERVAL_MINS} mins"
         )
         sched.add_job(
             do_update_async_HARD,
@@ -71,7 +70,7 @@ def schedule_jobs(update_db=False):
 
         for time in times:
             start, end = time[0], time[1]
-            print("[Scheduler] adding job between", start, "and", end)
+            log_cron(f"Adding notifs job between {start} and {end}")
             sched.add_job(
                 cronjob,
                 "interval",
@@ -92,12 +91,12 @@ def schedule_jobs(update_db=False):
             )
             if start <= datetime.now(tz) <= end:
                 set_status_indicator_to_on()
-        print("[Scheduler] booting new notifs scheduler")
+        log_cron("Booting notifs scheduler")
         sched.start()
-        print("[Scheduler] done booting scheduler")
+        log_cron("Done booting notifs scheduler")
         return sched
     except:
-        print("[Scheduler] an error occurred in function schedule_jobs()", file=stderr)
+        log_error("An error occurred in function schedule_jobs()")
 
 
 def check_spreadsheet_maybe_schedule_new_notifs(scheds: list[BackgroundScheduler]):
@@ -105,28 +104,27 @@ def check_spreadsheet_maybe_schedule_new_notifs(scheds: list[BackgroundScheduler
         times = generate_time_intervals()
         if not did_notifs_spreadsheet_change(times):
             return
-        print("[Scheduler] new datetimes detected - rescheduling jobs")
-        print("[Scheduler] shutting down current notifs scheduler")
+        log_cron("New datetimes detected - rescheduling jobs")
+        log_cron("Shutting down current notifs scheduler")
         scheds[-1].shutdown()  # stop and clear all current notifs jobs
         update_notifs_schedule(times)  # update database
         new_sched = schedule_jobs()  # schedule all new notifs jobs
-        print("[Scheduler] replacing notifs scheduler")
+        log_cron("Replacing notifs scheduler")
         scheds.pop(0)
         scheds.append(new_sched)
-        print("[Scheduler] done updating notifs scheduler")
+        log_cron("Done updating notifs scheduler")
     except:
-        print(
-            "[Scheduler] an error occurred in function check_spreadsheet_maybe_schedule_new_notifs()",
-            file=stderr,
+        log_error(
+            "An error occurred in function check_spreadsheet_maybe_schedule_new_notifs()"
         )
 
 
 if __name__ == "__main__":
-    print(
-        "[Scheduler] this script reads from https://docs.google.com/spreadsheets/d/1iSWihUcWa0yX8MsS_FKC-DuGH75AukdiuAigbSkPm8k/edit#gid=550138744 on an interval (configurable in Config Vars) and schedules all notifications jobs according to the datetimes in the spreadsheet"
+    log_cron(
+        "This script reads from https://docs.google.com/spreadsheets/d/1iSWihUcWa0yX8MsS_FKC-DuGH75AukdiuAigbSkPm8k/edit#gid=550138744 on an interval (configurable in Config Vars) and schedules all notifications jobs according to the datetimes in the spreadsheet"
     )
-    print(
-        '[Scheduler] reboot this dyno ("notifs") in Heroku to force a re-schedule using the spreadsheet'
+    log_cron(
+        "Reboot this dyno (notifs) in Heroku to force a re-schedule using the spreadsheet"
     )
     sched_spreadsheet_checker = BlockingScheduler()
 

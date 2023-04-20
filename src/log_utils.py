@@ -14,9 +14,9 @@ class _Colors:
     UNDERLINE = "\033[4m"
 
 
-def _log(message, prefix, color):
+def _log(message: str, prefix, color):
     print(
-        f'{color}[{datetime.now().strftime("%-I:%M:%S %p ET")}][{prefix}]\t{message}{_Colors.ENDC}'
+        f'{color}[{datetime.now().strftime("%-I:%M:%S %p ET")}][{prefix}]\t{message.capitalize()}{_Colors.ENDC}'
     )
     stdout.flush()
 
@@ -39,6 +39,10 @@ def log_system(message):
 
 def log_info(message):
     _log(message, "INFO", _Colors.OKCYAN)
+
+
+def log_warning(message):
+    _log(message, "WARNING", _Colors.WARNING)
 
 
 if __name__ == "__main__":

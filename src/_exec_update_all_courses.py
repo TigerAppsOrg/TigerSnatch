@@ -29,6 +29,7 @@ from time import time
 from os import system
 from update_all_courses_utils import get_all_dept_codes, process_dept_codes
 from fix_partial_subscriptions import fix_partial_subscriptions
+from log_utils import *
 
 
 # True --> hard reset
@@ -64,7 +65,7 @@ def do_update(reset_type):
             },
             netid="SYSTEM_AUTO",
         )
-        print(f"getting all courses in term code {current_term_code}")
+        log_info(f"Getting all courses in term code {current_term_code}")
 
         DEPT_CODES = ",".join(get_all_dept_codes(current_term_code))
         n_courses, n_classes, new_courses = process_dept_codes(
@@ -99,7 +100,7 @@ def do_update(reset_type):
         netid="SYSTEM_AUTO",
     )
 
-    print(f"success: approx. {round(time()-tic)} seconds")
+    log_info(f"Success: approx. {round(time()-tic)} seconds")
 
 
 def do_update_async_HARD():

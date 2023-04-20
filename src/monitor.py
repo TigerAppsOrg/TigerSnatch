@@ -14,6 +14,7 @@ from monitor_utils import (
     get_new_mobileapp_data,
 )
 from config import COURSE_UPDATE_INTERVAL_MINS
+from log_utils import *
 
 
 class Monitor:
@@ -36,7 +37,7 @@ class Monitor:
 
             # skip sections whose course is disabled
             if courseid in disabled_courses:
-                print(deptnum, "with courseid", courseid, "is disabled - skipping")
+                log_notifs(f"{deptnum} (courseID {courseid}) is disabled - skipping")
                 continue
 
             if courseid in data:
@@ -76,7 +77,6 @@ class Monitor:
             course_wrapper = CourseWrapper(
                 course_deptnum, new_enroll, new_cap, courseid, self._db
             )
-            # print(course_wrapper, end="")
             course_wrappers.append(course_wrapper)
 
         self._waited_course_wrappers = course_wrappers
@@ -98,7 +98,7 @@ class Monitor:
             pass
 
         tic = time()
-        print("🧮 calculating open spots")
+        log_notifs("Calculating open spots")
         self._construct_waited_classes()
         try:
             self._waited_classes
@@ -121,7 +121,7 @@ class Monitor:
                 data[class_] = n_slots
 
         self._changed_enrollments = data
-        print(f"✅ calculated open spots: approx. {round(time()-tic)} seconds")
+        log_notifs(f"Calculated open spots: approx. {round(time()-tic)} seconds")
         return self._changed_enrollments, len(self._waited_course_wrappers)
 
     # updates all course data if it has been 2 minutes since last update

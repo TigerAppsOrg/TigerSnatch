@@ -224,13 +224,13 @@ class Notify:
         return send_text_args
 
     def __str__(self):
-        ret = f"\n✨ {self._deptnum} {self._sectionname} ({self._classid}): {self.n_new_slots} open spot(s)\n"
-        ret += f"   🧍 Notifying {', '.join(self._netids)}\n"
-        ret += f"   📧 Emailing {', '.join(self._emails)}\n"
+        ret = f"\n{self._deptnum} {self._sectionname} ({self._classid}): {self.n_new_slots} open spot(s)\n"
+        ret += f"   Notifying {', '.join(self._netids)}\n"
+        ret += f"   Emailing {', '.join(self._emails)}\n"
         phones = list(filter(None, self._phones))
         if len(phones) == 0:
             return ret[:-1]
-        ret += f"   📱 Texting {', '.join(phones)}"
+        ret += f"   Texting {', '.join(phones)}"
         return ret
 
 
