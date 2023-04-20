@@ -1,5 +1,9 @@
 from datetime import datetime
 from sys import stdout
+import pytz
+
+
+TZ = pytz.timezone("US/Eastern")
 
 
 class _Colors:
@@ -17,7 +21,7 @@ class _Colors:
 def _log(message: str, prefix, color):
     message = message[0].capitalize() + message[1:]
     print(
-        f'{_Colors.BOLD}{color}[{datetime.now().strftime("%-I:%M:%S %p ET")}] [{prefix}]{_Colors.ENDC} {message}'
+        f'{_Colors.BOLD}{color}[{datetime.now(TZ).strftime("%-I:%M:%S %p ET")}] [{prefix}]{_Colors.ENDC} {message}'
     )
     stdout.flush()
 
