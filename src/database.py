@@ -762,6 +762,8 @@ class Database:
         return stats
 
     def increment_site_ref(self, ref: str):
+        if not ref:
+            return
         self._db.admin.update_one(
             {},
             {"$inc": {f"site_ref_counts.{ref}": 1}},
