@@ -81,7 +81,7 @@ def landing():
 def login():
     netid = _cas.authenticate()
     if _db.is_blacklisted(netid):
-        _db._add_admin_log(f"blacklisted user {netid} attempted to access the app")
+        _db._add_admin_log(f"blocked user {netid} attempted to access the app")
         return make_response(render_template("blocklisted.html"))
 
     _db._add_system_log("user", {"message": f"user {netid} logged in"}, netid=netid)
@@ -141,7 +141,7 @@ def dashboard():
 
     netid = _cas.authenticate()
     if _db.is_blacklisted(netid):
-        _db._add_admin_log(f"blacklisted user {netid} attempted to access the app")
+        _db._add_admin_log(f"blocked user {netid} attempted to access the app")
         return make_response(render_template("blocklisted.html"))
 
     data = _db.get_dashboard_data(netid)
@@ -260,7 +260,7 @@ def activity():
 def get_course():
     netid = _cas.authenticate()
     if _db.is_blacklisted(netid):
-        _db._add_admin_log(f"blacklisted user {netid} attempted to access the app")
+        _db._add_admin_log(f"blocked user {netid} attempted to access the app")
         return make_response(render_template("blocklisted.html"))
 
     if not _db.is_user_created(netid):
@@ -288,7 +288,7 @@ def get_course():
     _db._add_system_log(
         "user",
         {
-            "message": f"course {course_details['displayname']} ({courseid}) visited by user {netid}"
+            "message": f"courseID {course_details['displayname']} ({courseid}) visited by user {netid}"
         },
         netid=netid,
     )
@@ -374,7 +374,7 @@ def get_course_info(courseid):
         _db._add_system_log(
             "user",
             {
-                "message": f"course {course_details['displayname']} ({courseid}) visited by user {netid}"
+                "message": f"courseID {course_details['displayname']} ({courseid}) visited by user {netid}"
             },
             netid=netid,
         )
