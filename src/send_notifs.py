@@ -89,8 +89,6 @@ def cronjob():
         log_error("Failed to send texts")
 
     total = n_emails_sent + n_texts_sent
-    print()
-
     duration = round(time() - tic)
 
     if total > 0:
