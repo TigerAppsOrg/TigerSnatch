@@ -15,9 +15,10 @@ class _Colors:
 
 
 def _log(message: str, prefix, color):
+    message = f"{message.split(' ')[0].capitalize()} {' '.join(message.split(' ')[1:])}"
     print()
     print(
-        f'{_Colors.BOLD}{color}[{datetime.now().strftime("%-I:%M:%S %p ET")}] [{prefix}]{_Colors.ENDC} {message.capitalize()}'
+        f'{_Colors.BOLD}{color}[{datetime.now().strftime("%-I:%M:%S %p ET")}] [{prefix}]{_Colors.ENDC} {message}'
     )
     print()
     stdout.flush()
@@ -48,7 +49,7 @@ def log_warning(message):
 
 
 if __name__ == "__main__":
-    log_notifs("Notifs Notification")
-    log_error("Error Notification")
-    log_cron("Cron Notification")
-    log_system("System Notification")
+    log_notifs("notifs notification")
+    log_error("error Notification")
+    log_cron("cron notification")
+    log_system("system Notification")
