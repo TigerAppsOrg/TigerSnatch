@@ -16,11 +16,9 @@ class _Colors:
 
 def _log(message: str, prefix, color):
     message = message[0].capitalize() + message[1:]
-    print()
     print(
         f'{_Colors.BOLD}{color}[{datetime.now().strftime("%-I:%M:%S %p ET")}] [{prefix}]{_Colors.ENDC} {message}'
     )
-    print()
     stdout.flush()
 
 
