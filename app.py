@@ -269,9 +269,12 @@ def get_course():
 
     courseid = request.args.get("courseid")
     query = request.args.get("query")
+    ref = request.args.get("ref")
 
     if courseid is None:
         return redirect(url_for("dashboard"))
+
+    _db.increment_site_ref(ref)
 
     if query is None:
         query = ""

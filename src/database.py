@@ -738,6 +738,12 @@ class Database:
         )
         return stats
 
+    def increment_site_ref(self, ref: str):
+        self._db.admin.update_one(
+            {},
+            {"$inc": {f"site_ref_counts.{ref}": 1}},
+        )
+
     # ----------------------------------------------------------------------
     # BLACKLIST UTILITY METHODS
     # ----------------------------------------------------------------------
