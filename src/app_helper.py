@@ -34,7 +34,7 @@ def do_search(query, db: Database):
         return None, ""
     else:
         query = " ".join(query.split())
-        query = re.sub(r'[^0-9a-zA-Z"?:%\'\-, ]+', "", query)
+        # query = re.sub(r'[^0-9a-zA-Z"?:%\'\-, ]+', "", query)
         res = db.search_for_course(query)
 
     return res, query
