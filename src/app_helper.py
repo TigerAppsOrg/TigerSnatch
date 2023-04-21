@@ -29,13 +29,11 @@ def do_search(query, db: Database):
     res = []
     if query.strip() == "":
         return None, ""
-    elif "<" in query:
-        log_error(f"HTML code detected in {query}")
-        return None, ""
-    else:
-        query = " ".join(query.split())
-        # query = re.sub(r'[^0-9a-zA-Z"?:%\'\-, ]+', "", query)
-        res = db.search_for_course(query)
+
+    query = " ".join(query.split())
+    # query = re.sub(r'[^0-9a-zA-Z"?:%\'\-, ]+', "", query)
+    query = query.replace("/", " ")
+    res = db.search_for_course(query)
 
     return res, query
 

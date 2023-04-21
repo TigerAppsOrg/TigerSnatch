@@ -340,6 +340,7 @@ let searchFormListener = function () {
 
     // get search query
     query_raw = $("#search-form-input").prop("value");
+    query_raw = query_raw.replace(/\//g, " ");
     query = encodeURIComponent(query_raw);
 
     curr_path = location.pathname;
