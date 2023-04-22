@@ -194,6 +194,7 @@ def update_stats():
         stats_subbed_sections = db.get_num_subscribed_sections()
         stats_subbed_courses = db.get_num_subscribed_courses()
         stats_total_notifs = db.get_email_counter()
+        stats_current_notifs = db.get_current_email_counter()
         stats_update_time = (
             f"{(datetime.now(TZ)).strftime('%b %-d, %Y @ %-I:%M %p ET')}"
         )
@@ -210,6 +211,7 @@ def update_stats():
                     "stats_subbed_courses": stats_subbed_courses,
                     "stats_total_notifs": stats_total_notifs,
                     "stats_update_time": stats_update_time,
+                    "stats_current_notifs": stats_current_notifs,
                 }
             },
         )

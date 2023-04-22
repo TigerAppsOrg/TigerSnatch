@@ -560,6 +560,7 @@ class Database:
                 f"Subscriptions: {get_total_subscriptions()}",
                 f"Subscribed sections: {self.get_num_subscribed_sections()}",
                 f"Subscribed courses: {self.get_num_subscribed_courses()}",
+                f"Notifications sent in current period: {self.get_current_email_counter()}",
                 f"Notifications sent: {self.get_email_counter()}",
                 f"Notification frequency: {NOTIFS_INTERVAL_SECS}s",
                 f"Site refs: {get_site_ref_counts()}",
@@ -713,6 +714,11 @@ class Database:
             "stats_total_notifs"
         ]
 
+    def get_current_email_counter(self):
+        return self._db.admin.find_one({}, {"_id": 0, "stats_current_notifs": 1})[
+            "stats_current_notifs"
+        ]
+
     def add_stats_notif_log(self, log):
         stats_notifs_logs = self._db.admin.find_one(
             {}, {"_id": 0, "stats_notifs_logs": 1}
@@ -756,6 +762,7 @@ class Database:
                 "stats_total_notifs": 1,
                 "stats_notifs_logs": 1,
                 "stats_update_time": 1,
+                "stats_current_notifs": 1,
                 "_id": 0,
             },
         )
@@ -1731,6 +1738,9 @@ class Database:
         log_info("Clearing disabled courses")
         self._db.admin.update_one({}, {"$set": {"disabled_courses": []}})
 
+        log_info("Resetting current notification count to 0")
+        self._db.admin.update_one({}, {"$set": {"stats_current_notifs": 0}})
+
         clear_coll("mappings")
         clear_coll("courses")
         clear_coll("enrollments")
@@ -1764,7 +1774,9 @@ class Database:
     def increment_email_counter(self, n):
         if n <= 0:
             return
-        self._db.admin.update_one({}, {"$inc": {"stats_total_notifs": n}})
+        self._db.admin.update_one(
+            {}, {"$inc": {"stats_total_notifs": n, "stats_current_notifs": n}}
+        )
 
     def _get_all_emails_csv(self):
         data = self._db.users.find({}, {"_id": 0, "email": 1})
