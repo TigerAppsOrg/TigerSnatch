@@ -21,7 +21,7 @@
               <div class="fs-5 fw-bold text-center">Top Subscribed Courses</div>
               <div class="card-subtitle mt-1 mb-3 text-muted text-center">
                 Last Updated: {{ stats['stats_update_time'] }}. <br />
-                Only the top subscribed section from a course is shown.
+                Ranked by total Subscriptions across all sections of a course.
               </div>
               {% if stats['stats_top_subs'] == [] %}
               <div class="text-center">No data available.</div>
@@ -32,9 +32,9 @@
                   class="list-group-item d-flex align-items-center justify-content-between"
                 >
                   <label class="stats-top-course fs-6">
-                    {{sub['deptnum']}}: {{sub['name']}} ({{sub['section']}})
+                    {{sub['deptnum']}}: {{sub['name']}}
                   </label>
-                  <span class="badge fs-6">{{ sub['size'] }}</span>
+                  <span class="badge fs-6">{{sub['size']}}</span>
                 </div>
                 {% endfor %}
               </ul>

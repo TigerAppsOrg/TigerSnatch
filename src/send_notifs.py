@@ -187,7 +187,7 @@ def generate_time_intervals():
 def update_stats():
     db = Database()
     try:
-        stats_top_subs = db.get_top_subscriptions(target_num=10, unique_courses=True)
+        stats_top_subs = db.get_top_subscriptions(target_num=15)
         stats_total_users = db.get_total_user_count()
         stats_total_subs = db.get_total_subscriptions()
         stats_subbed_users = db.get_users_who_subscribe()

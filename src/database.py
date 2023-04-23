@@ -483,11 +483,9 @@ class Database:
             data = self.get_top_subscriptions(target_num=n)
             if len(data) == 0:
                 return ["No Subscriptions found"]
-            res = [f"Top {len(data)} most-subscribed sections:"]
+            res = [f"Top {len(data)} most-subscribed courses:"]
             for s_data in data:
-                res.append(
-                    f"[{s_data['size']}] {s_data['name']} ({s_data['deptnum']}): {s_data['section']}"
-                )
+                res.append(f"[{s_data['size']}] {s_data['name']} ({s_data['deptnum']})")
             return res
 
         def get_disabled_courses():
@@ -566,11 +564,11 @@ class Database:
                 f"Site refs: {get_site_ref_counts()}",
                 line_break,
             ]
-            res.extend(get_top_n_subscribed_sections(n=10))
-            res.append(line_break)
-            res.extend(get_disabled_courses())
+            res.extend(get_top_n_subscribed_sections(n=15))
             res.append(line_break)
             res.extend(get_notifs_schedule())
+            res.append(line_break)
+            res.extend(get_disabled_courses())
             return "{".join(res)
 
         except Exception as e:
@@ -625,67 +623,75 @@ class Database:
         return data
 
     # if unique_courses is True, removes entries for duplicate courses
-    def get_top_subscriptions(self, target_num, unique_courses=False):
+    def get_top_subscriptions(self, target_num):
         if target_num <= 0:
             return []
 
-        res = []
-        if unique_courses:
-            try:
-                waitlists = self.get_all_subscriptions_raw()
-                courses = set()
-                for data in waitlists:
-                    if len(courses) >= target_num:
-                        break
+        try:
+            waitlists = self._db.waitlists.aggregate(
+                [
+                    {"$addFields": {"size": {"$size": "$waitlist"}}},
+                    {"$project": {"classid": 1, "size": 1, "_id": 0}},
+                ]
+            )
+            waitlists = list(waitlists)
+            classids = [w["classid"] for w in waitlists]
+            classid_to_size = {w["classid"]: w["size"] for w in waitlists}
 
-                    try:
-                        deptnum, name, section, _ = self.classid_to_classinfo(
-                            data["classid"], entire_crosslisting=True
-                        )
-                    except:
-                        continue
+            courseids_with_classids = self._db.enrollments.find(
+                {"classid": {"$in": classids}}, {"_id": 0, "courseid": 1, "classid": 1}
+            )
+            courseids_with_classids = list(courseids_with_classids)
 
-                    if deptnum not in courses:
-                        courses.add(deptnum)
-                        res.append(
-                            {
-                                "deptnum": deptnum,
-                                "name": name,
-                                "section": section,
-                                "size": data["size"],
-                            }
-                        )
-            except Exception as e:
-                log_error("Failed to retrieve top subscribed courses")
-                print(e, file=stderr)
+            courseid_to_waitlist_size = {}
+            for e in courseids_with_classids:
+                if e["courseid"] not in courseid_to_waitlist_size:
+                    courseid_to_waitlist_size[e["courseid"]] = classid_to_size[
+                        e["classid"]
+                    ]
+                else:
+                    courseid_to_waitlist_size[e["courseid"]] += classid_to_size[
+                        e["classid"]
+                    ]
 
-        else:
-            try:
-                waitlists = self.get_all_subscriptions_raw()
-                for data in waitlists:
-                    if len(res) >= target_num:
-                        break
+            courseids_with_mappings = self._db.mappings.find(
+                {"courseid": {"$in": list(courseid_to_waitlist_size.keys())}},
+                {
+                    "_id": 0,
+                    "courseid": 1,
+                    "title": 1,
+                    "displayname": 1,
+                },
+            )
+            courseids_with_mappings = list(courseids_with_mappings)
 
-                    try:
-                        deptnum, name, section, _ = self.classid_to_classinfo(
-                            data["classid"], entire_crosslisting=True
-                        )
-                    except:
-                        continue
+            courseid_to_waitlist_size = [
+                (k, v) for k, v in courseid_to_waitlist_size.items()
+            ]
+            courseid_to_waitlist_size.sort(key=lambda x: x[1], reverse=True)
+            courseid_to_waitlist_size = courseid_to_waitlist_size[:target_num]
 
-                    res.append(
-                        {
-                            "deptnum": deptnum,
-                            "name": name,
-                            "section": section,
-                            "size": data["size"],
-                        }
-                    )
-            except Exception as e:
-                log_error("Failed to retrieve top subscribed sections")
-                print(e, file=stderr)
+            courseid_to_title_and_displayname = {
+                m["courseid"]: (m["title"], m["displayname"])
+                for m in courseids_with_mappings
+            }
 
-        return res
+            res = []
+            for courseid, waitlist_size in courseid_to_waitlist_size:
+                title, displayname = courseid_to_title_and_displayname[courseid]
+                res.append(
+                    {
+                        "name": title,
+                        "deptnum": displayname.split("/")[0],
+                        "size": waitlist_size,
+                    }
+                )
+
+            return res
+
+        except Exception as e:
+            log_error("Failed to retrieve top subscribed courses")
+            print(e, file=stderr)
 
     def get_total_user_count(self):
         return self._db.users.count_documents({})
