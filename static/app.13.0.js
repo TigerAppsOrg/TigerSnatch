@@ -74,52 +74,6 @@ const toastUserDoesNotExist = $(
 `)
 );
 
-const toastEmailsOn = $(
-  $.parseHTML(`
-<div
-    id="toast-emails-on"
-    class="toast align-items-center text-white bg-success border-0"
-    role="alert"
-    aria-live="assertive"
-    aria-atomic="true"
-    data-bs-delay="3000"
->
-    <div class="d-flex">
-        <div class="toast-body">Email notifications turned on! Reloading in a few seconds...</div>
-        <button
-            type="button"
-            class="btn-close btn-close-white me-2 m-auto"
-            data-bs-dismiss="toast"
-            aria-label="Close"
-        ></button>
-    </div>
-</div>
-`)
-);
-
-const toastEmailsOff = $(
-  $.parseHTML(`
-<div
-    id="toast-emails-off"
-    class="toast align-items-center text-white bg-success border-0"
-    role="alert"
-    aria-live="assertive"
-    aria-atomic="true"
-    data-bs-delay="3000"
->
-    <div class="d-flex">
-        <div class="toast-body">Email notifications turned off! Reloading in a few seconds...</div>
-        <button
-            type="button"
-            class="btn-close btn-close-white me-2 m-auto"
-            data-bs-dismiss="toast"
-            aria-label="Close"
-        ></button>
-    </div>
-</div>
-`)
-);
-
 const toastClearSuccess = $(
   $.parseHTML(`
 <div
