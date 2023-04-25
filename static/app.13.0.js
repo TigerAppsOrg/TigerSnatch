@@ -1266,3 +1266,12 @@ $(document).ready(function () {
   initTutorial();
   accountSettingsFunctions();
 });
+
+/**
+ * SOCKET LOGIC FOR LIVE NOTIFICATIONS STATUS
+ */
+
+var socket = io();
+socket.on("connect", function () {
+  socket.emit("my event", { data: "I'm connected!" });
+});

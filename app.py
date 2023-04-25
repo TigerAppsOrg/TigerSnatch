@@ -9,6 +9,7 @@ path.append("src")  # noqa
 
 from flask import Flask
 from flask import render_template, make_response, request, redirect, url_for, jsonify
+from flask_socketio import SocketIO
 from database import Database
 from CASClient import CASClient
 from config import APP_SECRET_KEY, MAX_AUTO_RESUB_NOTIFS
@@ -28,6 +29,7 @@ import traceback
 
 app = Flask(__name__, template_folder="./views")
 app.secret_key = APP_SECRET_KEY
+socketio = SocketIO(app)
 
 _cas = CASClient()
 _db = Database()
