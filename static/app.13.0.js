@@ -1,5 +1,5 @@
 // dummy variable used for toast ids
-i = 0;
+var i = 0;
 
 // change the name of this variable to force all users to see the tutorial and the alert banner
 var doneKeyTutorial = "completed4";
