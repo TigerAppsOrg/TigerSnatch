@@ -16,13 +16,14 @@ from monitor import Monitor
 from database import Database
 from sys import stdout, stderr
 from time import time
-from config import OIT_NOTIFS_OFFSET_MINS
+from config import NOTIFS_INTERVAL_SECS, OIT_NOTIFS_OFFSET_MINS
 from notify import send_email, send_text
 from multiprocess import Pool
 from os import cpu_count
 from log_utils import *
 
 TZ = pytz.timezone("US/Eastern")
+_db = Database()
 
 
 def cronjob():
@@ -116,24 +117,32 @@ def cronjob():
     stdout.flush()
 
 
+def update_live_notifs_countdown(sched_job):
+    try:
+        next_run_time = sched_job.next_run_time
+    except:
+        log_error("Failed to get next run time - returning NOTIFS_INTERVAL_SECS")
+        return NOTIFS_INTERVAL_SECS
+
+    now = datetime.now(TZ)
+    time_to_next_run = (next_run_time - now).seconds + 1
+    _db.set_live_notifs_status("countdown", time_to_next_run)
+
+
 def set_status_indicator_to_on():
-    db = Database()
-    db.set_cron_notification_status(True)
+    _db.set_cron_notification_status(True)
 
 
 def set_status_indicator_to_off(log=True):
-    db = Database()
-    db.set_cron_notification_status(False, log=log)
+    _db.set_cron_notification_status(False, log=log)
 
 
 def did_notifs_spreadsheet_change(data):
-    db = Database()
-    return db.did_notifs_spreadsheet_change(data)
+    return _db.did_notifs_spreadsheet_change(data)
 
 
 def update_notifs_schedule(data):
-    db = Database()
-    db.update_notifs_schedule(data)
+    _db.update_notifs_schedule(data)
 
 
 def generate_time_intervals():
@@ -185,21 +194,20 @@ def generate_time_intervals():
 
 
 def update_stats():
-    db = Database()
     try:
-        stats_top_subs = db.get_top_subscriptions(target_num=15)
-        stats_total_users = db.get_total_user_count()
-        stats_total_subs = db.get_total_subscriptions()
-        stats_subbed_users = db.get_users_who_subscribe()
-        stats_subbed_sections = db.get_num_subscribed_sections()
-        stats_subbed_courses = db.get_num_subscribed_courses()
-        stats_total_notifs = db.get_email_counter()
-        stats_current_notifs = db.get_current_email_counter()
+        stats_top_subs = _db.get_top_subscriptions(target_num=15)
+        stats_total_users = _db.get_total_user_count()
+        stats_total_subs = _db.get_total_subscriptions()
+        stats_subbed_users = _db.get_users_who_subscribe()
+        stats_subbed_sections = _db.get_num_subscribed_sections()
+        stats_subbed_courses = _db.get_num_subscribed_courses()
+        stats_total_notifs = _db.get_email_counter()
+        stats_current_notifs = _db.get_current_email_counter()
         stats_update_time = (
             f"{(datetime.now(TZ)).strftime('%b %-d, %Y @ %-I:%M %p ET')}"
         )
 
-        db._db.admin.update_one(
+        _db._db.admin.update_one(
             {},
             {
                 "$set": {

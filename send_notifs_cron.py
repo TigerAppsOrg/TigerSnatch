@@ -68,7 +68,7 @@ def schedule_jobs(update_db=False):
             minutes=GLOBAL_COURSE_UPDATE_INTERVAL_MINS,
         )
 
-        for time in times:
+        for i, time in enumerate(times):
             start, end = time[0], time[1]
             log_cron(f"Adding notifs job between {start} and {end}")
             sched.add_job(
@@ -79,6 +79,17 @@ def schedule_jobs(update_db=False):
                 timezone=tz,
                 seconds=NOTIFS_INTERVAL_SECS,
                 max_instances=8,
+                id=str(i),
+            )
+            log_cron(f"Adding live notifs countdown job between {start} and {end}")
+            sched.add_job(
+                update_live_notifs_countdown,
+                "interval",
+                start_date=start,
+                end_date=end,
+                timezone=tz,
+                seconds=1,
+                args=[sched.get_job(str(i))],
             )
             sched.add_job(
                 set_status_indicator_to_on,
@@ -95,8 +106,9 @@ def schedule_jobs(update_db=False):
         sched.start()
         log_cron("Done booting notifs scheduler")
         return sched
-    except:
+    except Exception as e:
         log_error("An error occurred in function schedule_jobs()")
+        print(e, file=stderr)
 
 
 def check_spreadsheet_maybe_schedule_new_notifs(scheds: list[BackgroundScheduler]):
