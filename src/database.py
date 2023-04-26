@@ -1639,7 +1639,7 @@ class Database:
             res = self._db.admin.find_one({}, {"_id": 0, "live_notifs_status": 1})[
                 "live_notifs_status"
             ]
-            return res["state"], res["data"]
+            return res["state"], res["description"], res["countdown"]
         except Exception as e:
             log_error("Failed to get live notifs status")
             print(e, file=stderr)
@@ -1648,9 +1648,6 @@ class Database:
     # sets the current state of live notifications and the data associated with it
     def set_live_notifs_status(self, state, data):
         try:
-            if not isinstance(data, str):
-                raise Exception("data must be a string")
-
             self._db.admin.update_one(
                 {},
                 {
