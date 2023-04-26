@@ -1274,4 +1274,7 @@ $(document).ready(function () {
 var socket = io();
 socket.on("notifs_update", (data) => {
   console.log(data);
+  $("#live-notifs-status-description").html(
+    data["state"] + data["description"]
+  );
 });
