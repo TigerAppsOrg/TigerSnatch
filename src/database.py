@@ -1630,6 +1630,41 @@ class Database:
         )
 
     # ----------------------------------------------------------------------
+    # LIVE NOTIFICATION STATUS METHODS
+    # ----------------------------------------------------------------------
+
+    # returns the current state of live notifications and the data associated with it
+    def get_live_notifs_status(self):
+        try:
+            res = self._db.admin.find_one({}, {"_id": 0, "live_notifs_status": 1})[
+                "live_notifs_status"
+            ]
+            return res["state"], res["data"]
+        except Exception as e:
+            log_error("Failed to get live notifs status")
+            print(e, file=stderr)
+            return "error", None
+
+    # sets the current state of live notifications and the data associated with it
+    def set_live_notifs_status(self, state, data):
+        try:
+            if not isinstance(data, str):
+                raise Exception("data must be a string")
+
+            self._db.admin.update_one(
+                {},
+                {
+                    "$set": {
+                        "live_notifs_status.state": state,
+                        "live_notifs_status.data": data,
+                    }
+                },
+            )
+        except Exception as e:
+            log_error("Failed to set live notifs status")
+            print(e, file=stderr)
+
+    # ----------------------------------------------------------------------
     # DATABASE POPULATION METHODS
     # ----------------------------------------------------------------------
 
@@ -1856,44 +1891,46 @@ class Database:
 
 
 if __name__ == "__main__":
+    Database().set_live_notifs_status("active", "computing open spots")
+
     # generate list of all sections that had open-spot notifs with timestamps
-    db = Database()._db
-    start_date = datetime(2022, 9, 5)
-    res = db.system.find(
-        {
-            "type": "cron",
-            "message": {"$regex": ":"},
-            "time": {"$gte": start_date, "$lte": start_date + timedelta(days=1)},
-        }
-    )
+    # db = Database()._db
+    # start_date = datetime(2022, 9, 5)
+    # res = db.system.find(
+    #     {
+    #         "type": "cron",
+    #         "message": {"$regex": ":"},
+    #         "time": {"$gte": start_date, "$lte": start_date + timedelta(days=1)},
+    #     }
+    # )
 
-    with open("all-notifs.txt", "w") as f:
-        for doc in res:
-            sections = doc["message"].split(": ")
-            if len(sections) < 2:
-                continue
-            for section in sections[1].split(", "):
-                f.write(f'{doc["time"].isoformat()} {section}\n')
+    # with open("all-notifs.txt", "w") as f:
+    #     for doc in res:
+    #         sections = doc["message"].split(": ")
+    #         if len(sections) < 2:
+    #             continue
+    #         for section in sections[1].split(", "):
+    #             f.write(f'{doc["time"].isoformat()} {section}\n')
 
-    # generate unique number of users who subscribed in a given period
-    db = Database()._db
-    # change the datetime
-    res = db.system.find(
-        {
-            "type": "subscription",
-            "time": {"$gt": datetime.datetime(2022, 3, 24, 0, 0, 0, 0)},
-            "message": {"$regex": " subscribed"},
-        },
-        {"message": 1, "_id": 0},
-    )
-    res = list(res)
+    # # generate unique number of users who subscribed in a given period
+    # db = Database()._db
+    # # change the datetime
+    # res = db.system.find(
+    #     {
+    #         "type": "subscription",
+    #         "time": {"$gt": datetime.datetime(2022, 3, 24, 0, 0, 0, 0)},
+    #         "message": {"$regex": " subscribed"},
+    #     },
+    #     {"message": 1, "_id": 0},
+    # )
+    # res = list(res)
 
-    user_set = set()
-    for message in res:
-        text = message["message"]
-        end_idx = text.find(" successfully")
-        start_idx = 5
-        name = text[start_idx:end_idx]
-        user_set.add(name)
+    # user_set = set()
+    # for message in res:
+    #     text = message["message"]
+    #     end_idx = text.find(" successfully")
+    #     start_idx = 5
+    #     name = text[start_idx:end_idx]
+    #     user_set.add(name)
 
-    print(len(user_set))
+    # print(len(user_set))

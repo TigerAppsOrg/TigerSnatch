@@ -708,4 +708,5 @@ def version_filter(file_path):
 
 @scheduler.task("interval", seconds=1)
 def notifs_update_broadcast():
-    socketio.emit("notifs_update", {"state": "countdown", "data": 0})
+    state, data = _db.get_live_notifs_status()
+    socketio.emit("notifs_update", {"state": state, "data": data})
