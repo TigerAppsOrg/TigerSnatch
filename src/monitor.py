@@ -98,7 +98,10 @@ class Monitor:
             pass
 
         tic = time()
+
         log_notifs("Calculating open spots")
+        self.update_live_notifs_state_active("Finding open spots...")
+
         self._construct_waited_classes()
         try:
             self._waited_classes
@@ -173,6 +176,12 @@ class Monitor:
             )
         except Exception as e:
             print(e, file=stderr)
+
+    def update_live_notifs_state_active(self, description):
+        self._db.set_live_notifs_status("active", description)
+
+    def update_live_notifs_state_countdown(self):
+        self._db.set_live_notifs_status("countdown", "")
 
 
 if __name__ == "__main__":

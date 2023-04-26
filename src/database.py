@@ -1646,11 +1646,18 @@ class Database:
             return "error", None
 
     # sets the current state of live notifications and the data associated with it
-    def set_live_notifs_status(self, state, data):
+    def set_live_notifs_status(self, state, data, update_countdown_state=True):
         try:
             if state == "countdown":
+                set_args = {
+                    "live_notifs_status.countdown": data,
+                }
+                if update_countdown_state:
+                    set_args["live_notifs_status.state"] = state
+
                 self._db.admin.update_one(
-                    {}, {"$set": {"live_notifs_status.countdown": data}}
+                    {},
+                    {"$set": set_args},
                 )
                 return
 
@@ -1659,7 +1666,7 @@ class Database:
                 {
                     "$set": {
                         "live_notifs_status.state": state,
-                        "live_notifs_status.data": data,
+                        "live_notifs_status.description": data,
                     }
                 },
             )

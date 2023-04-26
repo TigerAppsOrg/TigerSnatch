@@ -15,7 +15,7 @@ from notify import Notify
 from monitor import Monitor
 from database import Database
 from sys import stdout, stderr
-from time import time
+from time import sleep, time
 from config import NOTIFS_INTERVAL_SECS, OIT_NOTIFS_OFFSET_MINS
 from notify import send_email, send_text
 from multiprocess import Pool
@@ -48,6 +48,8 @@ def cronjob():
     # get all class openings (for waited-on classes) from MobileApp
     new_slots, _ = monitor.get_classes_with_changed_enrollments()
 
+    monitor.update_live_notifs_state_active("Sending notifs (0 sent so far)...")
+
     names = ""
     emails_to_send, texts_to_send = [], []
     n_sections = 0
@@ -70,6 +72,10 @@ def cronjob():
 
             emails_to_send.extend(notify.send_emails_html())
             texts_to_send.extend(notify.send_sms())
+
+            monitor.update_live_notifs_state_active(
+                f"Sending notifs ({len(emails_to_send) + len(texts_to_send)} sent so far)..."
+            )
 
             names += " " + notify.get_name() + ","
             n_sections += 1
@@ -116,6 +122,8 @@ def cronjob():
         )
     stdout.flush()
 
+    monitor.update_live_notifs_state_countdown()
+
 
 def update_live_notifs_countdown(sched_job):
     try:
@@ -126,7 +134,10 @@ def update_live_notifs_countdown(sched_job):
 
     now = datetime.now(TZ)
     time_to_next_run = (next_run_time - now).seconds + 1
-    _db.set_live_notifs_status("countdown", time_to_next_run)
+    sleep(0.5)
+    _db.set_live_notifs_status(
+        "countdown", time_to_next_run, update_countdown_state=False
+    )
 
 
 def set_status_indicator_to_on():
