@@ -10,6 +10,7 @@ path.append("src")  # noqa
 from flask import Flask
 from flask import render_template, make_response, request, redirect, url_for, jsonify
 from flask_socketio import SocketIO
+from flask_apscheduler import APScheduler
 from database import Database
 from CASClient import CASClient
 from config import APP_SECRET_KEY, MAX_AUTO_RESUB_NOTIFS
@@ -26,6 +27,10 @@ from sys import stderr
 from os import listdir
 from os.path import isfile, join
 import traceback
+import logging
+
+log = logging.getLogger("werkzeug")
+log.disabled = True
 
 app = Flask(__name__, template_folder="./views")
 app.secret_key = APP_SECRET_KEY
@@ -33,6 +38,11 @@ socketio = SocketIO(app)
 
 _cas = CASClient()
 _db = Database()
+
+scheduler = APScheduler()
+scheduler.api_enabled = True
+scheduler.init_app(app)
+scheduler.start()
 
 
 @app.errorhandler(Exception)
@@ -689,3 +699,13 @@ def version_filter(file_path):
 
     # "/static/app.<version_num>.js" or "/static/styles.<version_num>.css"
     return f"/{FOLDER}/{FNAME}{VERSION}{EXT}"
+
+
+# ----------------------------------------------------------------------
+# SOCKET LOGIC FOR LIVE NOTIFICATIONS STATUS
+# ----------------------------------------------------------------------
+
+
+@scheduler.task("interval", seconds=1)
+def notifs_update_broadcast():
+    socketio.emit("notifs_update", {"state": "countdown", "data": 0})

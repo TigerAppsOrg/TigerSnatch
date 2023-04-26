@@ -1271,7 +1271,7 @@ $(document).ready(function () {
  * SOCKET LOGIC FOR LIVE NOTIFICATIONS STATUS
  */
 
-// var socket = io();
-// socket.on("connect", function () {
-//   socket.emit("my event", { data: "I'm connected!" });
-// });
+var socket = io();
+socket.on("notifs_update", (data) => {
+  console.log(data);
+});
