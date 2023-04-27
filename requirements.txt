@@ -14,4 +14,4 @@ twilio==6.63.0
 markdown==3.3.6
 Flask-SocketIO==5.3.3
 Flask-APScheduler==1.12.4
-eventlet==0.33.3
+eventlet==0.30.2
