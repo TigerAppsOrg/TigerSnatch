@@ -134,7 +134,6 @@ def update_live_notifs_countdown(sched_job):
 
     now = datetime.now(TZ)
     time_to_next_run = (next_run_time - now).seconds + 1
-    sleep(0.5)
     _db.set_live_notifs_status(
         "countdown", time_to_next_run, update_countdown_state=False
     )
