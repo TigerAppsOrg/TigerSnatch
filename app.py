@@ -9,8 +9,6 @@ path.append("src")  # noqa
 
 from flask import Flask
 from flask import render_template, make_response, request, redirect, url_for, jsonify
-from flask_socketio import SocketIO
-from flask_apscheduler import APScheduler
 from database import Database
 from CASClient import CASClient
 from config import APP_SECRET_KEY, MAX_AUTO_RESUB_NOTIFS, NOTIFS_INTERVAL_SECS
@@ -24,7 +22,6 @@ from app_helper import (
     log_page_visit,
 )
 from urllib.parse import quote_plus, unquote_plus
-from sys import stderr
 from os import listdir
 from os.path import isfile, join
 import traceback

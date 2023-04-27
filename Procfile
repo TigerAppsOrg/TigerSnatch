@@ -1,2 +1,2 @@
-web: gunicorn app:app --worker-class eventlet -w 1
+web: gunicorn app:app -w 4
 notifs: python send_notifs_cron.py
