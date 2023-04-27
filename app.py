@@ -36,7 +36,8 @@ log.setLevel(logging.ERROR)
 
 app = Flask(__name__, template_folder="./views")
 app.secret_key = APP_SECRET_KEY
-socketio = SocketIO(app)
+socketio = SocketIO()
+socketio.init_app(app, cors_allowed_origins="*")
 
 _cas = CASClient()
 _db = Database()

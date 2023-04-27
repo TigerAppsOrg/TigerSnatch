@@ -15,3 +15,4 @@ markdown==3.3.6
 Flask-SocketIO==5.3.3
 Flask-APScheduler==1.12.4
 eventlet==0.30.2
+gevent==22.10.2
