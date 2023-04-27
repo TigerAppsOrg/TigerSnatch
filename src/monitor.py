@@ -181,7 +181,7 @@ class Monitor:
         self._db.set_live_notifs_status("active", description)
 
     def update_live_notifs_state_countdown(self):
-        self._db.set_live_notifs_status("countdown", "")
+        self._db.set_live_notifs_status("countdown", "", update_countdown_data=False)
 
 
 if __name__ == "__main__":

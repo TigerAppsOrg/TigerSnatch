@@ -1646,14 +1646,19 @@ class Database:
             return "error", None
 
     # sets the current state of live notifications and the data associated with it
-    def set_live_notifs_status(self, state, data, update_countdown_state=True):
+    def set_live_notifs_status(
+        self, state, data, update_countdown_state=True, update_countdown_data=True
+    ):
         try:
             if state == "countdown":
-                set_args = {
-                    "live_notifs_status.countdown": data,
-                }
+                set_args = {}
                 if update_countdown_state:
                     set_args["live_notifs_status.state"] = state
+                if update_countdown_data:
+                    set_args["live_notifs_status.countdown"] = data
+
+                if not set_args:
+                    return
 
                 self._db.admin.update_one(
                     {},
