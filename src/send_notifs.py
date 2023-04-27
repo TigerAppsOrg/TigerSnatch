@@ -15,7 +15,7 @@ from notify import Notify
 from monitor import Monitor
 from database import Database
 from sys import stdout, stderr
-from time import sleep, time
+from time import time
 from config import NOTIFS_INTERVAL_SECS, OIT_NOTIFS_OFFSET_MINS
 from notify import send_email, send_text
 from multiprocess import Pool
@@ -26,7 +26,7 @@ TZ = pytz.timezone("US/Eastern")
 _db = Database()
 
 
-def cronjob():
+def cronjob(end_time):
     tic = time()
     db = Database()
     monitor = Monitor(db)
@@ -122,6 +122,10 @@ def cronjob():
         )
     stdout.flush()
 
+    if datetime.now(TZ) >= end_time:
+        _db.set_live_notifs_status("inactive", "")
+        return
+
     monitor.update_live_notifs_state_countdown()
 
 
@@ -129,11 +133,21 @@ def update_live_notifs_countdown(sched_job):
     try:
         next_run_time = sched_job.next_run_time
     except:
-        log_error("Failed to get next run time - returning NOTIFS_INTERVAL_SECS")
-        return NOTIFS_INTERVAL_SECS
+        log_error(
+            "Failed to get next run time - setting countdown to NOTIFS_INTERVAL_SECS"
+        )
+        _db.set_live_notifs_status(
+            "countdown", NOTIFS_INTERVAL_SECS, update_countdown_state=False
+        )
+
+    if next_run_time is None:
+        _db.set_live_notifs_status("inactive", "")
+        return
 
     now = datetime.now(TZ)
     time_to_next_run = (next_run_time - now).seconds + 1
+    if time_to_next_run >= NOTIFS_INTERVAL_SECS:
+        return
     _db.set_live_notifs_status(
         "countdown", time_to_next_run, update_countdown_state=False
     )
@@ -144,6 +158,7 @@ def set_status_indicator_to_on():
 
 
 def set_status_indicator_to_off(log=True):
+    _db.set_live_notifs_status("inactive", "")
     _db.set_cron_notification_status(False, log=log)
 
 
@@ -159,7 +174,8 @@ def generate_time_intervals():
     tz = pytz.timezone("US/Eastern")
     # see https://towardsdatascience.com/read-data-from-google-sheets-into-pandas-without-the-google-sheets-api-5c468536550
     # for how to create this link
-    google_sheets_url = "https://docs.google.com/spreadsheets/d/1iSWihUcWa0yX8MsS_FKC-DuGH75AukdiuAigbSkPm8k/gviz/tq?tqx=out:csv&sheet=Schedule"
+    # google_sheets_url = "https://docs.google.com/spreadsheets/d/1iSWihUcWa0yX8MsS_FKC-DuGH75AukdiuAigbSkPm8k/gviz/tq?tqx=out:csv&sheet=Schedule"
+    google_sheets_url = "https://docs.google.com/spreadsheets/d/1iSWihUcWa0yX8MsS_FKC-DuGH75AukdiuAigbSkPm8k/gviz/tq?tqx=out:csv&sheet=Test"
     datetime_fmt = "%m/%d/%Y %I:%M %p"
     try:
         data = pd.read_csv(google_sheets_url)[

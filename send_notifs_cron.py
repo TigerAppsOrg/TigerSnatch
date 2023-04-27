@@ -75,18 +75,25 @@ def schedule_jobs(update_db=False):
                 cronjob,
                 "interval",
                 start_date=start,
-                end_date=end,
+                end_date=end
+                - timedelta(
+                    seconds=1  # subtract 1 second to prevent run at closing time
+                ),
                 timezone=tz,
                 seconds=NOTIFS_INTERVAL_SECS,
                 max_instances=8,
                 id=str(i),
+                args=[end - timedelta(seconds=NOTIFS_INTERVAL_SECS)],
             )
             log_cron(f"Adding live notifs countdown job between {start} and {end}")
             sched.add_job(
                 update_live_notifs_countdown,
                 "interval",
                 start_date=start,
-                end_date=end,
+                end_date=end
+                - timedelta(
+                    seconds=NOTIFS_INTERVAL_SECS  # subtract NOTIFS_INTERVAL_SECS seconds to prevent weird edge cases at closing time
+                ),
                 timezone=tz,
                 seconds=1,
                 args=[sched.get_job(str(i))],
@@ -98,7 +105,10 @@ def schedule_jobs(update_db=False):
                 timezone=tz,
             )
             sched.add_job(
-                set_status_indicator_to_off, "date", run_date=end, timezone=tz
+                set_status_indicator_to_off,
+                "date",
+                run_date=end,
+                timezone=tz,
             )
             if start <= datetime.now(tz) <= end:
                 set_status_indicator_to_on()
