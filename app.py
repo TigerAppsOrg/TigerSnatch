@@ -138,6 +138,8 @@ def dashboard():
         _db._add_admin_log(f"blocked user {netid} attempted to access the app")
         return make_response(render_template("blocklisted.html"))
 
+    log_page_visit("Dashboard", netid)
+
     data = _db.get_dashboard_data(netid)
     email = _db.get_user(netid, "email")
     phone = _db.get_user(netid, "phone")
