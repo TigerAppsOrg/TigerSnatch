@@ -138,14 +138,12 @@ def dashboard():
         _db._add_admin_log(f"blocked user {netid} attempted to access the app")
         return make_response(render_template("blocklisted.html"))
 
-    log_page_visit("Dashboard", netid)
-
     data = _db.get_dashboard_data(netid)
     email = _db.get_user(netid, "email")
     phone = _db.get_user(netid, "phone")
     auto_resub = _db.get_user_auto_resub(netid)
 
-    do_redirect = update_user_settings(netid)
+    do_redirect = update_user_settings(netid, request)
     if do_redirect:
         return redirect(url_for("dashboard"))
 

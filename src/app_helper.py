@@ -45,10 +45,12 @@ def update_user_settings(netid, request):
 
     if new_email is not None and "<" not in new_email:
         Database().update_user(netid, new_email.strip())
+        log_info(f"User {netid} changed email to {new_email.strip()}")
         return True
 
     if new_phone is not None and "<" not in new_phone:
         Database().update_user_phone(netid, new_phone.strip())
+        log_info(f"User {netid} changed phone to {new_phone.strip()}")
         return True
 
     return False
