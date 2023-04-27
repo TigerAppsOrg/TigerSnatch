@@ -38,6 +38,22 @@ def do_search(query, db: Database):
     return res, query
 
 
+# helper method to update user settings on dashboard
+def update_user_settings(netid, request):
+    new_email = request.form.get("new_email")
+    new_phone = request.form.get("new_phone")
+
+    if new_email is not None and "<" not in new_email:
+        Database().update_user(netid, new_email.strip())
+        return True
+
+    if new_phone is not None and "<" not in new_phone:
+        Database().update_user_phone(netid, new_phone.strip())
+        return True
+
+    return False
+
+
 # pulls most recent course info and returns dictionary with
 # course details and list with class info
 def pull_course(courseid, db: Database):

@@ -20,6 +20,7 @@ from app_helper import (
     get_release_notes,
     get_notifs_status_data,
     log_page_visit,
+    update_user_settings,
 )
 from urllib.parse import quote_plus, unquote_plus
 from os import listdir
@@ -127,22 +128,6 @@ def tutorial():
     return make_response(html)
 
 
-# helper method to update user settings on dashboard
-def _update_user_settings(netid):
-    new_email = request.form.get("new_email")
-    new_phone = request.form.get("new_phone")
-
-    if new_email is not None and "<" not in new_email:
-        _db.update_user(netid, new_email.strip())
-        return True
-
-    if new_phone is not None and "<" not in new_phone:
-        _db.update_user_phone(netid, new_phone.strip())
-        return True
-
-    return False
-
-
 @app.route("/dashboard", methods=["GET", "POST"])
 def dashboard():
     if redirect_landing():
@@ -160,7 +145,7 @@ def dashboard():
     phone = _db.get_user(netid, "phone")
     auto_resub = _db.get_user_auto_resub(netid)
 
-    do_redirect = _update_user_settings(netid)
+    do_redirect = update_user_settings(netid)
     if do_redirect:
         return redirect(url_for("dashboard"))
 
