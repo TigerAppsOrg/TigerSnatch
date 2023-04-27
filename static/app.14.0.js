@@ -2,7 +2,7 @@
 var i = 0;
 
 // change the name of this variable to force all users to see the tutorial and the alert banner
-var doneKeyTutorial = "completed4";
+var doneKeyTutorial = "completed6";
 var doneKeyBanner = "completed8";
 
 const toastAdded = $(
