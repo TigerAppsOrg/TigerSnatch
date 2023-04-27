@@ -13,8 +13,9 @@
 # Example: python _exec_reset_db.py --soft
 # ----------------------------------------------------------------------
 
+from sys import argv, exit
+
 from database import Database
-from sys import exit, argv
 from log_utils import *
 
 if __name__ == "__main__":

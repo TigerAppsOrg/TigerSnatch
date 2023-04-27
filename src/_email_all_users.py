@@ -24,10 +24,12 @@
 #    Example: python _email_all_users.py --all
 # ----------------------------------------------------------------------
 
-from database import Database
-from sys import exit, argv
+from sys import argv, exit
+
 from sendgrid import SendGridAPIClient
+
 from config import SENDGRID_API_KEY, TS_EMAIL
+from database import Database
 from log_utils import *
 
 if __name__ == "__main__":
