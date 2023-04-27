@@ -13,7 +13,7 @@ from flask_socketio import SocketIO
 from flask_apscheduler import APScheduler
 from database import Database
 from CASClient import CASClient
-from config import APP_SECRET_KEY, MAX_AUTO_RESUB_NOTIFS
+from config import APP_SECRET_KEY, MAX_AUTO_RESUB_NOTIFS, NOTIFS_INTERVAL_SECS
 from waitlist import Waitlist
 from app_helper import (
     do_search,
@@ -711,4 +711,11 @@ def notifs_update_broadcast():
     state, description, countdown = _db.get_live_notifs_status()
     if state == "countdown":
         description = countdown
-    socketio.emit("notifs_update", {"state": state, "description": description})
+    socketio.emit(
+        "notifs_update",
+        {
+            "state": state,
+            "description": description,
+            "max_countdown": NOTIFS_INTERVAL_SECS,
+        },
+    )
