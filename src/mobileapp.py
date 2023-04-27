@@ -6,12 +6,14 @@
 # Adapted from https://github.com/vr2amesh/COS333-API-Code-Examples
 # ----------------------------------------------------------------------
 
-import requests
-import json
 import base64
+import json
+from time import time
+
+import requests
+
 from config import CONSUMER_KEY, CONSUMER_SECRET
 from database import Database
-from time import time
 
 
 class MobileApp:

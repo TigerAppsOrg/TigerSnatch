@@ -10,7 +10,8 @@
 # Example: python _set_maintenance_mode.py --on
 # ----------------------------------------------------------------------
 
-from sys import exit, argv
+from sys import argv, exit
+
 from database import Database
 from log_utils import *
 

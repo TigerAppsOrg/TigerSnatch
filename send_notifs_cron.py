@@ -11,20 +11,22 @@ from sys import path
 
 path.append("src")  # noqa
 
-from send_notifs import *
-from _exec_update_all_courses import do_update_async_SOFT, do_update_async_HARD
 from datetime import datetime
 from sys import stderr
+
 import pytz
+from apscheduler.schedulers.background import BackgroundScheduler
+from apscheduler.schedulers.blocking import BlockingScheduler
+
+from _exec_update_all_courses import do_update_async_HARD, do_update_async_SOFT
 from config import (
+    GLOBAL_COURSE_UPDATE_INTERVAL_MINS,
     NOTIFS_INTERVAL_SECS,
     NOTIFS_SHEET_POLL_MINS,
-    GLOBAL_COURSE_UPDATE_INTERVAL_MINS,
     STATS_INTERVAL_MINS,
 )
-from apscheduler.schedulers.blocking import BlockingScheduler
-from apscheduler.schedulers.background import BackgroundScheduler
 from log_utils import *
+from send_notifs import *
 
 
 def schedule_jobs(update_db=False):

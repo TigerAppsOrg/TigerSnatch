@@ -8,19 +8,20 @@
 # run, depending on the number of waited-on classes.
 # ----------------------------------------------------------------------
 
-import pandas as pd
 from datetime import datetime, timedelta
-import pytz
-from notify import Notify
-from monitor import Monitor
-from database import Database
-from sys import stdout, stderr
-from time import time
-from config import NOTIFS_INTERVAL_SECS, OIT_NOTIFS_OFFSET_MINS
-from notify import send_email, send_text
-from multiprocess import Pool
 from os import cpu_count
+from sys import stderr, stdout
+from time import time
+
+import pandas as pd
+import pytz
+from multiprocess import Pool
+
+from config import NOTIFS_INTERVAL_SECS, OIT_NOTIFS_OFFSET_MINS
+from database import Database
 from log_utils import *
+from monitor import Monitor
+from notify import Notify, send_email, send_text
 
 TZ = pytz.timezone("US/Eastern")
 _db = Database()

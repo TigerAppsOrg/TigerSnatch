@@ -4,11 +4,12 @@
 # multiprocessing (top-level functions required).
 # ----------------------------------------------------------------------
 
-from mobileapp import MobileApp
-from database import Database
-from sys import stderr
 import time
+from sys import stderr
+
+from database import Database
 from log_utils import *
+from mobileapp import MobileApp
 
 _api = MobileApp()
 

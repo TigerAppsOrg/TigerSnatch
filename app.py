@@ -7,26 +7,35 @@ from sys import path
 
 path.append("src")  # noqa
 
-from flask import Flask
-from flask import render_template, make_response, request, redirect, url_for, jsonify
-from database import Database
-from CASClient import CASClient
-from config import APP_SECRET_KEY, MAX_AUTO_RESUB_NOTIFS, NOTIFS_INTERVAL_SECS
-from waitlist import Waitlist
-from app_helper import (
-    do_search,
-    pull_course,
-    is_admin,
-    get_release_notes,
-    get_notifs_status_data,
-    log_page_visit,
-    update_user_settings,
-)
-from urllib.parse import quote_plus, unquote_plus
+import logging
+import traceback
 from os import listdir
 from os.path import isfile, join
-import traceback
-import logging
+from urllib.parse import quote_plus, unquote_plus
+
+from flask import (
+    Flask,
+    jsonify,
+    make_response,
+    redirect,
+    render_template,
+    request,
+    url_for,
+)
+
+from app_helper import (
+    do_search,
+    get_notifs_status_data,
+    get_release_notes,
+    is_admin,
+    log_page_visit,
+    pull_course,
+    update_user_settings,
+)
+from CASClient import CASClient
+from config import APP_SECRET_KEY, MAX_AUTO_RESUB_NOTIFS, NOTIFS_INTERVAL_SECS
+from database import Database
+from waitlist import Waitlist
 
 log = logging.getLogger("werkzeug")
 # log.disabled = True

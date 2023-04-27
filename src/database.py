@@ -4,30 +4,25 @@
 # database.
 # ----------------------------------------------------------------------
 
-from sys import stderr, stdout
 import re
-import certifi
-from activedirectory import ActiveDirectory
-from config import (
-    DB_CONNECTION_STR,
-    COLLECTIONS,
-    MAX_LOG_LENGTH,
-    MAX_WAITLIST_SIZE,
-    MAX_ADMIN_LOG_LENGTH,
-    HEROKU_API_KEY,
-    HEROKU_APP_NAME,
-    MAX_AUTO_RESUB_NOTIFS,
-    NOTIFS_INTERVAL_SECS,
-)
-from schema import COURSES_SCHEMA, CLASS_SCHEMA, MAPPINGS_SCHEMA, ENROLLMENTS_SCHEMA
-from pymongo import MongoClient
-from pymongo.errors import ConnectionFailure
 from datetime import datetime, timedelta
 from random import randint
-import pytz
-import heroku3
-from log_utils import *
+from sys import stderr, stdout
 
+import certifi
+import heroku3
+import pytz
+from pymongo import MongoClient
+from pymongo.errors import ConnectionFailure
+
+from activedirectory import ActiveDirectory
+from config import (COLLECTIONS, DB_CONNECTION_STR, HEROKU_API_KEY,
+                    HEROKU_APP_NAME, MAX_ADMIN_LOG_LENGTH,
+                    MAX_AUTO_RESUB_NOTIFS, MAX_LOG_LENGTH, MAX_WAITLIST_SIZE,
+                    NOTIFS_INTERVAL_SECS)
+from log_utils import *
+from schema import (CLASS_SCHEMA, COURSES_SCHEMA, ENROLLMENTS_SCHEMA,
+                    MAPPINGS_SCHEMA)
 
 TZ = pytz.timezone("US/Eastern")
 

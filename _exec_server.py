@@ -10,7 +10,8 @@ from sys import path
 
 path.append("src")  # noqa
 
-from sys import argv, stderr, exit
+from sys import argv, exit, stderr
+
 from app import app
 from config import PROD, TS_HOST
 

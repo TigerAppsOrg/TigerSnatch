@@ -3,14 +3,16 @@
 # Defines helper methods to construct endpoints.
 # ----------------------------------------------------------------------
 
-from database import Database
-from monitor import Monitor
-import re
-from sys import stderr
-from markdown import markdown
 import json
 import os
+import re
+from sys import stderr
+
+from markdown import markdown
+
+from database import Database
 from log_utils import *
+from monitor import Monitor
 
 MAX_QUERY_LENGTH = 150
 

@@ -5,11 +5,13 @@
 # Adapted from https://github.com/vr2amesh/COS333-API-Code-Examples
 # ----------------------------------------------------------------------
 
-import requests
-import json
 import base64
-from config import CONSUMER_KEY, CONSUMER_SECRET
+import json
 from time import time
+
+import requests
+
+from config import CONSUMER_KEY, CONSUMER_SECRET
 
 
 class ActiveDirectory:

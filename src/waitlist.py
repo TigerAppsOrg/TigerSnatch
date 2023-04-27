@@ -4,8 +4,9 @@
 # functionality for a given user
 # ----------------------------------------------------------------------
 
-from database import Database
 from sys import stderr
+
+from database import Database
 from log_utils import *
 
 

@@ -1,7 +1,7 @@
 from datetime import datetime
 from sys import stdout
-import pytz
 
+import pytz
 
 TZ = pytz.timezone("US/Eastern")
 

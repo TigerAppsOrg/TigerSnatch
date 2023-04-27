@@ -11,7 +11,8 @@
 # Example: python _set_notif_status.py --on
 # ----------------------------------------------------------------------
 
-from sys import exit, argv
+from sys import argv, exit
+
 from database import Database
 from log_utils import *
 

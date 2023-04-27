@@ -3,10 +3,12 @@
 # Authors: Alex Halderman, Scott Karlin, Brian Kernighan, Bob Dondero
 # ----------------------------------------------------------------------
 
-from urllib.request import urlopen
-from urllib.parse import quote
 from re import sub
-from flask import request, session, redirect, abort
+from urllib.parse import quote
+from urllib.request import urlopen
+
+from flask import abort, redirect, request, session
+
 from config import TS_DOMAIN
 
 

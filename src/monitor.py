@@ -4,17 +4,15 @@
 # the database. Key class method: get_classes_with_changed_enrollments()
 # ----------------------------------------------------------------------
 
-from database import Database
-from time import time
 from sys import stderr
-from coursewrapper import CourseWrapper
-from monitor_utils import (
-    get_latest_term,
-    get_course_in_mobileapp,
-    get_new_mobileapp_data,
-)
+from time import time
+
 from config import COURSE_UPDATE_INTERVAL_MINS
+from coursewrapper import CourseWrapper
+from database import Database
 from log_utils import *
+from monitor_utils import (get_course_in_mobileapp, get_latest_term,
+                           get_new_mobileapp_data)
 
 
 class Monitor:

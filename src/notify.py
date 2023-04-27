@@ -3,20 +3,15 @@
 # Sends users emails or text messages about enrollment updates
 # ----------------------------------------------------------------------
 
-from sendgrid import SendGridAPIClient
-from sys import stderr
-from twilio.rest import Client
-from config import (
-    SENDGRID_API_KEY,
-    TS_EMAIL,
-    TWILIO_PHONE,
-    TWILIO_SID,
-    TWILIO_TOKEN,
-    TS_DOMAIN,
-    MIN_NOTIFS_DELAY_MINS,
-)
 from datetime import datetime
+from sys import stderr
+
 import pytz
+from sendgrid import SendGridAPIClient
+from twilio.rest import Client
+
+from config import (MIN_NOTIFS_DELAY_MINS, SENDGRID_API_KEY, TS_DOMAIN,
+                    TS_EMAIL, TWILIO_PHONE, TWILIO_SID, TWILIO_TOKEN)
 
 TZ_ET = pytz.timezone("US/Eastern")
 TZ_UTC = pytz.timezone("UTC")

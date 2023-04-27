@@ -22,14 +22,15 @@
 # Example: python _exec_update_all_courses.py --soft
 # ----------------------------------------------------------------------
 
-from mobileapp import MobileApp
-from database import Database
+from os import system
 from sys import argv, exit
 from time import time
-from os import system
-from update_all_courses_utils import get_all_dept_codes, process_dept_codes
+
+from database import Database
 from fix_partial_subscriptions import fix_partial_subscriptions
 from log_utils import *
+from mobileapp import MobileApp
+from update_all_courses_utils import get_all_dept_codes, process_dept_codes
 
 
 # True --> hard reset
