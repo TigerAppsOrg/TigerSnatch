@@ -1268,40 +1268,41 @@ $(document).ready(function () {
 });
 
 /**
- * SOCKET LOGIC FOR LIVE NOTIFICATIONS STATUS
+ * LIVE NOTIFICATIONS STATUS
  */
 
-var socket = io();
-socket.on("notifs_update", (data) => {
-  var description = $("#live-notifs-status-description");
-  var progressBar = $("#live-notifs-status-progress-bar");
+setInterval(() => {
+  $.get("/notifs_update_broadcast", (data) => {
+    var description = $("#live-notifs-status-description");
+    var progressBar = $("#live-notifs-status-progress-bar");
 
-  var COUNTDOWN_DESCRIPTION = "Next check for open spots in...";
-  var ACTIVE_DESCRIPTION = "Now checking for open spots...";
-  var INACTIVE_DESCRIPTION = "Not currently checking for open spots.";
+    var COUNTDOWN_DESCRIPTION = "Next check for open spots in...";
+    var ACTIVE_DESCRIPTION = "Now checking for open spots...";
+    var INACTIVE_DESCRIPTION = "Not currently checking for open spots.";
 
-  switch (data["state"]) {
-    case "countdown":
-      progressBar.removeClass("progress-bar-striped progress-bar-animated");
-      description.html(COUNTDOWN_DESCRIPTION);
-      var percent = data["description"] / data["max_countdown"];
-      percent = parseInt((100 - 5) * percent + 5);
-      var secs = data["description"] + "s";
-      progressBar.css({ width: percent + "%" });
-      progressBar.html(secs);
-      break;
-    case "active":
-      description.html(ACTIVE_DESCRIPTION);
-      progressBar.addClass("progress-bar-striped progress-bar-animated");
-      progressBar.css({ width: "100%" });
-      progressBar.html("");
-      break;
-    case "inactive":
-      description.html(INACTIVE_DESCRIPTION);
-      progressBar.removeClass("progress-bar-striped progress-bar-animated");
-      progressBar.html("");
-      progressBar.css({ width: "2%" });
-      progressBar.html("");
-      break;
-  }
-});
+    switch (data["state"]) {
+      case "countdown":
+        progressBar.removeClass("progress-bar-striped progress-bar-animated");
+        description.html(COUNTDOWN_DESCRIPTION);
+        var percent = data["description"] / data["max_countdown"];
+        percent = parseInt((100 - 5) * percent + 5);
+        var secs = data["description"] + "s";
+        progressBar.css({ width: percent + "%" });
+        progressBar.html(secs);
+        break;
+      case "active":
+        description.html(ACTIVE_DESCRIPTION);
+        progressBar.addClass("progress-bar-striped progress-bar-animated");
+        progressBar.css({ width: "100%" });
+        progressBar.html("");
+        break;
+      case "inactive":
+        description.html(INACTIVE_DESCRIPTION);
+        progressBar.removeClass("progress-bar-striped progress-bar-animated");
+        progressBar.html("");
+        progressBar.css({ width: "2%" });
+        progressBar.html("");
+        break;
+    }
+  });
+}, 1000);

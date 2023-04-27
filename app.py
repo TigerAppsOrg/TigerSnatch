@@ -36,16 +36,9 @@ log.setLevel(logging.ERROR)
 
 app = Flask(__name__, template_folder="./views")
 app.secret_key = APP_SECRET_KEY
-socketio = SocketIO()
-socketio.init_app(app, cors_allowed_origins="*")
 
 _cas = CASClient()
 _db = Database()
-
-scheduler = APScheduler()
-scheduler.api_enabled = True
-scheduler.init_app(app)
-scheduler.start()
 
 
 @app.errorhandler(Exception)
@@ -705,20 +698,19 @@ def version_filter(file_path):
 
 
 # ----------------------------------------------------------------------
-# SOCKET LOGIC FOR LIVE NOTIFICATIONS STATUS
+# LIVE NOTIFICATIONS STATUS
 # ----------------------------------------------------------------------
 
 
-@scheduler.task("interval", seconds=1)
+@app.route("/notifs_update_broadcast", methods=["GET"])
 def notifs_update_broadcast():
     state, description, countdown = _db.get_live_notifs_status()
     if state == "countdown":
         description = countdown
-    socketio.emit(
-        "notifs_update",
+    return jsonify(
         {
             "state": state,
             "description": description,
             "max_countdown": NOTIFS_INTERVAL_SECS,
-        },
+        }
     )

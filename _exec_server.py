@@ -11,7 +11,7 @@ from sys import path
 path.append("src")  # noqa
 
 from sys import argv, stderr, exit
-from app import app, socketio
+from app import app
 from config import PROD, TS_HOST
 
 
@@ -26,7 +26,7 @@ def main(argv):
         print("Port must be an integer", file=stderr)
         exit(1)
 
-    socketio.run(app, host=TS_HOST, port=port, debug=not PROD)
+    app.run(host=TS_HOST, port=port, debug=not PROD)
 
 
 if __name__ == "__main__":
