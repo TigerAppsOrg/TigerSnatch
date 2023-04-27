@@ -1275,6 +1275,7 @@ setInterval(() => {
   $.get("/notifs_update_broadcast", (data) => {
     var description = $("#live-notifs-status-description");
     var progressBar = $("#live-notifs-status-progress-bar");
+    var spinner = $("#live-notifs-status-spinner");
 
     var COUNTDOWN_DESCRIPTION = "Next check for open spots in...";
     var ACTIVE_DESCRIPTION = "Now checking for open spots...";
@@ -1289,12 +1290,14 @@ setInterval(() => {
         var secs = data["description"] + "s";
         progressBar.css({ width: percent + "%" });
         progressBar.html(secs);
+        spinner.removeClass("d-none");
         break;
       case "active":
         description.html(ACTIVE_DESCRIPTION);
         progressBar.addClass("progress-bar-striped progress-bar-animated");
         progressBar.css({ width: "100%" });
         progressBar.html("");
+        spinner.removeClass("d-none");
         break;
       case "inactive":
         description.html(INACTIVE_DESCRIPTION);
@@ -1302,6 +1305,7 @@ setInterval(() => {
         progressBar.html("");
         progressBar.css({ width: "2%" });
         progressBar.html("");
+        spinner.addClass("d-none");
         break;
     }
   });
