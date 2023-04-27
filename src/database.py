@@ -232,11 +232,12 @@ class Database:
 
     def get_cron_notification_status(self):
         try:
+            data = self._db.admin.find_one(
+                {}, {"notifs_status": 1, "live_notifs_status": 1, "_id": 0}
+            )
             return (
-                self._db.admin.find_one({}, {"notifs_status": 1, "_id": 0})[
-                    "notifs_status"
-                ]
-                == "on"
+                data["notifs_status"] == "on"
+                and data["live_notifs_status"]["state"] != "inactive"
             )
         except:
             raise Exception('ensure that key "notifs_status" is in admin collection')
