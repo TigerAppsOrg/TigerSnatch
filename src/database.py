@@ -16,13 +16,19 @@ from pymongo import MongoClient
 from pymongo.errors import ConnectionFailure
 
 from activedirectory import ActiveDirectory
-from config import (COLLECTIONS, DB_CONNECTION_STR, HEROKU_API_KEY,
-                    HEROKU_APP_NAME, MAX_ADMIN_LOG_LENGTH,
-                    MAX_AUTO_RESUB_NOTIFS, MAX_LOG_LENGTH, MAX_WAITLIST_SIZE,
-                    NOTIFS_INTERVAL_SECS)
+from config import (
+    COLLECTIONS,
+    DB_CONNECTION_STR,
+    HEROKU_API_KEY,
+    HEROKU_APP_NAME,
+    MAX_ADMIN_LOG_LENGTH,
+    MAX_AUTO_RESUB_NOTIFS,
+    MAX_LOG_LENGTH,
+    MAX_WAITLIST_SIZE,
+    NOTIFS_INTERVAL_SECS,
+)
 from log_utils import *
-from schema import (CLASS_SCHEMA, COURSES_SCHEMA, ENROLLMENTS_SCHEMA,
-                    MAPPINGS_SCHEMA)
+from schema import CLASS_SCHEMA, COURSES_SCHEMA, ENROLLMENTS_SCHEMA, MAPPINGS_SCHEMA
 
 TZ = pytz.timezone("US/Eastern")
 
@@ -245,7 +251,12 @@ class Database:
             "notifs_schedule"
         ]
         curr = [[tz.localize(pair[0]), tz.localize(pair[1])] for pair in curr]
-        return curr != data
+        return not all(
+            [
+                curr[i][0] == data[i][0] and curr[i][1] == data[i][1]
+                for i in range(len(curr))
+            ]
+        )
 
     # generates a string representing the current/next notifications interval
     def get_current_or_next_notifs_interval(self, fmt="%-m/%-d @ %-I:%M %p"):

@@ -15,15 +15,34 @@ from time import time
 
 import pandas as pd
 import pytz
+import requests
+from icalendar import Calendar
 from multiprocess import Pool
 
-from config import NOTIFS_INTERVAL_SECS, OIT_NOTIFS_OFFSET_MINS
+from config import (
+    AUTO_GENERATE_NOTIF_SCHEDULE,
+    NOTIFS_INTERVAL_SECS,
+    OIT_NOTIFS_OFFSET_MINS,
+)
 from database import Database
 from log_utils import *
 from monitor import Monitor
 from notify import Notify, send_email, send_text
 
+
+"""
+- start and end times for add/drop and course selection periods
+- assumed to be in Eastern time and constant across all periods
+- (e.g. add/drop period always starts at 6:30 AM and ends at 5:00 PM)
+"""
+ADD_DROP_START = timedelta(hours=6, minutes=30)  # 6:30 AM
+ADD_DROP_END = timedelta(hours=17, minutes=0)  # 5:00 PM
+COURSE_SELECTION_START = timedelta(hours=7, minutes=30)  # 7:30 AM
+COURSE_SELECTION_END = timedelta(hours=23, minutes=59)  # 11:59 PM
+
 TZ = pytz.timezone("US/Eastern")
+ICAL_URL = "https://registrar.princeton.edu/feeds/events/ical.ics"  # academic calendar iCal feed from Registrar
+
 _db = Database()
 
 
@@ -172,38 +191,97 @@ def update_notifs_schedule(data):
 
 
 def generate_time_intervals():
-    tz = pytz.timezone("US/Eastern")
-    # see https://towardsdatascience.com/read-data-from-google-sheets-into-pandas-without-the-google-sheets-api-5c468536550
-    # for how to create this link
-    google_sheets_url = "https://docs.google.com/spreadsheets/d/1iSWihUcWa0yX8MsS_FKC-DuGH75AukdiuAigbSkPm8k/gviz/tq?tqx=out:csv&sheet=Schedule"
-    # google_sheets_url = "https://docs.google.com/spreadsheets/d/1iSWihUcWa0yX8MsS_FKC-DuGH75AukdiuAigbSkPm8k/gviz/tq?tqx=out:csv&sheet=Test"
-    datetime_fmt = "%m/%d/%Y %I:%M %p"
-    try:
-        data = pd.read_csv(google_sheets_url)[
-            ["start_date", "start_time", "end_date", "end_time"]
-        ]
-        datetimes = list(data.itertuples(index=False, name=None))
-        datetimes = list(map(lambda x: (f"{x[0]} {x[1]}", f"{x[2]} {x[3]}"), datetimes))
-    except:
-        log_error(
-            f"Error reading Google Sheet ({google_sheets_url}) - please update/fix the Schedule tab"
-        )
-        return []
-    try:
-        datetimes = list(
-            map(
-                lambda x: [
-                    tz.localize(datetime.strptime(x[0], datetime_fmt))
-                    + timedelta(minutes=OIT_NOTIFS_OFFSET_MINS),
-                    tz.localize(datetime.strptime(x[1], datetime_fmt)),
-                ],
-                datetimes,
+    if AUTO_GENERATE_NOTIF_SCHEDULE:
+        res = requests.get(ICAL_URL)
+        res.raise_for_status()
+        raw_cal_data = res.text
+        cal = list(Calendar.from_ical(raw_cal_data).walk())
+
+        keywords = set(["add/drop", "course selection"])
+        non_keywords = set(["graduate student"])
+
+        cleaned_cal = []
+        for event in cal:
+            if event.name != "VEVENT":
+                continue
+
+            name = event.get("summary")
+            name = name.lower()
+
+            if not any([keyword in name for keyword in keywords]):
+                continue
+
+            if any([keyword in name for keyword in non_keywords]):
+                continue
+
+            start = event.get("dtstart").dt
+            end = event.get("dtend").dt
+
+            start = datetime(year=start.year, month=start.month, day=start.day)
+            end = datetime(year=end.year, month=end.month, day=end.day)
+
+            start = TZ.localize(start)
+            end = TZ.localize(end)
+
+            if datetime.now(TZ) > end:
+                continue
+
+            if (end - start).days > 1:
+                continue
+
+            cleaned_cal.append((name, start))
+
+        datetimes = []
+        i = 0
+        while i < len(cleaned_cal):
+            name, start_ = cleaned_cal[i]
+
+            if "add/drop" in name:
+                if i == len(cleaned_cal) - 1:
+                    break
+                start = start_ + ADD_DROP_START
+                end = cleaned_cal[i + 1][1] + ADD_DROP_END
+                i += 1
+            elif "course selection" in name:
+                start = start_ + COURSE_SELECTION_START
+                end = start_ + COURSE_SELECTION_END
+
+            datetimes.append((start + timedelta(minutes=OIT_NOTIFS_OFFSET_MINS), end))
+            i += 1
+    else:
+        # see https://towardsdatascience.com/read-data-from-google-sheets-into-pandas-without-the-google-sheets-api-5c468536550
+        # for how to create this link
+        google_sheets_url = "https://docs.google.com/spreadsheets/d/1iSWihUcWa0yX8MsS_FKC-DuGH75AukdiuAigbSkPm8k/gviz/tq?tqx=out:csv&sheet=Schedule"
+        # google_sheets_url = "https://docs.google.com/spreadsheets/d/1iSWihUcWa0yX8MsS_FKC-DuGH75AukdiuAigbSkPm8k/gviz/tq?tqx=out:csv&sheet=Test"
+        datetime_fmt = "%m/%d/%Y %I:%M %p"
+        try:
+            data = pd.read_csv(google_sheets_url)[
+                ["start_date", "start_time", "end_date", "end_time"]
+            ]
+            datetimes = list(data.itertuples(index=False, name=None))
+            datetimes = list(
+                map(lambda x: (f"{x[0]} {x[1]}", f"{x[2]} {x[3]}"), datetimes)
             )
-        )
-        datetimes = list(filter(lambda x: x[1] > datetime.now(tz), datetimes))
-    except:
-        log_error("Error parsing datetimes - please update/fix the Schedule tab")
-        return []
+        except:
+            log_error(
+                f"Error reading Google Sheet ({google_sheets_url}) - please update/fix the Schedule tab"
+            )
+            return []
+        try:
+            datetimes = list(
+                map(
+                    lambda x: [
+                        TZ.localize(datetime.strptime(x[0], datetime_fmt))
+                        + timedelta(minutes=OIT_NOTIFS_OFFSET_MINS),
+                        TZ.localize(datetime.strptime(x[1], datetime_fmt)),
+                    ],
+                    datetimes,
+                )
+            )
+            datetimes = list(filter(lambda x: x[1] > datetime.now(TZ), datetimes))
+        except:
+            log_error("Error parsing datetimes - please update/fix the Schedule tab")
+            return []
 
     # validate list of datetimes
     flat = [item for sublist in datetimes for item in sublist]
@@ -212,7 +290,7 @@ def generate_time_intervals():
             "Datetime intervals either overlap or are not in ascending order - please update/fix the Schedule tab"
         )
         return []
-    if flat[-1] <= datetime.now(tz):
+    if flat[-1] <= datetime.now(TZ):
         log_warning(
             "All time intervals are in the past - please update the Schedule tab"
         )

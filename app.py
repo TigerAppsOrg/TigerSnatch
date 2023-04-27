@@ -33,7 +33,12 @@ from app_helper import (
     update_user_settings,
 )
 from CASClient import CASClient
-from config import APP_SECRET_KEY, MAX_AUTO_RESUB_NOTIFS, NOTIFS_INTERVAL_SECS
+from config import (
+    APP_SECRET_KEY,
+    AUTO_GENERATE_NOTIF_SCHEDULE,
+    MAX_AUTO_RESUB_NOTIFS,
+    NOTIFS_INTERVAL_SECS,
+)
 from database import Database
 from waitlist import Waitlist
 
@@ -185,6 +190,7 @@ def dashboard():
         next_notifs=notifs_status_data["next_notifs"],
         term_name=notifs_status_data["term_name"],
         max_auto_resub_notifs=MAX_AUTO_RESUB_NOTIFS,
+        using_auto_notifs_scheduler=AUTO_GENERATE_NOTIF_SCHEDULE,
     )
 
     return make_response(html)
@@ -325,6 +331,7 @@ def get_course():
         is_course_disabled=_db.is_course_disabled(courseid),
         has_reserved_seats=_db.does_course_have_reserved_seats(courseid),
         is_top_n=_db.is_course_top_n_subscribed(course_details["displayname"]),
+        using_auto_notifs_scheduler=AUTO_GENERATE_NOTIF_SCHEDULE,
     )
 
     return make_response(html)
@@ -400,6 +407,7 @@ def get_course_info(courseid):
         is_course_disabled=_db.is_course_disabled(courseid),
         has_reserved_seats=_db.does_course_have_reserved_seats(courseid),
         is_top_n=_db.is_course_top_n_subscribed(course_details["displayname"]),
+        using_auto_notifs_scheduler=AUTO_GENERATE_NOTIF_SCHEDULE,
     )
     return make_response(html)
 

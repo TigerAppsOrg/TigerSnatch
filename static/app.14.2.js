@@ -1305,7 +1305,7 @@ setInterval(() => {
         progressBar.html("");
         progressBar.css({ width: "2%" });
         progressBar.html("");
-        spinner.addClass("d-none");
+        spinner.removeClass("d-none");
         break;
     }
   });
