@@ -183,6 +183,14 @@ def get_notifs_status_data():
     }
 
 
+def log_page_visit(page, netid):
+    Database()._add_system_log(
+        "user",
+        {"message": f"{page} page visited by user {netid}"},
+        netid=netid,
+    )
+
+
 if __name__ == "__main__":
     res = do_search("zishuoz", search_netid=True)
     print(res)

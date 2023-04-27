@@ -21,6 +21,7 @@ from app_helper import (
     is_admin,
     get_release_notes,
     get_notifs_status_data,
+    log_page_visit,
 )
 from urllib.parse import quote_plus, unquote_plus
 from sys import stderr
@@ -30,7 +31,8 @@ import traceback
 import logging
 
 log = logging.getLogger("werkzeug")
-log.disabled = True
+# log.disabled = True
+log.setLevel(logging.ERROR)
 
 app = Flask(__name__, template_folder="./views")
 app.secret_key = APP_SECRET_KEY
@@ -119,9 +121,13 @@ def tutorial():
         )
         return make_response(html)
 
+    netid = _cas.authenticate()
+
+    log_page_visit("Tutorial", netid)
+
     html = render_template(
         "tutorial.html",
-        user_is_admin=is_admin(_cas.authenticate(), _db),
+        user_is_admin=is_admin(netid, _db),
         loggedin=True,
         notifs_online=notifs_status_data["notifs_online"],
         next_notifs=notifs_status_data["next_notifs"],
@@ -155,6 +161,8 @@ def dashboard():
     if _db.is_blacklisted(netid):
         _db._add_admin_log(f"blocked user {netid} attempted to access the app")
         return make_response(render_template("blocklisted.html"))
+
+    log_page_visit("Dashboard", netid)
 
     data = _db.get_dashboard_data(netid)
     email = _db.get_user(netid, "email")
@@ -221,9 +229,13 @@ def about():
         )
         return make_response(html)
 
+    netid = _cas.authenticate()
+
+    log_page_visit("About", netid)
+
     html = render_template(
         "about.html",
-        user_is_admin=is_admin(_cas.authenticate(), _db),
+        user_is_admin=is_admin(netid, _db),
         loggedin=True,
         notifs_online=notifs_status_data["notifs_online"],
         next_notifs=notifs_status_data["next_notifs"],
@@ -251,6 +263,8 @@ def activity():
         return make_response(html)
 
     netid = _cas.authenticate()
+
+    log_page_visit("Activity", netid)
 
     waitlist_logs = _db.get_user_waitlist_log(netid)
 
@@ -300,13 +314,7 @@ def get_course():
     term_code, term_name = _db.get_current_term_code()
     section_names = _db.get_section_names_in_course(courseid)
 
-    _db._add_system_log(
-        "user",
-        {
-            "message": f"courseID {course_details['displayname']} ({courseid}) visited by user {netid}"
-        },
-        netid=netid,
-    )
+    log_page_visit(f"Course {course_details['displayname']} ({courseid})", netid)
 
     notifs_status_data = get_notifs_status_data()
 
@@ -386,13 +394,7 @@ def get_course_info(courseid):
     term_code, term_name = _db.get_current_term_code()
 
     if courseid is not None:
-        _db._add_system_log(
-            "user",
-            {
-                "message": f"courseID {course_details['displayname']} ({courseid}) visited by user {netid}"
-            },
-            netid=netid,
-        )
+        log_page_visit(f"Course {course_details['displayname']} ({courseid})", netid)
 
     notifs_status_data = get_notifs_status_data()
 
