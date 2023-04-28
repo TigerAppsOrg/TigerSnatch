@@ -89,3 +89,8 @@ TWILIO_TOKEN = environ["TWILIO_TOKEN"]
 OIT_NOTIFS_OFFSET_MINS = int(environ["OIT_NOTIFS_OFFSET_MINS"])
 
 PROD = getenv("PROD", "False").lower() in ("true", "1", "t")
+
+# whether to use the academic calendar iCal feed to determine the start and end datetimes of notification periods
+AUTO_GENERATE_NOTIF_SCHEDULE = getenv(
+    "AUTO_GENERATE_NOTIF_SCHEDULE", "True"
+).lower() in ("true", "1", "t")

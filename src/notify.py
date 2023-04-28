@@ -10,8 +10,15 @@ import pytz
 from sendgrid import SendGridAPIClient
 from twilio.rest import Client
 
-from config import (MIN_NOTIFS_DELAY_MINS, SENDGRID_API_KEY, TS_DOMAIN,
-                    TS_EMAIL, TWILIO_PHONE, TWILIO_SID, TWILIO_TOKEN)
+from config import (
+    MIN_NOTIFS_DELAY_MINS,
+    SENDGRID_API_KEY,
+    TS_DOMAIN,
+    TS_EMAIL,
+    TWILIO_PHONE,
+    TWILIO_SID,
+    TWILIO_TOKEN,
+)
 
 TZ_ET = pytz.timezone("US/Eastern")
 TZ_UTC = pytz.timezone("UTC")
@@ -142,8 +149,8 @@ class Notify:
                                 "coursename": self._coursename,
                                 "deptnum": self._deptnum,
                                 "tigerhub_url": "https://phubprod.princeton.edu/psp/phubprod/?cmd=start",
-                                "dashboard_url": f"{TS_DOMAIN}/dashboard?&skip&email",
-                                "course_url": f"{TS_DOMAIN}/course?query=&courseid={self._courseid}&skip&email",
+                                "dashboard_url": f"{TS_DOMAIN}/dashboard?&skip&ref=email",
+                                "course_url": f"{TS_DOMAIN}/course?query=&courseid={self._courseid}&skip&ref=email",
                                 "n_open_spots": self.n_new_slots,
                                 "n_other_students": len(self._netids) - 1,
                             },
@@ -179,8 +186,8 @@ class Notify:
 
     def send_sms(self):
         reserved = "This course has reserved seats, so enrollment may not be possible. "
-        msg_unsubbed = f"{self._sectionname} in {self._deptnum} has {self.n_new_slots} open spot(s)! {len(self._netids) - 1} other student(s) notified. {reserved if self._has_reserved_seats else ''}Resubscribe: {TS_DOMAIN}/course?courseid={self._courseid}&skip&sms"
-        msg_resubbed = f"{self._sectionname} in {self._deptnum} has {self.n_new_slots} open spot(s)! {len(self._netids) - 1} other student(s) notified. {reserved if self._has_reserved_seats else ''}Unsubscribe: {TS_DOMAIN}/dashboard?&skip&sms"
+        msg_unsubbed = f"{self._sectionname} in {self._deptnum} has {self.n_new_slots} open spot(s)! {len(self._netids) - 1} other student(s) notified. {reserved if self._has_reserved_seats else ''}Resubscribe: {TS_DOMAIN}/course?courseid={self._courseid}&skip&ref=sms"
+        msg_resubbed = f"{self._sectionname} in {self._deptnum} has {self.n_new_slots} open spot(s)! {len(self._netids) - 1} other student(s) notified. {reserved if self._has_reserved_seats else ''}Unsubscribe: {TS_DOMAIN}/dashboard?&skip&ref=sms"
         send_text_args = []
         for i, phone in enumerate(self._phones):
             try:

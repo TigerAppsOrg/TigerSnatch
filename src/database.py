@@ -16,13 +16,19 @@ from pymongo import MongoClient
 from pymongo.errors import ConnectionFailure
 
 from activedirectory import ActiveDirectory
-from config import (COLLECTIONS, DB_CONNECTION_STR, HEROKU_API_KEY,
-                    HEROKU_APP_NAME, MAX_ADMIN_LOG_LENGTH,
-                    MAX_AUTO_RESUB_NOTIFS, MAX_LOG_LENGTH, MAX_WAITLIST_SIZE,
-                    NOTIFS_INTERVAL_SECS)
+from config import (
+    COLLECTIONS,
+    DB_CONNECTION_STR,
+    HEROKU_API_KEY,
+    HEROKU_APP_NAME,
+    MAX_ADMIN_LOG_LENGTH,
+    MAX_AUTO_RESUB_NOTIFS,
+    MAX_LOG_LENGTH,
+    MAX_WAITLIST_SIZE,
+    NOTIFS_INTERVAL_SECS,
+)
 from log_utils import *
-from schema import (CLASS_SCHEMA, COURSES_SCHEMA, ENROLLMENTS_SCHEMA,
-                    MAPPINGS_SCHEMA)
+from schema import CLASS_SCHEMA, COURSES_SCHEMA, ENROLLMENTS_SCHEMA, MAPPINGS_SCHEMA
 
 TZ = pytz.timezone("US/Eastern")
 
@@ -245,7 +251,12 @@ class Database:
             "notifs_schedule"
         ]
         curr = [[tz.localize(pair[0]), tz.localize(pair[1])] for pair in curr]
-        return curr != data
+        return not all(
+            [
+                curr[i][0] == data[i][0] and curr[i][1] == data[i][1]
+                for i in range(len(curr))
+            ]
+        )
 
     # generates a string representing the current/next notifications interval
     def get_current_or_next_notifs_interval(self, fmt="%-m/%-d @ %-I:%M %p"):
@@ -524,12 +535,23 @@ class Database:
             raw_counts = self._db.admin.find_one({}, {"site_ref_counts": 1, "_id": 0})[
                 "site_ref_counts"
             ]
+
+            ref_to_name = {
+                "princetoncourses": "Princeton Courses",
+                "recal": "ReCal",
+                "email": "Email",
+                "sms": "SMS",
+                "feedback": "Feedback",
+                "reddit": "Reddit",
+                "tigerapps": "TigerApps",
+            }
+
             counts = {}
             for site_ref, count in raw_counts.items():
-                if site_ref == "princetoncourses":
-                    counts["Princeton Courses"] = count
-                elif site_ref == "recal":
-                    counts["ReCal"] = count
+                name = ref_to_name.get(site_ref)
+                if not name:
+                    continue
+                counts[name] = count
 
             counts = [(k, v) for k, v in counts.items()]
             counts.sort(key=lambda x: x[1], reverse=True)
@@ -1830,9 +1852,10 @@ class Database:
             {}, {"$inc": {"stats_total_notifs": n, "stats_current_notifs": n}}
         )
 
-    def _get_all_emails_csv(self):
-        data = self._db.users.find({}, {"_id": 0, "email": 1})
-        emails = [k["email"] for k in data]
+    def _get_all_emails_csv(self, years=None):
+        years = {"year": {"$in": years}} if years else {}
+        data = self._db.users.find(years, {"_id": 0, "email": 1})
+        emails = [k["email"] for k in data if k["email"] != "tigersnatch@princeton.edu"]
         return ",".join(emails)
 
     # checks that all required collections are available in self._db;

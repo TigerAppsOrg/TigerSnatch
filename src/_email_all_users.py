@@ -32,6 +32,8 @@ from config import SENDGRID_API_KEY, TS_EMAIL
 from database import Database
 from log_utils import *
 
+CLASS_YEARS = ["2024", "2025", "2026", None]
+
 if __name__ == "__main__":
 
     def process_args():
@@ -66,7 +68,7 @@ if __name__ == "__main__":
         exit(1)
 
     if send_to_all_users:
-        emails = Database()._get_all_emails_csv().split(",")
+        emails = Database()._get_all_emails_csv(years=CLASS_YEARS).split(",")
     else:
         emails = argv[2:]
 
