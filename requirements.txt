@@ -12,3 +12,4 @@ pandas==1.5.1
 sendgrid==6.0.5
 twilio==6.63.0
 markdown==3.3.6
+icalendar==5.0.5

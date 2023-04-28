@@ -137,16 +137,22 @@ def check_spreadsheet_maybe_schedule_new_notifs(scheds: list[BackgroundScheduler
         scheds.pop(0)
         scheds.append(new_sched)
         log_cron("Done updating notifs scheduler")
-    except:
+    except Exception as e:
         log_error(
             "An error occurred in function check_spreadsheet_maybe_schedule_new_notifs()"
         )
+        print(e, file=stderr)
 
 
 if __name__ == "__main__":
-    log_cron(
-        "This script reads from https://docs.google.com/spreadsheets/d/1iSWihUcWa0yX8MsS_FKC-DuGH75AukdiuAigbSkPm8k/edit#gid=550138744 on an interval (configurable in Config Vars) and schedules all notifications jobs according to the datetimes in the spreadsheet"
-    )
+    if AUTO_GENERATE_NOTIF_SCHEDULE:
+        log_cron(
+            "This script automatically schedules all notifications jobs according to the official academic calendar at https://registrar.princeton.edu/academic-calendar-and-deadlines"
+        )
+    else:
+        log_cron(
+            "This script reads from https://docs.google.com/spreadsheets/d/1iSWihUcWa0yX8MsS_FKC-DuGH75AukdiuAigbSkPm8k/edit#gid=550138744 on an interval (configurable in Config Vars) and schedules all notifications jobs according to the datetimes in the spreadsheet"
+        )
     log_cron(
         "Reboot this dyno (notifs) in Heroku to force a re-schedule using the spreadsheet"
     )

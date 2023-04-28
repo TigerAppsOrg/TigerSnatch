@@ -33,7 +33,12 @@ from app_helper import (
     update_user_settings,
 )
 from CASClient import CASClient
-from config import APP_SECRET_KEY, MAX_AUTO_RESUB_NOTIFS, NOTIFS_INTERVAL_SECS
+from config import (
+    APP_SECRET_KEY,
+    AUTO_GENERATE_NOTIF_SCHEDULE,
+    MAX_AUTO_RESUB_NOTIFS,
+    NOTIFS_INTERVAL_SECS,
+)
 from database import Database
 from waitlist import Waitlist
 
@@ -74,13 +79,13 @@ def redirect_landing():
 
 @app.route("/", methods=["GET"])
 def index():
-    if redirect_landing():
-        return redirect(url_for("landing"))
-    return redirect(url_for("dashboard"))
+    ref = request.args.get("ref")
+    if not redirect_landing():
+        return redirect(url_for("dashboard", ref=ref))
 
+    log_page_visit("Landing", "N/A")
+    _db.increment_site_ref(ref)
 
-@app.route("/landing", methods=["GET"])
-def landing():
     notifs_status_data = get_notifs_status_data()
 
     html = render_template(
@@ -139,8 +144,9 @@ def tutorial():
 
 @app.route("/dashboard", methods=["GET", "POST"])
 def dashboard():
+    ref = request.args.get("ref")
     if redirect_landing():
-        return redirect(url_for("landing"))
+        return redirect(f"/?ref={ref}" if ref else "/")
 
     netid = _cas.authenticate()
     if _db.is_blacklisted(netid):
@@ -148,6 +154,7 @@ def dashboard():
         return make_response(render_template("blocklisted.html"))
 
     log_page_visit("Dashboard", netid)
+    _db.increment_site_ref(ref)
 
     data = _db.get_dashboard_data(netid)
     email = _db.get_user(netid, "email")
@@ -185,6 +192,7 @@ def dashboard():
         next_notifs=notifs_status_data["next_notifs"],
         term_name=notifs_status_data["term_name"],
         max_auto_resub_notifs=MAX_AUTO_RESUB_NOTIFS,
+        using_auto_notifs_scheduler=AUTO_GENERATE_NOTIF_SCHEDULE,
     )
 
     return make_response(html)
@@ -325,6 +333,7 @@ def get_course():
         is_course_disabled=_db.is_course_disabled(courseid),
         has_reserved_seats=_db.does_course_have_reserved_seats(courseid),
         is_top_n=_db.is_course_top_n_subscribed(course_details["displayname"]),
+        using_auto_notifs_scheduler=AUTO_GENERATE_NOTIF_SCHEDULE,
     )
 
     return make_response(html)
@@ -400,6 +409,7 @@ def get_course_info(courseid):
         is_course_disabled=_db.is_course_disabled(courseid),
         has_reserved_seats=_db.does_course_have_reserved_seats(courseid),
         is_top_n=_db.is_course_top_n_subscribed(course_details["displayname"]),
+        using_auto_notifs_scheduler=AUTO_GENERATE_NOTIF_SCHEDULE,
     )
     return make_response(html)
 
@@ -514,9 +524,9 @@ def disable_course(courseid):
     netid = _cas.authenticate()
     try:
         if not is_admin(netid, _db):
-            return redirect(url_for("landing"))
+            return redirect("/")
     except:
-        return redirect(url_for("landing"))
+        return redirect("/")
     return jsonify({"isSuccess": _db.add_disabled_course(courseid.strip())})
 
 
@@ -525,9 +535,9 @@ def enable_course(courseid):
     netid = _cas.authenticate()
     try:
         if not is_admin(netid, _db):
-            return redirect(url_for("landing"))
+            return redirect("/")
     except:
-        return redirect(url_for("landing"))
+        return redirect("/")
     return jsonify({"isSuccess": _db.remove_disabled_course(courseid.strip())})
 
 
@@ -536,9 +546,9 @@ def add_to_blacklist(user):
     netid = _cas.authenticate()
     try:
         if not is_admin(netid, _db):
-            return redirect(url_for("landing"))
+            return redirect("/")
     except:
-        return redirect(url_for("landing"))
+        return redirect("/")
 
     return jsonify({"isSuccess": _db.add_to_blacklist(user.strip(), netid)})
 
@@ -548,9 +558,9 @@ def remove_from_blacklist(user):
     netid = _cas.authenticate()
     try:
         if not is_admin(netid, _db):
-            return redirect(url_for("landing"))
+            return redirect("/")
     except:
-        return redirect(url_for("landing"))
+        return redirect("/")
 
     return jsonify({"isSuccess": _db.remove_from_blacklist(user.strip(), netid)})
 
@@ -558,14 +568,14 @@ def remove_from_blacklist(user):
 @app.route("/get_notifications_status", methods=["POST"])
 def get_notifications_status():
     if redirect_landing():
-        return redirect(url_for("landing"))
+        return redirect("/")
 
     netid = _cas.authenticate()
     try:
         if not is_admin(netid, _db):
-            return redirect(url_for("landing"))
+            return redirect("/")
     except:
-        return redirect(url_for("landing"))
+        return redirect("/")
 
     return jsonify({"isOn": _db.get_cron_notification_status()})
 
@@ -575,9 +585,9 @@ def clear_by_class(classid):
     netid = _cas.authenticate()
     try:
         if not is_admin(netid, _db):
-            return redirect(url_for("landing"))
+            return redirect("/")
     except:
-        return redirect(url_for("landing"))
+        return redirect("/")
 
     return jsonify({"isSuccess": _db.clear_class_waitlist(classid, netid)})
 
@@ -587,9 +597,9 @@ def clear_by_course(courseid):
     netid = _cas.authenticate()
     try:
         if not is_admin(netid, _db):
-            return redirect(url_for("landing"))
+            return redirect("/")
     except:
-        return redirect(url_for("landing"))
+        return redirect("/")
 
     return jsonify({"isSuccess": _db.clear_course_waitlists(courseid, netid)})
 
@@ -599,9 +609,9 @@ def get_user_data(netid):
     netid_ = _cas.authenticate()
     try:
         if not is_admin(netid_, _db):
-            return redirect(url_for("landing"))
+            return redirect("/")
     except:
-        return redirect(url_for("landing"))
+        return redirect("/")
 
     return jsonify({"data": _db.get_waited_sections(netid.strip())})
 
@@ -611,9 +621,9 @@ def get_usage_summary():
     netid = _cas.authenticate()
     try:
         if not is_admin(netid, _db):
-            return redirect(url_for("landing"))
+            return redirect("/")
     except:
-        return redirect(url_for("landing"))
+        return redirect("/")
 
     return jsonify({"data": _db.get_usage_summary()})
 
@@ -623,9 +633,9 @@ def get_all_subscriptions():
     netid = _cas.authenticate()
     try:
         if not is_admin(netid, _db):
-            return redirect(url_for("landing"))
+            return redirect("/")
     except:
-        return redirect(url_for("landing"))
+        return redirect("/")
 
     return jsonify({"data": _db.get_all_subscriptions()})
 
@@ -635,9 +645,9 @@ def fill_section(classid):
     netid = _cas.authenticate()
     try:
         if not is_admin(netid, _db):
-            return redirect(url_for("landing"))
+            return redirect("/")
     except:
-        return redirect(url_for("landing"))
+        return redirect("/")
 
     try:
         curr_enrollment = _db.get_class_enrollment(classid)

@@ -1278,7 +1278,6 @@ setInterval(() => {
     var spinner = $("#live-notifs-status-spinner");
 
     var COUNTDOWN_DESCRIPTION = "Next check for open spots in...";
-    var ACTIVE_DESCRIPTION = "Now checking for open spots...";
     var INACTIVE_DESCRIPTION = "Not currently checking for open spots.";
 
     switch (data["state"]) {
@@ -1293,7 +1292,7 @@ setInterval(() => {
         spinner.removeClass("d-none");
         break;
       case "active":
-        description.html(ACTIVE_DESCRIPTION);
+        description.html(data["description"]);
         progressBar.addClass("progress-bar-striped progress-bar-animated");
         progressBar.css({ width: "100%" });
         progressBar.html("");
@@ -1305,7 +1304,7 @@ setInterval(() => {
         progressBar.html("");
         progressBar.css({ width: "2%" });
         progressBar.html("");
-        spinner.addClass("d-none");
+        spinner.removeClass("d-none");
         break;
     }
   });

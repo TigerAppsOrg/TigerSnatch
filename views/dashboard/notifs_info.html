@@ -14,14 +14,15 @@
       <span class="bg-warning rounded-2 me-1" style="padding: 0px 5px 2px">
         <i class="bi bi-calendar-x"></i
       ></span>
-      Is this wrong? Leave a comment in
+      Is this wrong?{% if using_auto_notifs_scheduler %} Email us at
+      it.admin[at]tigerapps.org!{% else %} Leave a comment in
       <a
         class="text-dark text-decoration-underline"
         href="https://docs.google.com/spreadsheets/d/1iSWihUcWa0yX8MsS_FKC-DuGH75AukdiuAigbSkPm8k/edit?usp=sharing"
         target="_blank"
       >
         this Sheet</a
-      >!
+      >! {% endif %}
     </div>
   </div>
 </div>

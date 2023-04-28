@@ -522,6 +522,6 @@ label.stats-top-course {
   margin-left: auto;
   margin-right: auto;
   background: white;
-  /* background-color: var(--color-yellow); */
+  box-shadow: 0 0px 20px var(--color-yellow);
   border-radius: 10px;
 }
