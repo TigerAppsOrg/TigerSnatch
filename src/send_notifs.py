@@ -29,7 +29,6 @@ from log_utils import *
 from monitor import Monitor
 from notify import Notify, send_email, send_text
 
-
 """
 - start and end times for add/drop and course selection periods
 - assumed to be in Eastern time and constant across all periods
@@ -200,7 +199,7 @@ def generate_time_intervals():
         cal = list(Calendar.from_ical(raw_cal_data).walk())
 
         keywords = set(["add/drop", "course selection"])
-        non_keywords = set(["graduate student"])
+        non_keywords = set(["graduate student", "first-year course selection"])
 
         cleaned_cal = []
         add_drop_start = None
@@ -241,22 +240,27 @@ def generate_time_intervals():
             cleaned_cal.append((name, start))
 
         datetimes = []
-        i = 0
-        while i < len(cleaned_cal):
-            name, start_ = cleaned_cal[i]
+        i = len(cleaned_cal) - 1
 
+        while i >= 0:
+            name, start_or_end = cleaned_cal[i]
             if "add/drop" in name:
-                if i == len(cleaned_cal) - 1:
+                if i < 1:
+                    log_warning(
+                        f'add/drop event missing start datetime: "{name}" ({start_or_end})'
+                    )
                     break
-                start = start_ + ADD_DROP_START
-                end = cleaned_cal[i + 1][1] + ADD_DROP_END
-                i += 1
+                start = cleaned_cal[i - 1][1] + ADD_DROP_START
+                end = start_or_end + ADD_DROP_END
+                i -= 1
             elif "course selection" in name:
-                start = start_ + COURSE_SELECTION_START
-                end = start_ + COURSE_SELECTION_END
+                start = start_or_end + COURSE_SELECTION_START
+                end = start_or_end + COURSE_SELECTION_END
 
             datetimes.append((start + timedelta(minutes=OIT_NOTIFS_OFFSET_MINS), end))
-            i += 1
+            i -= 1
+
+        datetimes.reverse()
     else:
         # see https://towardsdatascience.com/read-data-from-google-sheets-into-pandas-without-the-google-sheets-api-5c468536550
         # for how to create this link
