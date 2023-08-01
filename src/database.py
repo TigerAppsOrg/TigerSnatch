@@ -251,6 +251,10 @@ class Database:
             "notifs_schedule"
         ]
         curr = [[tz.localize(pair[0]), tz.localize(pair[1])] for pair in curr]
+
+        if len(curr) != len(data):
+            return True
+
         return not all(
             [
                 curr[i][0] == data[i][0] and curr[i][1] == data[i][1]
