@@ -18,6 +18,7 @@ import pytz
 from apscheduler.schedulers.background import BackgroundScheduler
 from apscheduler.schedulers.blocking import BlockingScheduler
 
+from _email_all_users import notify_admins_of_schedule_change
 from _exec_update_all_courses import do_update_async_HARD, do_update_async_SOFT
 from config import (
     GLOBAL_COURSE_UPDATE_INTERVAL_MINS,
@@ -34,6 +35,8 @@ def schedule_jobs(update_db=False):
         sched = BackgroundScheduler()
         times = generate_time_intervals()
         if update_db:
+            if did_notifs_spreadsheet_change(times):
+                notify_admins_of_schedule_change(times)
             update_notifs_schedule(times)  # update database
         set_status_indicator_to_off(log=False)
         tz = pytz.timezone("US/Eastern")
@@ -129,6 +132,10 @@ def check_spreadsheet_maybe_schedule_new_notifs(scheds: list[BackgroundScheduler
         if not did_notifs_spreadsheet_change(times):
             return
         log_cron("New datetimes detected - rescheduling jobs")
+
+        if AUTO_GENERATE_NOTIF_SCHEDULE:
+            notify_admins_of_schedule_change(times)
+
         log_cron("Shutting down current notifs scheduler")
         scheds[-1].shutdown()  # stop and clear all current notifs jobs
         update_notifs_schedule(times)  # update database

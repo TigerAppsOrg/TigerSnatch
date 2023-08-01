@@ -124,3 +124,44 @@ if __name__ == "__main__":
     log_info(
         f"Sent email to {'ALL users' if send_to_all_users else argv[2:]} ({len(emails)} in total)."
     )
+
+
+def notify_admins_of_schedule_change(schedule):
+    schedule_str = ""
+    for start, end in schedule:
+        schedule_str += f"{start.strftime('%Y-%m-%d @ %H:%M:%S')} ---> {end.strftime('%Y-%m-%d @ %H:%M:%S')}<br>"
+
+    academic_cal_url = "https://registrar.princeton.edu/academic-calendar-and-deadlines"
+    manual_schedule_spreadsheet = "https://docs.google.com/spreadsheets/d/1iSWihUcWa0yX8MsS_FKC-DuGH75AukdiuAigbSkPm8k/edit"
+    emails = ["ntyp@alumni.princeton.edu"]
+
+    SUBJECT = "TigerSnatch Schedule Update"
+    MESSAGE = f"""<p>TigerSnatch notifications schedule has been auto-updated to:</p>
+
+<p>{schedule_str}</p>
+
+<p>Verify that this is correct by checking against <a href="{academic_cal_url}">{academic_cal_url}</a>.</p>
+
+<p>If this is incorrect, immediately set the Config Var AUTO_GENERATE_NOTIF_SCHEDULE to "false" in Heroku! This will prevent bad notifications from getting sent. Try to find the bug later so that you can set the Config Var back to "true".</p>
+
+<p>Then, manually update the schedule at <a href="{manual_schedule_spreadsheet}">{manual_schedule_spreadsheet}</a>. Verify that the new schedule has been registered by checking the Admin panel after ~10 minutes.</p>
+"""
+
+    for email in emails:
+        data = {
+            "personalizations": [
+                {
+                    "to": [{"email": email}],
+                }
+            ],
+            "from": {"email": TS_EMAIL, "name": "TigerSnatch"},
+            "subject": SUBJECT,
+            "content": [{"type": "text/html", "value": MESSAGE}],
+        }
+
+        try:
+            SendGridAPIClient(SENDGRID_API_KEY).client.mail.send.post(request_body=data)
+        except Exception as e:
+            print(e)
+
+    log_info(f"Sent schedule update email to {emails}.")
