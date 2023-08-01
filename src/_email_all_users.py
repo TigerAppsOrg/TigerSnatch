@@ -133,7 +133,13 @@ def notify_admins_of_schedule_change(schedule):
 
     academic_cal_url = "https://registrar.princeton.edu/academic-calendar-and-deadlines"
     manual_schedule_spreadsheet = "https://docs.google.com/spreadsheets/d/1iSWihUcWa0yX8MsS_FKC-DuGH75AukdiuAigbSkPm8k/edit"
-    emails = ["ntyp@alumni.princeton.edu"]
+    emails = [
+        "ntyp@alumni.princeton.edu",
+        "taylory@princeton.edu",
+        "jungp@princeton.edu",
+        "youngseo@princeton.edu",
+        "akelch@princeton.edu",
+    ]
 
     SUBJECT = "TigerSnatch Schedule Update"
     MESSAGE = f"""<p>TigerSnatch notifications schedule has been auto-updated to:</p>
@@ -144,7 +150,7 @@ def notify_admins_of_schedule_change(schedule):
 
 <p>If this is incorrect, immediately set the Config Var AUTO_GENERATE_NOTIF_SCHEDULE to "false" in Heroku! This will prevent bad notifications from getting sent. Try to find the bug later so that you can set the Config Var back to "true".</p>
 
-<p>Then, manually update the schedule at <a href="{manual_schedule_spreadsheet}">{manual_schedule_spreadsheet}</a>. Verify that the new schedule has been registered by checking the Admin panel after ~10 minutes.</p>
+<p>Then, manually update the schedule at <a href="{manual_schedule_spreadsheet}">{manual_schedule_spreadsheet}</a>. Verify that the new schedule has been registered by checking the Admin panel after ~1 minute.</p>
 """
 
     for email in emails:
