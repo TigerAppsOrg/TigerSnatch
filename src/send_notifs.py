@@ -246,9 +246,6 @@ def generate_time_intervals():
             name, start_or_end = cleaned_cal[i]
             if "add/drop" in name:
                 if i < 1:
-                    log_warning(
-                        f'add/drop event missing start datetime: "{name}" ({start_or_end})'
-                    )
                     break
                 start = cleaned_cal[i - 1][1] + ADD_DROP_START
                 end = start_or_end + ADD_DROP_END
