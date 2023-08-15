@@ -32,7 +32,15 @@
                   class="list-group-item d-flex align-items-center justify-content-between"
                 >
                   <label class="stats-top-course fs-6">
-                    {{sub['deptnum']}}: {{sub['name']}}
+                    {% if 'course_page_url' in sub %}
+                    <a
+                      class="text-decoration-underline text-dark"
+                      href="{{sub['course_page_url']}}"
+                      target="_blank"
+                      style="cursor: pointer"
+                      >{{sub['deptnum']}}</a
+                    >: {{sub['name']}} {% else %} {{sub['deptnum']}}:
+                    {{sub['name']}} {% endif %}
                   </label>
                   <span class="badge fs-6">{{sub['size']}}</span>
                 </div>

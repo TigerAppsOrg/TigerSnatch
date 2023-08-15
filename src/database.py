@@ -26,6 +26,7 @@ from config import (
     MAX_LOG_LENGTH,
     MAX_WAITLIST_SIZE,
     NOTIFS_INTERVAL_SECS,
+    TS_DOMAIN,
 )
 from log_utils import *
 from schema import CLASS_SCHEMA, COURSES_SCHEMA, ENROLLMENTS_SCHEMA, MAPPINGS_SCHEMA
@@ -425,22 +426,26 @@ class Database:
             log_error(f"Failed to get Subscriptions for user {netid}")
             print(e, file=stderr)
             return "missing"
-        res = []
+        res = {"year": year if year else "Other", "waitlists": []}
 
         for classid in classids:
             try:
-                deptnum, name, section, _ = self.classid_to_classinfo(classid)
+                deptnum, name, section, courseid = self.classid_to_classinfo(classid)
             except:
                 continue
-            res.append(f"{name} ({deptnum}): {section}")
+            res["waitlists"].append(
+                {
+                    "name": name,
+                    "deptnum": deptnum,
+                    "section": section,
+                    "course_page_url": f"{TS_DOMAIN}/course?courseid={courseid}&skip",
+                }
+            )
 
-        if not year:
-            year = "Other"
+        res["waitlists"].sort(key=lambda x: x["deptnum"])
+        res["waitlists"].sort(key=lambda x: x["name"])
 
-        if len(res) == 0:
-            return "{".join([f"Year: {year}", "No data"])
-
-        return "{".join([f"Year: {year}"] + sorted(res))
+        return res
 
     # generates TigerSnatch usage summary: # users, total subscriptions,
     # top n most-subscribed sections, list of scheduled notifications
@@ -496,7 +501,9 @@ class Database:
                 return ["No Subscriptions found"]
             res = [f"Top {len(data)} most-subscribed courses:"]
             for s_data in data:
-                res.append(f"[{s_data['size']}] {s_data['name']} ({s_data['deptnum']})")
+                res.append(
+                    f'[{s_data["size"]}] {s_data["name"]} (<a class="text-decoration-underline text-dark" href="{s_data["course_page_url"]}" target="_blank"">{s_data["deptnum"]}</a>)'
+                )
             return res
 
         def get_disabled_courses():
@@ -706,6 +713,7 @@ class Database:
                         "name": title,
                         "deptnum": displayname.split("/")[0],
                         "size": waitlist_size,
+                        "course_page_url": f"{TS_DOMAIN}/course?courseid={courseid}&skip",
                     }
                 )
 

@@ -622,11 +622,15 @@ let getUserInfoListener = function () {
       enableAdminFunction();
       return;
     }
-    let data = res["data"].split("{");
+
+    let data = res["data"];
+    let year = data["year"];
+    let waitlists = data["waitlists"];
     $(`#get-${label}-input`).val("");
 
-    dataHTML = "";
-    for (let d of data) dataHTML += `<p class="my-1">&#8594; ${d}</p>`;
+    dataHTML = `Year: ${year}`;
+    for (let w of waitlists)
+      dataHTML += `<p class="my-1">&#8594; ${w.name} (<a class="text-decoration-underline text-dark" href="${w.course_page_url}" target="_blank">${w.deptnum}</a>): ${w.section}</p>`;
 
     $("#modal-body-user-data").html(dataHTML);
     $("#user-data-waitlist-modal").modal("show");
@@ -923,11 +927,15 @@ let getUserDataListener = function () {
       enableAdminFunction();
       return;
     }
-    let data = res["data"].split("{");
+
+    let data = res["data"];
+    let year = data["year"];
+    let waitlists = data["waitlists"];
     $(`#get-${label}-input`).val("");
 
-    dataHTML = "";
-    for (let d of data) dataHTML += `<p class="my-1">&#8594; ${d}</p>`;
+    dataHTML = `Year: ${year}`;
+    for (let w of waitlists)
+      dataHTML += `<p class="my-1">&#8594; ${w.name} (<a class="text-decoration-underline text-dark" href="${w.course_page_url}" target="_blank">${w.deptnum}</a>): ${w.section}</p>`;
 
     $("#modal-body-user-data").html(dataHTML);
     $("#user-data-waitlist-modal").modal("show");
