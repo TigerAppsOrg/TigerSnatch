@@ -580,7 +580,7 @@ class Database:
                 f"Subscriptions: {get_total_subscriptions()}",
                 f"Subscribed sections: {self.get_num_subscribed_sections()}",
                 f"Subscribed courses: {self.get_num_subscribed_courses()}",
-                f"Notifications sent in current period: {self.get_current_email_counter()}",
+                f"Notifications sent in current term: {self.get_current_email_counter()}",
                 f"Notifications sent: {self.get_email_counter()}",
                 f"Notification frequency: {NOTIFS_INTERVAL_SECS}s",
                 f"Site refs: {get_site_ref_counts()}",
