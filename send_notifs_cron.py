@@ -86,7 +86,7 @@ def schedule_jobs(update_db=False):
                 ),
                 timezone=tz,
                 seconds=NOTIFS_INTERVAL_SECS,
-                max_instances=8,
+                max_instances=1,
                 id=str(i),
                 args=[end - timedelta(seconds=NOTIFS_INTERVAL_SECS)],
             )
