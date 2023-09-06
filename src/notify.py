@@ -186,7 +186,7 @@ class Notify:
 
     def send_sms(self):
         reserved = "This course has reserved seats, so enrollment may not be possible. "
-        msg_unsubbed = f"{self._sectionname} in {self._deptnum} has {self.n_new_slots} open spot(s)! {len(self._netids) - 1} other student(s) notified. {reserved if self._has_reserved_seats else ''}Resubscribe: {TS_DOMAIN}/course?courseid={self._courseid}&skip&ref=sms"
+        msg_unsubbed = f"{self._sectionname} in {self._deptnum} has {self.n_new_slots} open spot(s)! {len(self._netids) - 1} other student(s) notified. {reserved if self._has_reserved_seats else ''}You've been unsubscribed from this section. Resubscribe: {TS_DOMAIN}/course?courseid={self._courseid}&skip&ref=sms"
         msg_resubbed = f"{self._sectionname} in {self._deptnum} has {self.n_new_slots} open spot(s)! {len(self._netids) - 1} other student(s) notified. {reserved if self._has_reserved_seats else ''}Unsubscribe: {TS_DOMAIN}/dashboard?&skip&ref=sms"
         send_text_args = []
         for i, phone in enumerate(self._phones):
