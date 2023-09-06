@@ -1279,7 +1279,7 @@ const getNotificationsStatus = () => {
         description.html(COUNTDOWN_DESCRIPTION);
         var percent = data["description"] / data["max_countdown"];
         percent = parseInt((100 - 5) * percent + 5);
-        var secs = "~" + data["description"] + "s";
+        var secs = data["description"] + "s";
         progressBar.css({ width: percent + "%" });
         progressBar.html(secs);
         spinner.removeClass("d-none");
@@ -1307,7 +1307,7 @@ const getNotificationsStatus = () => {
 // applies listeners to current elements when document is loaded
 $(document).ready(function () {
   getNotificationsStatus();
-  setInterval(() => getNotificationsStatus(), 5000);
+  setInterval(() => getNotificationsStatus(), 4000);
   mobileViewFunctions();
   adminFunctions();
   searchFunctions();
