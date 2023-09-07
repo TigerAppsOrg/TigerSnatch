@@ -112,7 +112,7 @@ class Notify:
     # returns the deptnum + section name of this Notify object
 
     def get_name(self):
-        return f"{self._deptnum} {self._sectionname}"
+        return f'<a class="text-decoration-underline text-dark" href="{TS_DOMAIN}/course?courseid={self._courseid}&skip" target="_blank style="cursor: pointer">{self._deptnum}</a> {self._sectionname}'
 
     # sends a formatted email
 

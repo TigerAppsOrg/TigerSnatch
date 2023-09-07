@@ -3,6 +3,6 @@
   {% if not admin_logs %}
   <div>No activity yet.</div>
   {% else %} {% for log in admin_logs %}
-  <div>{{log}}</div>
+  <div>{{log|safe}}</div>
   {% endfor %} {% endif %}
 </div>
