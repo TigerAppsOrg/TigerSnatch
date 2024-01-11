@@ -550,6 +550,7 @@ class Database:
             ref_to_name = {
                 "princetoncourses": "Princeton Courses",
                 "recal": "ReCal",
+                "recalplus": "Recal+",
                 "email": "Email",
                 "sms": "SMS",
                 "feedback": "Feedback",
