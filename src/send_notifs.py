@@ -32,10 +32,9 @@ from notify import Notify, send_email, send_text
 """
 - start and end times for add/drop and course selection periods
 - assumed to be in Eastern time and constant across all periods
-- (e.g. add/drop period always starts at 6:30 AM and ends at 5:00 PM)
 """
 ADD_DROP_START = timedelta(hours=6, minutes=30)  # 6:30 AM
-ADD_DROP_END = timedelta(hours=17, minutes=00)  # 5:00 PM
+ADD_DROP_END = timedelta(hours=23, minutes=59)  # 11:59 PM
 COURSE_SELECTION_START = timedelta(hours=7, minutes=30)  # 7:30 AM
 COURSE_SELECTION_END = timedelta(hours=23, minutes=59)  # 11:59 PM
 
