@@ -1,5 +1,5 @@
 Flask==2.1.0
-gunicorn==19.9.0
+gunicorn==22.0.0
 multiprocess==0.70.11.1
 pymongo==3.11.3
 Werkzeug==2.2.3
