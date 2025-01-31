@@ -4,6 +4,10 @@
 # ----------------------------------------------------------------------
 
 from os import environ, getenv
+from dotenv import load_dotenv
+
+# Load environment variables from .env file
+load_dotenv()
 
 # TigerSnatch host URL
 TS_HOST = "localhost"
