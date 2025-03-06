@@ -110,6 +110,6 @@ Werkzeug==2.2.3
 wheel==0.36.2
 wrapt==1.14.1
 yarg==0.1.9
-zipp==3.6.0
+zipp==3.19.1
 zope.event==4.6
 zope.interface==6.0
