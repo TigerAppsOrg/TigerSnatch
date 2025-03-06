@@ -298,7 +298,10 @@ def generate_time_intervals():
         log_error(
             "Datetime intervals either overlap or are not in ascending order - please update/fix the Schedule tab"
         )
-        print(flat)
+
+        for i in range(len(flat)):
+            print(flat[i])
+
         return []
     if flat[-1] <= datetime.now(TZ):
         log_warning(
