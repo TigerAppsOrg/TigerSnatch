@@ -28,7 +28,7 @@ executing==0.8.3
 fastjsonschema==2.21.1
 Flask==2.1.0
 gevent-websocket==0.10.1
-gunicorn==19.9.0
+gunicorn==23.0.0
 heroku3==4.2.3
 icalendar==5.0.5
 idna==2.10
