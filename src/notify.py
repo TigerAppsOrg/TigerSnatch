@@ -120,19 +120,18 @@ class Notify:
         send_email_args = []
         for i in range(len(self._emails)):
             try:
+                is_auto_resub = self.db.get_user_auto_resub(
+                    self._netids[i], classid=self._classid, print_max_resub_msg=True
+                )
                 if self._has_reserved_seats:
-                    if self.db.get_user_auto_resub(
-                        self._netids[i], classid=self._classid
-                    ):
+                    if is_auto_resub:
                         # yes auto-resub | yes reserved seats
                         template_id = "d-b32c7a8c99f2491899322ced801b216b"
                     else:
                         # no auto-resub | yes reserved seats
                         template_id = "d-632e8760499b40d680742b9acdb8d129"
                 else:
-                    if self.db.get_user_auto_resub(
-                        self._netids[i], classid=self._classid
-                    ):
+                    if is_auto_resub:
                         # yes auto-resub | no reserved seats
                         template_id = "d-c04bc32123ea45ec80889919cc5c377e"
                     else:
@@ -161,6 +160,9 @@ class Notify:
                 }
 
                 send_email_args.append([data])
+
+                if not is_auto_resub:
+                    self.db.remove_from_waitlist(self._netids[i], self._classid)
 
                 self.db._add_system_log(
                     "notif_email",
