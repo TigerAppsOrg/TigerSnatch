@@ -71,6 +71,7 @@ def handle_exception(e):
 def redirect_landing():
     return not _cas.is_logged_in() or not _db.is_user_created(_cas.authenticate())
 
+
 # private method that checks API key
 def require_api_key():
     auth_header = request.headers.get("Authorization")
@@ -80,6 +81,7 @@ def require_api_key():
     if not key_info:
         return (jsonify({"error": "Invalid key"}), 403)
     return None
+
 
 # ----------------------------------------------------------------------
 # ACCESSIBLE BY ALL, VIA URL
@@ -472,6 +474,7 @@ def contact_trade(course_name, match_netid, section_name):
 # ACCESSIBLE BY TIGERJUNCTION API KEY
 # ----------------------------------------------------------------------
 
+
 @app.route("/junction/add_to_waitlist/<netid>/<classid>", methods=["POST"])
 def junction_add_to_waitlist(netid, classid):
     error = require_api_key()
@@ -489,12 +492,14 @@ def junction_remove_from_waitlist(netid, classid):
     waitlist = Waitlist(netid)
     return jsonify({"isSuccess": waitlist.remove_from_waitlist(classid)})
 
+
 @app.route("/junction/get_user_data/<netid>", methods=["POST"])
 def junction_get_user_data(netid):
     error = require_api_key()
     if error:
         return error
     return jsonify({"data": _db.get_waited_sections(netid.strip())})
+
 
 # ----------------------------------------------------------------------
 # ACCESSIBLE BY ADMIN ONLY, VIA URL

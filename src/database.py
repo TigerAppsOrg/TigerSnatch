@@ -1945,8 +1945,9 @@ class Database:
         found_key = self._db.api_keys.find_one({"key": key})
         print(f"DEBUG: Found in DB: {found_key}")  # Add this
         if found_key:
-            return found_key     
+            return found_key
         return None
+
 
 if __name__ == "__main__":
     Database().set_live_notifs_status("active", "computing open spots")

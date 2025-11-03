@@ -11,8 +11,11 @@ from config import COURSE_UPDATE_INTERVAL_MINS
 from coursewrapper import CourseWrapper
 from database import Database
 from log_utils import *
-from monitor_utils import (get_course_in_mobileapp, get_latest_term,
-                           get_new_mobileapp_data)
+from monitor_utils import (
+    get_course_in_mobileapp,
+    get_latest_term,
+    get_new_mobileapp_data,
+)
 
 
 class Monitor:
