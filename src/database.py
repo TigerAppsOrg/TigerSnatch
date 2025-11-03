@@ -1941,9 +1941,7 @@ class Database:
     # ----------------------------------------------------------------------
 
     def validate_api_key(self, key):
-        print(f"DEBUG: Received key: '{key}'")  # Add this
         found_key = self._db.api_keys.find_one({"key": key})
-        print(f"DEBUG: Found in DB: {found_key}")  # Add this
         if found_key:
             return found_key
         return None
