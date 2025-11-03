@@ -1936,6 +1936,16 @@ class Database:
             ret += f"\t{coll:<15}(#docs: {ref.estimated_document_count()})\n"
         return ret
 
+    # ----------------------------------------------------------------------
+    # API AUTHENTICATION METHODS
+    # ----------------------------------------------------------------------
+
+    def validate_api_key(self, key):
+        found_key = self._db.api_keys.find_one({"key": key})
+        if found_key:
+            return found_key
+        return None
+
 
 if __name__ == "__main__":
     Database().set_live_notifs_status("active", "computing open spots")

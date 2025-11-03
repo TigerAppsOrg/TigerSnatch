@@ -23,6 +23,7 @@ COLLECTIONS = {
     "logs",
     "system",
     "notifs",
+    "api_keys",
 }
 
 # MobileApp keys
