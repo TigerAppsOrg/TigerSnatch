@@ -56,7 +56,14 @@ class ActiveDirectory:
         # Check to see if the response failed due to invalid credentials
         text = self._updateConfigs(text, endpoint, **kwargs)
 
-        return json.loads(text)
+        # Handle empty or invalid JSON responses from the API
+        if not text or not text.strip():
+            return None
+
+        try:
+            return json.loads(text)
+        except json.JSONDecodeError:
+            return None
 
     def _updateConfigs(self, text, endpoint, **kwargs):
         if text.startswith("<ams:fault"):
