@@ -1146,24 +1146,43 @@ let initTutorial = function () {
   window.addEventListener("load", function () {
     if (window.location.pathname !== "/dashboard") return;
     if (window.innerWidth < 992) return;
-    if (localStorage.getItem("EventTour") === doneKeyTutorial) return;
-    tutorial
-      .setOptions({
-        showBullets: false,
-        showProgress: true,
-        tooltipClass: "tutorial-style",
-        exitOnOverlayClick: false,
-        exitOnEsc: false,
-      })
-      .start();
+    const tutorialStorageKey = "EventTour";
+    const getTutorialState = function () {
+      try {
+        return localStorage.getItem(tutorialStorageKey);
+      } catch (e) {}
+      try {
+        return sessionStorage.getItem(tutorialStorageKey);
+      } catch (e) {}
+      return null;
+    };
+    const setTutorialDone = function () {
+      try {
+        localStorage.setItem(tutorialStorageKey, doneKeyTutorial);
+        return;
+      } catch (e) {}
+      try {
+        sessionStorage.setItem(tutorialStorageKey, doneKeyTutorial);
+      } catch (e) {}
+    };
 
-    tutorial.oncomplete(function () {
-      localStorage.setItem("EventTour", doneKeyTutorial);
+    if (getTutorialState() === doneKeyTutorial) return;
+
+    tutorial.setOptions({
+      showBullets: false,
+      showProgress: true,
+      tooltipClass: "tutorial-style",
+      // Never trap users behind the overlay.
+      exitOnOverlayClick: true,
+      exitOnEsc: true,
     });
 
-    tutorial.onexit(function () {
-      localStorage.setItem("EventTour", doneKeyTutorial);
-    });
+    // Register handlers before starting to avoid a race where the user exits
+    // immediately (Esc/overlay click) and the completion flag never gets set.
+    tutorial.oncomplete(setTutorialDone);
+    tutorial.onexit(setTutorialDone);
+
+    tutorial.start();
   });
 };
 
