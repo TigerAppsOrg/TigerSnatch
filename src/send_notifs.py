@@ -294,6 +294,10 @@ def generate_time_intervals():
 
     # validate list of datetimes
     flat = [item for sublist in datetimes for item in sublist]
+    if len(flat) == 0:
+        log_warning("No future notification intervals found")
+        return []
+
     if not all(flat[i] < flat[i + 1] for i in range(len(flat) - 1)):
         log_error(
             "Datetime intervals either overlap or are not in ascending order - please update/fix the Schedule tab"
